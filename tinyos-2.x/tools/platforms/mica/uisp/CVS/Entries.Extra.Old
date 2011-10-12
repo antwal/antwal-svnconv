@@ -1,0 +1,13 @@
+/.cvsignore////*///
+/AUTHORS////*///
+/CHANGES////*///
+/COPYING////*///
+/ChangeLog////*///
+/INSTALL////*///
+/Makefile.am////*///
+/TODO////*///
+/bootstrap////*///
+/configure.in////*///
+/install-giveio////*///
+/uisp.1.in////*///
+/uisp.spec.in////*///

@@ -1,0 +1,10 @@
+/GeneralIOC.nc////*///
+/HalPXA27xGeneralIOM.nc////*///
+/HalPXA27xGpioCapture.nc////*///
+/HalPXA27xGpioInterrupt.nc////*///
+/HalPXA27xSoftCaptureC.nc////*///
+/HalPXA27xSoftCaptureP.nc////*///
+/HplPXA27xGPIO.nc////*///
+/HplPXA27xGPIOC.nc////*///
+/HplPXA27xGPIOM.nc////*///
+/HplPXA27xGPIOPin.nc////*///

@@ -1,0 +1,14 @@
+/.platform////*///
+/ActiveMessageC.nc////*///
+/BlockStorageC.nc////*///
+/DemoSensorC.nc////*///
+/DemoSensorNowC.nc////*///
+/HilTimerMilliC.nc////*///
+/McuSleepC.nc////*///
+/PlatformC.nc////*///
+/PlatformLedsC.nc////*///
+/PlatformSerialC.nc////*///
+/Storage_chip.h////*///
+/hardware.h////*///
+/platform.h////*///
+/platform_message.h////*///

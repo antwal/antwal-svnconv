@@ -1,0 +1,12 @@
+/avr.rules////*///
+/avrisp.extra////*///
+/dapa.extra////*///
+/debug.extra////*///
+/debugopt.extra////*///
+/eprb.extra////*///
+/install.extra////*///
+/mib510.extra////*///
+/mib520.extra////*///
+/reinstall.extra////*///
+/reset.target////*///
+/xnp.extra////*///

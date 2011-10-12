@@ -1,0 +1,12 @@
+/AsyncDeferredPowerManagerP.nc////*///
+/AsyncPowerManagerP.nc////*///
+/AsyncStdControlDeferredPowerManagerC.nc////*///
+/AsyncStdControlPowerManagerC.nc////*///
+/DeferredPowerManagerP.nc////*///
+/InfiniteRetryPowerManagerP.nc////*///
+/PowerDownCleanup.nc////*///
+/PowerManagerP.nc////*///
+/SplitControlDeferredPowerManagerC.nc////*///
+/SplitControlPowerManagerC.nc////*///
+/StdControlDeferredPowerManagerC.nc////*///
+/StdControlPowerManagerC.nc////*///

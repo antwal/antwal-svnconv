@@ -1,0 +1,9 @@
+/NoBeaconSynchronizeP.nc////*///
+/NoBeaconTransmitP.nc////*///
+/NoCapP.nc////*///
+/NoCapQueueP.nc////*///
+/NoCoordCfpP.nc////*///
+/NoDebugP.nc////*///
+/NoDeviceCapQueueP.nc////*///
+/NoDeviceCfpP.nc////*///
+/NoScanP.nc////*///

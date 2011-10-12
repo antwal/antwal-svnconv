@@ -1,0 +1,8 @@
+COMPONENT=BaseStationC
+CFLAGS += -DCC2420_NO_ACKNOWLEDGEMENTS
+CFLAGS += -DCC2420_NO_ADDRESS_RECOGNITION
+
+PFLAGS += -I../Oscilloscope/AES -I../Oscilloscope/AES/Interfaces  
+
+include $(MAKERULES)
+

@@ -1,0 +1,10 @@
+/BlockingCollectionControlC.nc////*///
+/BlockingCollectionControlP.nc////*///
+/BlockingCollectionReceiverC.nc////*///
+/BlockingCollectionReceiverP.nc////*///
+/BlockingCollectionSenderImplP.nc////*///
+/BlockingCollectionSenderP.nc////*///
+/BlockingCollectionSnooperC.nc////*///
+/BlockingCollectionSnooperP.nc////*///
+/CCollectionP.nc////*///
+/tosthread_collection.h////*///

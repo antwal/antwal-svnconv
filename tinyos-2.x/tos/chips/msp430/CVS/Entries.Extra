@@ -1,0 +1,9 @@
+/McuSleepC.nc////*///
+/msp430hardware.h////*///
+/msp430regtypes.h////*///
+D/adc12///////
+D/dma///////
+D/pins///////
+D/sensors///////
+D/timer///////
+D/usart///////

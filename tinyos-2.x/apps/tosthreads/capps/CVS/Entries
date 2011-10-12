@@ -1,0 +1,13 @@
+/Makefile/1.1/Thu Jun 12 15:11:39 2008//
+D/BaseStation////
+D/Blink////
+D/Bounce////
+D/Null////
+D/RadioStress////
+D/SenseAndSend////
+D/SenseStoreAndForward////
+D/TestCollection////
+D/TestLogStorage////
+D/TestPrintf////
+D/TestSineSensor////
+D/ThreadStress////

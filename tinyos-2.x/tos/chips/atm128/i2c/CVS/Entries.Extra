@@ -1,0 +1,10 @@
+/Atm128I2C.h////*///
+/Atm128I2C.nc////*///
+/Atm128I2CMaster.nc////*///
+/Atm128I2CMasterC.nc////*///
+/Atm128I2CMasterImplP.nc////*///
+/Atm128I2CMasterP.nc////*///
+/Atm128I2CMasterPacketP.nc////*///
+/HplAtm128I2CBus.nc////*///
+/HplAtm128I2CBusC.nc////*///
+/HplAtm128I2CBusP.nc////*///

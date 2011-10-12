@@ -1,0 +1,9 @@
+/HplPXA27xInterrupt.nc////*///
+/HplPXA27xInterruptCntl.nc////*///
+/HplPXA27xInterruptM.nc////*///
+/McuSleepC.nc////*///
+/arm_defs.h////*///
+/inttypes.h////*///
+/pxa27x_registers.h////*///
+/pxa27x_util.s////*///
+/pxa27xhardware.h////*///

@@ -1,0 +1,11 @@
+/BlockingPhotoC.nc////*///
+/BlockingPhotoStreamC.nc////*///
+/BlockingTempC.nc////*///
+/BlockingTempStreamC.nc////*///
+/CPhotoC.nc////*///
+/CPhotoP.nc////*///
+/CTempC.nc////*///
+/CTempP.nc////*///
+/basicsb_sensors.h////*///
+/tosthread_photo.h////*///
+/tosthread_temp.h////*///

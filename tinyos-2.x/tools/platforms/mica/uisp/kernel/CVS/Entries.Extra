@@ -1,0 +1,4 @@
+/.cvsignore////*///
+/Makefile.am////*///
+D/stargate///////
+D/win32///////

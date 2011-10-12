@@ -1,0 +1,16 @@
+/.platform////*///
+/DemoSensorC.nc////*///
+/DemoSensorNowC.nc////*///
+/DemoSensorStreamC.nc////*///
+/HplUserButtonC.nc////*///
+/MoteClockC.nc////*///
+/MoteClockP.nc////*///
+/MotePlatformC.nc////*///
+/SwitchToggleC.nc////*///
+/UserButton.h////*///
+/UserButtonC.nc////*///
+/UserButtonP.nc////*///
+/VoltageC.nc////*///
+/VoltageStreamC.nc////*///
+/hardware.h////*///
+/platform.h////*///

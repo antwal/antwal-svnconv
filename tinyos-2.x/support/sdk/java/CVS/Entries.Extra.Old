@@ -1,0 +1,5 @@
+/.cvsignore////*///
+/Makefile////*///
+/Makefile.include////*///
+/build.xml////*///
+/tinyos.jar////*///

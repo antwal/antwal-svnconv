@@ -1,0 +1,10 @@
+/HalPXA27xSerialCntl.nc////*///
+/HalPXA27xSerialP.nc////*///
+/HalPXA27xSerialPacket.nc////*///
+/HplPXA27xBTUARTC.nc////*///
+/HplPXA27xFFUARTC.nc////*///
+/HplPXA27xSTUARTC.nc////*///
+/HplPXA27xUART.nc////*///
+/HplPXA27xUARTP.nc////*///
+/PXA27X_UARTREG.h////*///
+/pxa27x_serial.h////*///

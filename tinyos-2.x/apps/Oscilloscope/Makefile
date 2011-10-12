@@ -1,0 +1,3 @@
+COMPONENT=OscilloscopeAppC
+PFLAGS+=-DRF230_DEF_CHANNEL=19
+include $(MAKERULES)

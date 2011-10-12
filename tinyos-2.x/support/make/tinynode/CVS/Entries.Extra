@@ -1,0 +1,9 @@
+/bsl.extra////*///
+/digi.extra////*///
+/flash.gdb.in////*///
+/gdb.extra////*///
+/init.gdb.in////*///
+/noflash.extra////*///
+/noflash.gdb.in////*///
+/tinynode.rules////*///
+/xedebug.in////*///

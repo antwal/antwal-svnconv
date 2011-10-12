@@ -1,0 +1,13 @@
+/.platform////*///
+/DemoSensorC.nc////*///
+/DemoSensorNowC.nc////*///
+/DemoSensorStreamC.nc////*///
+/MotePlatformC.nc////*///
+/PlatformLedsC.nc////*///
+/TempC.nc////*///
+/TempDeviceP.nc////*///
+/TempNowC.nc////*///
+/TempP.nc////*///
+/TempStreamC.nc////*///
+/hardware.h////*///
+/platform.h////*///

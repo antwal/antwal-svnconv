@@ -1,0 +1,12 @@
+/.platform////*///
+/ActiveMessageC.nc////*///
+/BusyWaitMicroC.nc////*///
+/DemoSensorC.nc////*///
+/DemoSensorNowC.nc////*///
+/DemoSensorStreamC.nc////*///
+/MotePlatformC.nc////*///
+/MotePlatformP.nc////*///
+/TimeSyncMessageC.nc////*///
+/hardware.h////*///
+/platform.h////*///
+/platform_message.h////*///

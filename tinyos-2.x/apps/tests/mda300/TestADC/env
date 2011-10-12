@@ -1,0 +1,4 @@
+export TOSROOT=/opt/tinyos2/tinyos-2.x-src/
+export TOSDIR=$TOSROOT/tos
+export MAKERULES=$TOSDIR/../support/make/Makerules
+export CONTRIBROOT=/opt/CVSTinyOS/tinyos-2.x-contrib

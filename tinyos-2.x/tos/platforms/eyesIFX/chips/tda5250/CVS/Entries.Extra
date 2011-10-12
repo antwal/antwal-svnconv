@@ -1,0 +1,9 @@
+/HplTda5250DataIOC.nc////*///
+/HplTda5250DataIOP.nc////*///
+/Tda5250ASKNFSKFakePinP.nc////*///
+/Tda5250RadioIOC.nc////*///
+/Tda5250RadioInterruptC.nc////*///
+/Tda5250RegCommC.nc////*///
+/eyesIFXBaudrates.h////*///
+/tda5250BusResourceSettings.h////*///
+/tda5250RegDefaultSettings.h////*///

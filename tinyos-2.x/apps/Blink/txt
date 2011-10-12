@@ -1,0 +1,685 @@
+/usr/bin/nescc -fnesc-include=tos -topdir=/opt/tinyos-2.x -fnesc-scheduler=TinySchedulerC,TinySchedulerC.TaskBasic,TaskBasic,TaskBasic,runTask,postTask -DPLATFORM_IRIS -DBOARD_MICASB -o build/iris/main.exe -Os -v -Wall -Wshadow -Wnesc-all -fnesc-cfile=build/iris/app.c -DDEFINED_TOS_AM_GROUP=0x00 --param max-inline-insns-single=100000 -DIDENT_APPNAME="BlinkAppC" -DIDENT_USERNAME="root" -DIDENT_HOSTNAME="abhishek-deskto" -DIDENT_USERHASH=0xfa3a9409L -DIDENT_TIMESTAMP=0x4e8438f9L -DIDENT_UIDHASH=0x2a3cd95eL -fnesc-dump=wiring -fnesc-dump=interfaces(!abstract()) -fnesc-dump=referenced(interfacedefs, components) -fnesc-dumpfile=build/iris/wiring-check.xml BlinkAppC.nc -lm -gcc=avr-gcc -mmcu=atmega1281 -fnesc-target=avr -fnesc-no-debug -I/opt/tinyos-2.x/tos/sensorboards/micasb -I/opt/tinyos-2.x/tos/platforms/iris -I/opt/tinyos-2.x/tos/platforms/micaz -I/opt/tinyos-2.x/tos/platforms/mica -I/opt/tinyos-2.x/tos/platforms/iris/chips/rf230 -I/opt/tinyos-2.x/tos/chips/sht15 -I/opt/tinyos-2.x/tos/chips/rf230 -I/opt/tinyos-2.x/tos/chips/cc2420 -I/opt/tinyos-2.x/tos/platforms/iris/chips/at45db -I/opt/tinyos-2.x/tos/platforms/mica2/chips/at45db -I/opt/tinyos-2.x/tos/platforms/mica/chips/at45db -I/opt/tinyos-2.x/tos/chips/at45db -I/opt/tinyos-2.x/tos/chips/atm1281 -I/opt/tinyos-2.x/tos/chips/atm1281/adc -I/opt/tinyos-2.x/tos/chips/atm1281/timer -I/opt/tinyos-2.x/tos/chips/atm128 -I/opt/tinyos-2.x/tos/chips/atm128/adc -I/opt/tinyos-2.x/tos/chips/atm128/pins -I/opt/tinyos-2.x/tos/chips/atm128/spi -I/opt/tinyos-2.x/tos/chips/atm128/i2c -I/opt/tinyos-2.x/tos/chips/atm128/timer -I/opt/tinyos-2.x/tos/lib/timer -I/opt/tinyos-2.x/tos/lib/serial -I/opt/tinyos-2.x/tos/lib/power -I/opt/tinyos-2.x/tos/lib/diagmsg -I/opt/tinyos-2.x/tos/interfaces -I/opt/tinyos-2.x/tos/types -I/opt/tinyos-2.x/tos/system
+avr-gcc -_fnesc-gcc=avr-gcc -specs=/usr/lib/ncc/tdspecs -_fnesc-include=nesc_nx -I/usr/lib/ncc -_fnesc-include=tos -_fnesc-scheduler=TinySchedulerC,TinySchedulerC.TaskBasic,TaskBasic,TaskBasic,runTask,postTask -DPLATFORM_IRIS -DBOARD_MICASB -o build/iris/main.exe -Os -v -Wall -Wshadow -_Wnesc-all -_fnesc-cfile=build/iris/app.c -DDEFINED_TOS_AM_GROUP=0x00 --param max-inline-insns-single=100000 -DIDENT_APPNAME="BlinkAppC" -DIDENT_USERNAME="root" -DIDENT_HOSTNAME="abhishek-deskto" -DIDENT_USERHASH=0xfa3a9409L -DIDENT_TIMESTAMP=0x4e8438f9L -DIDENT_UIDHASH=0x2a3cd95eL -_fnesc-dump=wiring -_fnesc-dump=interfaces(!abstract()) -_fnesc-dump=referenced(interfacedefs, components) -_fnesc-dumpfile=build/iris/wiring-check.xml BlinkAppC.nc -lm -mmcu=atmega1281 -_fnesc-target=avr -_fnesc-no-debug -I/opt/tinyos-2.x/tos/sensorboards/micasb -I/opt/tinyos-2.x/tos/platforms/iris -I/opt/tinyos-2.x/tos/platforms/micaz -I/opt/tinyos-2.x/tos/platforms/mica -I/opt/tinyos-2.x/tos/platforms/iris/chips/rf230 -I/opt/tinyos-2.x/tos/chips/sht15 -I/opt/tinyos-2.x/tos/chips/rf230 -I/opt/tinyos-2.x/tos/chips/cc2420 -I/opt/tinyos-2.x/tos/platforms/iris/chips/at45db -I/opt/tinyos-2.x/tos/platforms/mica2/chips/at45db -I/opt/tinyos-2.x/tos/platforms/mica/chips/at45db -I/opt/tinyos-2.x/tos/chips/at45db -I/opt/tinyos-2.x/tos/chips/atm1281 -I/opt/tinyos-2.x/tos/chips/atm1281/adc -I/opt/tinyos-2.x/tos/chips/atm1281/timer -I/opt/tinyos-2.x/tos/chips/atm128 -I/opt/tinyos-2.x/tos/chips/atm128/adc -I/opt/tinyos-2.x/tos/chips/atm128/pins -I/opt/tinyos-2.x/tos/chips/atm128/spi -I/opt/tinyos-2.x/tos/chips/atm128/i2c -I/opt/tinyos-2.x/tos/chips/atm128/timer -I/opt/tinyos-2.x/tos/lib/timer -I/opt/tinyos-2.x/tos/lib/serial -I/opt/tinyos-2.x/tos/lib/power -I/opt/tinyos-2.x/tos/lib/diagmsg -I/opt/tinyos-2.x/tos/interfaces -I/opt/tinyos-2.x/tos/types -I/opt/tinyos-2.x/tos/system -DNESC=131
+Using built-in specs.
+Reading specs from /usr/lib/ncc/tdspecs
+Target: avr
+Configured with: ../src/configure -v --enable-languages=c,c++ --prefix=/usr/lib --infodir=/usr/share/info --mandir=/usr/share/man --bindir=/usr/bin --libexecdir=/usr/lib --libdir=/usr/lib --enable-shared --with-system-zlib --enable-long-long --enable-nls --without-included-gettext --disable-checking --disable-libssp --build=i486-linux-gnu --host=i486-linux-gnu --target=avr
+Thread model: single
+gcc version 4.3.3 (GCC) 
+COLLECT_GCC_OPTIONS='-_fnesc-gcc=avr-gcc' '-_fnesc-include=nesc_nx' '-I/usr/lib/ncc' '-_fnesc-include=tos' '-_fnesc-scheduler=TinySchedulerC,TinySchedulerC.TaskBasic,TaskBasic,TaskBasic,runTask,postTask' '-DPLATFORM_IRIS' '-DBOARD_MICASB' '-o' 'build/iris/main.exe' '-Os' '-v' '-Wall' '-Wshadow' '-_Wnesc-all' '-_fnesc-cfile=build/iris/app.c' '-DDEFINED_TOS_AM_GROUP=0x00' '--param' 'max-inline-insns-single=100000' '-DIDENT_APPNAME="BlinkAppC"' '-DIDENT_USERNAME="root"' '-DIDENT_HOSTNAME="abhishek-deskto"' '-DIDENT_USERHASH=0xfa3a9409L' '-DIDENT_TIMESTAMP=0x4e8438f9L' '-DIDENT_UIDHASH=0x2a3cd95eL' '-_fnesc-dump=wiring' '-_fnesc-dump=interfaces(!abstract())' '-_fnesc-dump=referenced(interfacedefs, components)' '-_fnesc-dumpfile=build/iris/wiring-check.xml' '-mmcu=atmega1281' '-_fnesc-target=avr' '-_fnesc-no-debug' '-I/opt/tinyos-2.x/tos/sensorboards/micasb' '-I/opt/tinyos-2.x/tos/platforms/iris' '-I/opt/tinyos-2.x/tos/platforms/micaz' '-I/opt/tinyos-2.x/tos/platforms/mica' '-I/opt/tinyos-2.x/tos/platforms/iris/chips/rf230' '-I/opt/tinyos-2.x/tos/chips/sht15' '-I/opt/tinyos-2.x/tos/chips/rf230' '-I/opt/tinyos-2.x/tos/chips/cc2420' '-I/opt/tinyos-2.x/tos/platforms/iris/chips/at45db' '-I/opt/tinyos-2.x/tos/platforms/mica2/chips/at45db' '-I/opt/tinyos-2.x/tos/platforms/mica/chips/at45db' '-I/opt/tinyos-2.x/tos/chips/at45db' '-I/opt/tinyos-2.x/tos/chips/atm1281' '-I/opt/tinyos-2.x/tos/chips/atm1281/adc' '-I/opt/tinyos-2.x/tos/chips/atm1281/timer' '-I/opt/tinyos-2.x/tos/chips/atm128' '-I/opt/tinyos-2.x/tos/chips/atm128/adc' '-I/opt/tinyos-2.x/tos/chips/atm128/pins' '-I/opt/tinyos-2.x/tos/chips/atm128/spi' '-I/opt/tinyos-2.x/tos/chips/atm128/i2c' '-I/opt/tinyos-2.x/tos/chips/atm128/timer' '-I/opt/tinyos-2.x/tos/lib/timer' '-I/opt/tinyos-2.x/tos/lib/serial' '-I/opt/tinyos-2.x/tos/lib/power' '-I/opt/tinyos-2.x/tos/lib/diagmsg' '-I/opt/tinyos-2.x/tos/interfaces' '-I/opt/tinyos-2.x/tos/types' '-I/opt/tinyos-2.x/tos/system' '-DNESC=131'
+ perl -S nesc-compile -_fnesc-gcc=avr-gcc -_fnesc-include=nesc_nx -_fnesc-include=tos -_fnesc-scheduler=TinySchedulerC,TinySchedulerC.TaskBasic,TaskBasic,TaskBasic,runTask,postTask -_Wnesc-all -_fnesc-cfile=build/iris/app.c -_fnesc-dump=wiring -_fnesc-dump=interfaces(!abstract()) -_fnesc-dump=referenced(interfacedefs, components) -_fnesc-dumpfile=build/iris/wiring-check.xml -_fnesc-target=avr -_fnesc-no-debug -mmcu=atmega1281 -DPLATFORM_IRIS -DBOARD_MICASB -DDEFINED_TOS_AM_GROUP=0x00 -DIDENT_APPNAME="BlinkAppC" -DIDENT_USERNAME="root" -DIDENT_HOSTNAME="abhishek-deskto" -DIDENT_USERHASH=0xfa3a9409L -DIDENT_TIMESTAMP=0x4e8438f9L -DIDENT_UIDHASH=0x2a3cd95eL -DNESC=131 -I/usr/lib/ncc -I/opt/tinyos-2.x/tos/sensorboards/micasb -I/opt/tinyos-2.x/tos/platforms/iris -I/opt/tinyos-2.x/tos/platforms/micaz -I/opt/tinyos-2.x/tos/platforms/mica -I/opt/tinyos-2.x/tos/platforms/iris/chips/rf230 -I/opt/tinyos-2.x/tos/chips/sht15 -I/opt/tinyos-2.x/tos/chips/rf230 -I/opt/tinyos-2.x/tos/chips/cc2420 -I/opt/tinyos-2.x/tos/platforms/iris/chips/at45db -I/opt/tinyos-2.x/tos/platforms/mica2/chips/at45db -I/opt/tinyos-2.x/tos/platforms/mica/chips/at45db -I/opt/tinyos-2.x/tos/chips/at45db -I/opt/tinyos-2.x/tos/chips/atm1281 -I/opt/tinyos-2.x/tos/chips/atm1281/adc -I/opt/tinyos-2.x/tos/chips/atm1281/timer -I/opt/tinyos-2.x/tos/chips/atm128 -I/opt/tinyos-2.x/tos/chips/atm128/adc -I/opt/tinyos-2.x/tos/chips/atm128/pins -I/opt/tinyos-2.x/tos/chips/atm128/spi -I/opt/tinyos-2.x/tos/chips/atm128/i2c -I/opt/tinyos-2.x/tos/chips/atm128/timer -I/opt/tinyos-2.x/tos/lib/timer -I/opt/tinyos-2.x/tos/lib/serial -I/opt/tinyos-2.x/tos/lib/power -I/opt/tinyos-2.x/tos/lib/diagmsg -I/opt/tinyos-2.x/tos/interfaces -I/opt/tinyos-2.x/tos/types -I/opt/tinyos-2.x/tos/system -Os -Wall -Wshadow -v -o /tmp/ccP36oZl.o --param max-inline-insns-single=100000 BlinkAppC.nc -_ASM
+nesc1 -fnesc-include=deputy_nodeputy -_fnesc-gcc=avr-gcc -_fnesc-include=nesc_nx -_fnesc-include=tos -_fnesc-scheduler=TinySchedulerC,TinySchedulerC.TaskBasic,TaskBasic,TaskBasic,runTask,postTask -_Wnesc-all -_fnesc-dump=wiring -_fnesc-dump=interfaces(!abstract()) -_fnesc-dump=referenced(interfacedefs, components) -_fnesc-dumpfile=build/iris/wiring-check.xml -_fnesc-target=avr -_fnesc-no-debug -mmcu=atmega1281 -DPLATFORM_IRIS -DBOARD_MICASB -DDEFINED_TOS_AM_GROUP=0x00 -DIDENT_APPNAME="BlinkAppC" -DIDENT_USERNAME="root" -DIDENT_HOSTNAME="abhishek-deskto" -DIDENT_USERHASH=0xfa3a9409L -DIDENT_TIMESTAMP=0x4e8438f9L -DIDENT_UIDHASH=0x2a3cd95eL -DNESC=131 -I/usr/lib/ncc -I/opt/tinyos-2.x/tos/sensorboards/micasb -I/opt/tinyos-2.x/tos/platforms/iris -I/opt/tinyos-2.x/tos/platforms/micaz -I/opt/tinyos-2.x/tos/platforms/mica -I/opt/tinyos-2.x/tos/platforms/iris/chips/rf230 -I/opt/tinyos-2.x/tos/chips/sht15 -I/opt/tinyos-2.x/tos/chips/rf230 -I/opt/tinyos-2.x/tos/chips/cc2420 -I/opt/tinyos-2.x/tos/platforms/iris/chips/at45db -I/opt/tinyos-2.x/tos/platforms/mica2/chips/at45db -I/opt/tinyos-2.x/tos/platforms/mica/chips/at45db -I/opt/tinyos-2.x/tos/chips/at45db -I/opt/tinyos-2.x/tos/chips/atm1281 -I/opt/tinyos-2.x/tos/chips/atm1281/adc -I/opt/tinyos-2.x/tos/chips/atm1281/timer -I/opt/tinyos-2.x/tos/chips/atm128 -I/opt/tinyos-2.x/tos/chips/atm128/adc -I/opt/tinyos-2.x/tos/chips/atm128/pins -I/opt/tinyos-2.x/tos/chips/atm128/spi -I/opt/tinyos-2.x/tos/chips/atm128/i2c -I/opt/tinyos-2.x/tos/chips/atm128/timer -I/opt/tinyos-2.x/tos/lib/timer -I/opt/tinyos-2.x/tos/lib/serial -I/opt/tinyos-2.x/tos/lib/power -I/opt/tinyos-2.x/tos/lib/diagmsg -I/opt/tinyos-2.x/tos/interfaces -I/opt/tinyos-2.x/tos/types -I/opt/tinyos-2.x/tos/system -Wall -Wshadow -v BlinkAppC.nc -o build/iris/app.c
+#include "..." and component search starts here:
+#include <...> search starts here:
+ /usr/lib/ncc/
+ /opt/tinyos-2.x/tos/sensorboards/micasb/
+ /opt/tinyos-2.x/tos/platforms/iris/
+ /opt/tinyos-2.x/tos/platforms/micaz/
+ /opt/tinyos-2.x/tos/platforms/mica/
+ /opt/tinyos-2.x/tos/platforms/iris/chips/rf230/
+ /opt/tinyos-2.x/tos/chips/sht15/
+ /opt/tinyos-2.x/tos/chips/rf230/
+ /opt/tinyos-2.x/tos/chips/cc2420/
+ /opt/tinyos-2.x/tos/platforms/iris/chips/at45db/
+ /opt/tinyos-2.x/tos/platforms/mica2/chips/at45db/
+ /opt/tinyos-2.x/tos/platforms/mica/chips/at45db/
+ /opt/tinyos-2.x/tos/chips/at45db/
+ /opt/tinyos-2.x/tos/chips/atm1281/
+ /opt/tinyos-2.x/tos/chips/atm1281/adc/
+ /opt/tinyos-2.x/tos/chips/atm1281/timer/
+ /opt/tinyos-2.x/tos/chips/atm128/
+ /opt/tinyos-2.x/tos/chips/atm128/adc/
+ /opt/tinyos-2.x/tos/chips/atm128/pins/
+ /opt/tinyos-2.x/tos/chips/atm128/spi/
+ /opt/tinyos-2.x/tos/chips/atm128/i2c/
+ /opt/tinyos-2.x/tos/chips/atm128/timer/
+ /opt/tinyos-2.x/tos/lib/timer/
+ /opt/tinyos-2.x/tos/lib/serial/
+ /opt/tinyos-2.x/tos/lib/power/
+ /opt/tinyos-2.x/tos/lib/diagmsg/
+ /opt/tinyos-2.x/tos/interfaces/
+ /opt/tinyos-2.x/tos/types/
+ /opt/tinyos-2.x/tos/system/
+ /usr/lib/gcc/avr/4.3.3/include/
+ /usr/lib/gcc/avr/4.3.3/include-fixed/
+ /usr/lib/gcc/avr/4.3.3/../../../avr/include/
+End of search list.
+preprocessing /usr/lib/ncc/deputy_nodeputy.h
+preprocessing /usr/lib/ncc/nesc_nx.h
+preprocessing /opt/tinyos-2.x/tos/system/tos.h
+preprocessing /opt/tinyos-2.x/tos/system/TinySchedulerC.nc
+preprocessing /opt/tinyos-2.x/tos/interfaces/Scheduler.nc
+preprocessing /opt/tinyos-2.x/tos/interfaces/TaskBasic.nc
+preprocessing /opt/tinyos-2.x/tos/system/SchedulerBasicP.nc
+preprocessing /opt/tinyos-2.x/tos/interfaces/McuSleep.nc
+preprocessing /opt/tinyos-2.x/tos/chips/atm1281/McuSleepC.nc
+preprocessing /opt/tinyos-2.x/tos/interfaces/McuPowerState.nc
+preprocessing /opt/tinyos-2.x/tos/interfaces/McuPowerOverride.nc
+preprocessing BlinkAppC.nc
+preprocessing /opt/tinyos-2.x/tos/system/MainC.nc
+preprocessing /opt/tinyos-2.x/tos/interfaces/Boot.nc
+preprocessing /opt/tinyos-2.x/tos/interfaces/Init.nc
+preprocessing /opt/tinyos-2.x/tos/platforms/mica/PlatformC.nc
+preprocessing /opt/tinyos-2.x/tos/chips/atm128/timer/Atm128Calibrate.nc
+preprocessing /opt/tinyos-2.x/tos/platforms/mica/PlatformP.nc
+preprocessing /opt/tinyos-2.x/tos/platforms/micaz/MotePlatformC.nc
+preprocessing /opt/tinyos-2.x/tos/platforms/micaz/MotePlatformP.nc
+preprocessing /opt/tinyos-2.x/tos/interfaces/GeneralIO.nc
+preprocessing /opt/tinyos-2.x/tos/chips/atm128/pins/HplAtm128GeneralIOC.nc
+preprocessing /opt/tinyos-2.x/tos/chips/atm128/pins/HplAtm128GeneralIOPortP.nc
+preprocessing /opt/tinyos-2.x/tos/chips/atm128/pins/HplAtm128GeneralIOPinP.nc
+preprocessing /opt/tinyos-2.x/tos/chips/atm128/pins/HplAtm128GeneralIOSlowPinP.nc
+preprocessing /opt/tinyos-2.x/tos/platforms/iris/MeasureClockC.nc
+preprocessing /opt/tinyos-2.x/tos/system/RealMainP.nc
+preprocessing BlinkC.nc
+preprocessing /opt/tinyos-2.x/tos/lib/timer/Timer.nc
+preprocessing /opt/tinyos-2.x/tos/interfaces/Leds.nc
+preprocessing /opt/tinyos-2.x/tos/system/LedsC.nc
+preprocessing /opt/tinyos-2.x/tos/system/LedsP.nc
+preprocessing /opt/tinyos-2.x/tos/platforms/mica/PlatformLedsC.nc
+preprocessing /opt/tinyos-2.x/tos/system/TimerMilliC.nc
+preprocessing /opt/tinyos-2.x/tos/system/TimerMilliP.nc
+preprocessing /opt/tinyos-2.x/tos/platforms/mica/HilTimerMilliC.nc
+preprocessing /opt/tinyos-2.x/tos/lib/timer/LocalTime.nc
+preprocessing /opt/tinyos-2.x/tos/platforms/mica/AlarmCounterMilliP.nc
+preprocessing /opt/tinyos-2.x/tos/lib/timer/Alarm.nc
+preprocessing /opt/tinyos-2.x/tos/lib/timer/Counter.nc
+preprocessing /opt/tinyos-2.x/tos/chips/atm1281/timer/Atm128AlarmAsyncC.nc
+preprocessing /opt/tinyos-2.x/tos/chips/atm1281/timer/Atm1281AlarmAsyncP.nc
+preprocessing /opt/tinyos-2.x/tos/chips/atm128/timer/HplAtm128Timer.nc
+preprocessing /opt/tinyos-2.x/tos/chips/atm1281/timer/HplAtm128TimerCtrl8.nc
+preprocessing /opt/tinyos-2.x/tos/chips/atm128/timer/HplAtm128Compare.nc
+preprocessing /opt/tinyos-2.x/tos/chips/atm1281/timer/HplAtm128TimerAsync.nc
+preprocessing /opt/tinyos-2.x/tos/chips/atm1281/timer/HplAtm1281Timer2AsyncC.nc
+preprocessing /opt/tinyos-2.x/tos/chips/atm1281/timer/HplAtm1281Timer2AsyncP.nc
+preprocessing /opt/tinyos-2.x/tos/lib/timer/AlarmToTimerC.nc
+preprocessing /opt/tinyos-2.x/tos/lib/timer/VirtualizeTimerC.nc
+preprocessing /opt/tinyos-2.x/tos/lib/timer/CounterToLocalTimeC.nc
+avr-gcc -B/usr/lib/ncc -mmcu=atmega1281 -Os -Wall -Wshadow -v --param max-inline-insns-single=100000 -o /tmp/ccP36oZl.o -c -fdollars-in-identifiers build/iris/app.c
+Using built-in specs.
+Target: avr
+Configured with: ../src/configure -v --enable-languages=c,c++ --prefix=/usr/lib --infodir=/usr/share/info --mandir=/usr/share/man --bindir=/usr/bin --libexecdir=/usr/lib --libdir=/usr/lib --enable-shared --with-system-zlib --enable-long-long --enable-nls --without-included-gettext --disable-checking --disable-libssp --build=i486-linux-gnu --host=i486-linux-gnu --target=avr
+Thread model: single
+gcc version 4.3.3 (GCC) 
+COLLECT_GCC_OPTIONS='-B/usr/lib/ncc' '-mmcu=atmega1281' '-Os' '-Wall' '-Wshadow' '-v' '--param' 'max-inline-insns-single=100000' '-o' '/tmp/ccP36oZl.o' '-c' '-fdollars-in-identifiers'
+ /usr/lib/gcc/avr/4.3.3/cc1 -quiet -v -imultilib avr51 build/iris/app.c -quiet -dumpbase app.c -mmcu=atmega1281 -auxbase-strip /tmp/ccP36oZl.o -Os -Wall -Wshadow -version -fdollars-in-identifiers --param max-inline-insns-single=100000 -o /tmp/ccZzq1Uy.s
+ignoring nonexistent directory "/usr/lib/gcc/avr/4.3.3/../../../avr/sys-include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /usr/lib/gcc/avr/4.3.3/include
+ /usr/lib/gcc/avr/4.3.3/include-fixed
+ /usr/lib/gcc/avr/4.3.3/../../../avr/include
+End of search list.
+GNU C (GCC) version 4.3.3 (avr)
+	compiled by GNU C version 4.4.0, GMP version 4.2.4, MPFR version 2.4.0.
+warning: GMP header version 4.2.4 differs from library version 4.3.2.
+warning: MPFR header version 2.4.0 differs from library version 2.4.1-p2.
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+Compiler executable checksum: 179183f0af6e59a7126139276d4b4db0
+COLLECT_GCC_OPTIONS='-B/usr/lib/ncc' '-mmcu=atmega1281' '-Os' '-Wall' '-Wshadow' '-v' '--param' 'max-inline-insns-single=100000' '-o' '/tmp/ccP36oZl.o' '-c' '-fdollars-in-identifiers'
+ /usr/lib/gcc/avr/4.3.3/../../../avr/bin/as -mmcu=atmega1281 -o /tmp/ccP36oZl.o /tmp/ccZzq1Uy.s
+/tmp/ccZzq1Uy.s: Assembler messages:
+/tmp/ccZzq1Uy.s:34: Error: unrecognized symbol type ""
+/tmp/ccZzq1Uy.s:34: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:34: Error: unknown opcode `firetimers'
+/tmp/ccZzq1Uy.s:35: Error: unknown opcode `virtualize'
+/tmp/ccZzq1Uy.s:35: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:48: Error: `)' required
+/tmp/ccZzq1Uy.s:48: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:48: Error: unknown opcode `m_timers'
+/tmp/ccZzq1Uy.s:49: Error: `)' required
+/tmp/ccZzq1Uy.s:49: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:49: Error: unknown opcode `m_timers'
+/tmp/ccZzq1Uy.s:143: Error: unknown opcode `m_next'
+/tmp/ccZzq1Uy.s:146: Error: unknown opcode `m_tail'
+/tmp/ccZzq1Uy.s:149: Error: unknown opcode `m_head'
+/tmp/ccZzq1Uy.s:153: Error: `,' required
+/tmp/ccZzq1Uy.s:153: Error: constant value required
+/tmp/ccZzq1Uy.s:153: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:153: Error: unknown opcode `m_head'
+/tmp/ccZzq1Uy.s:156: Error: unknown opcode `m_tail'
+/tmp/ccZzq1Uy.s:158: Error: `)' required
+/tmp/ccZzq1Uy.s:158: Error: unknown opcode `m_next'
+/tmp/ccZzq1Uy.s:159: Error: `)' required
+/tmp/ccZzq1Uy.s:159: Error: unknown opcode `m_next'
+/tmp/ccZzq1Uy.s:163: Error: `,' required
+/tmp/ccZzq1Uy.s:163: Error: constant value required
+/tmp/ccZzq1Uy.s:163: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:163: Error: unknown opcode `m_tail'
+/tmp/ccZzq1Uy.s:176: Error: expected comma after name `VirtualizeTimerC' in .size directive
+/tmp/ccZzq1Uy.s:176: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:176: Error: unknown opcode `firetimers'
+/tmp/ccZzq1Uy.s:176: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:176: Error: unknown opcode `firetimers'
+/tmp/ccZzq1Uy.s:177: Error: unrecognized symbol type ""
+/tmp/ccZzq1Uy.s:177: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:177: Error: unknown opcode `setinterru'
+/tmp/ccZzq1Uy.s:178: Error: unknown opcode `atm1281ala'
+/tmp/ccZzq1Uy.s:178: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:202: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:213: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:213: Error: unknown opcode `base'
+/tmp/ccZzq1Uy.s:214: Error: missing ')'
+/tmp/ccZzq1Uy.s:214: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:214: Error: unknown opcode `base'
+/tmp/ccZzq1Uy.s:215: Error: missing ')'
+/tmp/ccZzq1Uy.s:215: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:215: Error: unknown opcode `base'
+/tmp/ccZzq1Uy.s:216: Error: missing ')'
+/tmp/ccZzq1Uy.s:216: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:216: Error: unknown opcode `base'
+/tmp/ccZzq1Uy.s:241: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:241: Error: unknown opcode `t0'
+/tmp/ccZzq1Uy.s:242: Error: missing ')'
+/tmp/ccZzq1Uy.s:242: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:242: Error: unknown opcode `t0'
+/tmp/ccZzq1Uy.s:243: Error: missing ')'
+/tmp/ccZzq1Uy.s:243: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:243: Error: unknown opcode `t0'
+/tmp/ccZzq1Uy.s:244: Error: missing ')'
+/tmp/ccZzq1Uy.s:244: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:244: Error: unknown opcode `t0'
+/tmp/ccZzq1Uy.s:245: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:245: Error: unknown opcode `dt'
+/tmp/ccZzq1Uy.s:246: Error: missing ')'
+/tmp/ccZzq1Uy.s:246: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:246: Error: unknown opcode `dt'
+/tmp/ccZzq1Uy.s:247: Error: missing ')'
+/tmp/ccZzq1Uy.s:247: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:247: Error: unknown opcode `dt'
+/tmp/ccZzq1Uy.s:248: Error: missing ')'
+/tmp/ccZzq1Uy.s:248: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:248: Error: unknown opcode `dt'
+/tmp/ccZzq1Uy.s:258: Error: `,' required
+/tmp/ccZzq1Uy.s:258: Error: constant value required
+/tmp/ccZzq1Uy.s:258: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:258: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:258: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:268: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:268: Error: unknown opcode `base'
+/tmp/ccZzq1Uy.s:269: Error: missing ')'
+/tmp/ccZzq1Uy.s:269: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:269: Error: unknown opcode `base'
+/tmp/ccZzq1Uy.s:270: Error: missing ')'
+/tmp/ccZzq1Uy.s:270: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:270: Error: unknown opcode `base'
+/tmp/ccZzq1Uy.s:271: Error: missing ')'
+/tmp/ccZzq1Uy.s:271: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:271: Error: unknown opcode `base'
+/tmp/ccZzq1Uy.s:305: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:305: Error: unknown opcode `base'
+/tmp/ccZzq1Uy.s:306: Error: missing ')'
+/tmp/ccZzq1Uy.s:306: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:306: Error: unknown opcode `base'
+/tmp/ccZzq1Uy.s:307: Error: missing ')'
+/tmp/ccZzq1Uy.s:307: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:307: Error: unknown opcode `base'
+/tmp/ccZzq1Uy.s:308: Error: missing ')'
+/tmp/ccZzq1Uy.s:308: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:308: Error: unknown opcode `base'
+/tmp/ccZzq1Uy.s:339: Error: unknown opcode `m_next'
+/tmp/ccZzq1Uy.s:342: Error: unknown opcode `m_tail'
+/tmp/ccZzq1Uy.s:345: Error: unknown opcode `m_head'
+/tmp/ccZzq1Uy.s:348: Error: `,' required
+/tmp/ccZzq1Uy.s:348: Error: constant value required
+/tmp/ccZzq1Uy.s:348: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:348: Error: unknown opcode `m_head'
+/tmp/ccZzq1Uy.s:351: Error: unknown opcode `m_tail'
+/tmp/ccZzq1Uy.s:353: Error: `)' required
+/tmp/ccZzq1Uy.s:353: Error: unknown opcode `m_next'
+/tmp/ccZzq1Uy.s:354: Error: `)' required
+/tmp/ccZzq1Uy.s:354: Error: unknown opcode `m_next'
+/tmp/ccZzq1Uy.s:357: Error: `,' required
+/tmp/ccZzq1Uy.s:357: Error: constant value required
+/tmp/ccZzq1Uy.s:357: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:357: Error: unknown opcode `m_tail'
+/tmp/ccZzq1Uy.s:367: Error: expected comma after name `Atm1281AlarmAsyncP' in .size directive
+/tmp/ccZzq1Uy.s:367: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:367: Error: unknown opcode `setinterru'
+/tmp/ccZzq1Uy.s:367: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:367: Error: unknown opcode `setinterru'
+/tmp/ccZzq1Uy.s:368: Error: unrecognized symbol type ""
+/tmp/ccZzq1Uy.s:368: Error: unknown opcode `taskbasic'
+/tmp/ccZzq1Uy.s:368: Error: unknown opcode `runtask'
+/tmp/ccZzq1Uy.s:369: Error: unknown opcode `schedulerb'
+/tmp/ccZzq1Uy.s:369: Error: unknown opcode `taskbasic'
+/tmp/ccZzq1Uy.s:387: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:387: Error: unknown opcode `m_oneshot'
+/tmp/ccZzq1Uy.s:397: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:397: Error: unknown opcode `dt'
+/tmp/ccZzq1Uy.s:398: Error: missing ')'
+/tmp/ccZzq1Uy.s:398: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:398: Error: unknown opcode `dt'
+/tmp/ccZzq1Uy.s:399: Error: missing ')'
+/tmp/ccZzq1Uy.s:399: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:399: Error: unknown opcode `dt'
+/tmp/ccZzq1Uy.s:400: Error: missing ')'
+/tmp/ccZzq1Uy.s:400: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:400: Error: unknown opcode `dt'
+/tmp/ccZzq1Uy.s:401: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:401: Error: unknown opcode `t0'
+/tmp/ccZzq1Uy.s:402: Error: missing ')'
+/tmp/ccZzq1Uy.s:402: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:402: Error: unknown opcode `t0'
+/tmp/ccZzq1Uy.s:403: Error: missing ')'
+/tmp/ccZzq1Uy.s:403: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:403: Error: unknown opcode `t0'
+/tmp/ccZzq1Uy.s:404: Error: missing ')'
+/tmp/ccZzq1Uy.s:404: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:404: Error: unknown opcode `t0'
+/tmp/ccZzq1Uy.s:410: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:410: Error: unknown opcode `m_dt'
+/tmp/ccZzq1Uy.s:411: Error: missing ')'
+/tmp/ccZzq1Uy.s:411: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:411: Error: unknown opcode `m_dt'
+/tmp/ccZzq1Uy.s:412: Error: missing ')'
+/tmp/ccZzq1Uy.s:412: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:412: Error: unknown opcode `m_dt'
+/tmp/ccZzq1Uy.s:413: Error: missing ')'
+/tmp/ccZzq1Uy.s:413: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:413: Error: unknown opcode `m_dt'
+/tmp/ccZzq1Uy.s:414: Error: `,' required
+/tmp/ccZzq1Uy.s:414: Error: constant value required
+/tmp/ccZzq1Uy.s:414: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:414: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:414: Error: unknown opcode `m_oneshot'
+/tmp/ccZzq1Uy.s:422: Error: `,' required
+/tmp/ccZzq1Uy.s:422: Error: constant value required
+/tmp/ccZzq1Uy.s:422: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:422: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:422: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:423: Error: `,' required
+/tmp/ccZzq1Uy.s:423: Error: constant value required
+/tmp/ccZzq1Uy.s:423: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:423: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:423: Error: unknown opcode `t0'
+/tmp/ccZzq1Uy.s:424: Error: missing ')'
+/tmp/ccZzq1Uy.s:424: Error: `,' required
+/tmp/ccZzq1Uy.s:424: Error: constant value required
+/tmp/ccZzq1Uy.s:424: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:424: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:424: Error: unknown opcode `t0'
+/tmp/ccZzq1Uy.s:425: Error: missing ')'
+/tmp/ccZzq1Uy.s:425: Error: `,' required
+/tmp/ccZzq1Uy.s:425: Error: constant value required
+/tmp/ccZzq1Uy.s:425: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:425: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:425: Error: unknown opcode `t0'
+/tmp/ccZzq1Uy.s:426: Error: missing ')'
+/tmp/ccZzq1Uy.s:426: Error: `,' required
+/tmp/ccZzq1Uy.s:426: Error: constant value required
+/tmp/ccZzq1Uy.s:426: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:426: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:426: Error: unknown opcode `t0'
+/tmp/ccZzq1Uy.s:427: Error: `,' required
+/tmp/ccZzq1Uy.s:427: Error: constant value required
+/tmp/ccZzq1Uy.s:427: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:427: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:427: Error: unknown opcode `dt'
+/tmp/ccZzq1Uy.s:428: Error: missing ')'
+/tmp/ccZzq1Uy.s:428: Error: `,' required
+/tmp/ccZzq1Uy.s:428: Error: constant value required
+/tmp/ccZzq1Uy.s:428: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:428: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:428: Error: unknown opcode `dt'
+/tmp/ccZzq1Uy.s:429: Error: missing ')'
+/tmp/ccZzq1Uy.s:429: Error: `,' required
+/tmp/ccZzq1Uy.s:429: Error: constant value required
+/tmp/ccZzq1Uy.s:429: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:429: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:429: Error: unknown opcode `dt'
+/tmp/ccZzq1Uy.s:430: Error: missing ')'
+/tmp/ccZzq1Uy.s:430: Error: `,' required
+/tmp/ccZzq1Uy.s:430: Error: constant value required
+/tmp/ccZzq1Uy.s:430: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:430: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:430: Error: unknown opcode `dt'
+/tmp/ccZzq1Uy.s:432: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:432: Error: unknown opcode `setinterru'
+/tmp/ccZzq1Uy.s:441: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:441: Error: unknown opcode `base'
+/tmp/ccZzq1Uy.s:442: Error: missing ')'
+/tmp/ccZzq1Uy.s:442: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:442: Error: unknown opcode `base'
+/tmp/ccZzq1Uy.s:443: Error: missing ')'
+/tmp/ccZzq1Uy.s:443: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:443: Error: unknown opcode `base'
+/tmp/ccZzq1Uy.s:444: Error: missing ')'
+/tmp/ccZzq1Uy.s:444: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:444: Error: unknown opcode `base'
+/tmp/ccZzq1Uy.s:480: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:480: Error: unknown opcode `base'
+/tmp/ccZzq1Uy.s:481: Error: missing ')'
+/tmp/ccZzq1Uy.s:481: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:481: Error: unknown opcode `base'
+/tmp/ccZzq1Uy.s:482: Error: missing ')'
+/tmp/ccZzq1Uy.s:482: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:482: Error: unknown opcode `base'
+/tmp/ccZzq1Uy.s:483: Error: missing ')'
+/tmp/ccZzq1Uy.s:483: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:483: Error: unknown opcode `base'
+/tmp/ccZzq1Uy.s:519: Error: `,' required
+/tmp/ccZzq1Uy.s:519: Error: constant value required
+/tmp/ccZzq1Uy.s:519: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:519: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:519: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:521: Error: `)' required
+/tmp/ccZzq1Uy.s:521: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:521: Error: unknown opcode `m_timers'
+/tmp/ccZzq1Uy.s:522: Error: `)' required
+/tmp/ccZzq1Uy.s:522: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:522: Error: unknown opcode `m_timers'
+/tmp/ccZzq1Uy.s:568: Error: `)' required
+/tmp/ccZzq1Uy.s:568: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:568: Error: unknown opcode `m_timers'
+/tmp/ccZzq1Uy.s:569: Error: `)' required
+/tmp/ccZzq1Uy.s:569: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:569: Error: unknown opcode `m_timers'
+/tmp/ccZzq1Uy.s:586: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:586: Error: unknown opcode `firetimers'
+/tmp/ccZzq1Uy.s:589: Error: `,' required
+/tmp/ccZzq1Uy.s:589: Error: constant value required
+/tmp/ccZzq1Uy.s:589: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:589: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:589: Error: unknown opcode `m_dt'
+/tmp/ccZzq1Uy.s:590: Error: `,' required
+/tmp/ccZzq1Uy.s:590: Error: constant value required
+/tmp/ccZzq1Uy.s:590: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:590: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:590: Error: unknown opcode `m_dt'
+/tmp/ccZzq1Uy.s:591: Error: `,' required
+/tmp/ccZzq1Uy.s:591: Error: constant value required
+/tmp/ccZzq1Uy.s:591: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:591: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:591: Error: unknown opcode `m_dt'
+/tmp/ccZzq1Uy.s:592: Error: `,' required
+/tmp/ccZzq1Uy.s:592: Error: constant value required
+/tmp/ccZzq1Uy.s:592: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:592: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:592: Error: unknown opcode `m_dt'
+/tmp/ccZzq1Uy.s:594: Error: `,' required
+/tmp/ccZzq1Uy.s:594: Error: constant value required
+/tmp/ccZzq1Uy.s:594: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:594: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:594: Error: unknown opcode `m_oneshot'
+/tmp/ccZzq1Uy.s:601: Error: `,' required
+/tmp/ccZzq1Uy.s:601: Error: constant value required
+/tmp/ccZzq1Uy.s:601: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:601: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:601: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:602: Error: `,' required
+/tmp/ccZzq1Uy.s:602: Error: constant value required
+/tmp/ccZzq1Uy.s:602: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:602: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:602: Error: unknown opcode `t0'
+/tmp/ccZzq1Uy.s:603: Error: missing ')'
+/tmp/ccZzq1Uy.s:603: Error: `,' required
+/tmp/ccZzq1Uy.s:603: Error: constant value required
+/tmp/ccZzq1Uy.s:603: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:603: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:603: Error: unknown opcode `t0'
+/tmp/ccZzq1Uy.s:604: Error: missing ')'
+/tmp/ccZzq1Uy.s:604: Error: `,' required
+/tmp/ccZzq1Uy.s:604: Error: constant value required
+/tmp/ccZzq1Uy.s:604: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:604: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:604: Error: unknown opcode `t0'
+/tmp/ccZzq1Uy.s:605: Error: missing ')'
+/tmp/ccZzq1Uy.s:605: Error: `,' required
+/tmp/ccZzq1Uy.s:605: Error: constant value required
+/tmp/ccZzq1Uy.s:605: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:605: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:605: Error: unknown opcode `t0'
+/tmp/ccZzq1Uy.s:606: Error: `,' required
+/tmp/ccZzq1Uy.s:606: Error: constant value required
+/tmp/ccZzq1Uy.s:606: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:606: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:606: Error: unknown opcode `dt'
+/tmp/ccZzq1Uy.s:607: Error: `,' required
+/tmp/ccZzq1Uy.s:607: Error: constant value required
+/tmp/ccZzq1Uy.s:607: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:607: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:607: Error: unknown opcode `dt'
+/tmp/ccZzq1Uy.s:608: Error: `,' required
+/tmp/ccZzq1Uy.s:608: Error: constant value required
+/tmp/ccZzq1Uy.s:608: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:608: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:608: Error: unknown opcode `dt'
+/tmp/ccZzq1Uy.s:609: Error: `,' required
+/tmp/ccZzq1Uy.s:609: Error: constant value required
+/tmp/ccZzq1Uy.s:609: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:609: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:609: Error: unknown opcode `dt'
+/tmp/ccZzq1Uy.s:611: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:611: Error: unknown opcode `setinterru'
+/tmp/ccZzq1Uy.s:623: Error: expected comma after name `SchedulerBasicP' in .size directive
+/tmp/ccZzq1Uy.s:623: Error: unknown opcode `taskbasic'
+/tmp/ccZzq1Uy.s:623: Error: unknown opcode `runtask'
+/tmp/ccZzq1Uy.s:623: Error: unknown opcode `taskbasic'
+/tmp/ccZzq1Uy.s:623: Error: unknown opcode `runtask'
+/tmp/ccZzq1Uy.s:624: Error: unrecognized symbol type ""
+/tmp/ccZzq1Uy.s:624: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:624: Error: unknown opcode `timer'
+/tmp/ccZzq1Uy.s:624: Error: unknown opcode `startperio'
+/tmp/ccZzq1Uy.s:625: Error: unknown opcode `virtualize'
+/tmp/ccZzq1Uy.s:625: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:625: Error: unknown opcode `timer'
+/tmp/ccZzq1Uy.s:642: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:642: Error: unknown opcode `base'
+/tmp/ccZzq1Uy.s:643: Error: missing ')'
+/tmp/ccZzq1Uy.s:643: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:643: Error: unknown opcode `base'
+/tmp/ccZzq1Uy.s:644: Error: missing ')'
+/tmp/ccZzq1Uy.s:644: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:644: Error: unknown opcode `base'
+/tmp/ccZzq1Uy.s:645: Error: missing ')'
+/tmp/ccZzq1Uy.s:645: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:645: Error: unknown opcode `base'
+/tmp/ccZzq1Uy.s:674: Error: `)' required
+/tmp/ccZzq1Uy.s:674: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:674: Error: unknown opcode `m_timers'
+/tmp/ccZzq1Uy.s:675: Error: `)' required
+/tmp/ccZzq1Uy.s:675: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:675: Error: unknown opcode `m_timers'
+/tmp/ccZzq1Uy.s:694: Error: unknown opcode `m_next'
+/tmp/ccZzq1Uy.s:697: Error: unknown opcode `m_tail'
+/tmp/ccZzq1Uy.s:700: Error: unknown opcode `m_head'
+/tmp/ccZzq1Uy.s:704: Error: `,' required
+/tmp/ccZzq1Uy.s:704: Error: constant value required
+/tmp/ccZzq1Uy.s:704: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:704: Error: unknown opcode `m_head'
+/tmp/ccZzq1Uy.s:707: Error: unknown opcode `m_tail'
+/tmp/ccZzq1Uy.s:709: Error: `)' required
+/tmp/ccZzq1Uy.s:709: Error: unknown opcode `m_next'
+/tmp/ccZzq1Uy.s:710: Error: `)' required
+/tmp/ccZzq1Uy.s:710: Error: unknown opcode `m_next'
+/tmp/ccZzq1Uy.s:714: Error: `,' required
+/tmp/ccZzq1Uy.s:714: Error: constant value required
+/tmp/ccZzq1Uy.s:714: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:714: Error: unknown opcode `m_tail'
+/tmp/ccZzq1Uy.s:723: Error: expected comma after name `VirtualizeTimerC' in .size directive
+/tmp/ccZzq1Uy.s:723: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:723: Error: unknown opcode `timer'
+/tmp/ccZzq1Uy.s:723: Error: unknown opcode `startperio'
+/tmp/ccZzq1Uy.s:723: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:723: Error: unknown opcode `timer'
+/tmp/ccZzq1Uy.s:723: Error: unknown opcode `startperio'
+/tmp/ccZzq1Uy.s:759: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:759: Error: unknown opcode `base'
+/tmp/ccZzq1Uy.s:760: Error: missing ')'
+/tmp/ccZzq1Uy.s:760: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:760: Error: unknown opcode `base'
+/tmp/ccZzq1Uy.s:761: Error: missing ')'
+/tmp/ccZzq1Uy.s:761: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:761: Error: unknown opcode `base'
+/tmp/ccZzq1Uy.s:762: Error: missing ')'
+/tmp/ccZzq1Uy.s:762: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:762: Error: unknown opcode `base'
+/tmp/ccZzq1Uy.s:767: Error: `,' required
+/tmp/ccZzq1Uy.s:767: Error: constant value required
+/tmp/ccZzq1Uy.s:767: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:767: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:767: Error: unknown opcode `base'
+/tmp/ccZzq1Uy.s:768: Error: missing ')'
+/tmp/ccZzq1Uy.s:768: Error: `,' required
+/tmp/ccZzq1Uy.s:768: Error: constant value required
+/tmp/ccZzq1Uy.s:768: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:768: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:768: Error: unknown opcode `base'
+/tmp/ccZzq1Uy.s:769: Error: missing ')'
+/tmp/ccZzq1Uy.s:769: Error: `,' required
+/tmp/ccZzq1Uy.s:769: Error: constant value required
+/tmp/ccZzq1Uy.s:769: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:769: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:769: Error: unknown opcode `base'
+/tmp/ccZzq1Uy.s:770: Error: missing ')'
+/tmp/ccZzq1Uy.s:770: Error: `,' required
+/tmp/ccZzq1Uy.s:770: Error: constant value required
+/tmp/ccZzq1Uy.s:770: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:770: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:770: Error: unknown opcode `base'
+/tmp/ccZzq1Uy.s:776: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:776: Error: unknown opcode `setinterru'
+/tmp/ccZzq1Uy.s:838: Error: missing ')'
+/tmp/ccZzq1Uy.s:838: Error: `,' required
+/tmp/ccZzq1Uy.s:838: Error: constant value required
+/tmp/ccZzq1Uy.s:838: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:838: Error: unknown opcode `m_next'
+/tmp/ccZzq1Uy.s:839: Error: `,' required
+/tmp/ccZzq1Uy.s:839: Error: constant value required
+/tmp/ccZzq1Uy.s:839: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:839: Error: unknown opcode `m_next'
+/tmp/ccZzq1Uy.s:841: Error: `,' required
+/tmp/ccZzq1Uy.s:841: Error: constant value required
+/tmp/ccZzq1Uy.s:841: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:841: Error: unknown opcode `m_head'
+/tmp/ccZzq1Uy.s:842: Error: `,' required
+/tmp/ccZzq1Uy.s:842: Error: constant value required
+/tmp/ccZzq1Uy.s:842: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:842: Error: unknown opcode `m_tail'
+/tmp/ccZzq1Uy.s:887: Error: missing ')'
+/tmp/ccZzq1Uy.s:887: Error: `,' required
+/tmp/ccZzq1Uy.s:887: Error: constant value required
+/tmp/ccZzq1Uy.s:887: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:887: Error: unknown opcode `cycles'
+/tmp/ccZzq1Uy.s:888: Error: `,' required
+/tmp/ccZzq1Uy.s:888: Error: constant value required
+/tmp/ccZzq1Uy.s:888: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:888: Error: unknown opcode `cycles'
+/tmp/ccZzq1Uy.s:920: Error: unknown opcode `m_head'
+/tmp/ccZzq1Uy.s:923: Error: unknown opcode `m_head'
+/tmp/ccZzq1Uy.s:924: Error: unknown opcode `m_head'
+/tmp/ccZzq1Uy.s:926: Error: `)' required
+/tmp/ccZzq1Uy.s:926: Error: unknown opcode `m_next'
+/tmp/ccZzq1Uy.s:927: Error: `)' required
+/tmp/ccZzq1Uy.s:927: Error: unknown opcode `m_next'
+/tmp/ccZzq1Uy.s:929: Error: `,' required
+/tmp/ccZzq1Uy.s:929: Error: constant value required
+/tmp/ccZzq1Uy.s:929: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:929: Error: unknown opcode `m_head'
+/tmp/ccZzq1Uy.s:930: Error: unknown opcode `m_head'
+/tmp/ccZzq1Uy.s:933: Error: `,' required
+/tmp/ccZzq1Uy.s:933: Error: constant value required
+/tmp/ccZzq1Uy.s:933: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:933: Error: unknown opcode `m_tail'
+/tmp/ccZzq1Uy.s:937: Error: `)' required
+/tmp/ccZzq1Uy.s:937: Error: unknown opcode `m_next'
+/tmp/ccZzq1Uy.s:938: Error: `)' required
+/tmp/ccZzq1Uy.s:938: Error: unknown opcode `m_next'
+/tmp/ccZzq1Uy.s:943: Error: unknown opcode `taskbasic'
+/tmp/ccZzq1Uy.s:943: Error: unknown opcode `runtask'
+/tmp/ccZzq1Uy.s:970: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:970: Error: unknown opcode `setinterru'
+/tmp/ccZzq1Uy.s:973: Error: unknown opcode `m_head'
+/tmp/ccZzq1Uy.s:976: Error: unknown opcode `m_head'
+/tmp/ccZzq1Uy.s:977: Error: unknown opcode `m_head'
+/tmp/ccZzq1Uy.s:979: Error: `)' required
+/tmp/ccZzq1Uy.s:979: Error: unknown opcode `m_next'
+/tmp/ccZzq1Uy.s:980: Error: `)' required
+/tmp/ccZzq1Uy.s:980: Error: unknown opcode `m_next'
+/tmp/ccZzq1Uy.s:982: Error: `,' required
+/tmp/ccZzq1Uy.s:982: Error: constant value required
+/tmp/ccZzq1Uy.s:982: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:982: Error: unknown opcode `m_head'
+/tmp/ccZzq1Uy.s:983: Error: unknown opcode `m_head'
+/tmp/ccZzq1Uy.s:986: Error: `,' required
+/tmp/ccZzq1Uy.s:986: Error: constant value required
+/tmp/ccZzq1Uy.s:986: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:986: Error: unknown opcode `m_tail'
+/tmp/ccZzq1Uy.s:990: Error: `)' required
+/tmp/ccZzq1Uy.s:990: Error: unknown opcode `m_next'
+/tmp/ccZzq1Uy.s:991: Error: `)' required
+/tmp/ccZzq1Uy.s:991: Error: unknown opcode `m_next'
+/tmp/ccZzq1Uy.s:996: Error: unknown opcode `taskbasic'
+/tmp/ccZzq1Uy.s:996: Error: unknown opcode `runtask'
+/tmp/ccZzq1Uy.s:1010: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:1010: Error: unknown opcode `timer'
+/tmp/ccZzq1Uy.s:1010: Error: unknown opcode `startperio'
+/tmp/ccZzq1Uy.s:1016: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:1016: Error: unknown opcode `timer'
+/tmp/ccZzq1Uy.s:1016: Error: unknown opcode `startperio'
+/tmp/ccZzq1Uy.s:1022: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:1022: Error: unknown opcode `timer'
+/tmp/ccZzq1Uy.s:1022: Error: unknown opcode `startperio'
+/tmp/ccZzq1Uy.s:1096: Error: `)' required
+/tmp/ccZzq1Uy.s:1096: Error: unknown opcode `atm128powe'
+/tmp/ccZzq1Uy.s:1097: Error: `)' required
+/tmp/ccZzq1Uy.s:1097: Error: unknown opcode `atm128powe'
+/tmp/ccZzq1Uy.s:1123: Error: unknown opcode `m_head'
+/tmp/ccZzq1Uy.s:1127: Error: unknown opcode `m_head'
+/tmp/ccZzq1Uy.s:1128: Error: unknown opcode `m_head'
+/tmp/ccZzq1Uy.s:1130: Error: `)' required
+/tmp/ccZzq1Uy.s:1130: Error: unknown opcode `m_next'
+/tmp/ccZzq1Uy.s:1131: Error: `)' required
+/tmp/ccZzq1Uy.s:1131: Error: unknown opcode `m_next'
+/tmp/ccZzq1Uy.s:1133: Error: `,' required
+/tmp/ccZzq1Uy.s:1133: Error: constant value required
+/tmp/ccZzq1Uy.s:1133: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:1133: Error: unknown opcode `m_head'
+/tmp/ccZzq1Uy.s:1134: Error: unknown opcode `m_head'
+/tmp/ccZzq1Uy.s:1137: Error: `,' required
+/tmp/ccZzq1Uy.s:1137: Error: constant value required
+/tmp/ccZzq1Uy.s:1137: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:1137: Error: unknown opcode `m_tail'
+/tmp/ccZzq1Uy.s:1141: Error: `)' required
+/tmp/ccZzq1Uy.s:1141: Error: unknown opcode `m_next'
+/tmp/ccZzq1Uy.s:1142: Error: `)' required
+/tmp/ccZzq1Uy.s:1142: Error: unknown opcode `m_next'
+/tmp/ccZzq1Uy.s:1149: Error: unknown opcode `taskbasic'
+/tmp/ccZzq1Uy.s:1149: Error: unknown opcode `runtask'
+/tmp/ccZzq1Uy.s:1152: Error: unknown opcode `atm128powe'
+/tmp/ccZzq1Uy.s:1154: Error: unrecognized symbol type ""
+/tmp/ccZzq1Uy.s:1154: Error: unknown opcode `atm128powe'
+/tmp/ccZzq1Uy.s:1155: Error: expected comma after name `McuSleepC' in .size directive
+/tmp/ccZzq1Uy.s:1155: Error: unknown opcode `atm128powe'
+/tmp/ccZzq1Uy.s:1156: Error: unknown opcode `mcusleepc'
+/tmp/ccZzq1Uy.s:1163: Error: missing size expression
+/tmp/ccZzq1Uy.s:1163: Error: unknown opcode `cycles'
+/tmp/ccZzq1Uy.s:1164: Error: missing size expression
+/tmp/ccZzq1Uy.s:1164: Error: unknown opcode `m_head'
+/tmp/ccZzq1Uy.s:1165: Error: missing size expression
+/tmp/ccZzq1Uy.s:1165: Error: unknown opcode `m_tail'
+/tmp/ccZzq1Uy.s:1166: Error: missing size expression
+/tmp/ccZzq1Uy.s:1166: Error: unknown opcode `m_next'
+/tmp/ccZzq1Uy.s:1167: Error: missing size expression
+/tmp/ccZzq1Uy.s:1167: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:1167: Error: garbage at end of line
+/tmp/ccZzq1Uy.s:1168: Error: missing size expression
+/tmp/ccZzq1Uy.s:1168: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:1168: Error: unknown opcode `t0'
+/tmp/ccZzq1Uy.s:1169: Error: missing size expression
+/tmp/ccZzq1Uy.s:1169: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:1169: Error: unknown opcode `dt'
+/tmp/ccZzq1Uy.s:1170: Error: missing size expression
+/tmp/ccZzq1Uy.s:1170: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:1170: Error: unknown opcode `base'
+/tmp/ccZzq1Uy.s:1171: Error: missing size expression
+/tmp/ccZzq1Uy.s:1171: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:1171: Error: unknown opcode `m_dt'
+/tmp/ccZzq1Uy.s:1172: Error: missing size expression
+/tmp/ccZzq1Uy.s:1172: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:1172: Error: unknown opcode `m_oneshot'
+/tmp/ccZzq1Uy.s:1173: Error: missing size expression
+/tmp/ccZzq1Uy.s:1173: Error: junk at end of line, first unrecognized character is `0'
+/tmp/ccZzq1Uy.s:1173: Error: unknown opcode `m_timers'
+make: *** [exe0] Error 1

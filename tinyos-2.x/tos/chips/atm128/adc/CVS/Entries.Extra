@@ -1,0 +1,17 @@
+/Adc.h////*///
+/AdcP.nc////*///
+/AdcReadClientC.nc////*///
+/AdcReadNowClientC.nc////*///
+/AdcReadStreamClientC.nc////*///
+/AdcStreamP.nc////*///
+/Atm128Adc.h////*///
+/Atm128AdcC.nc////*///
+/Atm128AdcConfig.nc////*///
+/Atm128AdcMultiple.nc////*///
+/Atm128AdcP.nc////*///
+/Atm128AdcSingle.nc////*///
+/HplAtm128Adc.nc////*///
+/HplAtm128AdcC.nc////*///
+/HplAtm128AdcP.nc////*///
+/WireAdcP.nc////*///
+/WireAdcStreamP.nc////*///

@@ -1,0 +1,17 @@
+/.platform////*///
+/ActiveMessageC.nc////*///
+/DemoSensorC.nc////*///
+/DemoSensorNowC.nc////*///
+/DemoSensorStreamC.nc////*///
+/LedsP.nc////*///
+/PlatformC.nc////*///
+/PlatformLedsC.nc////*///
+/PlatformP.nc////*///
+/PlatformSerialC.nc////*///
+/TinyNodeSerialP.nc////*///
+/VoltageC.nc////*///
+/VoltageStreamC.nc////*///
+/hardware.h////*///
+/platform.h////*///
+/platform_message.h////*///
+D/chips///////

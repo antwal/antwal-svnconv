@@ -1,0 +1,15 @@
+/BlockingHamamatsuS10871TsrC.nc////*///
+/BlockingHamamatsuS1087ParC.nc////*///
+/BlockingSensirionSht11C.nc////*///
+/BlockingSensirionSht11ReaderImplP.nc////*///
+/BlockingSensirionSht11ReaderP.nc////*///
+/CHamamatsuS10871TsrC.nc////*///
+/CHamamatsuS10871TsrP.nc////*///
+/CHamamatsuS1087ParC.nc////*///
+/CHamamatsuS1087ParP.nc////*///
+/CSensirionSht11C.nc////*///
+/CSensirionSht11P.nc////*///
+/tmote_onboard_sensors.h////*///
+/tosthread_hamamatsuS1087.h////*///
+/tosthread_hamamatsuS10871.h////*///
+/tosthread_sensirionSht11.h////*///

@@ -1,0 +1,5 @@
+/.cvsignore////*///
+/Makefile.am////*///
+D/intelmote2///////
+D/mica///////
+D/msp430///////

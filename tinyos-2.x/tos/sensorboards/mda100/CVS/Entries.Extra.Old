@@ -1,0 +1,12 @@
+/.sensor////*///
+/ArbitratedPhotoDeviceP.nc////*///
+/ArbitratedTempDeviceP.nc////*///
+/DemoSensorC.nc////*///
+/PhotoC.nc////*///
+/PhotoImplP.nc////*///
+/PhotoTempConfigC.nc////*///
+/PhotoTempConfigP.nc////*///
+/SharedAnalogDeviceC.nc////*///
+/SharedAnalogDeviceP.nc////*///
+/TempC.nc////*///
+/mda100.h////*///

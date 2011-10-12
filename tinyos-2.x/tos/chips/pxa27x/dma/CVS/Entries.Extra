@@ -1,0 +1,10 @@
+/DMA.h////*///
+/HalPXA27xDMAChannel.nc////*///
+/HalPXA27xDMAChannelC.nc////*///
+/HalPXA27xDMAChannelM.nc////*///
+/HplPXA27xDMAC.nc////*///
+/HplPXA27xDMAChnl.nc////*///
+/HplPXA27xDMACntl.nc////*///
+/HplPXA27xDMAInfo.nc////*///
+/HplPXA27xDMAInfoC.nc////*///
+/HplPXA27xDMAM.nc////*///

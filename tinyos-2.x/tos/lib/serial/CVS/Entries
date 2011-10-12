@@ -1,0 +1,22 @@
+/HdlcTranslateC.nc/1.5/Wed Jan 24 17:17:01 2007//
+/README.txt/1.2/Wed Jul 12 17:02:28 2006//
+/ReceiveBytePacket.nc/1.4/Tue Dec 12 18:23:31 2006//
+/SendBytePacket.nc/1.4/Tue Dec 12 18:23:31 2006//
+/Serial.h/1.7/Wed Feb 20 04:53:37 2008//
+/Serial802_15_4C.nc/1.2/Mon Jun 16 18:57:46 2008//
+/SerialAMQueueP.nc/1.4/Tue Dec 12 18:23:31 2006//
+/SerialAMReceiverC.nc/1.4/Tue Dec 12 18:23:31 2006//
+/SerialAMSenderC.nc/1.4/Tue Dec 12 18:23:31 2006//
+/SerialActiveMessageC.nc/1.4/Tue Dec 12 18:23:31 2006//
+/SerialActiveMessageP.nc/1.9/Wed Jun  4 03:43:50 2008//
+/SerialByteComm.nc/1.4/Tue Dec 12 18:23:31 2006//
+/SerialDispatcherC.nc/1.5/Wed Jan 24 17:17:01 2007//
+/SerialDispatcherP.nc/1.7/Wed Jun  4 03:43:53 2008//
+/SerialFlush.nc/1.1/Tue Feb  6 02:39:43 2007//
+/SerialFrameComm.nc/1.4/Tue Dec 12 18:23:31 2006//
+/SerialP.nc/1.5/Wed Jan 24 17:17:01 2007//
+/SerialPacketInfo.nc/1.2/Wed Jul 12 17:02:30 2006//
+/SerialPacketInfo802_15_4P.nc/1.5/Tue May 13 00:15:21 2008//
+/SerialPacketInfoActiveMessageP.nc/1.4/Tue Dec 12 18:23:32 2006//
+/SerialQueueP.nc/1.4/Tue Dec 12 18:23:32 2006//
+D

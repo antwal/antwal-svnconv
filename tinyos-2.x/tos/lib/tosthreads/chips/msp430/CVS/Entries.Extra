@@ -1,0 +1,16 @@
+/HplAdc12P.nc////*///
+/HplMsp430DmaC.nc////*///
+/HplMsp430DmaP.nc////*///
+/HplMsp430InterruptC.nc////*///
+/HplMsp430InterruptNMIC.nc////*///
+/HplMsp430InterruptNMIP.nc////*///
+/HplMsp430InterruptP.nc////*///
+/HplMsp430Usart0C.nc////*///
+/HplMsp430Usart0P.nc////*///
+/HplMsp430Usart1C.nc////*///
+/HplMsp430Usart1P.nc////*///
+/Msp430Adc12P.nc////*///
+/Msp430TimerC.nc////*///
+/Msp430TimerCommonP.nc////*///
+/chip_thread.h////*///
+D/adc12///////
