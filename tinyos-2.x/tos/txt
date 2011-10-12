@@ -1,0 +1,12 @@
+ hi sam,
+        
+        This is the report of work being done in this week
+        
+        -> Study of RF230 Radio Stack implementation for tinyos-2.x is still
+ongoing. Completed understanding the layers(software) involved and their
+functionality. Need to go head understanding Hardware presentation layer
+components.
+
+        -> Field trip to CRIDA and a visit to GHMC for SPARK demo
+
+        -> Study of Dynamic MANET On-Demand(DYMO) Routing protocol on going
