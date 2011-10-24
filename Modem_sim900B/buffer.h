@@ -60,9 +60,12 @@ unsigned char	bufferGetFromFront(cBuffer* buffer);
 //! dump (discard) the first numbytes from the front of the buffer
 void bufferDumpFromFront(cBuffer* buffer, unsigned short numbytes);
 
+//! It reads from front does not modify the index
+unsigned char  bufferReadFromFront(cBuffer* buffer);
 //! get a byte at the specified index in the buffer (kind of like array access)
 // ** note: this does not remove the byte that was read from the buffer
 unsigned char	bufferGetAtIndex(cBuffer* buffer, unsigned short index);
+
 
 //! add a byte to the end of the buffer
 unsigned char	bufferAddToEnd(cBuffer* buffer, unsigned char data);

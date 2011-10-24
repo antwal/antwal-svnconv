@@ -21,9 +21,26 @@
 #define serial_fix()            1               													// Clear error
 
 
+unsigned char ERROR;									// Stores the error number
+char APaddr[] = "\"gprssouth.cellone.in\"\r";
+
+unsigned char signal[2];							// Stores signal strength
+char addr[20] = {'\0'};												// used to store ip address
+unsigned char res;
+
+enum {
+SHUT = 0,
+INIT,
+SIGLVL,
+NWATT,
+APN,
+NWUP,
+IP,
+};
+
 struct termios  options;
 int fd;
-unsigned char state = 0;
+unsigned char state = SHUT;
 
 unsigned int TIME;                              													// 10 millseconds counter
 #define TIME_SET(a) TIME=a                      													// Set 10 millisecond counter to value 'a'
@@ -45,7 +62,7 @@ void *timer(void *arg){
 
 void *read_serial(void *arg)
 {
-	unsigned char res =0, lbuff;
+	unsigned char lbuff;
 	while(1){
 		res = read(fd, &lbuff, 1);
 		if(res <= 0)
@@ -53,7 +70,6 @@ void *read_serial(void *arg)
 		else{
 			if(lbuff != 0x00 && lbuff != 0xa)
 			{
-				fprintf(stderr,"%c",lbuff);
 				if(bufferIsNotFull(&modem_buffer))
 				bufferAddToEnd(&modem_buffer, lbuff);																	// Keeping data into the buffer	
 				else
@@ -65,6 +81,38 @@ void *read_serial(void *arg)
 }
 
 /*
+*	This function matches the data received with the res buffer
+* @res buffer with which rcvd data to be matched
+* @timeout Time to wait for response
+* @return If matched SUCCESS else FAIL
+*/
+unsigned char serialMatch(const char *resp, unsigned timeout)
+{
+	addr2 = addr4 = 0;
+	for (TIME_SET(0); TIME<timeout; )           														// loop until time runs out
+	{	
+			if (serial_rx_ready()) 
+			{
+				serial_get(addr4);                      														// get character
+
+				if(addr4 != '\r')
+				fprintf(stderr,"%c",addr4);
+				else
+				fprintf(stderr,"\n");
+
+				if (resp[addr2] == addr4) addr2++;       													// does char match response string
+   	   	else addr2 = 0;									                          						// otherwise reset match pointer
+ 				TIME_SET(0);
+
+				if (!resp[addr2]){																								// All char are matched 	
+					return SUCCESS;            																							// finished if string matches
+     	 }
+			}
+	}
+	return FAIL;
+}
+
+/*
 *	This function checks the response from the modem 
 *	@timeout It takes the timeout for that command
 * @returns Success if command response is what is expected else returns error
@@ -72,42 +120,59 @@ void *read_serial(void *arg)
 unsigned char response(unsigned int timeout)
 {
 	
+
+		switch (state)
+		{
+			case SHUT:
+					res = serialMatch("OK", timeout);
+					break;
+			case INIT:
+					res = serialMatch("OK",timeout);
+					break;
+
+			case NWATT:
+					res = serialMatch("OK",timeout);
+					break;
+			case SIGLVL:
+					res = serialMatch("+CSQ: ",timeout);
+					serial_get(signal[0]);
+					serial_get(signal[1]);
+					res = serialMatch("OK",10);
+					printf("SIGNAL: %s\n",signal);
+					break;
+			case APN:
+					res = serialMatch("OK",timeout);
+					break;
+			case NWUP:
+					res = serialMatch("OK",timeout);
+					break;
+
+			case IP:
+					res = serialMatch("ERROR", timeout);
+					if(res != SUCCESS){										// that means error has not occured					
+					strncpy(addr,mBuffer,15);
+					res = !res;
+					}
+					else	res = !res;
+
+					break;
+
+			default:								
+					break;
+		}
+		return res;
 }
 
-char sendwait(const char *send, const char *response, unsigned int timeout) {
-	char sent = 1;	
+char sendwait(const char *send, unsigned int timeout) {
 	addr2=addr3=0;
-	printf("\nto Send = %s\n", send);
-  
- 	for (TIME_SET(0); TIME<timeout; )           														// loop until time runs out
-	{	
-		
-		//while(!sent)																														// Reciving the response from modem
-		//{
-			if (serial_rx_ready()) 
-			{
-				serial_get(addr4);                      														// get character
-				//if(addr4 != 0xa)
-				printf("%c",addr4);
-				// Checking if response string is checked already
- 				if(!response[addr2]){
-						sent = 1;
-				}
-				
-				if (response[addr2] == addr4) addr2++;       													// does char match response string
-   	   	else addr2 = 0;									                          						// otherwise reset match pointer
- 				
-				if (!response[addr2]){																								// All char are matched 
-						sent = 1;
-						printf("\n");
-						if(!send[addr3])
-						return 0;            																							// finished if string matches
-     	 }
-			}
-		//}
-	
+
 	// Sending commands to the modem 
-		if (send[addr3] ) {  																											// if char to send and Tx ready	
+	do{
+		if (serial_tx_ready() ) {  																											// if char to send and Tx ready	
+			if(send[addr3] != '\r')
+				printf("%c", send[addr3]);
+			else
+				printf("\n");
 		    if (send[addr3]=='|') { 																							// if pause character
 	      		TIME_SET(0);	
 						while (TIME < 100);                      													// Polling; has 1 second expired yet?
@@ -119,32 +184,71 @@ char sendwait(const char *send, const char *response, unsigned int timeout) {
 	      		serial_send(send[addr3]);																   				// send the character
  	    	 		addr3++;                    																			// point to next char in tx string
  	     	}
-	// All characters are sent			  
-				if(!send[addr3]){
-					sent = 0;
-				}
- 	   }
-	}
-	return FAIL;																																	// Timed Out; Some error
+ 			}
+		}
+		while(send[addr3]);
+	
+		addr3 = response(timeout); 	   
+
+	return addr3;
 }
 
 /* Modem initialisation function */
 unsigned char modem_init(void){
 	unsigned char result; 
+	char CMD[26 + 10]="AT+CSTT=";
+	do{
 	switch(state){
+	case SHUT:
+		result = sendwait("AT+CIPSHUT\r", 500);
+		result = sendwait("AT+CIPSTATUS\r",500);	
+			break;
+
 	case INIT:           
-			result = sendwait("\rATH\r|","OK", 200);
-			result = sendwait("ATZ\r|","OK", 200);
-			result = sendwait("AT&FS11=55\r","OK",300);	 																					// Init modem
-			result = sendwait("AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0\r","OK",100);
+			result = sendwait("\rATH\r", 200);
+			result = sendwait("ATZ\r", 200);
+			result = sendwait("AT&FS11=55\r",300);	 																					// Init modem
+			result = sendwait("\rAT S7=45 S0=0 L1 V1 X4 &c1 E0 Q0\r",100);
 			
-	result = sendwait("AT+CGATT=1\r","OK",300);
-	result = sendwait("AT+CSQ\r","OK",100);
-	result = sendwait("AT+CSTT=\"gprssouth.cellone.in\"\r","OK",200);
-	result = sendwait("AT+CIICR\r","OK",300);
-	result = sendwait("AT+CIFSR\r","",200);
+			break;
+
+	case NWATT:
+			result = sendwait("AT+CGATT=1\r", 300);
+			break;
+
+	case SIGLVL:		
+			result = sendwait("AT+CSQ\r",100);
+			break;
+
+	case APN:
+			
+			strcat(CMD,APaddr);
+			result = sendwait(CMD,200);
+			break;
+
+	case NWUP:
+			result = sendwait("AT+CIICR\r",500);
+			break;
+
+	case IP:
+			bufferFlush(&modem_buffer);
+			result = sendwait("AT+CIFSR\r",200);
+			break;
+
+	default:
+			break;
+		}
 					// Error occurred in connection
-	return 0;
+		if(result== FAIL)
+			{
+				ERROR = state;
+				state = FAIL;
+			}
+		else 
+			state ++;		
+	}
+	while(state != IP+1 && result != FAIL);
+	return result;
 }
 
 /* Serial intiailisation in PC*/
@@ -168,7 +272,7 @@ void display_data(unsigned char* data){
 
 /* Main Function */
 int main(void) {
-	
+	unsigned char res;
  	pthread_t timer_thread;																										// timer thread which keeps updating timer at 10ms
 	pthread_t read_thread;																										// Reads data from serial port and keeps in the modem buffer
 
@@ -179,10 +283,14 @@ int main(void) {
  	pthread_create(&timer_thread, NULL, timer, NULL);													// Thread for Timer
  	pthread_create(&read_thread, NULL, read_serial, NULL);										// Thread for Serial Read
 
-
-//  	sendwait("at\r", "OK", 100);
-	while(modem_init());								// Do till modem gets connected
-        printf("Modem initialised successfully\n");
+	res = modem_init();								// Do till modem gets connected
+	if(res == SUCCESS){
+  printf("Modem initialised successfully\n");
+	printf("IP:%s\n",addr);
+	}
+	else
+  printf("Modem initialised FAiled\n");
 
 	return 1;
 }
+

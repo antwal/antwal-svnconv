@@ -81,6 +81,31 @@ unsigned char  bufferGetFromFront(cBuffer* buffer)
 	return data;
 }
 
+// Reads data from buffer but does not affects the data index
+unsigned char  bufferReadFromFront(cBuffer* buffer)
+{
+	unsigned char data = 0;
+	// begin critical section
+	CRITICAL_SECTION_START;
+	// check to see if there's data in the buffer
+	if(buffer->datalength)
+	{
+		// get the first character from buffer
+		data = buffer->dataptr[buffer->dataindex];
+		// move index down and decrement length
+		buffer->dataindex++;
+		if(buffer->dataindex >= buffer->size)
+		{
+			buffer->dataindex -= buffer->size;
+		}
+//		buffer->datalength--;
+	}
+	// end critical section
+	CRITICAL_SECTION_END;
+	// return
+	return data;
+}
+
 void bufferDumpFromFront(cBuffer* buffer, unsigned short numbytes)
 {
 	// begin critical section
@@ -169,6 +194,7 @@ void bufferFlush(cBuffer* buffer)
 	CRITICAL_SECTION_START;
 	// flush contents of the buffer
 	buffer->datalength = 0;
+	buffer->dataindex = 0;
 	// end critical section
 	CRITICAL_SECTION_END;
 }
