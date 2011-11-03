@@ -67,9 +67,13 @@ implementation{
   norace uint8_t m_tx_intr;
   
   command error_t Init.init() {
-    if (PLATFORM_BAUDRATE == 19200UL)
+    if (PLATFORM_BAUDRATE_uart0 == 19200UL)
       m_byte_time = 200; // 1 TMicor ~= 2.12 us, one byte = 417us ~= 200
-    else if (PLATFORM_BAUDRATE == 57600UL)
+    else if (PLATFORM_BAUDRATE_uart0 == 57600UL)
+      m_byte_time = 68;  // 1 TMicor ~= 2.12 us, one byte = 138us ~= 65
+    if (PLATFORM_BAUDRATE_uart1 == 19200UL)
+      m_byte_time = 200; // 1 TMicor ~= 2.12 us, one byte = 417us ~= 200
+    else if (PLATFORM_BAUDRATE_uart1 == 57600UL)
       m_byte_time = 68;  // 1 TMicor ~= 2.12 us, one byte = 138us ~= 65
     return SUCCESS;
   }

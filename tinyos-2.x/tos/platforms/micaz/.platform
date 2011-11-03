@@ -47,6 +47,7 @@ push( @includes, qw(
   -mmcu=atmega128
   -fnesc-target=avr
   -fnesc-no-debug
+  -fnesc-separator=__
 
 );
 

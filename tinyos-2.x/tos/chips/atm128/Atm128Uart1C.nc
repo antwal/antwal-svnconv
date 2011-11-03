@@ -32,34 +32,33 @@
 /**
  * @author Alec Woo <awoo@archrock.com>
  * @author Jonathan Hui <jhui@archrock.com>
- * @version $Revision: 1.4 $ $Date: 2006/12/12 18:23:42 $
+ * @author ABhishek Singh <sabhishek@cdac.in>		// Added the UART1 Interface
+ * @version $Revision: 1.4 $ $Date: 2011/10/12 16:46:25 $
  */
 
-configuration PlatformSerialC {
+configuration Atm128Uart1C {
   
   provides interface StdControl;
-  provides interface UartStream;
   provides interface UartByte;
+  provides interface UartStream;
+  uses interface Counter<TMicro, uint32_t>;
   
 }
-implementation {
 
-/*  components Atm128Uart0C as Uart0;
-  StdControl = Uart0;
-  UartStream = Uart0;
-  UartByte = Uart0;
+implementation{
   
-  components CounterMicro32C;
-  Uart0.Counter -> CounterMicro32C;
-  */
-
-// Using Uart1 for Serial Debugging purpose
-  components Atm128Uart1C as Uart1;
-  StdControl = Uart1;
-  UartStream = Uart1;
-  UartByte = Uart1;
+  components new Atm128UartP() as UartP;
+  StdControl = UartP;
+  UartByte = UartP;
+  UartStream = UartP;
+  UartP.Counter = Counter;
   
-  components CounterMicro32C;
-  Uart1.Counter -> CounterMicro32C;
-
+  components HplAtm128UartC as HplUartC;
+  UartP.HplUartTxControl -> HplUartC.Uart1TxControl;
+  UartP.HplUartRxControl -> HplUartC.Uart1RxControl;
+  UartP.HplUart -> HplUartC.HplUart1;
+  
+  components MainC;
+  MainC.SoftwareInit -> UartP;
+  
 }

@@ -921,6 +921,10 @@ enum __nesc_unnamed4309 {
 };
 
 enum __nesc_unnamed4310 {
+
+
+
+
   PLATFORM_BAUDRATE = 57600L
 };
 # 32 "/opt/tinyos-2.x/tos/types/Leds.h"
@@ -1002,11 +1006,11 @@ static error_t MeasureClockC__Init__init(void );
 # 56 "/opt/tinyos-2.x/tos/interfaces/TaskBasic.nc"
 static error_t SchedulerBasicP__TaskBasic__postTask(
 # 45 "/opt/tinyos-2.x/tos/system/SchedulerBasicP.nc"
-uint8_t arg_0x4035cb38);
+uint8_t arg_0x4035cbc0);
 # 64 "/opt/tinyos-2.x/tos/interfaces/TaskBasic.nc"
 static void SchedulerBasicP__TaskBasic__default__runTask(
 # 45 "/opt/tinyos-2.x/tos/system/SchedulerBasicP.nc"
-uint8_t arg_0x4035cb38);
+uint8_t arg_0x4035cbc0);
 # 46 "/opt/tinyos-2.x/tos/interfaces/Scheduler.nc"
 static void SchedulerBasicP__Scheduler__init(void );
 #line 61
@@ -1097,11 +1101,11 @@ static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__TimerFrom__f
 #line 72
 static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__default__fired(
 # 37 "/opt/tinyos-2.x/tos/lib/timer/VirtualizeTimerC.nc"
-uint8_t arg_0x40589228);
+uint8_t arg_0x4057f228);
 # 53 "/opt/tinyos-2.x/tos/lib/timer/Timer.nc"
 static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__startPeriodic(
 # 37 "/opt/tinyos-2.x/tos/lib/timer/VirtualizeTimerC.nc"
-uint8_t arg_0x40589228, 
+uint8_t arg_0x4057f228, 
 # 53 "/opt/tinyos-2.x/tos/lib/timer/Timer.nc"
 uint32_t dt);
 # 71 "/opt/tinyos-2.x/tos/lib/timer/Counter.nc"
@@ -1185,7 +1189,7 @@ int main(void )   ;
 # 64 "/opt/tinyos-2.x/tos/interfaces/TaskBasic.nc"
 static void SchedulerBasicP__TaskBasic__runTask(
 # 45 "/opt/tinyos-2.x/tos/system/SchedulerBasicP.nc"
-uint8_t arg_0x4035cb38);
+uint8_t arg_0x4035cbc0);
 # 59 "/opt/tinyos-2.x/tos/interfaces/McuSleep.nc"
 static void SchedulerBasicP__McuSleep__sleep(void );
 # 50 "/opt/tinyos-2.x/tos/system/SchedulerBasicP.nc"
@@ -1511,7 +1515,7 @@ static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__TimerFrom__s
 
 static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__fired(
 # 37 "/opt/tinyos-2.x/tos/lib/timer/VirtualizeTimerC.nc"
-uint8_t arg_0x40589228);
+uint8_t arg_0x4057f228);
 #line 60
 enum /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0____nesc_unnamed4317 {
 #line 60
@@ -2141,9 +2145,9 @@ static inline void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer
 }
 
 # 72 "/opt/tinyos-2.x/tos/lib/timer/Timer.nc"
-inline static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__fired(uint8_t arg_0x40589228){
+inline static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__fired(uint8_t arg_0x4057f228){
 #line 72
-  switch (arg_0x40589228) {
+  switch (arg_0x4057f228) {
 #line 72
     case 0U:
 #line 72
@@ -2165,7 +2169,7 @@ inline static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer
 #line 72
     default:
 #line 72
-      /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__default__fired(arg_0x40589228);
+      /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__default__fired(arg_0x4057f228);
 #line 72
       break;
 #line 72
@@ -2603,9 +2607,9 @@ static inline void SchedulerBasicP__TaskBasic__default__runTask(uint8_t id)
 }
 
 # 64 "/opt/tinyos-2.x/tos/interfaces/TaskBasic.nc"
-inline static void SchedulerBasicP__TaskBasic__runTask(uint8_t arg_0x4035cb38){
+inline static void SchedulerBasicP__TaskBasic__runTask(uint8_t arg_0x4035cbc0){
 #line 64
-  switch (arg_0x4035cb38) {
+  switch (arg_0x4035cbc0) {
 #line 64
     case /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__fired:
 #line 64
@@ -2621,7 +2625,7 @@ inline static void SchedulerBasicP__TaskBasic__runTask(uint8_t arg_0x4035cb38){
 #line 64
     default:
 #line 64
-      SchedulerBasicP__TaskBasic__default__runTask(arg_0x4035cb38);
+      SchedulerBasicP__TaskBasic__default__runTask(arg_0x4035cbc0);
 #line 64
       break;
 #line 64

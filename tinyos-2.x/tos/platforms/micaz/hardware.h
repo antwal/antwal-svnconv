@@ -57,7 +57,22 @@ enum {
 };
 
 enum {
-  PLATFORM_BAUDRATE = 57600L
+/**
+* Modified by @ Abhishek Singh <sabhishek@cdac.in>
+* To support Soil Moisture Sensor which is based on UART
+*/
+PLATFORM_BAUDRATE = 115200L
+ 
 };
 
+#ifndef PLATFORM_BAUDRATE_uart1
+#define  PLATFORM_BAUDRATE_uart1  PLATFORM_BAUDRATE
+#endif
+
+#ifndef	SOIL_MOISTURE
+#define  PLATFORM_BAUDRATE_uart0  PLATFORM_BAUDRATE 
+#else
+#define  PLATFORM_BAUDRATE_uart0  PLATFORM_BAUDRATE
+#endif
+ 
 #endif //HARDWARE_H

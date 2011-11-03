@@ -50,9 +50,9 @@ implementation
   event void Boot.booted()
   {
 //    call alarm.start(163934);
-    call Timer0.startPeriodic( 250 );
-    call Timer1.startPeriodic( 500 );
-    call Timer2.startPeriodic( 1000 );
+    call Timer0.startPeriodic( 250);
+    call Timer1.startPeriodic( 500);
+    call Timer2.startPeriodic( 1000);
   }
 
 /*
@@ -62,12 +62,14 @@ implementation
 */
   event void Timer0.fired() {
     dbg("BlinkC", "Timer 0 fired @ %s.\n", sim_time_string());
-    call Leds.led0Toggle();
+  
+    	call Leds.led0Toggle();
   }
   
   event void Timer1.fired()
   {
     dbg("BlinkC", "Timer 1 fired @ %s \n", sim_time_string());
+// call Leds.led1Off();
     call Leds.led1Toggle();
   }
   

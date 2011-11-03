@@ -8,7 +8,7 @@ TestSerial.class: $(wildcard *.java) TestSerialMsg.java
 	javac -target 1.4 -source 1.4 *.java
 
 TestSerialMsg.java:
-	mig java -target=null $(CFLAGS) -java-classname=TestSerialMsg TestSerial.h test_serial_msg -o $@
+	mig java -target=micaz $(CFLAGS) -java-classname=TestSerialMsg TestSerial.h test_serial_msg -o $@
 
 
 include $(MAKERULES)

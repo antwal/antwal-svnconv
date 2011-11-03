@@ -962,144 +962,144 @@ enum __nesc_unnamed4266 {
   LEDS_LED6 = 1 << 6, 
   LEDS_LED7 = 1 << 7
 };
-typedef TMilli BlinkC$Timer0$precision_tag;
-typedef TMilli BlinkC$Timer1$precision_tag;
-typedef TMilli BlinkC$Timer2$precision_tag;
-enum /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Timer*/Msp430Timer32khzC$0$__nesc_unnamed4267 {
-  Msp430Timer32khzC$0$ALARM_ID = 0U
+typedef TMilli BlinkC__Timer0__precision_tag;
+typedef TMilli BlinkC__Timer1__precision_tag;
+typedef TMilli BlinkC__Timer2__precision_tag;
+enum /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Timer*/Msp430Timer32khzC__0____nesc_unnamed4267 {
+  Msp430Timer32khzC__0__ALARM_ID = 0U
 };
-typedef T32khz /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$frequency_tag;
-typedef /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$frequency_tag /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Alarm$precision_tag;
-typedef uint16_t /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Alarm$size_type;
-typedef T32khz /*Msp430Counter32khzC.Counter*/Msp430CounterC$0$frequency_tag;
-typedef /*Msp430Counter32khzC.Counter*/Msp430CounterC$0$frequency_tag /*Msp430Counter32khzC.Counter*/Msp430CounterC$0$Counter$precision_tag;
-typedef uint16_t /*Msp430Counter32khzC.Counter*/Msp430CounterC$0$Counter$size_type;
-typedef TMilli /*CounterMilli32C.Transform*/TransformCounterC$0$to_precision_tag;
-typedef uint32_t /*CounterMilli32C.Transform*/TransformCounterC$0$to_size_type;
-typedef T32khz /*CounterMilli32C.Transform*/TransformCounterC$0$from_precision_tag;
-typedef uint16_t /*CounterMilli32C.Transform*/TransformCounterC$0$from_size_type;
-typedef uint32_t /*CounterMilli32C.Transform*/TransformCounterC$0$upper_count_type;
-typedef /*CounterMilli32C.Transform*/TransformCounterC$0$from_precision_tag /*CounterMilli32C.Transform*/TransformCounterC$0$CounterFrom$precision_tag;
-typedef /*CounterMilli32C.Transform*/TransformCounterC$0$from_size_type /*CounterMilli32C.Transform*/TransformCounterC$0$CounterFrom$size_type;
-typedef /*CounterMilli32C.Transform*/TransformCounterC$0$to_precision_tag /*CounterMilli32C.Transform*/TransformCounterC$0$Counter$precision_tag;
-typedef /*CounterMilli32C.Transform*/TransformCounterC$0$to_size_type /*CounterMilli32C.Transform*/TransformCounterC$0$Counter$size_type;
-typedef TMilli /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$to_precision_tag;
-typedef uint32_t /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$to_size_type;
-typedef T32khz /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$from_precision_tag;
-typedef uint16_t /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$from_size_type;
-typedef /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$to_precision_tag /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Alarm$precision_tag;
-typedef /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$to_size_type /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Alarm$size_type;
-typedef /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$from_precision_tag /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$AlarmFrom$precision_tag;
-typedef /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$from_size_type /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$AlarmFrom$size_type;
-typedef /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$to_precision_tag /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Counter$precision_tag;
-typedef /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$to_size_type /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Counter$size_type;
-typedef TMilli /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$precision_tag;
-typedef /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$precision_tag /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Alarm$precision_tag;
-typedef uint32_t /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Alarm$size_type;
-typedef /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$precision_tag /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Timer$precision_tag;
-typedef TMilli /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$precision_tag;
-typedef /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$precision_tag /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$TimerFrom$precision_tag;
-typedef /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$precision_tag /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$Timer$precision_tag;
-typedef TMilli /*HilTimerMilliC.CounterToLocalTimeC*/CounterToLocalTimeC$0$precision_tag;
-typedef /*HilTimerMilliC.CounterToLocalTimeC*/CounterToLocalTimeC$0$precision_tag /*HilTimerMilliC.CounterToLocalTimeC*/CounterToLocalTimeC$0$LocalTime$precision_tag;
-typedef /*HilTimerMilliC.CounterToLocalTimeC*/CounterToLocalTimeC$0$precision_tag /*HilTimerMilliC.CounterToLocalTimeC*/CounterToLocalTimeC$0$Counter$precision_tag;
-typedef uint32_t /*HilTimerMilliC.CounterToLocalTimeC*/CounterToLocalTimeC$0$Counter$size_type;
+typedef T32khz /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__frequency_tag;
+typedef /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__frequency_tag /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Alarm__precision_tag;
+typedef uint16_t /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Alarm__size_type;
+typedef T32khz /*Msp430Counter32khzC.Counter*/Msp430CounterC__0__frequency_tag;
+typedef /*Msp430Counter32khzC.Counter*/Msp430CounterC__0__frequency_tag /*Msp430Counter32khzC.Counter*/Msp430CounterC__0__Counter__precision_tag;
+typedef uint16_t /*Msp430Counter32khzC.Counter*/Msp430CounterC__0__Counter__size_type;
+typedef TMilli /*CounterMilli32C.Transform*/TransformCounterC__0__to_precision_tag;
+typedef uint32_t /*CounterMilli32C.Transform*/TransformCounterC__0__to_size_type;
+typedef T32khz /*CounterMilli32C.Transform*/TransformCounterC__0__from_precision_tag;
+typedef uint16_t /*CounterMilli32C.Transform*/TransformCounterC__0__from_size_type;
+typedef uint32_t /*CounterMilli32C.Transform*/TransformCounterC__0__upper_count_type;
+typedef /*CounterMilli32C.Transform*/TransformCounterC__0__from_precision_tag /*CounterMilli32C.Transform*/TransformCounterC__0__CounterFrom__precision_tag;
+typedef /*CounterMilli32C.Transform*/TransformCounterC__0__from_size_type /*CounterMilli32C.Transform*/TransformCounterC__0__CounterFrom__size_type;
+typedef /*CounterMilli32C.Transform*/TransformCounterC__0__to_precision_tag /*CounterMilli32C.Transform*/TransformCounterC__0__Counter__precision_tag;
+typedef /*CounterMilli32C.Transform*/TransformCounterC__0__to_size_type /*CounterMilli32C.Transform*/TransformCounterC__0__Counter__size_type;
+typedef TMilli /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__to_precision_tag;
+typedef uint32_t /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__to_size_type;
+typedef T32khz /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__from_precision_tag;
+typedef uint16_t /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__from_size_type;
+typedef /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__to_precision_tag /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Alarm__precision_tag;
+typedef /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__to_size_type /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Alarm__size_type;
+typedef /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__from_precision_tag /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__AlarmFrom__precision_tag;
+typedef /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__from_size_type /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__AlarmFrom__size_type;
+typedef /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__to_precision_tag /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Counter__precision_tag;
+typedef /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__to_size_type /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Counter__size_type;
+typedef TMilli /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__precision_tag;
+typedef /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__precision_tag /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Alarm__precision_tag;
+typedef uint32_t /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Alarm__size_type;
+typedef /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__precision_tag /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Timer__precision_tag;
+typedef TMilli /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__precision_tag;
+typedef /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__precision_tag /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__TimerFrom__precision_tag;
+typedef /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__precision_tag /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__precision_tag;
+typedef TMilli /*HilTimerMilliC.CounterToLocalTimeC*/CounterToLocalTimeC__0__precision_tag;
+typedef /*HilTimerMilliC.CounterToLocalTimeC*/CounterToLocalTimeC__0__precision_tag /*HilTimerMilliC.CounterToLocalTimeC*/CounterToLocalTimeC__0__LocalTime__precision_tag;
+typedef /*HilTimerMilliC.CounterToLocalTimeC*/CounterToLocalTimeC__0__precision_tag /*HilTimerMilliC.CounterToLocalTimeC*/CounterToLocalTimeC__0__Counter__precision_tag;
+typedef uint32_t /*HilTimerMilliC.CounterToLocalTimeC*/CounterToLocalTimeC__0__Counter__size_type;
 # 51 "/opt/tinyos-2.x/tos/interfaces/Init.nc"
-static error_t PlatformP$Init$init(void );
+static error_t PlatformP__Init__init(void );
 #line 51
-static error_t MotePlatformC$Init$init(void );
+static error_t MotePlatformC__Init__init(void );
 # 35 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430ClockInit.nc"
-static void Msp430ClockP$Msp430ClockInit$defaultInitClocks(void );
+static void Msp430ClockP__Msp430ClockInit__defaultInitClocks(void );
 #line 32
-static void Msp430ClockP$Msp430ClockInit$default$initTimerB(void );
+static void Msp430ClockP__Msp430ClockInit__default__initTimerB(void );
 
 
 
-static void Msp430ClockP$Msp430ClockInit$defaultInitTimerA(void );
+static void Msp430ClockP__Msp430ClockInit__defaultInitTimerA(void );
 #line 31
-static void Msp430ClockP$Msp430ClockInit$default$initTimerA(void );
+static void Msp430ClockP__Msp430ClockInit__default__initTimerA(void );
 
 
 
 
 
-static void Msp430ClockP$Msp430ClockInit$defaultInitTimerB(void );
+static void Msp430ClockP__Msp430ClockInit__defaultInitTimerB(void );
 #line 34
-static void Msp430ClockP$Msp430ClockInit$defaultSetupDcoCalibrate(void );
+static void Msp430ClockP__Msp430ClockInit__defaultSetupDcoCalibrate(void );
 #line 29
-static void Msp430ClockP$Msp430ClockInit$default$setupDcoCalibrate(void );
-static void Msp430ClockP$Msp430ClockInit$default$initClocks(void );
+static void Msp430ClockP__Msp430ClockInit__default__setupDcoCalibrate(void );
+static void Msp430ClockP__Msp430ClockInit__default__initClocks(void );
 # 51 "/opt/tinyos-2.x/tos/interfaces/Init.nc"
-static error_t Msp430ClockP$Init$init(void );
+static error_t Msp430ClockP__Init__init(void );
 # 28 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerEvent.nc"
-static void /*Msp430TimerC.Msp430TimerA*/Msp430TimerP$0$VectorTimerX0$fired(void );
+static void /*Msp430TimerC.Msp430TimerA*/Msp430TimerP__0__VectorTimerX0__fired(void );
 #line 28
-static void /*Msp430TimerC.Msp430TimerA*/Msp430TimerP$0$Overflow$fired(void );
+static void /*Msp430TimerC.Msp430TimerA*/Msp430TimerP__0__Overflow__fired(void );
 #line 28
-static void /*Msp430TimerC.Msp430TimerA*/Msp430TimerP$0$VectorTimerX1$fired(void );
+static void /*Msp430TimerC.Msp430TimerA*/Msp430TimerP__0__VectorTimerX1__fired(void );
 #line 28
-static void /*Msp430TimerC.Msp430TimerA*/Msp430TimerP$0$Event$default$fired(
+static void /*Msp430TimerC.Msp430TimerA*/Msp430TimerP__0__Event__default__fired(
 # 40 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerP.nc"
 uint8_t arg_0x4061f4b0);
 # 28 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerEvent.nc"
-static void /*Msp430TimerC.Msp430TimerB*/Msp430TimerP$1$VectorTimerX0$fired(void );
+static void /*Msp430TimerC.Msp430TimerB*/Msp430TimerP__1__VectorTimerX0__fired(void );
 #line 28
-static void /*Msp430TimerC.Msp430TimerB*/Msp430TimerP$1$Overflow$fired(void );
+static void /*Msp430TimerC.Msp430TimerB*/Msp430TimerP__1__Overflow__fired(void );
 #line 28
-static void /*Msp430TimerC.Msp430TimerB*/Msp430TimerP$1$VectorTimerX1$fired(void );
+static void /*Msp430TimerC.Msp430TimerB*/Msp430TimerP__1__VectorTimerX1__fired(void );
 #line 28
-static void /*Msp430TimerC.Msp430TimerB*/Msp430TimerP$1$Event$default$fired(
+static void /*Msp430TimerC.Msp430TimerB*/Msp430TimerP__1__Event__default__fired(
 # 40 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerP.nc"
 uint8_t arg_0x4061f4b0);
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Timer.nc"
-static uint16_t /*Msp430TimerC.Msp430TimerB*/Msp430TimerP$1$Timer$get(void );
-static bool /*Msp430TimerC.Msp430TimerB*/Msp430TimerP$1$Timer$isOverflowPending(void );
+static uint16_t /*Msp430TimerC.Msp430TimerB*/Msp430TimerP__1__Timer__get(void );
+static bool /*Msp430TimerC.Msp430TimerB*/Msp430TimerP__1__Timer__isOverflowPending(void );
 # 33 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Capture.nc"
-static uint16_t /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$Capture$getEvent(void );
+static uint16_t /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__Capture__getEvent(void );
 #line 75
-static void /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$Capture$default$captured(uint16_t time);
+static void /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__Capture__default__captured(uint16_t time);
 # 31 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerControl.nc"
-static msp430_compare_control_t /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$Control$getControl(void );
+static msp430_compare_control_t /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__Control__getControl(void );
 # 28 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerEvent.nc"
-static void /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$Event$fired(void );
+static void /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__Event__fired(void );
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Compare.nc"
-static void /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$Compare$default$fired(void );
+static void /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__Compare__default__fired(void );
 # 37 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Timer.nc"
-static void /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$Timer$overflow(void );
+static void /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__Timer__overflow(void );
 # 33 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Capture.nc"
-static uint16_t /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$Capture$getEvent(void );
+static uint16_t /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__Capture__getEvent(void );
 #line 75
-static void /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$Capture$default$captured(uint16_t time);
+static void /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__Capture__default__captured(uint16_t time);
 # 31 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerControl.nc"
-static msp430_compare_control_t /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$Control$getControl(void );
+static msp430_compare_control_t /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__Control__getControl(void );
 # 28 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerEvent.nc"
-static void /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$Event$fired(void );
+static void /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__Event__fired(void );
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Compare.nc"
-static void /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$Compare$default$fired(void );
+static void /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__Compare__default__fired(void );
 # 37 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Timer.nc"
-static void /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$Timer$overflow(void );
+static void /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__Timer__overflow(void );
 # 33 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Capture.nc"
-static uint16_t /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$Capture$getEvent(void );
+static uint16_t /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__Capture__getEvent(void );
 #line 75
-static void /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$Capture$default$captured(uint16_t time);
+static void /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__Capture__default__captured(uint16_t time);
 # 31 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerControl.nc"
-static msp430_compare_control_t /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$Control$getControl(void );
+static msp430_compare_control_t /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__Control__getControl(void );
 # 28 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerEvent.nc"
-static void /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$Event$fired(void );
+static void /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__Event__fired(void );
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Compare.nc"
-static void /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$Compare$default$fired(void );
+static void /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__Compare__default__fired(void );
 # 37 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Timer.nc"
-static void /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$Timer$overflow(void );
+static void /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__Timer__overflow(void );
 # 33 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Capture.nc"
-static uint16_t /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Capture$getEvent(void );
+static uint16_t /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Capture__getEvent(void );
 #line 75
-static void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Capture$default$captured(uint16_t time);
+static void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Capture__default__captured(uint16_t time);
 # 31 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerControl.nc"
-static msp430_compare_control_t /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Control$getControl(void );
+static msp430_compare_control_t /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Control__getControl(void );
 #line 46
-static void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Control$enableEvents(void );
+static void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Control__enableEvents(void );
 #line 36
-static void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Control$setControlAsCompare(void );
+static void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Control__setControlAsCompare(void );
 
 
 
@@ -1110,129 +1110,129 @@ static void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Control$setContro
 
 
 
-static void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Control$disableEvents(void );
+static void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Control__disableEvents(void );
 #line 33
-static void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Control$clearPendingInterrupt(void );
+static void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Control__clearPendingInterrupt(void );
 # 28 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerEvent.nc"
-static void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Event$fired(void );
+static void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Event__fired(void );
 # 30 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Compare.nc"
-static void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Compare$setEvent(uint16_t time);
+static void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Compare__setEvent(uint16_t time);
 
-static void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Compare$setEventFromNow(uint16_t delta);
+static void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Compare__setEventFromNow(uint16_t delta);
 # 37 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Timer.nc"
-static void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Timer$overflow(void );
+static void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Timer__overflow(void );
 # 33 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Capture.nc"
-static uint16_t /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$Capture$getEvent(void );
+static uint16_t /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__Capture__getEvent(void );
 #line 75
-static void /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$Capture$default$captured(uint16_t time);
+static void /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__Capture__default__captured(uint16_t time);
 # 31 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerControl.nc"
-static msp430_compare_control_t /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$Control$getControl(void );
+static msp430_compare_control_t /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__Control__getControl(void );
 # 28 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerEvent.nc"
-static void /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$Event$fired(void );
+static void /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__Event__fired(void );
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Compare.nc"
-static void /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$Compare$default$fired(void );
+static void /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__Compare__default__fired(void );
 # 37 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Timer.nc"
-static void /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$Timer$overflow(void );
+static void /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__Timer__overflow(void );
 # 33 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Capture.nc"
-static uint16_t /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$Capture$getEvent(void );
+static uint16_t /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__Capture__getEvent(void );
 #line 75
-static void /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$Capture$default$captured(uint16_t time);
+static void /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__Capture__default__captured(uint16_t time);
 # 31 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerControl.nc"
-static msp430_compare_control_t /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$Control$getControl(void );
+static msp430_compare_control_t /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__Control__getControl(void );
 # 28 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerEvent.nc"
-static void /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$Event$fired(void );
+static void /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__Event__fired(void );
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Compare.nc"
-static void /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$Compare$default$fired(void );
+static void /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__Compare__default__fired(void );
 # 37 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Timer.nc"
-static void /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$Timer$overflow(void );
+static void /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__Timer__overflow(void );
 # 33 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Capture.nc"
-static uint16_t /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$Capture$getEvent(void );
+static uint16_t /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__Capture__getEvent(void );
 #line 75
-static void /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$Capture$default$captured(uint16_t time);
+static void /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__Capture__default__captured(uint16_t time);
 # 31 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerControl.nc"
-static msp430_compare_control_t /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$Control$getControl(void );
+static msp430_compare_control_t /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__Control__getControl(void );
 # 28 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerEvent.nc"
-static void /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$Event$fired(void );
+static void /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__Event__fired(void );
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Compare.nc"
-static void /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$Compare$default$fired(void );
+static void /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__Compare__default__fired(void );
 # 37 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Timer.nc"
-static void /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$Timer$overflow(void );
+static void /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__Timer__overflow(void );
 # 33 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Capture.nc"
-static uint16_t /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$Capture$getEvent(void );
+static uint16_t /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__Capture__getEvent(void );
 #line 75
-static void /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$Capture$default$captured(uint16_t time);
+static void /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__Capture__default__captured(uint16_t time);
 # 31 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerControl.nc"
-static msp430_compare_control_t /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$Control$getControl(void );
+static msp430_compare_control_t /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__Control__getControl(void );
 # 28 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerEvent.nc"
-static void /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$Event$fired(void );
+static void /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__Event__fired(void );
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Compare.nc"
-static void /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$Compare$default$fired(void );
+static void /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__Compare__default__fired(void );
 # 37 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Timer.nc"
-static void /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$Timer$overflow(void );
+static void /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__Timer__overflow(void );
 # 33 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Capture.nc"
-static uint16_t /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$Capture$getEvent(void );
+static uint16_t /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__Capture__getEvent(void );
 #line 75
-static void /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$Capture$default$captured(uint16_t time);
+static void /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__Capture__default__captured(uint16_t time);
 # 31 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerControl.nc"
-static msp430_compare_control_t /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$Control$getControl(void );
+static msp430_compare_control_t /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__Control__getControl(void );
 # 28 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerEvent.nc"
-static void /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$Event$fired(void );
+static void /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__Event__fired(void );
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Compare.nc"
-static void /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$Compare$default$fired(void );
+static void /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__Compare__default__fired(void );
 # 37 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Timer.nc"
-static void /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$Timer$overflow(void );
+static void /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__Timer__overflow(void );
 # 33 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Capture.nc"
-static uint16_t /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$Capture$getEvent(void );
+static uint16_t /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__Capture__getEvent(void );
 #line 75
-static void /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$Capture$default$captured(uint16_t time);
+static void /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__Capture__default__captured(uint16_t time);
 # 31 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerControl.nc"
-static msp430_compare_control_t /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$Control$getControl(void );
+static msp430_compare_control_t /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__Control__getControl(void );
 # 28 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerEvent.nc"
-static void /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$Event$fired(void );
+static void /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__Event__fired(void );
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Compare.nc"
-static void /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$Compare$default$fired(void );
+static void /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__Compare__default__fired(void );
 # 37 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Timer.nc"
-static void /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$Timer$overflow(void );
+static void /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__Timer__overflow(void );
 # 56 "/opt/tinyos-2.x/tos/interfaces/TaskBasic.nc"
-static error_t SchedulerBasicP$TaskBasic$postTask(
+static error_t SchedulerBasicP__TaskBasic__postTask(
 # 45 "/opt/tinyos-2.x/tos/system/SchedulerBasicP.nc"
 uint8_t arg_0x40587b40);
 # 64 "/opt/tinyos-2.x/tos/interfaces/TaskBasic.nc"
-static void SchedulerBasicP$TaskBasic$default$runTask(
+static void SchedulerBasicP__TaskBasic__default__runTask(
 # 45 "/opt/tinyos-2.x/tos/system/SchedulerBasicP.nc"
 uint8_t arg_0x40587b40);
 # 46 "/opt/tinyos-2.x/tos/interfaces/Scheduler.nc"
-static void SchedulerBasicP$Scheduler$init(void );
+static void SchedulerBasicP__Scheduler__init(void );
 #line 61
-static void SchedulerBasicP$Scheduler$taskLoop(void );
+static void SchedulerBasicP__Scheduler__taskLoop(void );
 #line 54
-static bool SchedulerBasicP$Scheduler$runNextTask(void );
+static bool SchedulerBasicP__Scheduler__runNextTask(void );
 # 54 "/opt/tinyos-2.x/tos/interfaces/McuPowerOverride.nc"
-static mcu_power_t McuSleepC$McuPowerOverride$default$lowestState(void );
+static mcu_power_t McuSleepC__McuPowerOverride__default__lowestState(void );
 # 59 "/opt/tinyos-2.x/tos/interfaces/McuSleep.nc"
-static void McuSleepC$McuSleep$sleep(void );
+static void McuSleepC__McuSleep__sleep(void );
 # 72 "/opt/tinyos-2.x/tos/lib/timer/Timer.nc"
-static void BlinkC$Timer0$fired(void );
+static void BlinkC__Timer0__fired(void );
 # 49 "/opt/tinyos-2.x/tos/interfaces/Boot.nc"
-static void BlinkC$Boot$booted(void );
+static void BlinkC__Boot__booted(void );
 # 72 "/opt/tinyos-2.x/tos/lib/timer/Timer.nc"
-static void BlinkC$Timer1$fired(void );
+static void BlinkC__Timer1__fired(void );
 #line 72
-static void BlinkC$Timer2$fired(void );
+static void BlinkC__Timer2__fired(void );
 # 51 "/opt/tinyos-2.x/tos/interfaces/Init.nc"
-static error_t LedsP$Init$init(void );
+static error_t LedsP__Init__init(void );
 # 56 "/opt/tinyos-2.x/tos/interfaces/Leds.nc"
-static void LedsP$Leds$led0Toggle(void );
+static void LedsP__Leds__led0Toggle(void );
 #line 72
-static void LedsP$Leds$led1Toggle(void );
+static void LedsP__Leds__led1Toggle(void );
 #line 89
-static void LedsP$Leds$led2Toggle(void );
+static void LedsP__Leds__led2Toggle(void );
 # 44 "/opt/tinyos-2.x/tos/chips/msp430/pins/HplMsp430GeneralIO.nc"
-static void /*HplMsp430GeneralIOC.P54*/HplMsp430GeneralIOP$36$IO$toggle(void );
+static void /*HplMsp430GeneralIOC.P54*/HplMsp430GeneralIOP__36__IO__toggle(void );
 #line 71
-static void /*HplMsp430GeneralIOC.P54*/HplMsp430GeneralIOP$36$IO$makeOutput(void );
+static void /*HplMsp430GeneralIOC.P54*/HplMsp430GeneralIOP__36__IO__makeOutput(void );
 #line 34
-static void /*HplMsp430GeneralIOC.P54*/HplMsp430GeneralIOP$36$IO$set(void );
+static void /*HplMsp430GeneralIOC.P54*/HplMsp430GeneralIOP__36__IO__set(void );
 
 
 
@@ -1242,11 +1242,11 @@ static void /*HplMsp430GeneralIOC.P54*/HplMsp430GeneralIOP$36$IO$set(void );
 
 
 
-static void /*HplMsp430GeneralIOC.P55*/HplMsp430GeneralIOP$37$IO$toggle(void );
+static void /*HplMsp430GeneralIOC.P55*/HplMsp430GeneralIOP__37__IO__toggle(void );
 #line 71
-static void /*HplMsp430GeneralIOC.P55*/HplMsp430GeneralIOP$37$IO$makeOutput(void );
+static void /*HplMsp430GeneralIOC.P55*/HplMsp430GeneralIOP__37__IO__makeOutput(void );
 #line 34
-static void /*HplMsp430GeneralIOC.P55*/HplMsp430GeneralIOP$37$IO$set(void );
+static void /*HplMsp430GeneralIOC.P55*/HplMsp430GeneralIOP__37__IO__set(void );
 
 
 
@@ -1256,56 +1256,56 @@ static void /*HplMsp430GeneralIOC.P55*/HplMsp430GeneralIOP$37$IO$set(void );
 
 
 
-static void /*HplMsp430GeneralIOC.P56*/HplMsp430GeneralIOP$38$IO$toggle(void );
+static void /*HplMsp430GeneralIOC.P56*/HplMsp430GeneralIOP__38__IO__toggle(void );
 #line 71
-static void /*HplMsp430GeneralIOC.P56*/HplMsp430GeneralIOP$38$IO$makeOutput(void );
+static void /*HplMsp430GeneralIOC.P56*/HplMsp430GeneralIOP__38__IO__makeOutput(void );
 #line 34
-static void /*HplMsp430GeneralIOC.P56*/HplMsp430GeneralIOP$38$IO$set(void );
+static void /*HplMsp430GeneralIOC.P56*/HplMsp430GeneralIOP__38__IO__set(void );
 # 31 "/opt/tinyos-2.x/tos/interfaces/GeneralIO.nc"
-static void /*PlatformLedsC.Led0Impl*/Msp430GpioC$0$GeneralIO$toggle(void );
+static void /*PlatformLedsC.Led0Impl*/Msp430GpioC__0__GeneralIO__toggle(void );
 
 
 
-static void /*PlatformLedsC.Led0Impl*/Msp430GpioC$0$GeneralIO$makeOutput(void );
+static void /*PlatformLedsC.Led0Impl*/Msp430GpioC__0__GeneralIO__makeOutput(void );
 #line 29
-static void /*PlatformLedsC.Led0Impl*/Msp430GpioC$0$GeneralIO$set(void );
+static void /*PlatformLedsC.Led0Impl*/Msp430GpioC__0__GeneralIO__set(void );
 
-static void /*PlatformLedsC.Led1Impl*/Msp430GpioC$1$GeneralIO$toggle(void );
+static void /*PlatformLedsC.Led1Impl*/Msp430GpioC__1__GeneralIO__toggle(void );
 
 
 
-static void /*PlatformLedsC.Led1Impl*/Msp430GpioC$1$GeneralIO$makeOutput(void );
+static void /*PlatformLedsC.Led1Impl*/Msp430GpioC__1__GeneralIO__makeOutput(void );
 #line 29
-static void /*PlatformLedsC.Led1Impl*/Msp430GpioC$1$GeneralIO$set(void );
+static void /*PlatformLedsC.Led1Impl*/Msp430GpioC__1__GeneralIO__set(void );
 
-static void /*PlatformLedsC.Led2Impl*/Msp430GpioC$2$GeneralIO$toggle(void );
+static void /*PlatformLedsC.Led2Impl*/Msp430GpioC__2__GeneralIO__toggle(void );
 
 
 
-static void /*PlatformLedsC.Led2Impl*/Msp430GpioC$2$GeneralIO$makeOutput(void );
+static void /*PlatformLedsC.Led2Impl*/Msp430GpioC__2__GeneralIO__makeOutput(void );
 #line 29
-static void /*PlatformLedsC.Led2Impl*/Msp430GpioC$2$GeneralIO$set(void );
+static void /*PlatformLedsC.Led2Impl*/Msp430GpioC__2__GeneralIO__set(void );
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Compare.nc"
-static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Msp430Compare$fired(void );
+static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Msp430Compare__fired(void );
 # 37 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Timer.nc"
-static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Msp430Timer$overflow(void );
+static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Msp430Timer__overflow(void );
 # 92 "/opt/tinyos-2.x/tos/lib/timer/Alarm.nc"
-static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Alarm$startAt(/*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Alarm$size_type t0, /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Alarm$size_type dt);
+static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Alarm__startAt(/*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Alarm__size_type t0, /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Alarm__size_type dt);
 #line 62
-static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Alarm$stop(void );
+static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Alarm__stop(void );
 # 51 "/opt/tinyos-2.x/tos/interfaces/Init.nc"
-static error_t /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Init$init(void );
+static error_t /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Init__init(void );
 # 37 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Timer.nc"
-static void /*Msp430Counter32khzC.Counter*/Msp430CounterC$0$Msp430Timer$overflow(void );
+static void /*Msp430Counter32khzC.Counter*/Msp430CounterC__0__Msp430Timer__overflow(void );
 # 53 "/opt/tinyos-2.x/tos/lib/timer/Counter.nc"
-static /*Msp430Counter32khzC.Counter*/Msp430CounterC$0$Counter$size_type /*Msp430Counter32khzC.Counter*/Msp430CounterC$0$Counter$get(void );
+static /*Msp430Counter32khzC.Counter*/Msp430CounterC__0__Counter__size_type /*Msp430Counter32khzC.Counter*/Msp430CounterC__0__Counter__get(void );
 
 
 
 
 
 
-static bool /*Msp430Counter32khzC.Counter*/Msp430CounterC$0$Counter$isOverflowPending(void );
+static bool /*Msp430Counter32khzC.Counter*/Msp430CounterC__0__Counter__isOverflowPending(void );
 
 
 
@@ -1316,223 +1316,223 @@ static bool /*Msp430Counter32khzC.Counter*/Msp430CounterC$0$Counter$isOverflowPe
 
 
 
-static void /*CounterMilli32C.Transform*/TransformCounterC$0$CounterFrom$overflow(void );
+static void /*CounterMilli32C.Transform*/TransformCounterC__0__CounterFrom__overflow(void );
 #line 53
-static /*CounterMilli32C.Transform*/TransformCounterC$0$Counter$size_type /*CounterMilli32C.Transform*/TransformCounterC$0$Counter$get(void );
+static /*CounterMilli32C.Transform*/TransformCounterC__0__Counter__size_type /*CounterMilli32C.Transform*/TransformCounterC__0__Counter__get(void );
 # 98 "/opt/tinyos-2.x/tos/lib/timer/Alarm.nc"
-static /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Alarm$size_type /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Alarm$getNow(void );
+static /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Alarm__size_type /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Alarm__getNow(void );
 #line 92
-static void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Alarm$startAt(/*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Alarm$size_type t0, /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Alarm$size_type dt);
+static void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Alarm__startAt(/*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Alarm__size_type t0, /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Alarm__size_type dt);
 #line 105
-static /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Alarm$size_type /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Alarm$getAlarm(void );
+static /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Alarm__size_type /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Alarm__getAlarm(void );
 #line 62
-static void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Alarm$stop(void );
+static void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Alarm__stop(void );
 
 
 
 
-static void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$AlarmFrom$fired(void );
+static void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__AlarmFrom__fired(void );
 # 71 "/opt/tinyos-2.x/tos/lib/timer/Counter.nc"
-static void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Counter$overflow(void );
+static void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Counter__overflow(void );
 # 64 "/opt/tinyos-2.x/tos/interfaces/TaskBasic.nc"
-static void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$fired$runTask(void );
+static void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__fired__runTask(void );
 # 67 "/opt/tinyos-2.x/tos/lib/timer/Alarm.nc"
-static void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Alarm$fired(void );
+static void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Alarm__fired(void );
 # 125 "/opt/tinyos-2.x/tos/lib/timer/Timer.nc"
-static uint32_t /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Timer$getNow(void );
+static uint32_t /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Timer__getNow(void );
 #line 118
-static void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Timer$startOneShotAt(uint32_t t0, uint32_t dt);
+static void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Timer__startOneShotAt(uint32_t t0, uint32_t dt);
 #line 67
-static void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Timer$stop(void );
+static void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Timer__stop(void );
 # 64 "/opt/tinyos-2.x/tos/interfaces/TaskBasic.nc"
-static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$updateFromTimer$runTask(void );
+static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__updateFromTimer__runTask(void );
 # 72 "/opt/tinyos-2.x/tos/lib/timer/Timer.nc"
-static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$TimerFrom$fired(void );
+static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__TimerFrom__fired(void );
 #line 72
-static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$Timer$default$fired(
+static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__default__fired(
 # 37 "/opt/tinyos-2.x/tos/lib/timer/VirtualizeTimerC.nc"
 uint8_t arg_0x408c69f0);
 # 53 "/opt/tinyos-2.x/tos/lib/timer/Timer.nc"
-static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$Timer$startPeriodic(
+static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__startPeriodic(
 # 37 "/opt/tinyos-2.x/tos/lib/timer/VirtualizeTimerC.nc"
 uint8_t arg_0x408c69f0, 
 # 53 "/opt/tinyos-2.x/tos/lib/timer/Timer.nc"
 uint32_t dt);
 # 71 "/opt/tinyos-2.x/tos/lib/timer/Counter.nc"
-static void /*HilTimerMilliC.CounterToLocalTimeC*/CounterToLocalTimeC$0$Counter$overflow(void );
+static void /*HilTimerMilliC.CounterToLocalTimeC*/CounterToLocalTimeC__0__Counter__overflow(void );
 # 51 "/opt/tinyos-2.x/tos/interfaces/Init.nc"
-static error_t PlatformP$MoteInit$init(void );
+static error_t PlatformP__MoteInit__init(void );
 #line 51
-static error_t PlatformP$MoteClockInit$init(void );
+static error_t PlatformP__MoteClockInit__init(void );
 #line 51
-static error_t PlatformP$LedsInit$init(void );
+static error_t PlatformP__LedsInit__init(void );
 # 10 "/opt/tinyos-2.x/tos/platforms/telosa/PlatformP.nc"
-static inline error_t PlatformP$Init$init(void );
+static inline error_t PlatformP__Init__init(void );
 # 6 "/opt/tinyos-2.x/tos/platforms/telosb/MotePlatformC.nc"
-static __inline void MotePlatformC$uwait(uint16_t u);
+static __inline void MotePlatformC__uwait(uint16_t u);
 
 
 
 
-static __inline void MotePlatformC$TOSH_wait(void );
+static __inline void MotePlatformC__TOSH_wait(void );
 
 
 
 
-static void MotePlatformC$TOSH_FLASH_M25P_DP_bit(bool set);
-
-
-
-
-
+static void MotePlatformC__TOSH_FLASH_M25P_DP_bit(bool set);
 
 
 
 
 
-static inline void MotePlatformC$TOSH_FLASH_M25P_DP(void );
+
+
+
+
+
+static inline void MotePlatformC__TOSH_FLASH_M25P_DP(void );
 #line 56
-static inline error_t MotePlatformC$Init$init(void );
+static inline error_t MotePlatformC__Init__init(void );
 # 32 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430ClockInit.nc"
-static void Msp430ClockP$Msp430ClockInit$initTimerB(void );
+static void Msp430ClockP__Msp430ClockInit__initTimerB(void );
 #line 31
-static void Msp430ClockP$Msp430ClockInit$initTimerA(void );
+static void Msp430ClockP__Msp430ClockInit__initTimerA(void );
 #line 29
-static void Msp430ClockP$Msp430ClockInit$setupDcoCalibrate(void );
-static void Msp430ClockP$Msp430ClockInit$initClocks(void );
+static void Msp430ClockP__Msp430ClockInit__setupDcoCalibrate(void );
+static void Msp430ClockP__Msp430ClockInit__initClocks(void );
 # 39 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430ClockP.nc"
-static volatile uint8_t Msp430ClockP$IE1 __asm ("0x0000");
-static volatile uint16_t Msp430ClockP$TA0CTL __asm ("0x0160");
-static volatile uint16_t Msp430ClockP$TA0IV __asm ("0x012E");
-static volatile uint16_t Msp430ClockP$TBCTL __asm ("0x0180");
-static volatile uint16_t Msp430ClockP$TBIV __asm ("0x011E");
+static volatile uint8_t Msp430ClockP__IE1 __asm ("0x0000");
+static volatile uint16_t Msp430ClockP__TA0CTL __asm ("0x0160");
+static volatile uint16_t Msp430ClockP__TA0IV __asm ("0x012E");
+static volatile uint16_t Msp430ClockP__TBCTL __asm ("0x0180");
+static volatile uint16_t Msp430ClockP__TBIV __asm ("0x011E");
 
-enum Msp430ClockP$__nesc_unnamed4268 {
+enum Msp430ClockP____nesc_unnamed4268 {
 
-  Msp430ClockP$ACLK_CALIB_PERIOD = 8, 
-  Msp430ClockP$TARGET_DCO_DELTA = 4096 / 32 * Msp430ClockP$ACLK_CALIB_PERIOD
+  Msp430ClockP__ACLK_CALIB_PERIOD = 8, 
+  Msp430ClockP__TARGET_DCO_DELTA = 4096 / 32 * Msp430ClockP__ACLK_CALIB_PERIOD
 };
 
 
-static inline void Msp430ClockP$Msp430ClockInit$defaultSetupDcoCalibrate(void );
+static inline void Msp430ClockP__Msp430ClockInit__defaultSetupDcoCalibrate(void );
 #line 64
-static inline void Msp430ClockP$Msp430ClockInit$defaultInitClocks(void );
+static inline void Msp430ClockP__Msp430ClockInit__defaultInitClocks(void );
 #line 85
-static inline void Msp430ClockP$Msp430ClockInit$defaultInitTimerA(void );
+static inline void Msp430ClockP__Msp430ClockInit__defaultInitTimerA(void );
 #line 100
-static inline void Msp430ClockP$Msp430ClockInit$defaultInitTimerB(void );
+static inline void Msp430ClockP__Msp430ClockInit__defaultInitTimerB(void );
 #line 115
-static inline void Msp430ClockP$Msp430ClockInit$default$setupDcoCalibrate(void );
+static inline void Msp430ClockP__Msp430ClockInit__default__setupDcoCalibrate(void );
 
 
 
 
-static inline void Msp430ClockP$Msp430ClockInit$default$initClocks(void );
+static inline void Msp430ClockP__Msp430ClockInit__default__initClocks(void );
 
 
 
 
-static inline void Msp430ClockP$Msp430ClockInit$default$initTimerA(void );
+static inline void Msp430ClockP__Msp430ClockInit__default__initTimerA(void );
 
 
 
 
-static inline void Msp430ClockP$Msp430ClockInit$default$initTimerB(void );
+static inline void Msp430ClockP__Msp430ClockInit__default__initTimerB(void );
 
 
 
 
 
-static inline void Msp430ClockP$startTimerA(void );
+static inline void Msp430ClockP__startTimerA(void );
 #line 148
-static inline void Msp430ClockP$startTimerB(void );
+static inline void Msp430ClockP__startTimerB(void );
 #line 160
-static void Msp430ClockP$set_dco_calib(int calib);
+static void Msp430ClockP__set_dco_calib(int calib);
 
 
 
 
 
-static inline uint16_t Msp430ClockP$test_calib_busywait_delta(int calib);
+static inline uint16_t Msp430ClockP__test_calib_busywait_delta(int calib);
 #line 189
-static inline void Msp430ClockP$busyCalibrateDco(void );
+static inline void Msp430ClockP__busyCalibrateDco(void );
 #line 214
-static inline error_t Msp430ClockP$Init$init(void );
+static inline error_t Msp430ClockP__Init__init(void );
 # 28 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerEvent.nc"
-static void /*Msp430TimerC.Msp430TimerA*/Msp430TimerP$0$Event$fired(
+static void /*Msp430TimerC.Msp430TimerA*/Msp430TimerP__0__Event__fired(
 # 40 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerP.nc"
 uint8_t arg_0x4061f4b0);
 # 37 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Timer.nc"
-static void /*Msp430TimerC.Msp430TimerA*/Msp430TimerP$0$Timer$overflow(void );
+static void /*Msp430TimerC.Msp430TimerA*/Msp430TimerP__0__Timer__overflow(void );
 # 115 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerP.nc"
-static inline void /*Msp430TimerC.Msp430TimerA*/Msp430TimerP$0$VectorTimerX0$fired(void );
+static inline void /*Msp430TimerC.Msp430TimerA*/Msp430TimerP__0__VectorTimerX0__fired(void );
 
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerA*/Msp430TimerP$0$VectorTimerX1$fired(void );
-
-
-
-
-
-static inline void /*Msp430TimerC.Msp430TimerA*/Msp430TimerP$0$Overflow$fired(void );
+static inline void /*Msp430TimerC.Msp430TimerA*/Msp430TimerP__0__VectorTimerX1__fired(void );
 
 
 
 
 
+static inline void /*Msp430TimerC.Msp430TimerA*/Msp430TimerP__0__Overflow__fired(void );
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerA*/Msp430TimerP$0$Event$default$fired(uint8_t n);
+
+
+
+
+
+static inline void /*Msp430TimerC.Msp430TimerA*/Msp430TimerP__0__Event__default__fired(uint8_t n);
 # 28 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerEvent.nc"
-static void /*Msp430TimerC.Msp430TimerB*/Msp430TimerP$1$Event$fired(
+static void /*Msp430TimerC.Msp430TimerB*/Msp430TimerP__1__Event__fired(
 # 40 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerP.nc"
 uint8_t arg_0x4061f4b0);
 # 37 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Timer.nc"
-static void /*Msp430TimerC.Msp430TimerB*/Msp430TimerP$1$Timer$overflow(void );
+static void /*Msp430TimerC.Msp430TimerB*/Msp430TimerP__1__Timer__overflow(void );
 # 51 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerP.nc"
-static uint16_t /*Msp430TimerC.Msp430TimerB*/Msp430TimerP$1$Timer$get(void );
+static uint16_t /*Msp430TimerC.Msp430TimerB*/Msp430TimerP__1__Timer__get(void );
 #line 70
-static inline bool /*Msp430TimerC.Msp430TimerB*/Msp430TimerP$1$Timer$isOverflowPending(void );
+static inline bool /*Msp430TimerC.Msp430TimerB*/Msp430TimerP__1__Timer__isOverflowPending(void );
 #line 115
-static inline void /*Msp430TimerC.Msp430TimerB*/Msp430TimerP$1$VectorTimerX0$fired(void );
+static inline void /*Msp430TimerC.Msp430TimerB*/Msp430TimerP__1__VectorTimerX0__fired(void );
 
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerB*/Msp430TimerP$1$VectorTimerX1$fired(void );
-
-
-
-
-
-static inline void /*Msp430TimerC.Msp430TimerB*/Msp430TimerP$1$Overflow$fired(void );
+static inline void /*Msp430TimerC.Msp430TimerB*/Msp430TimerP__1__VectorTimerX1__fired(void );
 
 
 
 
 
+static inline void /*Msp430TimerC.Msp430TimerB*/Msp430TimerP__1__Overflow__fired(void );
 
 
 
-static void /*Msp430TimerC.Msp430TimerB*/Msp430TimerP$1$Event$default$fired(uint8_t n);
+
+
+
+
+
+static void /*Msp430TimerC.Msp430TimerB*/Msp430TimerP__1__Event__default__fired(uint8_t n);
 # 75 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Capture.nc"
-static void /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$Capture$captured(uint16_t time);
+static void /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__Capture__captured(uint16_t time);
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Compare.nc"
-static void /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$Compare$fired(void );
+static void /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__Compare__fired(void );
 # 44 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-typedef msp430_compare_control_t /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$cc_t;
+typedef msp430_compare_control_t /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__cc_t;
 
 
-static inline /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$cc_t /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$int2CC(uint16_t x)  ;
+static inline /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__cc_t /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__int2CC(uint16_t x)  ;
 #line 74
-static inline /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$cc_t /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$Control$getControl(void );
+static inline /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__cc_t /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__Control__getControl(void );
 #line 139
-static inline uint16_t /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$Capture$getEvent(void );
+static inline uint16_t /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__Capture__getEvent(void );
 #line 169
-static void /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$Event$fired(void );
+static void /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__Event__fired(void );
 
 
 
@@ -1540,30 +1540,30 @@ static void /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$Event$fired(void 
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$Capture$default$captured(uint16_t n);
+static inline void /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__Capture__default__captured(uint16_t n);
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$Compare$default$fired(void );
+static inline void /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__Compare__default__fired(void );
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$Timer$overflow(void );
+static inline void /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__Timer__overflow(void );
 # 75 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Capture.nc"
-static void /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$Capture$captured(uint16_t time);
+static void /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__Capture__captured(uint16_t time);
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Compare.nc"
-static void /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$Compare$fired(void );
+static void /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__Compare__fired(void );
 # 44 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-typedef msp430_compare_control_t /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$cc_t;
+typedef msp430_compare_control_t /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__cc_t;
 
 
-static inline /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$cc_t /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$int2CC(uint16_t x)  ;
+static inline /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__cc_t /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__int2CC(uint16_t x)  ;
 #line 74
-static inline /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$cc_t /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$Control$getControl(void );
+static inline /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__cc_t /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__Control__getControl(void );
 #line 139
-static inline uint16_t /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$Capture$getEvent(void );
+static inline uint16_t /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__Capture__getEvent(void );
 #line 169
-static void /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$Event$fired(void );
+static void /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__Event__fired(void );
 
 
 
@@ -1571,30 +1571,30 @@ static void /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$Event$fired(void 
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$Capture$default$captured(uint16_t n);
+static inline void /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__Capture__default__captured(uint16_t n);
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$Compare$default$fired(void );
+static inline void /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__Compare__default__fired(void );
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$Timer$overflow(void );
+static inline void /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__Timer__overflow(void );
 # 75 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Capture.nc"
-static void /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$Capture$captured(uint16_t time);
+static void /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__Capture__captured(uint16_t time);
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Compare.nc"
-static void /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$Compare$fired(void );
+static void /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__Compare__fired(void );
 # 44 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-typedef msp430_compare_control_t /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$cc_t;
+typedef msp430_compare_control_t /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__cc_t;
 
 
-static inline /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$cc_t /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$int2CC(uint16_t x)  ;
+static inline /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__cc_t /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__int2CC(uint16_t x)  ;
 #line 74
-static inline /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$cc_t /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$Control$getControl(void );
+static inline /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__cc_t /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__Control__getControl(void );
 #line 139
-static inline uint16_t /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$Capture$getEvent(void );
+static inline uint16_t /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__Capture__getEvent(void );
 #line 169
-static void /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$Event$fired(void );
+static void /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__Event__fired(void );
 
 
 
@@ -1602,30 +1602,30 @@ static void /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$Event$fired(void 
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$Capture$default$captured(uint16_t n);
+static inline void /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__Capture__default__captured(uint16_t n);
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$Compare$default$fired(void );
+static inline void /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__Compare__default__fired(void );
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$Timer$overflow(void );
+static inline void /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__Timer__overflow(void );
 # 75 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Capture.nc"
-static void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Capture$captured(uint16_t time);
+static void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Capture__captured(uint16_t time);
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Compare.nc"
-static void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Compare$fired(void );
+static void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Compare__fired(void );
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Timer.nc"
-static uint16_t /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Timer$get(void );
+static uint16_t /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Timer__get(void );
 # 44 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-typedef msp430_compare_control_t /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$cc_t;
+typedef msp430_compare_control_t /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__cc_t;
 
-static inline uint16_t /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$CC2int(/*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$cc_t x)  ;
-static inline /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$cc_t /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$int2CC(uint16_t x)  ;
+static inline uint16_t /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__CC2int(/*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__cc_t x)  ;
+static inline /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__cc_t /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__int2CC(uint16_t x)  ;
 
-static inline uint16_t /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$compareControl(void );
+static inline uint16_t /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__compareControl(void );
 #line 74
-static inline /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$cc_t /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Control$getControl(void );
+static inline /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__cc_t /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Control__getControl(void );
 
 
 
@@ -1635,7 +1635,7 @@ static inline /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$cc_t /*Msp430Ti
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Control$clearPendingInterrupt(void );
+static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Control__clearPendingInterrupt(void );
 
 
 
@@ -1645,21 +1645,21 @@ static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Control$cl
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Control$setControlAsCompare(void );
+static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Control__setControlAsCompare(void );
 #line 119
-static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Control$enableEvents(void );
+static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Control__enableEvents(void );
 
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Control$disableEvents(void );
+static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Control__disableEvents(void );
 #line 139
-static inline uint16_t /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Capture$getEvent(void );
+static inline uint16_t /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Capture__getEvent(void );
 
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Compare$setEvent(uint16_t x);
+static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Compare__setEvent(uint16_t x);
 
 
 
@@ -1669,9 +1669,9 @@ static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Compare$se
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Compare$setEventFromNow(uint16_t x);
+static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Compare__setEventFromNow(uint16_t x);
 #line 169
-static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Event$fired(void );
+static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Event__fired(void );
 
 
 
@@ -1679,7 +1679,7 @@ static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Event$fire
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Capture$default$captured(uint16_t n);
+static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Capture__default__captured(uint16_t n);
 
 
 
@@ -1687,22 +1687,22 @@ static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Capture$de
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Timer$overflow(void );
+static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Timer__overflow(void );
 # 75 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Capture.nc"
-static void /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$Capture$captured(uint16_t time);
+static void /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__Capture__captured(uint16_t time);
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Compare.nc"
-static void /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$Compare$fired(void );
+static void /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__Compare__fired(void );
 # 44 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-typedef msp430_compare_control_t /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$cc_t;
+typedef msp430_compare_control_t /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__cc_t;
 
 
-static inline /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$cc_t /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$int2CC(uint16_t x)  ;
+static inline /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__cc_t /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__int2CC(uint16_t x)  ;
 #line 74
-static inline /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$cc_t /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$Control$getControl(void );
+static inline /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__cc_t /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__Control__getControl(void );
 #line 139
-static inline uint16_t /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$Capture$getEvent(void );
+static inline uint16_t /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__Capture__getEvent(void );
 #line 169
-static inline void /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$Event$fired(void );
+static inline void /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__Event__fired(void );
 
 
 
@@ -1710,30 +1710,30 @@ static inline void /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$Event$fire
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$Capture$default$captured(uint16_t n);
+static inline void /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__Capture__default__captured(uint16_t n);
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$Compare$default$fired(void );
+static inline void /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__Compare__default__fired(void );
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$Timer$overflow(void );
+static inline void /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__Timer__overflow(void );
 # 75 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Capture.nc"
-static void /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$Capture$captured(uint16_t time);
+static void /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__Capture__captured(uint16_t time);
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Compare.nc"
-static void /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$Compare$fired(void );
+static void /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__Compare__fired(void );
 # 44 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-typedef msp430_compare_control_t /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$cc_t;
+typedef msp430_compare_control_t /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__cc_t;
 
 
-static inline /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$cc_t /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$int2CC(uint16_t x)  ;
+static inline /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__cc_t /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__int2CC(uint16_t x)  ;
 #line 74
-static inline /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$cc_t /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$Control$getControl(void );
+static inline /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__cc_t /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__Control__getControl(void );
 #line 139
-static inline uint16_t /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$Capture$getEvent(void );
+static inline uint16_t /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__Capture__getEvent(void );
 #line 169
-static inline void /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$Event$fired(void );
+static inline void /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__Event__fired(void );
 
 
 
@@ -1741,30 +1741,30 @@ static inline void /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$Event$fire
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$Capture$default$captured(uint16_t n);
+static inline void /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__Capture__default__captured(uint16_t n);
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$Compare$default$fired(void );
+static inline void /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__Compare__default__fired(void );
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$Timer$overflow(void );
+static inline void /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__Timer__overflow(void );
 # 75 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Capture.nc"
-static void /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$Capture$captured(uint16_t time);
+static void /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__Capture__captured(uint16_t time);
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Compare.nc"
-static void /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$Compare$fired(void );
+static void /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__Compare__fired(void );
 # 44 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-typedef msp430_compare_control_t /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$cc_t;
+typedef msp430_compare_control_t /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__cc_t;
 
 
-static inline /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$cc_t /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$int2CC(uint16_t x)  ;
+static inline /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__cc_t /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__int2CC(uint16_t x)  ;
 #line 74
-static inline /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$cc_t /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$Control$getControl(void );
+static inline /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__cc_t /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__Control__getControl(void );
 #line 139
-static inline uint16_t /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$Capture$getEvent(void );
+static inline uint16_t /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__Capture__getEvent(void );
 #line 169
-static inline void /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$Event$fired(void );
+static inline void /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__Event__fired(void );
 
 
 
@@ -1772,30 +1772,30 @@ static inline void /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$Event$fire
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$Capture$default$captured(uint16_t n);
+static inline void /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__Capture__default__captured(uint16_t n);
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$Compare$default$fired(void );
+static inline void /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__Compare__default__fired(void );
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$Timer$overflow(void );
+static inline void /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__Timer__overflow(void );
 # 75 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Capture.nc"
-static void /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$Capture$captured(uint16_t time);
+static void /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__Capture__captured(uint16_t time);
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Compare.nc"
-static void /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$Compare$fired(void );
+static void /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__Compare__fired(void );
 # 44 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-typedef msp430_compare_control_t /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$cc_t;
+typedef msp430_compare_control_t /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__cc_t;
 
 
-static inline /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$cc_t /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$int2CC(uint16_t x)  ;
+static inline /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__cc_t /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__int2CC(uint16_t x)  ;
 #line 74
-static inline /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$cc_t /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$Control$getControl(void );
+static inline /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__cc_t /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__Control__getControl(void );
 #line 139
-static inline uint16_t /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$Capture$getEvent(void );
+static inline uint16_t /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__Capture__getEvent(void );
 #line 169
-static inline void /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$Event$fired(void );
+static inline void /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__Event__fired(void );
 
 
 
@@ -1803,30 +1803,30 @@ static inline void /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$Event$fire
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$Capture$default$captured(uint16_t n);
+static inline void /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__Capture__default__captured(uint16_t n);
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$Compare$default$fired(void );
+static inline void /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__Compare__default__fired(void );
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$Timer$overflow(void );
+static inline void /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__Timer__overflow(void );
 # 75 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Capture.nc"
-static void /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$Capture$captured(uint16_t time);
+static void /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__Capture__captured(uint16_t time);
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Compare.nc"
-static void /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$Compare$fired(void );
+static void /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__Compare__fired(void );
 # 44 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-typedef msp430_compare_control_t /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$cc_t;
+typedef msp430_compare_control_t /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__cc_t;
 
 
-static inline /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$cc_t /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$int2CC(uint16_t x)  ;
+static inline /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__cc_t /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__int2CC(uint16_t x)  ;
 #line 74
-static inline /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$cc_t /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$Control$getControl(void );
+static inline /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__cc_t /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__Control__getControl(void );
 #line 139
-static inline uint16_t /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$Capture$getEvent(void );
+static inline uint16_t /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__Capture__getEvent(void );
 #line 169
-static inline void /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$Event$fired(void );
+static inline void /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__Event__fired(void );
 
 
 
@@ -1834,30 +1834,30 @@ static inline void /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$Event$fire
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$Capture$default$captured(uint16_t n);
+static inline void /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__Capture__default__captured(uint16_t n);
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$Compare$default$fired(void );
+static inline void /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__Compare__default__fired(void );
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$Timer$overflow(void );
+static inline void /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__Timer__overflow(void );
 # 75 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Capture.nc"
-static void /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$Capture$captured(uint16_t time);
+static void /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__Capture__captured(uint16_t time);
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Compare.nc"
-static void /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$Compare$fired(void );
+static void /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__Compare__fired(void );
 # 44 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-typedef msp430_compare_control_t /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$cc_t;
+typedef msp430_compare_control_t /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__cc_t;
 
 
-static inline /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$cc_t /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$int2CC(uint16_t x)  ;
+static inline /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__cc_t /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__int2CC(uint16_t x)  ;
 #line 74
-static inline /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$cc_t /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$Control$getControl(void );
+static inline /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__cc_t /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__Control__getControl(void );
 #line 139
-static inline uint16_t /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$Capture$getEvent(void );
+static inline uint16_t /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__Capture__getEvent(void );
 #line 169
-static inline void /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$Event$fired(void );
+static inline void /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__Event__fired(void );
 
 
 
@@ -1865,58 +1865,58 @@ static inline void /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$Event$fire
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$Capture$default$captured(uint16_t n);
+static inline void /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__Capture__default__captured(uint16_t n);
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$Compare$default$fired(void );
+static inline void /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__Compare__default__fired(void );
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$Timer$overflow(void );
+static inline void /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__Timer__overflow(void );
 # 28 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerEvent.nc"
-static void Msp430TimerCommonP$VectorTimerB1$fired(void );
+static void Msp430TimerCommonP__VectorTimerB1__fired(void );
 #line 28
-static void Msp430TimerCommonP$VectorTimerA0$fired(void );
+static void Msp430TimerCommonP__VectorTimerA0__fired(void );
 #line 28
-static void Msp430TimerCommonP$VectorTimerA1$fired(void );
+static void Msp430TimerCommonP__VectorTimerA1__fired(void );
 #line 28
-static void Msp430TimerCommonP$VectorTimerB0$fired(void );
+static void Msp430TimerCommonP__VectorTimerB0__fired(void );
 # 11 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCommonP.nc"
 void sig_TIMERA0_VECTOR(void ) __attribute((wakeup)) __attribute((interrupt(12)))  ;
 void sig_TIMERA1_VECTOR(void ) __attribute((wakeup)) __attribute((interrupt(10)))  ;
 void sig_TIMERB0_VECTOR(void ) __attribute((wakeup)) __attribute((interrupt(26)))  ;
 void sig_TIMERB1_VECTOR(void ) __attribute((wakeup)) __attribute((interrupt(24)))  ;
 # 51 "/opt/tinyos-2.x/tos/interfaces/Init.nc"
-static error_t RealMainP$SoftwareInit$init(void );
+static error_t RealMainP__SoftwareInit__init(void );
 # 49 "/opt/tinyos-2.x/tos/interfaces/Boot.nc"
-static void RealMainP$Boot$booted(void );
+static void RealMainP__Boot__booted(void );
 # 51 "/opt/tinyos-2.x/tos/interfaces/Init.nc"
-static error_t RealMainP$PlatformInit$init(void );
+static error_t RealMainP__PlatformInit__init(void );
 # 46 "/opt/tinyos-2.x/tos/interfaces/Scheduler.nc"
-static void RealMainP$Scheduler$init(void );
+static void RealMainP__Scheduler__init(void );
 #line 61
-static void RealMainP$Scheduler$taskLoop(void );
+static void RealMainP__Scheduler__taskLoop(void );
 #line 54
-static bool RealMainP$Scheduler$runNextTask(void );
+static bool RealMainP__Scheduler__runNextTask(void );
 # 52 "/opt/tinyos-2.x/tos/system/RealMainP.nc"
 int main(void )   ;
 # 64 "/opt/tinyos-2.x/tos/interfaces/TaskBasic.nc"
-static void SchedulerBasicP$TaskBasic$runTask(
+static void SchedulerBasicP__TaskBasic__runTask(
 # 45 "/opt/tinyos-2.x/tos/system/SchedulerBasicP.nc"
 uint8_t arg_0x40587b40);
 # 59 "/opt/tinyos-2.x/tos/interfaces/McuSleep.nc"
-static void SchedulerBasicP$McuSleep$sleep(void );
+static void SchedulerBasicP__McuSleep__sleep(void );
 # 50 "/opt/tinyos-2.x/tos/system/SchedulerBasicP.nc"
-enum SchedulerBasicP$__nesc_unnamed4269 {
+enum SchedulerBasicP____nesc_unnamed4269 {
 
-  SchedulerBasicP$NUM_TASKS = 2U, 
-  SchedulerBasicP$NO_TASK = 255
+  SchedulerBasicP__NUM_TASKS = 2U, 
+  SchedulerBasicP__NO_TASK = 255
 };
 
-volatile uint8_t SchedulerBasicP$m_head;
-volatile uint8_t SchedulerBasicP$m_tail;
-volatile uint8_t SchedulerBasicP$m_next[SchedulerBasicP$NUM_TASKS];
+volatile uint8_t SchedulerBasicP__m_head;
+volatile uint8_t SchedulerBasicP__m_tail;
+volatile uint8_t SchedulerBasicP__m_next[SchedulerBasicP__NUM_TASKS];
 
 
 
@@ -1925,16 +1925,16 @@ volatile uint8_t SchedulerBasicP$m_next[SchedulerBasicP$NUM_TASKS];
 
 
 
-static __inline uint8_t SchedulerBasicP$popTask(void );
+static __inline uint8_t SchedulerBasicP__popTask(void );
 #line 86
-static inline bool SchedulerBasicP$isWaiting(uint8_t id);
+static inline bool SchedulerBasicP__isWaiting(uint8_t id);
 
 
 
 
-static inline bool SchedulerBasicP$pushTask(uint8_t id);
+static inline bool SchedulerBasicP__pushTask(uint8_t id);
 #line 113
-static inline void SchedulerBasicP$Scheduler$init(void );
+static inline void SchedulerBasicP__Scheduler__init(void );
 
 
 
@@ -1944,26 +1944,26 @@ static inline void SchedulerBasicP$Scheduler$init(void );
 
 
 
-static bool SchedulerBasicP$Scheduler$runNextTask(void );
+static bool SchedulerBasicP__Scheduler__runNextTask(void );
 #line 138
-static inline void SchedulerBasicP$Scheduler$taskLoop(void );
+static inline void SchedulerBasicP__Scheduler__taskLoop(void );
 #line 159
-static error_t SchedulerBasicP$TaskBasic$postTask(uint8_t id);
+static error_t SchedulerBasicP__TaskBasic__postTask(uint8_t id);
 
 
 
 
-static inline void SchedulerBasicP$TaskBasic$default$runTask(uint8_t id);
+static inline void SchedulerBasicP__TaskBasic__default__runTask(uint8_t id);
 # 54 "/opt/tinyos-2.x/tos/interfaces/McuPowerOverride.nc"
-static mcu_power_t McuSleepC$McuPowerOverride$lowestState(void );
+static mcu_power_t McuSleepC__McuPowerOverride__lowestState(void );
 # 51 "/opt/tinyos-2.x/tos/chips/msp430/McuSleepC.nc"
-bool McuSleepC$dirty = TRUE;
-mcu_power_t McuSleepC$powerState = MSP430_POWER_ACTIVE;
+bool McuSleepC__dirty = TRUE;
+mcu_power_t McuSleepC__powerState = MSP430_POWER_ACTIVE;
 
 
 
 
-const uint16_t McuSleepC$msp430PowerBits[MSP430_POWER_LPM4 + 1] = { 
+const uint16_t McuSleepC__msp430PowerBits[MSP430_POWER_LPM4 + 1] = { 
 0, 
 0x0010, 
 0x0040 + 0x0010, 
@@ -1972,156 +1972,156 @@ const uint16_t McuSleepC$msp430PowerBits[MSP430_POWER_LPM4 + 1] = {
 0x0080 + 0x0040 + 0x0020 + 0x0010 };
 
 
-static inline mcu_power_t McuSleepC$getPowerState(void );
+static inline mcu_power_t McuSleepC__getPowerState(void );
 #line 104
-static inline void McuSleepC$computePowerState(void );
+static inline void McuSleepC__computePowerState(void );
 
 
 
 
-static inline void McuSleepC$McuSleep$sleep(void );
+static inline void McuSleepC__McuSleep__sleep(void );
 #line 124
-static inline mcu_power_t McuSleepC$McuPowerOverride$default$lowestState(void );
+static inline mcu_power_t McuSleepC__McuPowerOverride__default__lowestState(void );
 # 53 "/opt/tinyos-2.x/tos/lib/timer/Timer.nc"
-static void BlinkC$Timer0$startPeriodic(uint32_t dt);
+static void BlinkC__Timer0__startPeriodic(uint32_t dt);
 #line 53
-static void BlinkC$Timer1$startPeriodic(uint32_t dt);
+static void BlinkC__Timer1__startPeriodic(uint32_t dt);
 # 56 "/opt/tinyos-2.x/tos/interfaces/Leds.nc"
-static void BlinkC$Leds$led0Toggle(void );
+static void BlinkC__Leds__led0Toggle(void );
 #line 72
-static void BlinkC$Leds$led1Toggle(void );
+static void BlinkC__Leds__led1Toggle(void );
 #line 89
-static void BlinkC$Leds$led2Toggle(void );
+static void BlinkC__Leds__led2Toggle(void );
 # 53 "/opt/tinyos-2.x/tos/lib/timer/Timer.nc"
-static void BlinkC$Timer2$startPeriodic(uint32_t dt);
+static void BlinkC__Timer2__startPeriodic(uint32_t dt);
 # 50 "BlinkC.nc"
-static inline void BlinkC$Boot$booted(void );
+static inline void BlinkC__Boot__booted(void );
 #line 63
-static inline void BlinkC$Timer0$fired(void );
+static inline void BlinkC__Timer0__fired(void );
 
 
 
 
-static inline void BlinkC$Timer1$fired(void );
+static inline void BlinkC__Timer1__fired(void );
 
 
 
 
 
-static inline void BlinkC$Timer2$fired(void );
+static inline void BlinkC__Timer2__fired(void );
 # 31 "/opt/tinyos-2.x/tos/interfaces/GeneralIO.nc"
-static void LedsP$Led0$toggle(void );
+static void LedsP__Led0__toggle(void );
 
 
 
-static void LedsP$Led0$makeOutput(void );
+static void LedsP__Led0__makeOutput(void );
 #line 29
-static void LedsP$Led0$set(void );
+static void LedsP__Led0__set(void );
 
-static void LedsP$Led1$toggle(void );
+static void LedsP__Led1__toggle(void );
 
 
 
-static void LedsP$Led1$makeOutput(void );
+static void LedsP__Led1__makeOutput(void );
 #line 29
-static void LedsP$Led1$set(void );
+static void LedsP__Led1__set(void );
 
-static void LedsP$Led2$toggle(void );
+static void LedsP__Led2__toggle(void );
 
 
 
-static void LedsP$Led2$makeOutput(void );
+static void LedsP__Led2__makeOutput(void );
 #line 29
-static void LedsP$Led2$set(void );
+static void LedsP__Led2__set(void );
 # 45 "/opt/tinyos-2.x/tos/system/LedsP.nc"
-static inline error_t LedsP$Init$init(void );
+static inline error_t LedsP__Init__init(void );
 #line 73
-static inline void LedsP$Leds$led0Toggle(void );
+static inline void LedsP__Leds__led0Toggle(void );
 #line 88
-static inline void LedsP$Leds$led1Toggle(void );
+static inline void LedsP__Leds__led1Toggle(void );
 #line 103
-static inline void LedsP$Leds$led2Toggle(void );
+static inline void LedsP__Leds__led2Toggle(void );
 # 45 "/opt/tinyos-2.x/tos/chips/msp430/pins/HplMsp430GeneralIOP.nc"
-static inline void /*HplMsp430GeneralIOC.P54*/HplMsp430GeneralIOP$36$IO$set(void );
+static inline void /*HplMsp430GeneralIOC.P54*/HplMsp430GeneralIOP__36__IO__set(void );
 
-static inline void /*HplMsp430GeneralIOC.P54*/HplMsp430GeneralIOP$36$IO$toggle(void );
-
-
+static inline void /*HplMsp430GeneralIOC.P54*/HplMsp430GeneralIOP__36__IO__toggle(void );
 
 
-static inline void /*HplMsp430GeneralIOC.P54*/HplMsp430GeneralIOP$36$IO$makeOutput(void );
+
+
+static inline void /*HplMsp430GeneralIOC.P54*/HplMsp430GeneralIOP__36__IO__makeOutput(void );
 #line 45
-static inline void /*HplMsp430GeneralIOC.P55*/HplMsp430GeneralIOP$37$IO$set(void );
+static inline void /*HplMsp430GeneralIOC.P55*/HplMsp430GeneralIOP__37__IO__set(void );
 
-static inline void /*HplMsp430GeneralIOC.P55*/HplMsp430GeneralIOP$37$IO$toggle(void );
-
-
+static inline void /*HplMsp430GeneralIOC.P55*/HplMsp430GeneralIOP__37__IO__toggle(void );
 
 
-static inline void /*HplMsp430GeneralIOC.P55*/HplMsp430GeneralIOP$37$IO$makeOutput(void );
+
+
+static inline void /*HplMsp430GeneralIOC.P55*/HplMsp430GeneralIOP__37__IO__makeOutput(void );
 #line 45
-static inline void /*HplMsp430GeneralIOC.P56*/HplMsp430GeneralIOP$38$IO$set(void );
+static inline void /*HplMsp430GeneralIOC.P56*/HplMsp430GeneralIOP__38__IO__set(void );
 
-static inline void /*HplMsp430GeneralIOC.P56*/HplMsp430GeneralIOP$38$IO$toggle(void );
-
-
+static inline void /*HplMsp430GeneralIOC.P56*/HplMsp430GeneralIOP__38__IO__toggle(void );
 
 
-static inline void /*HplMsp430GeneralIOC.P56*/HplMsp430GeneralIOP$38$IO$makeOutput(void );
+
+
+static inline void /*HplMsp430GeneralIOC.P56*/HplMsp430GeneralIOP__38__IO__makeOutput(void );
 # 44 "/opt/tinyos-2.x/tos/chips/msp430/pins/HplMsp430GeneralIO.nc"
-static void /*PlatformLedsC.Led0Impl*/Msp430GpioC$0$HplGeneralIO$toggle(void );
+static void /*PlatformLedsC.Led0Impl*/Msp430GpioC__0__HplGeneralIO__toggle(void );
 #line 71
-static void /*PlatformLedsC.Led0Impl*/Msp430GpioC$0$HplGeneralIO$makeOutput(void );
+static void /*PlatformLedsC.Led0Impl*/Msp430GpioC__0__HplGeneralIO__makeOutput(void );
 #line 34
-static void /*PlatformLedsC.Led0Impl*/Msp430GpioC$0$HplGeneralIO$set(void );
+static void /*PlatformLedsC.Led0Impl*/Msp430GpioC__0__HplGeneralIO__set(void );
 # 37 "/opt/tinyos-2.x/tos/chips/msp430/pins/Msp430GpioC.nc"
-static inline void /*PlatformLedsC.Led0Impl*/Msp430GpioC$0$GeneralIO$set(void );
+static inline void /*PlatformLedsC.Led0Impl*/Msp430GpioC__0__GeneralIO__set(void );
 
-static inline void /*PlatformLedsC.Led0Impl*/Msp430GpioC$0$GeneralIO$toggle(void );
+static inline void /*PlatformLedsC.Led0Impl*/Msp430GpioC__0__GeneralIO__toggle(void );
 
 
 
-static inline void /*PlatformLedsC.Led0Impl*/Msp430GpioC$0$GeneralIO$makeOutput(void );
+static inline void /*PlatformLedsC.Led0Impl*/Msp430GpioC__0__GeneralIO__makeOutput(void );
 # 44 "/opt/tinyos-2.x/tos/chips/msp430/pins/HplMsp430GeneralIO.nc"
-static void /*PlatformLedsC.Led1Impl*/Msp430GpioC$1$HplGeneralIO$toggle(void );
+static void /*PlatformLedsC.Led1Impl*/Msp430GpioC__1__HplGeneralIO__toggle(void );
 #line 71
-static void /*PlatformLedsC.Led1Impl*/Msp430GpioC$1$HplGeneralIO$makeOutput(void );
+static void /*PlatformLedsC.Led1Impl*/Msp430GpioC__1__HplGeneralIO__makeOutput(void );
 #line 34
-static void /*PlatformLedsC.Led1Impl*/Msp430GpioC$1$HplGeneralIO$set(void );
+static void /*PlatformLedsC.Led1Impl*/Msp430GpioC__1__HplGeneralIO__set(void );
 # 37 "/opt/tinyos-2.x/tos/chips/msp430/pins/Msp430GpioC.nc"
-static inline void /*PlatformLedsC.Led1Impl*/Msp430GpioC$1$GeneralIO$set(void );
+static inline void /*PlatformLedsC.Led1Impl*/Msp430GpioC__1__GeneralIO__set(void );
 
-static inline void /*PlatformLedsC.Led1Impl*/Msp430GpioC$1$GeneralIO$toggle(void );
+static inline void /*PlatformLedsC.Led1Impl*/Msp430GpioC__1__GeneralIO__toggle(void );
 
 
 
-static inline void /*PlatformLedsC.Led1Impl*/Msp430GpioC$1$GeneralIO$makeOutput(void );
+static inline void /*PlatformLedsC.Led1Impl*/Msp430GpioC__1__GeneralIO__makeOutput(void );
 # 44 "/opt/tinyos-2.x/tos/chips/msp430/pins/HplMsp430GeneralIO.nc"
-static void /*PlatformLedsC.Led2Impl*/Msp430GpioC$2$HplGeneralIO$toggle(void );
+static void /*PlatformLedsC.Led2Impl*/Msp430GpioC__2__HplGeneralIO__toggle(void );
 #line 71
-static void /*PlatformLedsC.Led2Impl*/Msp430GpioC$2$HplGeneralIO$makeOutput(void );
+static void /*PlatformLedsC.Led2Impl*/Msp430GpioC__2__HplGeneralIO__makeOutput(void );
 #line 34
-static void /*PlatformLedsC.Led2Impl*/Msp430GpioC$2$HplGeneralIO$set(void );
+static void /*PlatformLedsC.Led2Impl*/Msp430GpioC__2__HplGeneralIO__set(void );
 # 37 "/opt/tinyos-2.x/tos/chips/msp430/pins/Msp430GpioC.nc"
-static inline void /*PlatformLedsC.Led2Impl*/Msp430GpioC$2$GeneralIO$set(void );
+static inline void /*PlatformLedsC.Led2Impl*/Msp430GpioC__2__GeneralIO__set(void );
 
-static inline void /*PlatformLedsC.Led2Impl*/Msp430GpioC$2$GeneralIO$toggle(void );
+static inline void /*PlatformLedsC.Led2Impl*/Msp430GpioC__2__GeneralIO__toggle(void );
 
 
 
-static inline void /*PlatformLedsC.Led2Impl*/Msp430GpioC$2$GeneralIO$makeOutput(void );
+static inline void /*PlatformLedsC.Led2Impl*/Msp430GpioC__2__GeneralIO__makeOutput(void );
 # 30 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Compare.nc"
-static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Msp430Compare$setEvent(uint16_t time);
+static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Msp430Compare__setEvent(uint16_t time);
 
-static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Msp430Compare$setEventFromNow(uint16_t delta);
+static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Msp430Compare__setEventFromNow(uint16_t delta);
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Timer.nc"
-static uint16_t /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Msp430Timer$get(void );
+static uint16_t /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Msp430Timer__get(void );
 # 67 "/opt/tinyos-2.x/tos/lib/timer/Alarm.nc"
-static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Alarm$fired(void );
+static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Alarm__fired(void );
 # 46 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerControl.nc"
-static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Msp430TimerControl$enableEvents(void );
+static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Msp430TimerControl__enableEvents(void );
 #line 36
-static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Msp430TimerControl$setControlAsCompare(void );
+static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Msp430TimerControl__setControlAsCompare(void );
 
 
 
@@ -2132,43 +2132,43 @@ static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0
 
 
 
-static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Msp430TimerControl$disableEvents(void );
+static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Msp430TimerControl__disableEvents(void );
 #line 33
-static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Msp430TimerControl$clearPendingInterrupt(void );
+static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Msp430TimerControl__clearPendingInterrupt(void );
 # 42 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430AlarmC.nc"
-static inline error_t /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Init$init(void );
+static inline error_t /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Init__init(void );
 #line 54
-static inline void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Alarm$stop(void );
+static inline void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Alarm__stop(void );
 
 
 
 
-static inline void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Msp430Compare$fired(void );
-
-
-
-
-
+static inline void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Msp430Compare__fired(void );
 
 
 
 
 
-static inline void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Alarm$startAt(uint16_t t0, uint16_t dt);
+
+
+
+
+
+static inline void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Alarm__startAt(uint16_t t0, uint16_t dt);
 #line 103
-static inline void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Msp430Timer$overflow(void );
+static inline void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Msp430Timer__overflow(void );
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Timer.nc"
-static uint16_t /*Msp430Counter32khzC.Counter*/Msp430CounterC$0$Msp430Timer$get(void );
-static bool /*Msp430Counter32khzC.Counter*/Msp430CounterC$0$Msp430Timer$isOverflowPending(void );
+static uint16_t /*Msp430Counter32khzC.Counter*/Msp430CounterC__0__Msp430Timer__get(void );
+static bool /*Msp430Counter32khzC.Counter*/Msp430CounterC__0__Msp430Timer__isOverflowPending(void );
 # 71 "/opt/tinyos-2.x/tos/lib/timer/Counter.nc"
-static void /*Msp430Counter32khzC.Counter*/Msp430CounterC$0$Counter$overflow(void );
+static void /*Msp430Counter32khzC.Counter*/Msp430CounterC__0__Counter__overflow(void );
 # 38 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430CounterC.nc"
-static inline uint16_t /*Msp430Counter32khzC.Counter*/Msp430CounterC$0$Counter$get(void );
+static inline uint16_t /*Msp430Counter32khzC.Counter*/Msp430CounterC__0__Counter__get(void );
 
 
 
 
-static inline bool /*Msp430Counter32khzC.Counter*/Msp430CounterC$0$Counter$isOverflowPending(void );
+static inline bool /*Msp430Counter32khzC.Counter*/Msp430CounterC__0__Counter__isOverflowPending(void );
 
 
 
@@ -2178,16 +2178,16 @@ static inline bool /*Msp430Counter32khzC.Counter*/Msp430CounterC$0$Counter$isOve
 
 
 
-static inline void /*Msp430Counter32khzC.Counter*/Msp430CounterC$0$Msp430Timer$overflow(void );
+static inline void /*Msp430Counter32khzC.Counter*/Msp430CounterC__0__Msp430Timer__overflow(void );
 # 53 "/opt/tinyos-2.x/tos/lib/timer/Counter.nc"
-static /*CounterMilli32C.Transform*/TransformCounterC$0$CounterFrom$size_type /*CounterMilli32C.Transform*/TransformCounterC$0$CounterFrom$get(void );
+static /*CounterMilli32C.Transform*/TransformCounterC__0__CounterFrom__size_type /*CounterMilli32C.Transform*/TransformCounterC__0__CounterFrom__get(void );
 
 
 
 
 
 
-static bool /*CounterMilli32C.Transform*/TransformCounterC$0$CounterFrom$isOverflowPending(void );
+static bool /*CounterMilli32C.Transform*/TransformCounterC__0__CounterFrom__isOverflowPending(void );
 
 
 
@@ -2198,138 +2198,138 @@ static bool /*CounterMilli32C.Transform*/TransformCounterC$0$CounterFrom$isOverf
 
 
 
-static void /*CounterMilli32C.Transform*/TransformCounterC$0$Counter$overflow(void );
+static void /*CounterMilli32C.Transform*/TransformCounterC__0__Counter__overflow(void );
 # 56 "/opt/tinyos-2.x/tos/lib/timer/TransformCounterC.nc"
-/*CounterMilli32C.Transform*/TransformCounterC$0$upper_count_type /*CounterMilli32C.Transform*/TransformCounterC$0$m_upper;
+/*CounterMilli32C.Transform*/TransformCounterC__0__upper_count_type /*CounterMilli32C.Transform*/TransformCounterC__0__m_upper;
 
-enum /*CounterMilli32C.Transform*/TransformCounterC$0$__nesc_unnamed4270 {
+enum /*CounterMilli32C.Transform*/TransformCounterC__0____nesc_unnamed4270 {
 
-  TransformCounterC$0$LOW_SHIFT_RIGHT = 5, 
-  TransformCounterC$0$HIGH_SHIFT_LEFT = 8 * sizeof(/*CounterMilli32C.Transform*/TransformCounterC$0$from_size_type ) - /*CounterMilli32C.Transform*/TransformCounterC$0$LOW_SHIFT_RIGHT, 
-  TransformCounterC$0$NUM_UPPER_BITS = 8 * sizeof(/*CounterMilli32C.Transform*/TransformCounterC$0$to_size_type ) - 8 * sizeof(/*CounterMilli32C.Transform*/TransformCounterC$0$from_size_type ) + 5, 
+  TransformCounterC__0__LOW_SHIFT_RIGHT = 5, 
+  TransformCounterC__0__HIGH_SHIFT_LEFT = 8 * sizeof(/*CounterMilli32C.Transform*/TransformCounterC__0__from_size_type ) - /*CounterMilli32C.Transform*/TransformCounterC__0__LOW_SHIFT_RIGHT, 
+  TransformCounterC__0__NUM_UPPER_BITS = 8 * sizeof(/*CounterMilli32C.Transform*/TransformCounterC__0__to_size_type ) - 8 * sizeof(/*CounterMilli32C.Transform*/TransformCounterC__0__from_size_type ) + 5, 
 
 
 
-  TransformCounterC$0$OVERFLOW_MASK = /*CounterMilli32C.Transform*/TransformCounterC$0$NUM_UPPER_BITS ? ((/*CounterMilli32C.Transform*/TransformCounterC$0$upper_count_type )2 << (/*CounterMilli32C.Transform*/TransformCounterC$0$NUM_UPPER_BITS - 1)) - 1 : 0
+  TransformCounterC__0__OVERFLOW_MASK = /*CounterMilli32C.Transform*/TransformCounterC__0__NUM_UPPER_BITS ? ((/*CounterMilli32C.Transform*/TransformCounterC__0__upper_count_type )2 << (/*CounterMilli32C.Transform*/TransformCounterC__0__NUM_UPPER_BITS - 1)) - 1 : 0
 };
 
-static /*CounterMilli32C.Transform*/TransformCounterC$0$to_size_type /*CounterMilli32C.Transform*/TransformCounterC$0$Counter$get(void );
+static /*CounterMilli32C.Transform*/TransformCounterC__0__to_size_type /*CounterMilli32C.Transform*/TransformCounterC__0__Counter__get(void );
 #line 122
-static inline void /*CounterMilli32C.Transform*/TransformCounterC$0$CounterFrom$overflow(void );
+static inline void /*CounterMilli32C.Transform*/TransformCounterC__0__CounterFrom__overflow(void );
 # 67 "/opt/tinyos-2.x/tos/lib/timer/Alarm.nc"
-static void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Alarm$fired(void );
+static void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Alarm__fired(void );
 #line 92
-static void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$AlarmFrom$startAt(/*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$AlarmFrom$size_type t0, /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$AlarmFrom$size_type dt);
+static void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__AlarmFrom__startAt(/*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__AlarmFrom__size_type t0, /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__AlarmFrom__size_type dt);
 #line 62
-static void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$AlarmFrom$stop(void );
+static void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__AlarmFrom__stop(void );
 # 53 "/opt/tinyos-2.x/tos/lib/timer/Counter.nc"
-static /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Counter$size_type /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Counter$get(void );
+static /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Counter__size_type /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Counter__get(void );
 # 66 "/opt/tinyos-2.x/tos/lib/timer/TransformAlarmC.nc"
-/*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$to_size_type /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$m_t0;
-/*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$to_size_type /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$m_dt;
+/*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__to_size_type /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__m_t0;
+/*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__to_size_type /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__m_dt;
 
-enum /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$__nesc_unnamed4271 {
+enum /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0____nesc_unnamed4271 {
 
-  TransformAlarmC$0$MAX_DELAY_LOG2 = 8 * sizeof(/*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$from_size_type ) - 1 - 5, 
-  TransformAlarmC$0$MAX_DELAY = (/*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$to_size_type )1 << /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$MAX_DELAY_LOG2
+  TransformAlarmC__0__MAX_DELAY_LOG2 = 8 * sizeof(/*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__from_size_type ) - 1 - 5, 
+  TransformAlarmC__0__MAX_DELAY = (/*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__to_size_type )1 << /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__MAX_DELAY_LOG2
 };
 
-static inline /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$to_size_type /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Alarm$getNow(void );
+static inline /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__to_size_type /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Alarm__getNow(void );
 
 
 
 
-static inline /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$to_size_type /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Alarm$getAlarm(void );
-
-
-
-
-
+static inline /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__to_size_type /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Alarm__getAlarm(void );
 
 
 
 
 
-static inline void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Alarm$stop(void );
 
 
 
 
-static void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$set_alarm(void );
+
+static inline void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Alarm__stop(void );
+
+
+
+
+static void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__set_alarm(void );
 #line 136
-static void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Alarm$startAt(/*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$to_size_type t0, /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$to_size_type dt);
+static void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Alarm__startAt(/*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__to_size_type t0, /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__to_size_type dt);
 #line 151
-static inline void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$AlarmFrom$fired(void );
+static inline void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__AlarmFrom__fired(void );
 #line 166
-static inline void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Counter$overflow(void );
+static inline void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Counter__overflow(void );
 # 56 "/opt/tinyos-2.x/tos/interfaces/TaskBasic.nc"
-static error_t /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$fired$postTask(void );
+static error_t /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__fired__postTask(void );
 # 98 "/opt/tinyos-2.x/tos/lib/timer/Alarm.nc"
-static /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Alarm$size_type /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Alarm$getNow(void );
+static /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Alarm__size_type /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Alarm__getNow(void );
 #line 92
-static void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Alarm$startAt(/*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Alarm$size_type t0, /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Alarm$size_type dt);
+static void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Alarm__startAt(/*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Alarm__size_type t0, /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Alarm__size_type dt);
 #line 105
-static /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Alarm$size_type /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Alarm$getAlarm(void );
+static /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Alarm__size_type /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Alarm__getAlarm(void );
 #line 62
-static void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Alarm$stop(void );
+static void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Alarm__stop(void );
 # 72 "/opt/tinyos-2.x/tos/lib/timer/Timer.nc"
-static void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Timer$fired(void );
+static void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Timer__fired(void );
 # 63 "/opt/tinyos-2.x/tos/lib/timer/AlarmToTimerC.nc"
-enum /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$__nesc_unnamed4272 {
+enum /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0____nesc_unnamed4272 {
 #line 63
-  AlarmToTimerC$0$fired = 0U
+  AlarmToTimerC__0__fired = 0U
 };
 #line 63
-typedef int /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$__nesc_sillytask_fired[/*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$fired];
+typedef int /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0____nesc_sillytask_fired[/*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__fired];
 #line 44
-uint32_t /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$m_dt;
-bool /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$m_oneshot;
+uint32_t /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__m_dt;
+bool /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__m_oneshot;
 
-static inline void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$start(uint32_t t0, uint32_t dt, bool oneshot);
+static inline void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__start(uint32_t t0, uint32_t dt, bool oneshot);
 #line 60
-static inline void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Timer$stop(void );
+static inline void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Timer__stop(void );
 
 
-static void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$fired$runTask(void );
-
-
-
+static void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__fired__runTask(void );
 
 
 
-static inline void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Alarm$fired(void );
+
+
+
+static inline void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Alarm__fired(void );
 #line 82
-static inline void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Timer$startOneShotAt(uint32_t t0, uint32_t dt);
+static inline void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Timer__startOneShotAt(uint32_t t0, uint32_t dt);
 
 
-static inline uint32_t /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Timer$getNow(void );
+static inline uint32_t /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Timer__getNow(void );
 # 56 "/opt/tinyos-2.x/tos/interfaces/TaskBasic.nc"
-static error_t /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$updateFromTimer$postTask(void );
+static error_t /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__updateFromTimer__postTask(void );
 # 125 "/opt/tinyos-2.x/tos/lib/timer/Timer.nc"
-static uint32_t /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$TimerFrom$getNow(void );
+static uint32_t /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__TimerFrom__getNow(void );
 #line 118
-static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$TimerFrom$startOneShotAt(uint32_t t0, uint32_t dt);
+static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__TimerFrom__startOneShotAt(uint32_t t0, uint32_t dt);
 #line 67
-static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$TimerFrom$stop(void );
+static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__TimerFrom__stop(void );
 
 
 
 
-static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$Timer$fired(
+static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__fired(
 # 37 "/opt/tinyos-2.x/tos/lib/timer/VirtualizeTimerC.nc"
 uint8_t arg_0x408c69f0);
 #line 60
-enum /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$__nesc_unnamed4273 {
+enum /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0____nesc_unnamed4273 {
 #line 60
-  VirtualizeTimerC$0$updateFromTimer = 1U
+  VirtualizeTimerC__0__updateFromTimer = 1U
 };
 #line 60
-typedef int /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$__nesc_sillytask_updateFromTimer[/*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$updateFromTimer];
+typedef int /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0____nesc_sillytask_updateFromTimer[/*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__updateFromTimer];
 #line 42
-enum /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$__nesc_unnamed4274 {
+enum /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0____nesc_unnamed4274 {
 
-  VirtualizeTimerC$0$NUM_TIMERS = 3U, 
-  VirtualizeTimerC$0$END_OF_LIST = 255
+  VirtualizeTimerC__0__NUM_TIMERS = 3U, 
+  VirtualizeTimerC__0__END_OF_LIST = 255
 };
 
 
@@ -2340,30 +2340,30 @@ enum /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$__nesc_unnamed4274 {
 
 
 #line 48
-typedef struct /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$__nesc_unnamed4275 {
+typedef struct /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0____nesc_unnamed4275 {
 
   uint32_t t0;
   uint32_t dt;
   bool isoneshot : 1;
   bool isrunning : 1;
   bool _reserved : 6;
-} /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$Timer_t;
+} /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer_t;
 
-/*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$Timer_t /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$m_timers[/*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$NUM_TIMERS];
-
-
+/*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer_t /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__m_timers[/*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__NUM_TIMERS];
 
 
-static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$fireTimers(uint32_t now);
+
+
+static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__fireTimers(uint32_t now);
 #line 89
-static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$updateFromTimer$runTask(void );
+static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__updateFromTimer__runTask(void );
 #line 128
-static inline void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$TimerFrom$fired(void );
+static inline void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__TimerFrom__fired(void );
 
 
 
 
-static inline void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$startTimer(uint8_t num, uint32_t t0, uint32_t dt, bool isoneshot);
+static inline void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__startTimer(uint8_t num, uint32_t t0, uint32_t dt, bool isoneshot);
 
 
 
@@ -2373,88 +2373,88 @@ static inline void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$startTi
 
 
 
-static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$Timer$startPeriodic(uint8_t num, uint32_t dt);
+static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__startPeriodic(uint8_t num, uint32_t dt);
 #line 193
-static inline void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$Timer$default$fired(uint8_t num);
+static inline void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__default__fired(uint8_t num);
 # 47 "/opt/tinyos-2.x/tos/lib/timer/CounterToLocalTimeC.nc"
-static inline void /*HilTimerMilliC.CounterToLocalTimeC*/CounterToLocalTimeC$0$Counter$overflow(void );
+static inline void /*HilTimerMilliC.CounterToLocalTimeC*/CounterToLocalTimeC__0__Counter__overflow(void );
 # 212 "/opt/tinyos-2.x/tos/chips/msp430/msp430hardware.h"
 static inline  void __nesc_enable_interrupt(void )
 {
    __asm volatile ("eint");}
 
 # 185 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-static inline void /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$Timer$overflow(void )
+static inline void /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__Timer__overflow(void )
 {
 }
 
 #line 185
-static inline void /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$Timer$overflow(void )
+static inline void /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__Timer__overflow(void )
 {
 }
 
 #line 185
-static inline void /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$Timer$overflow(void )
+static inline void /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__Timer__overflow(void )
 {
 }
 
 # 37 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Timer.nc"
-inline static void /*Msp430TimerC.Msp430TimerA*/Msp430TimerP$0$Timer$overflow(void ){
+inline static void /*Msp430TimerC.Msp430TimerA*/Msp430TimerP__0__Timer__overflow(void ){
 #line 37
-  /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$Timer$overflow();
+  /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__Timer__overflow();
 #line 37
-  /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$Timer$overflow();
+  /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__Timer__overflow();
 #line 37
-  /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$Timer$overflow();
+  /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__Timer__overflow();
 #line 37
 }
 #line 37
 # 126 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerP.nc"
-static inline void /*Msp430TimerC.Msp430TimerA*/Msp430TimerP$0$Overflow$fired(void )
+static inline void /*Msp430TimerC.Msp430TimerA*/Msp430TimerP__0__Overflow__fired(void )
 {
-  /*Msp430TimerC.Msp430TimerA*/Msp430TimerP$0$Timer$overflow();
+  /*Msp430TimerC.Msp430TimerA*/Msp430TimerP__0__Timer__overflow();
 }
 
 
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerA*/Msp430TimerP$0$Event$default$fired(uint8_t n)
+static inline void /*Msp430TimerC.Msp430TimerA*/Msp430TimerP__0__Event__default__fired(uint8_t n)
 {
 }
 
 # 28 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerEvent.nc"
-inline static void /*Msp430TimerC.Msp430TimerA*/Msp430TimerP$0$Event$fired(uint8_t arg_0x4061f4b0){
+inline static void /*Msp430TimerC.Msp430TimerA*/Msp430TimerP__0__Event__fired(uint8_t arg_0x4061f4b0){
 #line 28
   switch (arg_0x4061f4b0) {
 #line 28
     case 0:
 #line 28
-      /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$Event$fired();
+      /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__Event__fired();
 #line 28
       break;
 #line 28
     case 1:
 #line 28
-      /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$Event$fired();
+      /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__Event__fired();
 #line 28
       break;
 #line 28
     case 2:
 #line 28
-      /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$Event$fired();
+      /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__Event__fired();
 #line 28
       break;
 #line 28
     case 5:
 #line 28
-      /*Msp430TimerC.Msp430TimerA*/Msp430TimerP$0$Overflow$fired();
+      /*Msp430TimerC.Msp430TimerA*/Msp430TimerP__0__Overflow__fired();
 #line 28
       break;
 #line 28
     default:
 #line 28
-      /*Msp430TimerC.Msp430TimerA*/Msp430TimerP$0$Event$default$fired(arg_0x4061f4b0);
+      /*Msp430TimerC.Msp430TimerA*/Msp430TimerP__0__Event__default__fired(arg_0x4061f4b0);
 #line 28
       break;
 #line 28
@@ -2463,28 +2463,28 @@ inline static void /*Msp430TimerC.Msp430TimerA*/Msp430TimerP$0$Event$fired(uint8
 }
 #line 28
 # 115 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerP.nc"
-static inline void /*Msp430TimerC.Msp430TimerA*/Msp430TimerP$0$VectorTimerX0$fired(void )
+static inline void /*Msp430TimerC.Msp430TimerA*/Msp430TimerP__0__VectorTimerX0__fired(void )
 {
-  /*Msp430TimerC.Msp430TimerA*/Msp430TimerP$0$Event$fired(0);
+  /*Msp430TimerC.Msp430TimerA*/Msp430TimerP__0__Event__fired(0);
 }
 
 # 28 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerEvent.nc"
-inline static void Msp430TimerCommonP$VectorTimerA0$fired(void ){
+inline static void Msp430TimerCommonP__VectorTimerA0__fired(void ){
 #line 28
-  /*Msp430TimerC.Msp430TimerA*/Msp430TimerP$0$VectorTimerX0$fired();
+  /*Msp430TimerC.Msp430TimerA*/Msp430TimerP__0__VectorTimerX0__fired();
 #line 28
 }
 #line 28
 # 47 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-static inline  /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$cc_t /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$int2CC(uint16_t x)
+static inline  /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__cc_t /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__int2CC(uint16_t x)
 #line 47
 {
 #line 47
-  union /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$__nesc_unnamed4276 {
+  union /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0____nesc_unnamed4276 {
 #line 47
     uint16_t f;
 #line 47
-    /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$cc_t t;
+    /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__cc_t t;
   } 
 #line 47
   c = { .f = x };
@@ -2494,51 +2494,51 @@ static inline  /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$cc_t /*Msp430T
 }
 
 #line 74
-static inline /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$cc_t /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$Control$getControl(void )
+static inline /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__cc_t /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__Control__getControl(void )
 {
-  return /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$int2CC(* (volatile uint16_t * )354U);
+  return /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__int2CC(* (volatile uint16_t * )354U);
 }
 
 #line 177
-static inline void /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$Capture$default$captured(uint16_t n)
+static inline void /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__Capture__default__captured(uint16_t n)
 {
 }
 
 # 75 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Capture.nc"
-inline static void /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$Capture$captured(uint16_t time){
+inline static void /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__Capture__captured(uint16_t time){
 #line 75
-  /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$Capture$default$captured(time);
+  /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__Capture__default__captured(time);
 #line 75
 }
 #line 75
 # 139 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-static inline uint16_t /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$Capture$getEvent(void )
+static inline uint16_t /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__Capture__getEvent(void )
 {
   return * (volatile uint16_t * )370U;
 }
 
 #line 181
-static inline void /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$Compare$default$fired(void )
+static inline void /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__Compare__default__fired(void )
 {
 }
 
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Compare.nc"
-inline static void /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$Compare$fired(void ){
+inline static void /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__Compare__fired(void ){
 #line 34
-  /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$Compare$default$fired();
+  /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__Compare__default__fired();
 #line 34
 }
 #line 34
 # 47 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-static inline  /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$cc_t /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$int2CC(uint16_t x)
+static inline  /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__cc_t /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__int2CC(uint16_t x)
 #line 47
 {
 #line 47
-  union /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$__nesc_unnamed4277 {
+  union /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1____nesc_unnamed4277 {
 #line 47
     uint16_t f;
 #line 47
-    /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$cc_t t;
+    /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__cc_t t;
   } 
 #line 47
   c = { .f = x };
@@ -2548,51 +2548,51 @@ static inline  /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$cc_t /*Msp430T
 }
 
 #line 74
-static inline /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$cc_t /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$Control$getControl(void )
+static inline /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__cc_t /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__Control__getControl(void )
 {
-  return /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$int2CC(* (volatile uint16_t * )356U);
+  return /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__int2CC(* (volatile uint16_t * )356U);
 }
 
 #line 177
-static inline void /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$Capture$default$captured(uint16_t n)
+static inline void /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__Capture__default__captured(uint16_t n)
 {
 }
 
 # 75 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Capture.nc"
-inline static void /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$Capture$captured(uint16_t time){
+inline static void /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__Capture__captured(uint16_t time){
 #line 75
-  /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$Capture$default$captured(time);
+  /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__Capture__default__captured(time);
 #line 75
 }
 #line 75
 # 139 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-static inline uint16_t /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$Capture$getEvent(void )
+static inline uint16_t /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__Capture__getEvent(void )
 {
   return * (volatile uint16_t * )372U;
 }
 
 #line 181
-static inline void /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$Compare$default$fired(void )
+static inline void /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__Compare__default__fired(void )
 {
 }
 
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Compare.nc"
-inline static void /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$Compare$fired(void ){
+inline static void /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__Compare__fired(void ){
 #line 34
-  /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$Compare$default$fired();
+  /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__Compare__default__fired();
 #line 34
 }
 #line 34
 # 47 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-static inline  /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$cc_t /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$int2CC(uint16_t x)
+static inline  /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__cc_t /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__int2CC(uint16_t x)
 #line 47
 {
 #line 47
-  union /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$__nesc_unnamed4278 {
+  union /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2____nesc_unnamed4278 {
 #line 47
     uint16_t f;
 #line 47
-    /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$cc_t t;
+    /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__cc_t t;
   } 
 #line 47
   c = { .f = x };
@@ -2602,191 +2602,191 @@ static inline  /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$cc_t /*Msp430T
 }
 
 #line 74
-static inline /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$cc_t /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$Control$getControl(void )
+static inline /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__cc_t /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__Control__getControl(void )
 {
-  return /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$int2CC(* (volatile uint16_t * )358U);
+  return /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__int2CC(* (volatile uint16_t * )358U);
 }
 
 #line 177
-static inline void /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$Capture$default$captured(uint16_t n)
+static inline void /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__Capture__default__captured(uint16_t n)
 {
 }
 
 # 75 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Capture.nc"
-inline static void /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$Capture$captured(uint16_t time){
+inline static void /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__Capture__captured(uint16_t time){
 #line 75
-  /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$Capture$default$captured(time);
+  /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__Capture__default__captured(time);
 #line 75
 }
 #line 75
 # 139 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-static inline uint16_t /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$Capture$getEvent(void )
+static inline uint16_t /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__Capture__getEvent(void )
 {
   return * (volatile uint16_t * )374U;
 }
 
 #line 181
-static inline void /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$Compare$default$fired(void )
+static inline void /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__Compare__default__fired(void )
 {
 }
 
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Compare.nc"
-inline static void /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$Compare$fired(void ){
+inline static void /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__Compare__fired(void ){
 #line 34
-  /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$Compare$default$fired();
+  /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__Compare__default__fired();
 #line 34
 }
 #line 34
 # 120 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerP.nc"
-static inline void /*Msp430TimerC.Msp430TimerA*/Msp430TimerP$0$VectorTimerX1$fired(void )
+static inline void /*Msp430TimerC.Msp430TimerA*/Msp430TimerP__0__VectorTimerX1__fired(void )
 {
   uint8_t n = * (volatile uint16_t * )302U;
 
 #line 123
-  /*Msp430TimerC.Msp430TimerA*/Msp430TimerP$0$Event$fired(n >> 1);
+  /*Msp430TimerC.Msp430TimerA*/Msp430TimerP__0__Event__fired(n >> 1);
 }
 
 # 28 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerEvent.nc"
-inline static void Msp430TimerCommonP$VectorTimerA1$fired(void ){
+inline static void Msp430TimerCommonP__VectorTimerA1__fired(void ){
 #line 28
-  /*Msp430TimerC.Msp430TimerA*/Msp430TimerP$0$VectorTimerX1$fired();
+  /*Msp430TimerC.Msp430TimerA*/Msp430TimerP__0__VectorTimerX1__fired();
 #line 28
 }
 #line 28
 # 115 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerP.nc"
-static inline void /*Msp430TimerC.Msp430TimerB*/Msp430TimerP$1$VectorTimerX0$fired(void )
+static inline void /*Msp430TimerC.Msp430TimerB*/Msp430TimerP__1__VectorTimerX0__fired(void )
 {
-  /*Msp430TimerC.Msp430TimerB*/Msp430TimerP$1$Event$fired(0);
+  /*Msp430TimerC.Msp430TimerB*/Msp430TimerP__1__Event__fired(0);
 }
 
 # 28 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerEvent.nc"
-inline static void Msp430TimerCommonP$VectorTimerB0$fired(void ){
+inline static void Msp430TimerCommonP__VectorTimerB0__fired(void ){
 #line 28
-  /*Msp430TimerC.Msp430TimerB*/Msp430TimerP$1$VectorTimerX0$fired();
+  /*Msp430TimerC.Msp430TimerB*/Msp430TimerP__1__VectorTimerX0__fired();
 #line 28
 }
 #line 28
 # 185 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-static inline void /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$Timer$overflow(void )
+static inline void /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__Timer__overflow(void )
 {
 }
 
 #line 185
-static inline void /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$Timer$overflow(void )
+static inline void /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__Timer__overflow(void )
 {
 }
 
 #line 185
-static inline void /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$Timer$overflow(void )
+static inline void /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__Timer__overflow(void )
 {
 }
 
 #line 185
-static inline void /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$Timer$overflow(void )
+static inline void /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__Timer__overflow(void )
 {
 }
 
 #line 185
-static inline void /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$Timer$overflow(void )
+static inline void /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__Timer__overflow(void )
 {
 }
 
 #line 185
-static inline void /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$Timer$overflow(void )
+static inline void /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__Timer__overflow(void )
 {
 }
 
 #line 185
-static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Timer$overflow(void )
+static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Timer__overflow(void )
 {
 }
 
 # 103 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430AlarmC.nc"
-static inline void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Msp430Timer$overflow(void )
+static inline void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Msp430Timer__overflow(void )
 {
 }
 
 # 47 "/opt/tinyos-2.x/tos/lib/timer/CounterToLocalTimeC.nc"
-static inline void /*HilTimerMilliC.CounterToLocalTimeC*/CounterToLocalTimeC$0$Counter$overflow(void )
+static inline void /*HilTimerMilliC.CounterToLocalTimeC*/CounterToLocalTimeC__0__Counter__overflow(void )
 {
 }
 
 # 166 "/opt/tinyos-2.x/tos/lib/timer/TransformAlarmC.nc"
-static inline void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Counter$overflow(void )
+static inline void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Counter__overflow(void )
 {
 }
 
 # 71 "/opt/tinyos-2.x/tos/lib/timer/Counter.nc"
-inline static void /*CounterMilli32C.Transform*/TransformCounterC$0$Counter$overflow(void ){
+inline static void /*CounterMilli32C.Transform*/TransformCounterC__0__Counter__overflow(void ){
 #line 71
-  /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Counter$overflow();
+  /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Counter__overflow();
 #line 71
-  /*HilTimerMilliC.CounterToLocalTimeC*/CounterToLocalTimeC$0$Counter$overflow();
+  /*HilTimerMilliC.CounterToLocalTimeC*/CounterToLocalTimeC__0__Counter__overflow();
 #line 71
 }
 #line 71
 # 122 "/opt/tinyos-2.x/tos/lib/timer/TransformCounterC.nc"
-static inline void /*CounterMilli32C.Transform*/TransformCounterC$0$CounterFrom$overflow(void )
+static inline void /*CounterMilli32C.Transform*/TransformCounterC__0__CounterFrom__overflow(void )
 {
   /* atomic removed: atomic calls only */
   {
-    /*CounterMilli32C.Transform*/TransformCounterC$0$m_upper++;
-    if ((/*CounterMilli32C.Transform*/TransformCounterC$0$m_upper & /*CounterMilli32C.Transform*/TransformCounterC$0$OVERFLOW_MASK) == 0) {
-      /*CounterMilli32C.Transform*/TransformCounterC$0$Counter$overflow();
+    /*CounterMilli32C.Transform*/TransformCounterC__0__m_upper++;
+    if ((/*CounterMilli32C.Transform*/TransformCounterC__0__m_upper & /*CounterMilli32C.Transform*/TransformCounterC__0__OVERFLOW_MASK) == 0) {
+      /*CounterMilli32C.Transform*/TransformCounterC__0__Counter__overflow();
       }
   }
 }
 
 # 71 "/opt/tinyos-2.x/tos/lib/timer/Counter.nc"
-inline static void /*Msp430Counter32khzC.Counter*/Msp430CounterC$0$Counter$overflow(void ){
+inline static void /*Msp430Counter32khzC.Counter*/Msp430CounterC__0__Counter__overflow(void ){
 #line 71
-  /*CounterMilli32C.Transform*/TransformCounterC$0$CounterFrom$overflow();
+  /*CounterMilli32C.Transform*/TransformCounterC__0__CounterFrom__overflow();
 #line 71
 }
 #line 71
 # 53 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430CounterC.nc"
-static inline void /*Msp430Counter32khzC.Counter*/Msp430CounterC$0$Msp430Timer$overflow(void )
+static inline void /*Msp430Counter32khzC.Counter*/Msp430CounterC__0__Msp430Timer__overflow(void )
 {
-  /*Msp430Counter32khzC.Counter*/Msp430CounterC$0$Counter$overflow();
+  /*Msp430Counter32khzC.Counter*/Msp430CounterC__0__Counter__overflow();
 }
 
 # 37 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Timer.nc"
-inline static void /*Msp430TimerC.Msp430TimerB*/Msp430TimerP$1$Timer$overflow(void ){
+inline static void /*Msp430TimerC.Msp430TimerB*/Msp430TimerP__1__Timer__overflow(void ){
 #line 37
-  /*Msp430Counter32khzC.Counter*/Msp430CounterC$0$Msp430Timer$overflow();
+  /*Msp430Counter32khzC.Counter*/Msp430CounterC__0__Msp430Timer__overflow();
 #line 37
-  /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Msp430Timer$overflow();
+  /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Msp430Timer__overflow();
 #line 37
-  /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Timer$overflow();
+  /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Timer__overflow();
 #line 37
-  /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$Timer$overflow();
+  /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__Timer__overflow();
 #line 37
-  /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$Timer$overflow();
+  /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__Timer__overflow();
 #line 37
-  /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$Timer$overflow();
+  /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__Timer__overflow();
 #line 37
-  /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$Timer$overflow();
+  /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__Timer__overflow();
 #line 37
-  /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$Timer$overflow();
+  /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__Timer__overflow();
 #line 37
-  /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$Timer$overflow();
+  /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__Timer__overflow();
 #line 37
 }
 #line 37
 # 126 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerP.nc"
-static inline void /*Msp430TimerC.Msp430TimerB*/Msp430TimerP$1$Overflow$fired(void )
+static inline void /*Msp430TimerC.Msp430TimerB*/Msp430TimerP__1__Overflow__fired(void )
 {
-  /*Msp430TimerC.Msp430TimerB*/Msp430TimerP$1$Timer$overflow();
+  /*Msp430TimerC.Msp430TimerB*/Msp430TimerP__1__Timer__overflow();
 }
 
 # 56 "/opt/tinyos-2.x/tos/interfaces/TaskBasic.nc"
-inline static error_t /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$fired$postTask(void ){
+inline static error_t /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__fired__postTask(void ){
 #line 56
   unsigned char __nesc_result;
 #line 56
 
 #line 56
-  __nesc_result = SchedulerBasicP$TaskBasic$postTask(/*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$fired);
+  __nesc_result = SchedulerBasicP__TaskBasic__postTask(/*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__fired);
 #line 56
 
 #line 56
@@ -2795,97 +2795,97 @@ inline static error_t /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$fired$post
 }
 #line 56
 # 70 "/opt/tinyos-2.x/tos/lib/timer/AlarmToTimerC.nc"
-static inline void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Alarm$fired(void )
+static inline void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Alarm__fired(void )
 {
 #line 71
-  /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$fired$postTask();
+  /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__fired__postTask();
 }
 
 # 67 "/opt/tinyos-2.x/tos/lib/timer/Alarm.nc"
-inline static void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Alarm$fired(void ){
+inline static void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Alarm__fired(void ){
 #line 67
-  /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Alarm$fired();
+  /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Alarm__fired();
 #line 67
 }
 #line 67
 # 151 "/opt/tinyos-2.x/tos/lib/timer/TransformAlarmC.nc"
-static inline void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$AlarmFrom$fired(void )
+static inline void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__AlarmFrom__fired(void )
 {
   /* atomic removed: atomic calls only */
   {
-    if (/*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$m_dt == 0) 
+    if (/*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__m_dt == 0) 
       {
-        /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Alarm$fired();
+        /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Alarm__fired();
       }
     else 
       {
-        /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$set_alarm();
+        /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__set_alarm();
       }
   }
 }
 
 # 67 "/opt/tinyos-2.x/tos/lib/timer/Alarm.nc"
-inline static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Alarm$fired(void ){
+inline static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Alarm__fired(void ){
 #line 67
-  /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$AlarmFrom$fired();
+  /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__AlarmFrom__fired();
 #line 67
 }
 #line 67
 # 124 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Control$disableEvents(void )
+static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Control__disableEvents(void )
 {
   * (volatile uint16_t * )386U &= ~0x0010;
 }
 
 # 47 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerControl.nc"
-inline static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Msp430TimerControl$disableEvents(void ){
+inline static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Msp430TimerControl__disableEvents(void ){
 #line 47
-  /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Control$disableEvents();
+  /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Control__disableEvents();
 #line 47
 }
 #line 47
 # 59 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430AlarmC.nc"
-static inline void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Msp430Compare$fired(void )
+static inline void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Msp430Compare__fired(void )
 {
-  /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Msp430TimerControl$disableEvents();
-  /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Alarm$fired();
+  /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Msp430TimerControl__disableEvents();
+  /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Alarm__fired();
 }
 
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Compare.nc"
-inline static void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Compare$fired(void ){
+inline static void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Compare__fired(void ){
 #line 34
-  /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Msp430Compare$fired();
+  /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Msp430Compare__fired();
 #line 34
 }
 #line 34
 # 139 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-static inline uint16_t /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Capture$getEvent(void )
+static inline uint16_t /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Capture__getEvent(void )
 {
   return * (volatile uint16_t * )402U;
 }
 
 #line 177
-static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Capture$default$captured(uint16_t n)
+static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Capture__default__captured(uint16_t n)
 {
 }
 
 # 75 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Capture.nc"
-inline static void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Capture$captured(uint16_t time){
+inline static void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Capture__captured(uint16_t time){
 #line 75
-  /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Capture$default$captured(time);
+  /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Capture__default__captured(time);
 #line 75
 }
 #line 75
 # 47 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-static inline  /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$cc_t /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$int2CC(uint16_t x)
+static inline  /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__cc_t /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__int2CC(uint16_t x)
 #line 47
 {
 #line 47
-  union /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$__nesc_unnamed4279 {
+  union /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3____nesc_unnamed4279 {
 #line 47
     uint16_t f;
 #line 47
-    /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$cc_t t;
+    /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__cc_t t;
   } 
 #line 47
   c = { .f = x };
@@ -2895,42 +2895,42 @@ static inline  /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$cc_t /*Msp430T
 }
 
 #line 74
-static inline /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$cc_t /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Control$getControl(void )
+static inline /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__cc_t /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Control__getControl(void )
 {
-  return /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$int2CC(* (volatile uint16_t * )386U);
+  return /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__int2CC(* (volatile uint16_t * )386U);
 }
 
 #line 169
-static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Event$fired(void )
+static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Event__fired(void )
 {
-  if (/*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Control$getControl().cap) {
-    /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Capture$captured(/*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Capture$getEvent());
+  if (/*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Control__getControl().cap) {
+    /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Capture__captured(/*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Capture__getEvent());
     }
   else {
 #line 174
-    /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Compare$fired();
+    /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Compare__fired();
     }
 }
 
 # 86 "/opt/tinyos-2.x/tos/system/SchedulerBasicP.nc"
-static inline bool SchedulerBasicP$isWaiting(uint8_t id)
+static inline bool SchedulerBasicP__isWaiting(uint8_t id)
 {
-  return SchedulerBasicP$m_next[id] != SchedulerBasicP$NO_TASK || SchedulerBasicP$m_tail == id;
+  return SchedulerBasicP__m_next[id] != SchedulerBasicP__NO_TASK || SchedulerBasicP__m_tail == id;
 }
 
-static inline bool SchedulerBasicP$pushTask(uint8_t id)
+static inline bool SchedulerBasicP__pushTask(uint8_t id)
 {
-  if (!SchedulerBasicP$isWaiting(id)) 
+  if (!SchedulerBasicP__isWaiting(id)) 
     {
-      if (SchedulerBasicP$m_head == SchedulerBasicP$NO_TASK) 
+      if (SchedulerBasicP__m_head == SchedulerBasicP__NO_TASK) 
         {
-          SchedulerBasicP$m_head = id;
-          SchedulerBasicP$m_tail = id;
+          SchedulerBasicP__m_head = id;
+          SchedulerBasicP__m_tail = id;
         }
       else 
         {
-          SchedulerBasicP$m_next[SchedulerBasicP$m_tail] = id;
-          SchedulerBasicP$m_tail = id;
+          SchedulerBasicP__m_next[SchedulerBasicP__m_tail] = id;
+          SchedulerBasicP__m_tail = id;
         }
       return TRUE;
     }
@@ -2941,13 +2941,13 @@ static inline bool SchedulerBasicP$pushTask(uint8_t id)
 }
 
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Timer.nc"
-inline static uint16_t /*Msp430Counter32khzC.Counter*/Msp430CounterC$0$Msp430Timer$get(void ){
+inline static uint16_t /*Msp430Counter32khzC.Counter*/Msp430CounterC__0__Msp430Timer__get(void ){
 #line 34
   unsigned int __nesc_result;
 #line 34
 
 #line 34
-  __nesc_result = /*Msp430TimerC.Msp430TimerB*/Msp430TimerP$1$Timer$get();
+  __nesc_result = /*Msp430TimerC.Msp430TimerB*/Msp430TimerP__1__Timer__get();
 #line 34
 
 #line 34
@@ -2956,19 +2956,19 @@ inline static uint16_t /*Msp430Counter32khzC.Counter*/Msp430CounterC$0$Msp430Tim
 }
 #line 34
 # 38 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430CounterC.nc"
-static inline uint16_t /*Msp430Counter32khzC.Counter*/Msp430CounterC$0$Counter$get(void )
+static inline uint16_t /*Msp430Counter32khzC.Counter*/Msp430CounterC__0__Counter__get(void )
 {
-  return /*Msp430Counter32khzC.Counter*/Msp430CounterC$0$Msp430Timer$get();
+  return /*Msp430Counter32khzC.Counter*/Msp430CounterC__0__Msp430Timer__get();
 }
 
 # 53 "/opt/tinyos-2.x/tos/lib/timer/Counter.nc"
-inline static /*CounterMilli32C.Transform*/TransformCounterC$0$CounterFrom$size_type /*CounterMilli32C.Transform*/TransformCounterC$0$CounterFrom$get(void ){
+inline static /*CounterMilli32C.Transform*/TransformCounterC__0__CounterFrom__size_type /*CounterMilli32C.Transform*/TransformCounterC__0__CounterFrom__get(void ){
 #line 53
   unsigned int __nesc_result;
 #line 53
 
 #line 53
-  __nesc_result = /*Msp430Counter32khzC.Counter*/Msp430CounterC$0$Counter$get();
+  __nesc_result = /*Msp430Counter32khzC.Counter*/Msp430CounterC__0__Counter__get();
 #line 53
 
 #line 53
@@ -2977,19 +2977,19 @@ inline static /*CounterMilli32C.Transform*/TransformCounterC$0$CounterFrom$size_
 }
 #line 53
 # 70 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerP.nc"
-static inline bool /*Msp430TimerC.Msp430TimerB*/Msp430TimerP$1$Timer$isOverflowPending(void )
+static inline bool /*Msp430TimerC.Msp430TimerB*/Msp430TimerP__1__Timer__isOverflowPending(void )
 {
   return * (volatile uint16_t * )384U & 1U;
 }
 
 # 35 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Timer.nc"
-inline static bool /*Msp430Counter32khzC.Counter*/Msp430CounterC$0$Msp430Timer$isOverflowPending(void ){
+inline static bool /*Msp430Counter32khzC.Counter*/Msp430CounterC__0__Msp430Timer__isOverflowPending(void ){
 #line 35
   unsigned char __nesc_result;
 #line 35
 
 #line 35
-  __nesc_result = /*Msp430TimerC.Msp430TimerB*/Msp430TimerP$1$Timer$isOverflowPending();
+  __nesc_result = /*Msp430TimerC.Msp430TimerB*/Msp430TimerP__1__Timer__isOverflowPending();
 #line 35
 
 #line 35
@@ -2998,19 +2998,19 @@ inline static bool /*Msp430Counter32khzC.Counter*/Msp430CounterC$0$Msp430Timer$i
 }
 #line 35
 # 43 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430CounterC.nc"
-static inline bool /*Msp430Counter32khzC.Counter*/Msp430CounterC$0$Counter$isOverflowPending(void )
+static inline bool /*Msp430Counter32khzC.Counter*/Msp430CounterC__0__Counter__isOverflowPending(void )
 {
-  return /*Msp430Counter32khzC.Counter*/Msp430CounterC$0$Msp430Timer$isOverflowPending();
+  return /*Msp430Counter32khzC.Counter*/Msp430CounterC__0__Msp430Timer__isOverflowPending();
 }
 
 # 60 "/opt/tinyos-2.x/tos/lib/timer/Counter.nc"
-inline static bool /*CounterMilli32C.Transform*/TransformCounterC$0$CounterFrom$isOverflowPending(void ){
+inline static bool /*CounterMilli32C.Transform*/TransformCounterC__0__CounterFrom__isOverflowPending(void ){
 #line 60
   unsigned char __nesc_result;
 #line 60
 
 #line 60
-  __nesc_result = /*Msp430Counter32khzC.Counter*/Msp430CounterC$0$Counter$isOverflowPending();
+  __nesc_result = /*Msp430Counter32khzC.Counter*/Msp430CounterC__0__Counter__isOverflowPending();
 #line 60
 
 #line 60
@@ -3019,52 +3019,52 @@ inline static bool /*CounterMilli32C.Transform*/TransformCounterC$0$CounterFrom$
 }
 #line 60
 # 119 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Control$enableEvents(void )
+static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Control__enableEvents(void )
 {
   * (volatile uint16_t * )386U |= 0x0010;
 }
 
 # 46 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerControl.nc"
-inline static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Msp430TimerControl$enableEvents(void ){
+inline static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Msp430TimerControl__enableEvents(void ){
 #line 46
-  /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Control$enableEvents();
+  /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Control__enableEvents();
 #line 46
 }
 #line 46
 # 84 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Control$clearPendingInterrupt(void )
+static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Control__clearPendingInterrupt(void )
 {
   * (volatile uint16_t * )386U &= ~0x0001;
 }
 
 # 33 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerControl.nc"
-inline static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Msp430TimerControl$clearPendingInterrupt(void ){
+inline static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Msp430TimerControl__clearPendingInterrupt(void ){
 #line 33
-  /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Control$clearPendingInterrupt();
+  /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Control__clearPendingInterrupt();
 #line 33
 }
 #line 33
 # 144 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Compare$setEvent(uint16_t x)
+static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Compare__setEvent(uint16_t x)
 {
   * (volatile uint16_t * )402U = x;
 }
 
 # 30 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Compare.nc"
-inline static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Msp430Compare$setEvent(uint16_t time){
+inline static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Msp430Compare__setEvent(uint16_t time){
 #line 30
-  /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Compare$setEvent(time);
+  /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Compare__setEvent(time);
 #line 30
 }
 #line 30
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Timer.nc"
-inline static uint16_t /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Timer$get(void ){
+inline static uint16_t /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Timer__get(void ){
 #line 34
   unsigned int __nesc_result;
 #line 34
 
 #line 34
-  __nesc_result = /*Msp430TimerC.Msp430TimerB*/Msp430TimerP$1$Timer$get();
+  __nesc_result = /*Msp430TimerC.Msp430TimerB*/Msp430TimerP__1__Timer__get();
 #line 34
 
 #line 34
@@ -3073,26 +3073,26 @@ inline static uint16_t /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Timer$
 }
 #line 34
 # 154 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Compare$setEventFromNow(uint16_t x)
+static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Compare__setEventFromNow(uint16_t x)
 {
-  * (volatile uint16_t * )402U = /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Timer$get() + x;
+  * (volatile uint16_t * )402U = /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Timer__get() + x;
 }
 
 # 32 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Compare.nc"
-inline static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Msp430Compare$setEventFromNow(uint16_t delta){
+inline static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Msp430Compare__setEventFromNow(uint16_t delta){
 #line 32
-  /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Compare$setEventFromNow(delta);
+  /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Compare__setEventFromNow(delta);
 #line 32
 }
 #line 32
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Timer.nc"
-inline static uint16_t /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Msp430Timer$get(void ){
+inline static uint16_t /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Msp430Timer__get(void ){
 #line 34
   unsigned int __nesc_result;
 #line 34
 
 #line 34
-  __nesc_result = /*Msp430TimerC.Msp430TimerB*/Msp430TimerP$1$Timer$get();
+  __nesc_result = /*Msp430TimerC.Msp430TimerB*/Msp430TimerP__1__Timer__get();
 #line 34
 
 #line 34
@@ -3101,17 +3101,17 @@ inline static uint16_t /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp
 }
 #line 34
 # 70 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430AlarmC.nc"
-static inline void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Alarm$startAt(uint16_t t0, uint16_t dt)
+static inline void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Alarm__startAt(uint16_t t0, uint16_t dt)
 {
   /* atomic removed: atomic calls only */
   {
-    uint16_t now = /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Msp430Timer$get();
+    uint16_t now = /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Msp430Timer__get();
     uint16_t elapsed = now - t0;
 
 #line 76
     if (elapsed >= dt) 
       {
-        /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Msp430Compare$setEventFromNow(2);
+        /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Msp430Compare__setEventFromNow(2);
       }
     else 
       {
@@ -3119,66 +3119,66 @@ static inline void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430A
 
 #line 83
         if (remaining <= 2) {
-          /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Msp430Compare$setEventFromNow(2);
+          /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Msp430Compare__setEventFromNow(2);
           }
         else {
 #line 86
-          /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Msp430Compare$setEvent(now + remaining);
+          /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Msp430Compare__setEvent(now + remaining);
           }
       }
 #line 88
-    /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Msp430TimerControl$clearPendingInterrupt();
-    /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Msp430TimerControl$enableEvents();
+    /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Msp430TimerControl__clearPendingInterrupt();
+    /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Msp430TimerControl__enableEvents();
   }
 }
 
 # 92 "/opt/tinyos-2.x/tos/lib/timer/Alarm.nc"
-inline static void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$AlarmFrom$startAt(/*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$AlarmFrom$size_type t0, /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$AlarmFrom$size_type dt){
+inline static void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__AlarmFrom__startAt(/*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__AlarmFrom__size_type t0, /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__AlarmFrom__size_type dt){
 #line 92
-  /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Alarm$startAt(t0, dt);
+  /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Alarm__startAt(t0, dt);
 #line 92
 }
 #line 92
 # 181 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-static inline void /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$Compare$default$fired(void )
+static inline void /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__Compare__default__fired(void )
 {
 }
 
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Compare.nc"
-inline static void /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$Compare$fired(void ){
+inline static void /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__Compare__fired(void ){
 #line 34
-  /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$Compare$default$fired();
+  /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__Compare__default__fired();
 #line 34
 }
 #line 34
 # 139 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-static inline uint16_t /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$Capture$getEvent(void )
+static inline uint16_t /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__Capture__getEvent(void )
 {
   return * (volatile uint16_t * )404U;
 }
 
 #line 177
-static inline void /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$Capture$default$captured(uint16_t n)
+static inline void /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__Capture__default__captured(uint16_t n)
 {
 }
 
 # 75 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Capture.nc"
-inline static void /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$Capture$captured(uint16_t time){
+inline static void /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__Capture__captured(uint16_t time){
 #line 75
-  /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$Capture$default$captured(time);
+  /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__Capture__default__captured(time);
 #line 75
 }
 #line 75
 # 47 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-static inline  /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$cc_t /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$int2CC(uint16_t x)
+static inline  /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__cc_t /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__int2CC(uint16_t x)
 #line 47
 {
 #line 47
-  union /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$__nesc_unnamed4280 {
+  union /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4____nesc_unnamed4280 {
 #line 47
     uint16_t f;
 #line 47
-    /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$cc_t t;
+    /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__cc_t t;
   } 
 #line 47
   c = { .f = x };
@@ -3188,65 +3188,65 @@ static inline  /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$cc_t /*Msp430T
 }
 
 #line 74
-static inline /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$cc_t /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$Control$getControl(void )
+static inline /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__cc_t /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__Control__getControl(void )
 {
-  return /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$int2CC(* (volatile uint16_t * )388U);
+  return /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__int2CC(* (volatile uint16_t * )388U);
 }
 
 #line 169
-static inline void /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$Event$fired(void )
+static inline void /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__Event__fired(void )
 {
-  if (/*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$Control$getControl().cap) {
-    /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$Capture$captured(/*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$Capture$getEvent());
+  if (/*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__Control__getControl().cap) {
+    /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__Capture__captured(/*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__Capture__getEvent());
     }
   else {
 #line 174
-    /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$Compare$fired();
+    /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__Compare__fired();
     }
 }
 
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$Compare$default$fired(void )
+static inline void /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__Compare__default__fired(void )
 {
 }
 
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Compare.nc"
-inline static void /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$Compare$fired(void ){
+inline static void /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__Compare__fired(void ){
 #line 34
-  /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$Compare$default$fired();
+  /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__Compare__default__fired();
 #line 34
 }
 #line 34
 # 139 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-static inline uint16_t /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$Capture$getEvent(void )
+static inline uint16_t /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__Capture__getEvent(void )
 {
   return * (volatile uint16_t * )406U;
 }
 
 #line 177
-static inline void /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$Capture$default$captured(uint16_t n)
+static inline void /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__Capture__default__captured(uint16_t n)
 {
 }
 
 # 75 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Capture.nc"
-inline static void /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$Capture$captured(uint16_t time){
+inline static void /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__Capture__captured(uint16_t time){
 #line 75
-  /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$Capture$default$captured(time);
+  /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__Capture__default__captured(time);
 #line 75
 }
 #line 75
 # 47 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-static inline  /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$cc_t /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$int2CC(uint16_t x)
+static inline  /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__cc_t /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__int2CC(uint16_t x)
 #line 47
 {
 #line 47
-  union /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$__nesc_unnamed4281 {
+  union /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5____nesc_unnamed4281 {
 #line 47
     uint16_t f;
 #line 47
-    /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$cc_t t;
+    /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__cc_t t;
   } 
 #line 47
   c = { .f = x };
@@ -3256,65 +3256,65 @@ static inline  /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$cc_t /*Msp430T
 }
 
 #line 74
-static inline /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$cc_t /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$Control$getControl(void )
+static inline /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__cc_t /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__Control__getControl(void )
 {
-  return /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$int2CC(* (volatile uint16_t * )390U);
+  return /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__int2CC(* (volatile uint16_t * )390U);
 }
 
 #line 169
-static inline void /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$Event$fired(void )
+static inline void /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__Event__fired(void )
 {
-  if (/*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$Control$getControl().cap) {
-    /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$Capture$captured(/*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$Capture$getEvent());
+  if (/*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__Control__getControl().cap) {
+    /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__Capture__captured(/*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__Capture__getEvent());
     }
   else {
 #line 174
-    /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$Compare$fired();
+    /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__Compare__fired();
     }
 }
 
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$Compare$default$fired(void )
+static inline void /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__Compare__default__fired(void )
 {
 }
 
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Compare.nc"
-inline static void /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$Compare$fired(void ){
+inline static void /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__Compare__fired(void ){
 #line 34
-  /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$Compare$default$fired();
+  /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__Compare__default__fired();
 #line 34
 }
 #line 34
 # 139 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-static inline uint16_t /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$Capture$getEvent(void )
+static inline uint16_t /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__Capture__getEvent(void )
 {
   return * (volatile uint16_t * )408U;
 }
 
 #line 177
-static inline void /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$Capture$default$captured(uint16_t n)
+static inline void /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__Capture__default__captured(uint16_t n)
 {
 }
 
 # 75 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Capture.nc"
-inline static void /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$Capture$captured(uint16_t time){
+inline static void /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__Capture__captured(uint16_t time){
 #line 75
-  /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$Capture$default$captured(time);
+  /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__Capture__default__captured(time);
 #line 75
 }
 #line 75
 # 47 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-static inline  /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$cc_t /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$int2CC(uint16_t x)
+static inline  /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__cc_t /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__int2CC(uint16_t x)
 #line 47
 {
 #line 47
-  union /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$__nesc_unnamed4282 {
+  union /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6____nesc_unnamed4282 {
 #line 47
     uint16_t f;
 #line 47
-    /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$cc_t t;
+    /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__cc_t t;
   } 
 #line 47
   c = { .f = x };
@@ -3324,65 +3324,65 @@ static inline  /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$cc_t /*Msp430T
 }
 
 #line 74
-static inline /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$cc_t /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$Control$getControl(void )
+static inline /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__cc_t /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__Control__getControl(void )
 {
-  return /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$int2CC(* (volatile uint16_t * )392U);
+  return /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__int2CC(* (volatile uint16_t * )392U);
 }
 
 #line 169
-static inline void /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$Event$fired(void )
+static inline void /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__Event__fired(void )
 {
-  if (/*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$Control$getControl().cap) {
-    /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$Capture$captured(/*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$Capture$getEvent());
+  if (/*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__Control__getControl().cap) {
+    /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__Capture__captured(/*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__Capture__getEvent());
     }
   else {
 #line 174
-    /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$Compare$fired();
+    /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__Compare__fired();
     }
 }
 
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$Compare$default$fired(void )
+static inline void /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__Compare__default__fired(void )
 {
 }
 
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Compare.nc"
-inline static void /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$Compare$fired(void ){
+inline static void /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__Compare__fired(void ){
 #line 34
-  /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$Compare$default$fired();
+  /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__Compare__default__fired();
 #line 34
 }
 #line 34
 # 139 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-static inline uint16_t /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$Capture$getEvent(void )
+static inline uint16_t /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__Capture__getEvent(void )
 {
   return * (volatile uint16_t * )410U;
 }
 
 #line 177
-static inline void /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$Capture$default$captured(uint16_t n)
+static inline void /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__Capture__default__captured(uint16_t n)
 {
 }
 
 # 75 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Capture.nc"
-inline static void /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$Capture$captured(uint16_t time){
+inline static void /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__Capture__captured(uint16_t time){
 #line 75
-  /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$Capture$default$captured(time);
+  /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__Capture__default__captured(time);
 #line 75
 }
 #line 75
 # 47 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-static inline  /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$cc_t /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$int2CC(uint16_t x)
+static inline  /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__cc_t /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__int2CC(uint16_t x)
 #line 47
 {
 #line 47
-  union /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$__nesc_unnamed4283 {
+  union /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7____nesc_unnamed4283 {
 #line 47
     uint16_t f;
 #line 47
-    /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$cc_t t;
+    /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__cc_t t;
   } 
 #line 47
   c = { .f = x };
@@ -3392,65 +3392,65 @@ static inline  /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$cc_t /*Msp430T
 }
 
 #line 74
-static inline /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$cc_t /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$Control$getControl(void )
+static inline /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__cc_t /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__Control__getControl(void )
 {
-  return /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$int2CC(* (volatile uint16_t * )394U);
+  return /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__int2CC(* (volatile uint16_t * )394U);
 }
 
 #line 169
-static inline void /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$Event$fired(void )
+static inline void /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__Event__fired(void )
 {
-  if (/*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$Control$getControl().cap) {
-    /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$Capture$captured(/*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$Capture$getEvent());
+  if (/*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__Control__getControl().cap) {
+    /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__Capture__captured(/*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__Capture__getEvent());
     }
   else {
 #line 174
-    /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$Compare$fired();
+    /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__Compare__fired();
     }
 }
 
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$Compare$default$fired(void )
+static inline void /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__Compare__default__fired(void )
 {
 }
 
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Compare.nc"
-inline static void /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$Compare$fired(void ){
+inline static void /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__Compare__fired(void ){
 #line 34
-  /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$Compare$default$fired();
+  /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__Compare__default__fired();
 #line 34
 }
 #line 34
 # 139 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-static inline uint16_t /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$Capture$getEvent(void )
+static inline uint16_t /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__Capture__getEvent(void )
 {
   return * (volatile uint16_t * )412U;
 }
 
 #line 177
-static inline void /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$Capture$default$captured(uint16_t n)
+static inline void /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__Capture__default__captured(uint16_t n)
 {
 }
 
 # 75 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Capture.nc"
-inline static void /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$Capture$captured(uint16_t time){
+inline static void /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__Capture__captured(uint16_t time){
 #line 75
-  /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$Capture$default$captured(time);
+  /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__Capture__default__captured(time);
 #line 75
 }
 #line 75
 # 47 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-static inline  /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$cc_t /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$int2CC(uint16_t x)
+static inline  /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__cc_t /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__int2CC(uint16_t x)
 #line 47
 {
 #line 47
-  union /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$__nesc_unnamed4284 {
+  union /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8____nesc_unnamed4284 {
 #line 47
     uint16_t f;
 #line 47
-    /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$cc_t t;
+    /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__cc_t t;
   } 
 #line 47
   c = { .f = x };
@@ -3460,65 +3460,65 @@ static inline  /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$cc_t /*Msp430T
 }
 
 #line 74
-static inline /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$cc_t /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$Control$getControl(void )
+static inline /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__cc_t /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__Control__getControl(void )
 {
-  return /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$int2CC(* (volatile uint16_t * )396U);
+  return /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__int2CC(* (volatile uint16_t * )396U);
 }
 
 #line 169
-static inline void /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$Event$fired(void )
+static inline void /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__Event__fired(void )
 {
-  if (/*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$Control$getControl().cap) {
-    /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$Capture$captured(/*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$Capture$getEvent());
+  if (/*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__Control__getControl().cap) {
+    /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__Capture__captured(/*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__Capture__getEvent());
     }
   else {
 #line 174
-    /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$Compare$fired();
+    /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__Compare__fired();
     }
 }
 
 
 
 
-static inline void /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$Compare$default$fired(void )
+static inline void /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__Compare__default__fired(void )
 {
 }
 
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Compare.nc"
-inline static void /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$Compare$fired(void ){
+inline static void /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__Compare__fired(void ){
 #line 34
-  /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$Compare$default$fired();
+  /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__Compare__default__fired();
 #line 34
 }
 #line 34
 # 139 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-static inline uint16_t /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$Capture$getEvent(void )
+static inline uint16_t /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__Capture__getEvent(void )
 {
   return * (volatile uint16_t * )414U;
 }
 
 #line 177
-static inline void /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$Capture$default$captured(uint16_t n)
+static inline void /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__Capture__default__captured(uint16_t n)
 {
 }
 
 # 75 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430Capture.nc"
-inline static void /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$Capture$captured(uint16_t time){
+inline static void /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__Capture__captured(uint16_t time){
 #line 75
-  /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$Capture$default$captured(time);
+  /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__Capture__default__captured(time);
 #line 75
 }
 #line 75
 # 47 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-static inline  /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$cc_t /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$int2CC(uint16_t x)
+static inline  /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__cc_t /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__int2CC(uint16_t x)
 #line 47
 {
 #line 47
-  union /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$__nesc_unnamed4285 {
+  union /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9____nesc_unnamed4285 {
 #line 47
     uint16_t f;
 #line 47
-    /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$cc_t t;
+    /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__cc_t t;
   } 
 #line 47
   c = { .f = x };
@@ -3528,59 +3528,59 @@ static inline  /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$cc_t /*Msp430T
 }
 
 #line 74
-static inline /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$cc_t /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$Control$getControl(void )
+static inline /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__cc_t /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__Control__getControl(void )
 {
-  return /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$int2CC(* (volatile uint16_t * )398U);
+  return /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__int2CC(* (volatile uint16_t * )398U);
 }
 
 #line 169
-static inline void /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$Event$fired(void )
+static inline void /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__Event__fired(void )
 {
-  if (/*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$Control$getControl().cap) {
-    /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$Capture$captured(/*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$Capture$getEvent());
+  if (/*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__Control__getControl().cap) {
+    /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__Capture__captured(/*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__Capture__getEvent());
     }
   else {
 #line 174
-    /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$Compare$fired();
+    /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__Compare__fired();
     }
 }
 
 # 120 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerP.nc"
-static inline void /*Msp430TimerC.Msp430TimerB*/Msp430TimerP$1$VectorTimerX1$fired(void )
+static inline void /*Msp430TimerC.Msp430TimerB*/Msp430TimerP__1__VectorTimerX1__fired(void )
 {
   uint8_t n = * (volatile uint16_t * )286U;
 
 #line 123
-  /*Msp430TimerC.Msp430TimerB*/Msp430TimerP$1$Event$fired(n >> 1);
+  /*Msp430TimerC.Msp430TimerB*/Msp430TimerP__1__Event__fired(n >> 1);
 }
 
 # 28 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerEvent.nc"
-inline static void Msp430TimerCommonP$VectorTimerB1$fired(void ){
+inline static void Msp430TimerCommonP__VectorTimerB1__fired(void ){
 #line 28
-  /*Msp430TimerC.Msp430TimerB*/Msp430TimerP$1$VectorTimerX1$fired();
+  /*Msp430TimerC.Msp430TimerB*/Msp430TimerP__1__VectorTimerX1__fired();
 #line 28
 }
 #line 28
 # 113 "/opt/tinyos-2.x/tos/system/SchedulerBasicP.nc"
-static inline void SchedulerBasicP$Scheduler$init(void )
+static inline void SchedulerBasicP__Scheduler__init(void )
 {
   /* atomic removed: atomic calls only */
   {
-    memset((void *)SchedulerBasicP$m_next, SchedulerBasicP$NO_TASK, sizeof SchedulerBasicP$m_next);
-    SchedulerBasicP$m_head = SchedulerBasicP$NO_TASK;
-    SchedulerBasicP$m_tail = SchedulerBasicP$NO_TASK;
+    memset((void *)SchedulerBasicP__m_next, SchedulerBasicP__NO_TASK, sizeof SchedulerBasicP__m_next);
+    SchedulerBasicP__m_head = SchedulerBasicP__NO_TASK;
+    SchedulerBasicP__m_tail = SchedulerBasicP__NO_TASK;
   }
 }
 
 # 46 "/opt/tinyos-2.x/tos/interfaces/Scheduler.nc"
-inline static void RealMainP$Scheduler$init(void ){
+inline static void RealMainP__Scheduler__init(void ){
 #line 46
-  SchedulerBasicP$Scheduler$init();
+  SchedulerBasicP__Scheduler__init();
 #line 46
 }
 #line 46
 # 45 "/opt/tinyos-2.x/tos/chips/msp430/pins/HplMsp430GeneralIOP.nc"
-static inline void /*HplMsp430GeneralIOC.P56*/HplMsp430GeneralIOP$38$IO$set(void )
+static inline void /*HplMsp430GeneralIOC.P56*/HplMsp430GeneralIOP__38__IO__set(void )
 #line 45
 {
   /* atomic removed: atomic calls only */
@@ -3589,29 +3589,29 @@ static inline void /*HplMsp430GeneralIOC.P56*/HplMsp430GeneralIOP$38$IO$set(void
 }
 
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/pins/HplMsp430GeneralIO.nc"
-inline static void /*PlatformLedsC.Led2Impl*/Msp430GpioC$2$HplGeneralIO$set(void ){
+inline static void /*PlatformLedsC.Led2Impl*/Msp430GpioC__2__HplGeneralIO__set(void ){
 #line 34
-  /*HplMsp430GeneralIOC.P56*/HplMsp430GeneralIOP$38$IO$set();
+  /*HplMsp430GeneralIOC.P56*/HplMsp430GeneralIOP__38__IO__set();
 #line 34
 }
 #line 34
 # 37 "/opt/tinyos-2.x/tos/chips/msp430/pins/Msp430GpioC.nc"
-static inline void /*PlatformLedsC.Led2Impl*/Msp430GpioC$2$GeneralIO$set(void )
+static inline void /*PlatformLedsC.Led2Impl*/Msp430GpioC__2__GeneralIO__set(void )
 #line 37
 {
 #line 37
-  /*PlatformLedsC.Led2Impl*/Msp430GpioC$2$HplGeneralIO$set();
+  /*PlatformLedsC.Led2Impl*/Msp430GpioC__2__HplGeneralIO__set();
 }
 
 # 29 "/opt/tinyos-2.x/tos/interfaces/GeneralIO.nc"
-inline static void LedsP$Led2$set(void ){
+inline static void LedsP__Led2__set(void ){
 #line 29
-  /*PlatformLedsC.Led2Impl*/Msp430GpioC$2$GeneralIO$set();
+  /*PlatformLedsC.Led2Impl*/Msp430GpioC__2__GeneralIO__set();
 #line 29
 }
 #line 29
 # 45 "/opt/tinyos-2.x/tos/chips/msp430/pins/HplMsp430GeneralIOP.nc"
-static inline void /*HplMsp430GeneralIOC.P55*/HplMsp430GeneralIOP$37$IO$set(void )
+static inline void /*HplMsp430GeneralIOC.P55*/HplMsp430GeneralIOP__37__IO__set(void )
 #line 45
 {
   /* atomic removed: atomic calls only */
@@ -3620,29 +3620,29 @@ static inline void /*HplMsp430GeneralIOC.P55*/HplMsp430GeneralIOP$37$IO$set(void
 }
 
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/pins/HplMsp430GeneralIO.nc"
-inline static void /*PlatformLedsC.Led1Impl*/Msp430GpioC$1$HplGeneralIO$set(void ){
+inline static void /*PlatformLedsC.Led1Impl*/Msp430GpioC__1__HplGeneralIO__set(void ){
 #line 34
-  /*HplMsp430GeneralIOC.P55*/HplMsp430GeneralIOP$37$IO$set();
+  /*HplMsp430GeneralIOC.P55*/HplMsp430GeneralIOP__37__IO__set();
 #line 34
 }
 #line 34
 # 37 "/opt/tinyos-2.x/tos/chips/msp430/pins/Msp430GpioC.nc"
-static inline void /*PlatformLedsC.Led1Impl*/Msp430GpioC$1$GeneralIO$set(void )
+static inline void /*PlatformLedsC.Led1Impl*/Msp430GpioC__1__GeneralIO__set(void )
 #line 37
 {
 #line 37
-  /*PlatformLedsC.Led1Impl*/Msp430GpioC$1$HplGeneralIO$set();
+  /*PlatformLedsC.Led1Impl*/Msp430GpioC__1__HplGeneralIO__set();
 }
 
 # 29 "/opt/tinyos-2.x/tos/interfaces/GeneralIO.nc"
-inline static void LedsP$Led1$set(void ){
+inline static void LedsP__Led1__set(void ){
 #line 29
-  /*PlatformLedsC.Led1Impl*/Msp430GpioC$1$GeneralIO$set();
+  /*PlatformLedsC.Led1Impl*/Msp430GpioC__1__GeneralIO__set();
 #line 29
 }
 #line 29
 # 45 "/opt/tinyos-2.x/tos/chips/msp430/pins/HplMsp430GeneralIOP.nc"
-static inline void /*HplMsp430GeneralIOC.P54*/HplMsp430GeneralIOP$36$IO$set(void )
+static inline void /*HplMsp430GeneralIOC.P54*/HplMsp430GeneralIOP__36__IO__set(void )
 #line 45
 {
   /* atomic removed: atomic calls only */
@@ -3651,29 +3651,29 @@ static inline void /*HplMsp430GeneralIOC.P54*/HplMsp430GeneralIOP$36$IO$set(void
 }
 
 # 34 "/opt/tinyos-2.x/tos/chips/msp430/pins/HplMsp430GeneralIO.nc"
-inline static void /*PlatformLedsC.Led0Impl*/Msp430GpioC$0$HplGeneralIO$set(void ){
+inline static void /*PlatformLedsC.Led0Impl*/Msp430GpioC__0__HplGeneralIO__set(void ){
 #line 34
-  /*HplMsp430GeneralIOC.P54*/HplMsp430GeneralIOP$36$IO$set();
+  /*HplMsp430GeneralIOC.P54*/HplMsp430GeneralIOP__36__IO__set();
 #line 34
 }
 #line 34
 # 37 "/opt/tinyos-2.x/tos/chips/msp430/pins/Msp430GpioC.nc"
-static inline void /*PlatformLedsC.Led0Impl*/Msp430GpioC$0$GeneralIO$set(void )
+static inline void /*PlatformLedsC.Led0Impl*/Msp430GpioC__0__GeneralIO__set(void )
 #line 37
 {
 #line 37
-  /*PlatformLedsC.Led0Impl*/Msp430GpioC$0$HplGeneralIO$set();
+  /*PlatformLedsC.Led0Impl*/Msp430GpioC__0__HplGeneralIO__set();
 }
 
 # 29 "/opt/tinyos-2.x/tos/interfaces/GeneralIO.nc"
-inline static void LedsP$Led0$set(void ){
+inline static void LedsP__Led0__set(void ){
 #line 29
-  /*PlatformLedsC.Led0Impl*/Msp430GpioC$0$GeneralIO$set();
+  /*PlatformLedsC.Led0Impl*/Msp430GpioC__0__GeneralIO__set();
 #line 29
 }
 #line 29
 # 52 "/opt/tinyos-2.x/tos/chips/msp430/pins/HplMsp430GeneralIOP.nc"
-static inline void /*HplMsp430GeneralIOC.P56*/HplMsp430GeneralIOP$38$IO$makeOutput(void )
+static inline void /*HplMsp430GeneralIOC.P56*/HplMsp430GeneralIOP__38__IO__makeOutput(void )
 #line 52
 {
   /* atomic removed: atomic calls only */
@@ -3682,29 +3682,29 @@ static inline void /*HplMsp430GeneralIOC.P56*/HplMsp430GeneralIOP$38$IO$makeOutp
 }
 
 # 71 "/opt/tinyos-2.x/tos/chips/msp430/pins/HplMsp430GeneralIO.nc"
-inline static void /*PlatformLedsC.Led2Impl*/Msp430GpioC$2$HplGeneralIO$makeOutput(void ){
+inline static void /*PlatformLedsC.Led2Impl*/Msp430GpioC__2__HplGeneralIO__makeOutput(void ){
 #line 71
-  /*HplMsp430GeneralIOC.P56*/HplMsp430GeneralIOP$38$IO$makeOutput();
+  /*HplMsp430GeneralIOC.P56*/HplMsp430GeneralIOP__38__IO__makeOutput();
 #line 71
 }
 #line 71
 # 43 "/opt/tinyos-2.x/tos/chips/msp430/pins/Msp430GpioC.nc"
-static inline void /*PlatformLedsC.Led2Impl*/Msp430GpioC$2$GeneralIO$makeOutput(void )
+static inline void /*PlatformLedsC.Led2Impl*/Msp430GpioC__2__GeneralIO__makeOutput(void )
 #line 43
 {
 #line 43
-  /*PlatformLedsC.Led2Impl*/Msp430GpioC$2$HplGeneralIO$makeOutput();
+  /*PlatformLedsC.Led2Impl*/Msp430GpioC__2__HplGeneralIO__makeOutput();
 }
 
 # 35 "/opt/tinyos-2.x/tos/interfaces/GeneralIO.nc"
-inline static void LedsP$Led2$makeOutput(void ){
+inline static void LedsP__Led2__makeOutput(void ){
 #line 35
-  /*PlatformLedsC.Led2Impl*/Msp430GpioC$2$GeneralIO$makeOutput();
+  /*PlatformLedsC.Led2Impl*/Msp430GpioC__2__GeneralIO__makeOutput();
 #line 35
 }
 #line 35
 # 52 "/opt/tinyos-2.x/tos/chips/msp430/pins/HplMsp430GeneralIOP.nc"
-static inline void /*HplMsp430GeneralIOC.P55*/HplMsp430GeneralIOP$37$IO$makeOutput(void )
+static inline void /*HplMsp430GeneralIOC.P55*/HplMsp430GeneralIOP__37__IO__makeOutput(void )
 #line 52
 {
   /* atomic removed: atomic calls only */
@@ -3713,29 +3713,29 @@ static inline void /*HplMsp430GeneralIOC.P55*/HplMsp430GeneralIOP$37$IO$makeOutp
 }
 
 # 71 "/opt/tinyos-2.x/tos/chips/msp430/pins/HplMsp430GeneralIO.nc"
-inline static void /*PlatformLedsC.Led1Impl*/Msp430GpioC$1$HplGeneralIO$makeOutput(void ){
+inline static void /*PlatformLedsC.Led1Impl*/Msp430GpioC__1__HplGeneralIO__makeOutput(void ){
 #line 71
-  /*HplMsp430GeneralIOC.P55*/HplMsp430GeneralIOP$37$IO$makeOutput();
+  /*HplMsp430GeneralIOC.P55*/HplMsp430GeneralIOP__37__IO__makeOutput();
 #line 71
 }
 #line 71
 # 43 "/opt/tinyos-2.x/tos/chips/msp430/pins/Msp430GpioC.nc"
-static inline void /*PlatformLedsC.Led1Impl*/Msp430GpioC$1$GeneralIO$makeOutput(void )
+static inline void /*PlatformLedsC.Led1Impl*/Msp430GpioC__1__GeneralIO__makeOutput(void )
 #line 43
 {
 #line 43
-  /*PlatformLedsC.Led1Impl*/Msp430GpioC$1$HplGeneralIO$makeOutput();
+  /*PlatformLedsC.Led1Impl*/Msp430GpioC__1__HplGeneralIO__makeOutput();
 }
 
 # 35 "/opt/tinyos-2.x/tos/interfaces/GeneralIO.nc"
-inline static void LedsP$Led1$makeOutput(void ){
+inline static void LedsP__Led1__makeOutput(void ){
 #line 35
-  /*PlatformLedsC.Led1Impl*/Msp430GpioC$1$GeneralIO$makeOutput();
+  /*PlatformLedsC.Led1Impl*/Msp430GpioC__1__GeneralIO__makeOutput();
 #line 35
 }
 #line 35
 # 52 "/opt/tinyos-2.x/tos/chips/msp430/pins/HplMsp430GeneralIOP.nc"
-static inline void /*HplMsp430GeneralIOC.P54*/HplMsp430GeneralIOP$36$IO$makeOutput(void )
+static inline void /*HplMsp430GeneralIOC.P54*/HplMsp430GeneralIOP__36__IO__makeOutput(void )
 #line 52
 {
   /* atomic removed: atomic calls only */
@@ -3744,53 +3744,53 @@ static inline void /*HplMsp430GeneralIOC.P54*/HplMsp430GeneralIOP$36$IO$makeOutp
 }
 
 # 71 "/opt/tinyos-2.x/tos/chips/msp430/pins/HplMsp430GeneralIO.nc"
-inline static void /*PlatformLedsC.Led0Impl*/Msp430GpioC$0$HplGeneralIO$makeOutput(void ){
+inline static void /*PlatformLedsC.Led0Impl*/Msp430GpioC__0__HplGeneralIO__makeOutput(void ){
 #line 71
-  /*HplMsp430GeneralIOC.P54*/HplMsp430GeneralIOP$36$IO$makeOutput();
+  /*HplMsp430GeneralIOC.P54*/HplMsp430GeneralIOP__36__IO__makeOutput();
 #line 71
 }
 #line 71
 # 43 "/opt/tinyos-2.x/tos/chips/msp430/pins/Msp430GpioC.nc"
-static inline void /*PlatformLedsC.Led0Impl*/Msp430GpioC$0$GeneralIO$makeOutput(void )
+static inline void /*PlatformLedsC.Led0Impl*/Msp430GpioC__0__GeneralIO__makeOutput(void )
 #line 43
 {
 #line 43
-  /*PlatformLedsC.Led0Impl*/Msp430GpioC$0$HplGeneralIO$makeOutput();
+  /*PlatformLedsC.Led0Impl*/Msp430GpioC__0__HplGeneralIO__makeOutput();
 }
 
 # 35 "/opt/tinyos-2.x/tos/interfaces/GeneralIO.nc"
-inline static void LedsP$Led0$makeOutput(void ){
+inline static void LedsP__Led0__makeOutput(void ){
 #line 35
-  /*PlatformLedsC.Led0Impl*/Msp430GpioC$0$GeneralIO$makeOutput();
+  /*PlatformLedsC.Led0Impl*/Msp430GpioC__0__GeneralIO__makeOutput();
 #line 35
 }
 #line 35
 # 45 "/opt/tinyos-2.x/tos/system/LedsP.nc"
-static inline error_t LedsP$Init$init(void )
+static inline error_t LedsP__Init__init(void )
 #line 45
 {
   /* atomic removed: atomic calls only */
 #line 46
   {
     ;
-    LedsP$Led0$makeOutput();
-    LedsP$Led1$makeOutput();
-    LedsP$Led2$makeOutput();
-    LedsP$Led0$set();
-    LedsP$Led1$set();
-    LedsP$Led2$set();
+    LedsP__Led0__makeOutput();
+    LedsP__Led1__makeOutput();
+    LedsP__Led2__makeOutput();
+    LedsP__Led0__set();
+    LedsP__Led1__set();
+    LedsP__Led2__set();
   }
   return SUCCESS;
 }
 
 # 51 "/opt/tinyos-2.x/tos/interfaces/Init.nc"
-inline static error_t PlatformP$LedsInit$init(void ){
+inline static error_t PlatformP__LedsInit__init(void ){
 #line 51
   unsigned char __nesc_result;
 #line 51
 
 #line 51
-  __nesc_result = LedsP$Init$init();
+  __nesc_result = LedsP__Init__init();
 #line 51
 
 #line 51
@@ -3854,7 +3854,7 @@ static inline  void TOSH_CLR_FLASH_CS_PIN()
 }
 
 # 11 "/opt/tinyos-2.x/tos/platforms/telosb/MotePlatformC.nc"
-static __inline void MotePlatformC$TOSH_wait(void )
+static __inline void MotePlatformC__TOSH_wait(void )
 #line 11
 {
    __asm volatile ("nop"); __asm volatile ("nop");}
@@ -3915,7 +3915,7 @@ static inline  void TOSH_MAKE_SIMO0_OUTPUT()
 }
 
 # 27 "/opt/tinyos-2.x/tos/platforms/telosb/MotePlatformC.nc"
-static inline void MotePlatformC$TOSH_FLASH_M25P_DP(void )
+static inline void MotePlatformC__TOSH_FLASH_M25P_DP(void )
 #line 27
 {
 
@@ -3926,20 +3926,20 @@ static inline void MotePlatformC$TOSH_FLASH_M25P_DP(void )
   TOSH_SET_FLASH_HOLD_PIN();
   TOSH_SET_FLASH_CS_PIN();
 
-  MotePlatformC$TOSH_wait();
+  MotePlatformC__TOSH_wait();
 
 
   TOSH_CLR_FLASH_CS_PIN();
   TOSH_CLR_UCLK0_PIN();
 
-  MotePlatformC$TOSH_FLASH_M25P_DP_bit(TRUE);
-  MotePlatformC$TOSH_FLASH_M25P_DP_bit(FALSE);
-  MotePlatformC$TOSH_FLASH_M25P_DP_bit(TRUE);
-  MotePlatformC$TOSH_FLASH_M25P_DP_bit(TRUE);
-  MotePlatformC$TOSH_FLASH_M25P_DP_bit(TRUE);
-  MotePlatformC$TOSH_FLASH_M25P_DP_bit(FALSE);
-  MotePlatformC$TOSH_FLASH_M25P_DP_bit(FALSE);
-  MotePlatformC$TOSH_FLASH_M25P_DP_bit(TRUE);
+  MotePlatformC__TOSH_FLASH_M25P_DP_bit(TRUE);
+  MotePlatformC__TOSH_FLASH_M25P_DP_bit(FALSE);
+  MotePlatformC__TOSH_FLASH_M25P_DP_bit(TRUE);
+  MotePlatformC__TOSH_FLASH_M25P_DP_bit(TRUE);
+  MotePlatformC__TOSH_FLASH_M25P_DP_bit(TRUE);
+  MotePlatformC__TOSH_FLASH_M25P_DP_bit(FALSE);
+  MotePlatformC__TOSH_FLASH_M25P_DP_bit(FALSE);
+  MotePlatformC__TOSH_FLASH_M25P_DP_bit(TRUE);
 
   TOSH_SET_FLASH_CS_PIN();
   TOSH_SET_UCLK0_PIN();
@@ -3947,7 +3947,7 @@ static inline void MotePlatformC$TOSH_FLASH_M25P_DP(void )
 }
 
 #line 6
-static __inline void MotePlatformC$uwait(uint16_t u)
+static __inline void MotePlatformC__uwait(uint16_t u)
 #line 6
 {
   uint16_t t0 = TA0R;
@@ -3957,7 +3957,7 @@ static __inline void MotePlatformC$uwait(uint16_t u)
 }
 
 #line 56
-static inline error_t MotePlatformC$Init$init(void )
+static inline error_t MotePlatformC__Init__init(void )
 #line 56
 {
   /* atomic removed: atomic calls only */
@@ -3996,22 +3996,22 @@ static inline error_t MotePlatformC$Init$init(void )
 
 
 
-    MotePlatformC$uwait(1024 * 10);
+    MotePlatformC__uwait(1024 * 10);
 
-    MotePlatformC$TOSH_FLASH_M25P_DP();
+    MotePlatformC__TOSH_FLASH_M25P_DP();
   }
 
   return SUCCESS;
 }
 
 # 51 "/opt/tinyos-2.x/tos/interfaces/Init.nc"
-inline static error_t PlatformP$MoteInit$init(void ){
+inline static error_t PlatformP__MoteInit__init(void ){
 #line 51
   unsigned char __nesc_result;
 #line 51
 
 #line 51
-  __nesc_result = MotePlatformC$Init$init();
+  __nesc_result = MotePlatformC__Init__init();
 #line 51
 
 #line 51
@@ -4020,21 +4020,21 @@ inline static error_t PlatformP$MoteInit$init(void ){
 }
 #line 51
 # 148 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430ClockP.nc"
-static inline void Msp430ClockP$startTimerB(void )
+static inline void Msp430ClockP__startTimerB(void )
 {
 
-  Msp430ClockP$TBCTL = 0x0020 | (Msp430ClockP$TBCTL & ~(0x0020 | 0x0010));
+  Msp430ClockP__TBCTL = 0x0020 | (Msp430ClockP__TBCTL & ~(0x0020 | 0x0010));
 }
 
 #line 136
-static inline void Msp430ClockP$startTimerA(void )
+static inline void Msp430ClockP__startTimerA(void )
 {
 
-  Msp430ClockP$TA0CTL = 0x0020 | (Msp430ClockP$TA0CTL & ~(0x0020 | 0x0010));
+  Msp430ClockP__TA0CTL = 0x0020 | (Msp430ClockP__TA0CTL & ~(0x0020 | 0x0010));
 }
 
 #line 100
-static inline void Msp430ClockP$Msp430ClockInit$defaultInitTimerB(void )
+static inline void Msp430ClockP__Msp430ClockInit__defaultInitTimerB(void )
 {
   TBR = 0;
 
@@ -4046,24 +4046,24 @@ static inline void Msp430ClockP$Msp430ClockInit$defaultInitTimerB(void )
 
 
 
-  Msp430ClockP$TBCTL = 0x0100 | 0x0002;
+  Msp430ClockP__TBCTL = 0x0100 | 0x0002;
 }
 
 #line 130
-static inline void Msp430ClockP$Msp430ClockInit$default$initTimerB(void )
+static inline void Msp430ClockP__Msp430ClockInit__default__initTimerB(void )
 {
-  Msp430ClockP$Msp430ClockInit$defaultInitTimerB();
+  Msp430ClockP__Msp430ClockInit__defaultInitTimerB();
 }
 
 # 32 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430ClockInit.nc"
-inline static void Msp430ClockP$Msp430ClockInit$initTimerB(void ){
+inline static void Msp430ClockP__Msp430ClockInit__initTimerB(void ){
 #line 32
-  Msp430ClockP$Msp430ClockInit$default$initTimerB();
+  Msp430ClockP__Msp430ClockInit__default__initTimerB();
 #line 32
 }
 #line 32
 # 85 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430ClockP.nc"
-static inline void Msp430ClockP$Msp430ClockInit$defaultInitTimerA(void )
+static inline void Msp430ClockP__Msp430ClockInit__defaultInitTimerA(void )
 {
   TA0R = 0;
 
@@ -4075,24 +4075,24 @@ static inline void Msp430ClockP$Msp430ClockInit$defaultInitTimerA(void )
 
 
 
-  Msp430ClockP$TA0CTL = 0x0200 | 0x0002;
+  Msp430ClockP__TA0CTL = 0x0200 | 0x0002;
 }
 
 #line 125
-static inline void Msp430ClockP$Msp430ClockInit$default$initTimerA(void )
+static inline void Msp430ClockP__Msp430ClockInit__default__initTimerA(void )
 {
-  Msp430ClockP$Msp430ClockInit$defaultInitTimerA();
+  Msp430ClockP__Msp430ClockInit__defaultInitTimerA();
 }
 
 # 31 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430ClockInit.nc"
-inline static void Msp430ClockP$Msp430ClockInit$initTimerA(void ){
+inline static void Msp430ClockP__Msp430ClockInit__initTimerA(void ){
 #line 31
-  Msp430ClockP$Msp430ClockInit$default$initTimerA();
+  Msp430ClockP__Msp430ClockInit__default__initTimerA();
 #line 31
 }
 #line 31
 # 64 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430ClockP.nc"
-static inline void Msp430ClockP$Msp430ClockInit$defaultInitClocks(void )
+static inline void Msp430ClockP__Msp430ClockInit__defaultInitClocks(void )
 {
 
 
@@ -4110,34 +4110,34 @@ static inline void Msp430ClockP$Msp430ClockInit$defaultInitClocks(void )
   BCSCTL2 = 0x04;
 
 
-  Msp430ClockP$IE1 &= ~(1 << 1);
+  Msp430ClockP__IE1 &= ~(1 << 1);
 }
 
 #line 120
-static inline void Msp430ClockP$Msp430ClockInit$default$initClocks(void )
+static inline void Msp430ClockP__Msp430ClockInit__default__initClocks(void )
 {
-  Msp430ClockP$Msp430ClockInit$defaultInitClocks();
+  Msp430ClockP__Msp430ClockInit__defaultInitClocks();
 }
 
 # 30 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430ClockInit.nc"
-inline static void Msp430ClockP$Msp430ClockInit$initClocks(void ){
+inline static void Msp430ClockP__Msp430ClockInit__initClocks(void ){
 #line 30
-  Msp430ClockP$Msp430ClockInit$default$initClocks();
+  Msp430ClockP__Msp430ClockInit__default__initClocks();
 #line 30
 }
 #line 30
 # 166 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430ClockP.nc"
-static inline uint16_t Msp430ClockP$test_calib_busywait_delta(int calib)
+static inline uint16_t Msp430ClockP__test_calib_busywait_delta(int calib)
 {
   int8_t aclk_count = 2;
   uint16_t dco_prev = 0;
   uint16_t dco_curr = 0;
 
-  Msp430ClockP$set_dco_calib(calib);
+  Msp430ClockP__set_dco_calib(calib);
 
   while (aclk_count-- > 0) 
     {
-      TBCCR0 = TBR + Msp430ClockP$ACLK_CALIB_PERIOD;
+      TBCCR0 = TBR + Msp430ClockP__ACLK_CALIB_PERIOD;
       TBCCTL0 &= ~0x0001;
       while ((TBCCTL0 & 0x0001) == 0) ;
       dco_prev = dco_curr;
@@ -4150,7 +4150,7 @@ static inline uint16_t Msp430ClockP$test_calib_busywait_delta(int calib)
 
 
 
-static inline void Msp430ClockP$busyCalibrateDco(void )
+static inline void Msp430ClockP__busyCalibrateDco(void )
 {
 
   int calib;
@@ -4164,7 +4164,7 @@ static inline void Msp430ClockP$busyCalibrateDco(void )
   for (calib = 0, step = 0x800; step != 0; step >>= 1) 
     {
 
-      if (Msp430ClockP$test_calib_busywait_delta(calib | step) <= Msp430ClockP$TARGET_DCO_DELTA) {
+      if (Msp430ClockP__test_calib_busywait_delta(calib | step) <= Msp430ClockP__TARGET_DCO_DELTA) {
         calib |= step;
         }
     }
@@ -4172,66 +4172,66 @@ static inline void Msp430ClockP$busyCalibrateDco(void )
   if ((calib & 0x0e0) == 0x0e0) {
     calib &= ~0x01f;
     }
-  Msp430ClockP$set_dco_calib(calib);
+  Msp430ClockP__set_dco_calib(calib);
 }
 
 #line 52
-static inline void Msp430ClockP$Msp430ClockInit$defaultSetupDcoCalibrate(void )
+static inline void Msp430ClockP__Msp430ClockInit__defaultSetupDcoCalibrate(void )
 {
 
 
 
-  Msp430ClockP$TA0CTL = 0x0200 | 0x0020;
-  Msp430ClockP$TBCTL = 0x0100 | 0x0020;
+  Msp430ClockP__TA0CTL = 0x0200 | 0x0020;
+  Msp430ClockP__TBCTL = 0x0100 | 0x0020;
   BCSCTL1 = 0x80 | 0x04;
   BCSCTL2 = 0;
   TBCCTL0 = 0x4000;
 }
 
 #line 115
-static inline void Msp430ClockP$Msp430ClockInit$default$setupDcoCalibrate(void )
+static inline void Msp430ClockP__Msp430ClockInit__default__setupDcoCalibrate(void )
 {
-  Msp430ClockP$Msp430ClockInit$defaultSetupDcoCalibrate();
+  Msp430ClockP__Msp430ClockInit__defaultSetupDcoCalibrate();
 }
 
 # 29 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430ClockInit.nc"
-inline static void Msp430ClockP$Msp430ClockInit$setupDcoCalibrate(void ){
+inline static void Msp430ClockP__Msp430ClockInit__setupDcoCalibrate(void ){
 #line 29
-  Msp430ClockP$Msp430ClockInit$default$setupDcoCalibrate();
+  Msp430ClockP__Msp430ClockInit__default__setupDcoCalibrate();
 #line 29
 }
 #line 29
 # 214 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430ClockP.nc"
-static inline error_t Msp430ClockP$Init$init(void )
+static inline error_t Msp430ClockP__Init__init(void )
 {
 
-  Msp430ClockP$TA0CTL = 0x0004;
-  Msp430ClockP$TA0IV = 0;
-  Msp430ClockP$TBCTL = 0x0004;
-  Msp430ClockP$TBIV = 0;
+  Msp430ClockP__TA0CTL = 0x0004;
+  Msp430ClockP__TA0IV = 0;
+  Msp430ClockP__TBCTL = 0x0004;
+  Msp430ClockP__TBIV = 0;
   /* atomic removed: atomic calls only */
 
   {
-    Msp430ClockP$Msp430ClockInit$setupDcoCalibrate();
-    Msp430ClockP$busyCalibrateDco();
-    Msp430ClockP$Msp430ClockInit$initClocks();
-    Msp430ClockP$Msp430ClockInit$initTimerA();
-    Msp430ClockP$Msp430ClockInit$initTimerB();
-    Msp430ClockP$startTimerA();
-    Msp430ClockP$startTimerB();
+    Msp430ClockP__Msp430ClockInit__setupDcoCalibrate();
+    Msp430ClockP__busyCalibrateDco();
+    Msp430ClockP__Msp430ClockInit__initClocks();
+    Msp430ClockP__Msp430ClockInit__initTimerA();
+    Msp430ClockP__Msp430ClockInit__initTimerB();
+    Msp430ClockP__startTimerA();
+    Msp430ClockP__startTimerB();
   }
 
   return SUCCESS;
 }
 
 # 51 "/opt/tinyos-2.x/tos/interfaces/Init.nc"
-inline static error_t PlatformP$MoteClockInit$init(void ){
+inline static error_t PlatformP__MoteClockInit__init(void ){
 #line 51
   unsigned char __nesc_result;
 #line 51
 
 #line 51
-  __nesc_result = Msp430ClockP$Init$init();
+  __nesc_result = Msp430ClockP__Init__init();
 #line 51
 
 #line 51
@@ -4240,23 +4240,23 @@ inline static error_t PlatformP$MoteClockInit$init(void ){
 }
 #line 51
 # 10 "/opt/tinyos-2.x/tos/platforms/telosa/PlatformP.nc"
-static inline error_t PlatformP$Init$init(void )
+static inline error_t PlatformP__Init__init(void )
 #line 10
 {
-  PlatformP$MoteClockInit$init();
-  PlatformP$MoteInit$init();
-  PlatformP$LedsInit$init();
+  PlatformP__MoteClockInit__init();
+  PlatformP__MoteInit__init();
+  PlatformP__LedsInit__init();
   return SUCCESS;
 }
 
 # 51 "/opt/tinyos-2.x/tos/interfaces/Init.nc"
-inline static error_t RealMainP$PlatformInit$init(void ){
+inline static error_t RealMainP__PlatformInit__init(void ){
 #line 51
   unsigned char __nesc_result;
 #line 51
 
 #line 51
-  __nesc_result = PlatformP$Init$init();
+  __nesc_result = PlatformP__Init__init();
 #line 51
 
 #line 51
@@ -4276,13 +4276,13 @@ static inline  void TOSH_CLR_SIMO0_PIN()
 }
 
 # 54 "/opt/tinyos-2.x/tos/interfaces/Scheduler.nc"
-inline static bool RealMainP$Scheduler$runNextTask(void ){
+inline static bool RealMainP__Scheduler__runNextTask(void ){
 #line 54
   unsigned char __nesc_result;
 #line 54
 
 #line 54
-  __nesc_result = SchedulerBasicP$Scheduler$runNextTask();
+  __nesc_result = SchedulerBasicP__Scheduler__runNextTask();
 #line 54
 
 #line 54
@@ -4291,47 +4291,47 @@ inline static bool RealMainP$Scheduler$runNextTask(void ){
 }
 #line 54
 # 54 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430AlarmC.nc"
-static inline void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Alarm$stop(void )
+static inline void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Alarm__stop(void )
 {
-  /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Msp430TimerControl$disableEvents();
+  /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Msp430TimerControl__disableEvents();
 }
 
 # 62 "/opt/tinyos-2.x/tos/lib/timer/Alarm.nc"
-inline static void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$AlarmFrom$stop(void ){
+inline static void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__AlarmFrom__stop(void ){
 #line 62
-  /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Alarm$stop();
+  /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Alarm__stop();
 #line 62
 }
 #line 62
 # 91 "/opt/tinyos-2.x/tos/lib/timer/TransformAlarmC.nc"
-static inline void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Alarm$stop(void )
+static inline void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Alarm__stop(void )
 {
-  /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$AlarmFrom$stop();
+  /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__AlarmFrom__stop();
 }
 
 # 62 "/opt/tinyos-2.x/tos/lib/timer/Alarm.nc"
-inline static void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Alarm$stop(void ){
+inline static void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Alarm__stop(void ){
 #line 62
-  /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Alarm$stop();
+  /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Alarm__stop();
 #line 62
 }
 #line 62
 # 60 "/opt/tinyos-2.x/tos/lib/timer/AlarmToTimerC.nc"
-static inline void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Timer$stop(void )
+static inline void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Timer__stop(void )
 {
 #line 61
-  /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Alarm$stop();
+  /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Alarm__stop();
 }
 
 # 67 "/opt/tinyos-2.x/tos/lib/timer/Timer.nc"
-inline static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$TimerFrom$stop(void ){
+inline static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__TimerFrom__stop(void ){
 #line 67
-  /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Timer$stop();
+  /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Timer__stop();
 #line 67
 }
 #line 67
 # 47 "/opt/tinyos-2.x/tos/chips/msp430/pins/HplMsp430GeneralIOP.nc"
-static inline void /*HplMsp430GeneralIOC.P54*/HplMsp430GeneralIOP$36$IO$toggle(void )
+static inline void /*HplMsp430GeneralIOC.P54*/HplMsp430GeneralIOP__36__IO__toggle(void )
 #line 47
 {
 #line 47
@@ -4343,54 +4343,54 @@ static inline void /*HplMsp430GeneralIOC.P54*/HplMsp430GeneralIOP$36$IO$toggle(v
 }
 
 # 44 "/opt/tinyos-2.x/tos/chips/msp430/pins/HplMsp430GeneralIO.nc"
-inline static void /*PlatformLedsC.Led0Impl*/Msp430GpioC$0$HplGeneralIO$toggle(void ){
+inline static void /*PlatformLedsC.Led0Impl*/Msp430GpioC__0__HplGeneralIO__toggle(void ){
 #line 44
-  /*HplMsp430GeneralIOC.P54*/HplMsp430GeneralIOP$36$IO$toggle();
+  /*HplMsp430GeneralIOC.P54*/HplMsp430GeneralIOP__36__IO__toggle();
 #line 44
 }
 #line 44
 # 39 "/opt/tinyos-2.x/tos/chips/msp430/pins/Msp430GpioC.nc"
-static inline void /*PlatformLedsC.Led0Impl*/Msp430GpioC$0$GeneralIO$toggle(void )
+static inline void /*PlatformLedsC.Led0Impl*/Msp430GpioC__0__GeneralIO__toggle(void )
 #line 39
 {
 #line 39
-  /*PlatformLedsC.Led0Impl*/Msp430GpioC$0$HplGeneralIO$toggle();
+  /*PlatformLedsC.Led0Impl*/Msp430GpioC__0__HplGeneralIO__toggle();
 }
 
 # 31 "/opt/tinyos-2.x/tos/interfaces/GeneralIO.nc"
-inline static void LedsP$Led0$toggle(void ){
+inline static void LedsP__Led0__toggle(void ){
 #line 31
-  /*PlatformLedsC.Led0Impl*/Msp430GpioC$0$GeneralIO$toggle();
+  /*PlatformLedsC.Led0Impl*/Msp430GpioC__0__GeneralIO__toggle();
 #line 31
 }
 #line 31
 # 73 "/opt/tinyos-2.x/tos/system/LedsP.nc"
-static inline void LedsP$Leds$led0Toggle(void )
+static inline void LedsP__Leds__led0Toggle(void )
 #line 73
 {
-  LedsP$Led0$toggle();
+  LedsP__Led0__toggle();
   ;
 #line 75
   ;
 }
 
 # 56 "/opt/tinyos-2.x/tos/interfaces/Leds.nc"
-inline static void BlinkC$Leds$led0Toggle(void ){
+inline static void BlinkC__Leds__led0Toggle(void ){
 #line 56
-  LedsP$Leds$led0Toggle();
+  LedsP__Leds__led0Toggle();
 #line 56
 }
 #line 56
 # 63 "BlinkC.nc"
-static inline void BlinkC$Timer0$fired(void )
+static inline void BlinkC__Timer0__fired(void )
 #line 63
 {
   ;
-  BlinkC$Leds$led0Toggle();
+  BlinkC__Leds__led0Toggle();
 }
 
 # 47 "/opt/tinyos-2.x/tos/chips/msp430/pins/HplMsp430GeneralIOP.nc"
-static inline void /*HplMsp430GeneralIOC.P55*/HplMsp430GeneralIOP$37$IO$toggle(void )
+static inline void /*HplMsp430GeneralIOC.P55*/HplMsp430GeneralIOP__37__IO__toggle(void )
 #line 47
 {
 #line 47
@@ -4402,53 +4402,53 @@ static inline void /*HplMsp430GeneralIOC.P55*/HplMsp430GeneralIOP$37$IO$toggle(v
 }
 
 # 44 "/opt/tinyos-2.x/tos/chips/msp430/pins/HplMsp430GeneralIO.nc"
-inline static void /*PlatformLedsC.Led1Impl*/Msp430GpioC$1$HplGeneralIO$toggle(void ){
+inline static void /*PlatformLedsC.Led1Impl*/Msp430GpioC__1__HplGeneralIO__toggle(void ){
 #line 44
-  /*HplMsp430GeneralIOC.P55*/HplMsp430GeneralIOP$37$IO$toggle();
+  /*HplMsp430GeneralIOC.P55*/HplMsp430GeneralIOP__37__IO__toggle();
 #line 44
 }
 #line 44
 # 39 "/opt/tinyos-2.x/tos/chips/msp430/pins/Msp430GpioC.nc"
-static inline void /*PlatformLedsC.Led1Impl*/Msp430GpioC$1$GeneralIO$toggle(void )
+static inline void /*PlatformLedsC.Led1Impl*/Msp430GpioC__1__GeneralIO__toggle(void )
 #line 39
 {
 #line 39
-  /*PlatformLedsC.Led1Impl*/Msp430GpioC$1$HplGeneralIO$toggle();
+  /*PlatformLedsC.Led1Impl*/Msp430GpioC__1__HplGeneralIO__toggle();
 }
 
 # 31 "/opt/tinyos-2.x/tos/interfaces/GeneralIO.nc"
-inline static void LedsP$Led1$toggle(void ){
+inline static void LedsP__Led1__toggle(void ){
 #line 31
-  /*PlatformLedsC.Led1Impl*/Msp430GpioC$1$GeneralIO$toggle();
+  /*PlatformLedsC.Led1Impl*/Msp430GpioC__1__GeneralIO__toggle();
 #line 31
 }
 #line 31
 # 88 "/opt/tinyos-2.x/tos/system/LedsP.nc"
-static inline void LedsP$Leds$led1Toggle(void )
+static inline void LedsP__Leds__led1Toggle(void )
 #line 88
 {
-  LedsP$Led1$toggle();
+  LedsP__Led1__toggle();
   ;
 #line 90
   ;
 }
 
 # 72 "/opt/tinyos-2.x/tos/interfaces/Leds.nc"
-inline static void BlinkC$Leds$led1Toggle(void ){
+inline static void BlinkC__Leds__led1Toggle(void ){
 #line 72
-  LedsP$Leds$led1Toggle();
+  LedsP__Leds__led1Toggle();
 #line 72
 }
 #line 72
 # 68 "BlinkC.nc"
-static inline void BlinkC$Timer1$fired(void )
+static inline void BlinkC__Timer1__fired(void )
 {
   ;
-  BlinkC$Leds$led1Toggle();
+  BlinkC__Leds__led1Toggle();
 }
 
 # 47 "/opt/tinyos-2.x/tos/chips/msp430/pins/HplMsp430GeneralIOP.nc"
-static inline void /*HplMsp430GeneralIOC.P56*/HplMsp430GeneralIOP$38$IO$toggle(void )
+static inline void /*HplMsp430GeneralIOC.P56*/HplMsp430GeneralIOP__38__IO__toggle(void )
 #line 47
 {
 #line 47
@@ -4460,82 +4460,82 @@ static inline void /*HplMsp430GeneralIOC.P56*/HplMsp430GeneralIOP$38$IO$toggle(v
 }
 
 # 44 "/opt/tinyos-2.x/tos/chips/msp430/pins/HplMsp430GeneralIO.nc"
-inline static void /*PlatformLedsC.Led2Impl*/Msp430GpioC$2$HplGeneralIO$toggle(void ){
+inline static void /*PlatformLedsC.Led2Impl*/Msp430GpioC__2__HplGeneralIO__toggle(void ){
 #line 44
-  /*HplMsp430GeneralIOC.P56*/HplMsp430GeneralIOP$38$IO$toggle();
+  /*HplMsp430GeneralIOC.P56*/HplMsp430GeneralIOP__38__IO__toggle();
 #line 44
 }
 #line 44
 # 39 "/opt/tinyos-2.x/tos/chips/msp430/pins/Msp430GpioC.nc"
-static inline void /*PlatformLedsC.Led2Impl*/Msp430GpioC$2$GeneralIO$toggle(void )
+static inline void /*PlatformLedsC.Led2Impl*/Msp430GpioC__2__GeneralIO__toggle(void )
 #line 39
 {
 #line 39
-  /*PlatformLedsC.Led2Impl*/Msp430GpioC$2$HplGeneralIO$toggle();
+  /*PlatformLedsC.Led2Impl*/Msp430GpioC__2__HplGeneralIO__toggle();
 }
 
 # 31 "/opt/tinyos-2.x/tos/interfaces/GeneralIO.nc"
-inline static void LedsP$Led2$toggle(void ){
+inline static void LedsP__Led2__toggle(void ){
 #line 31
-  /*PlatformLedsC.Led2Impl*/Msp430GpioC$2$GeneralIO$toggle();
+  /*PlatformLedsC.Led2Impl*/Msp430GpioC__2__GeneralIO__toggle();
 #line 31
 }
 #line 31
 # 103 "/opt/tinyos-2.x/tos/system/LedsP.nc"
-static inline void LedsP$Leds$led2Toggle(void )
+static inline void LedsP__Leds__led2Toggle(void )
 #line 103
 {
-  LedsP$Led2$toggle();
+  LedsP__Led2__toggle();
   ;
 #line 105
   ;
 }
 
 # 89 "/opt/tinyos-2.x/tos/interfaces/Leds.nc"
-inline static void BlinkC$Leds$led2Toggle(void ){
+inline static void BlinkC__Leds__led2Toggle(void ){
 #line 89
-  LedsP$Leds$led2Toggle();
+  LedsP__Leds__led2Toggle();
 #line 89
 }
 #line 89
 # 74 "BlinkC.nc"
-static inline void BlinkC$Timer2$fired(void )
+static inline void BlinkC__Timer2__fired(void )
 {
   ;
-  BlinkC$Leds$led2Toggle();
+  BlinkC__Leds__led2Toggle();
 }
 
 # 193 "/opt/tinyos-2.x/tos/lib/timer/VirtualizeTimerC.nc"
-static inline void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$Timer$default$fired(uint8_t num)
+static inline void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__default__fired(uint8_t num)
 {
 }
 
 # 72 "/opt/tinyos-2.x/tos/lib/timer/Timer.nc"
-inline static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$Timer$fired(uint8_t arg_0x408c69f0){
+inline static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__fired(uint8_t arg_0x408c69f0){
 #line 72
   switch (arg_0x408c69f0) {
 #line 72
     case 0U:
 #line 72
-      BlinkC$Timer0$fired();
+      BlinkC__Timer0__fired();
 #line 72
       break;
 #line 72
     case 1U:
 #line 72
-      BlinkC$Timer1$fired();
+      BlinkC__Timer1__fired();
 #line 72
       break;
 #line 72
     case 2U:
 #line 72
-      BlinkC$Timer2$fired();
+      BlinkC__Timer2__fired();
 #line 72
       break;
 #line 72
     default:
 #line 72
-      /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$Timer$default$fired(arg_0x408c69f0);
+      /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__default__fired(arg_0x408c69f0);
 #line 72
       break;
 #line 72
@@ -4544,43 +4544,43 @@ inline static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$Timer$f
 }
 #line 72
 # 92 "/opt/tinyos-2.x/tos/lib/timer/Alarm.nc"
-inline static void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Alarm$startAt(/*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Alarm$size_type t0, /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Alarm$size_type dt){
+inline static void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Alarm__startAt(/*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Alarm__size_type t0, /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Alarm__size_type dt){
 #line 92
-  /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Alarm$startAt(t0, dt);
+  /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Alarm__startAt(t0, dt);
 #line 92
 }
 #line 92
 # 47 "/opt/tinyos-2.x/tos/lib/timer/AlarmToTimerC.nc"
-static inline void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$start(uint32_t t0, uint32_t dt, bool oneshot)
+static inline void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__start(uint32_t t0, uint32_t dt, bool oneshot)
 {
-  /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$m_dt = dt;
-  /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$m_oneshot = oneshot;
-  /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Alarm$startAt(t0, dt);
+  /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__m_dt = dt;
+  /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__m_oneshot = oneshot;
+  /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Alarm__startAt(t0, dt);
 }
 
 #line 82
-static inline void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Timer$startOneShotAt(uint32_t t0, uint32_t dt)
+static inline void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Timer__startOneShotAt(uint32_t t0, uint32_t dt)
 {
 #line 83
-  /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$start(t0, dt, TRUE);
+  /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__start(t0, dt, TRUE);
 }
 
 # 118 "/opt/tinyos-2.x/tos/lib/timer/Timer.nc"
-inline static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$TimerFrom$startOneShotAt(uint32_t t0, uint32_t dt){
+inline static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__TimerFrom__startOneShotAt(uint32_t t0, uint32_t dt){
 #line 118
-  /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Timer$startOneShotAt(t0, dt);
+  /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Timer__startOneShotAt(t0, dt);
 #line 118
 }
 #line 118
 # 80 "/opt/tinyos-2.x/tos/lib/timer/TransformAlarmC.nc"
-static inline /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$to_size_type /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Alarm$getAlarm(void )
+static inline /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__to_size_type /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Alarm__getAlarm(void )
 {
   { __nesc_atomic_t __nesc_atomic = __nesc_atomic_start();
 #line 82
     {
-      /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$to_size_type __nesc_temp = 
+      /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__to_size_type __nesc_temp = 
 #line 82
-      /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$m_t0 + /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$m_dt;
+      /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__m_t0 + /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__m_dt;
 
       {
 #line 82
@@ -4594,13 +4594,13 @@ static inline /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$to_siz
 }
 
 # 105 "/opt/tinyos-2.x/tos/lib/timer/Alarm.nc"
-inline static /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Alarm$size_type /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Alarm$getAlarm(void ){
+inline static /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Alarm__size_type /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Alarm__getAlarm(void ){
 #line 105
   unsigned long __nesc_result;
 #line 105
 
 #line 105
-  __nesc_result = /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Alarm$getAlarm();
+  __nesc_result = /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Alarm__getAlarm();
 #line 105
 
 #line 105
@@ -4609,13 +4609,13 @@ inline static /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Alarm$size_type /*
 }
 #line 105
 # 53 "/opt/tinyos-2.x/tos/lib/timer/Counter.nc"
-inline static /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Counter$size_type /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Counter$get(void ){
+inline static /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Counter__size_type /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Counter__get(void ){
 #line 53
   unsigned long __nesc_result;
 #line 53
 
 #line 53
-  __nesc_result = /*CounterMilli32C.Transform*/TransformCounterC$0$Counter$get();
+  __nesc_result = /*CounterMilli32C.Transform*/TransformCounterC__0__Counter__get();
 #line 53
 
 #line 53
@@ -4624,19 +4624,19 @@ inline static /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Counte
 }
 #line 53
 # 75 "/opt/tinyos-2.x/tos/lib/timer/TransformAlarmC.nc"
-static inline /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$to_size_type /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Alarm$getNow(void )
+static inline /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__to_size_type /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Alarm__getNow(void )
 {
-  return /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Counter$get();
+  return /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Counter__get();
 }
 
 # 98 "/opt/tinyos-2.x/tos/lib/timer/Alarm.nc"
-inline static /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Alarm$size_type /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Alarm$getNow(void ){
+inline static /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Alarm__size_type /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Alarm__getNow(void ){
 #line 98
   unsigned long __nesc_result;
 #line 98
 
 #line 98
-  __nesc_result = /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Alarm$getNow();
+  __nesc_result = /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Alarm__getNow();
 #line 98
 
 #line 98
@@ -4645,20 +4645,20 @@ inline static /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Alarm$size_type /*
 }
 #line 98
 # 85 "/opt/tinyos-2.x/tos/lib/timer/AlarmToTimerC.nc"
-static inline uint32_t /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Timer$getNow(void )
+static inline uint32_t /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Timer__getNow(void )
 {
 #line 86
-  return /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Alarm$getNow();
+  return /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Alarm__getNow();
 }
 
 # 125 "/opt/tinyos-2.x/tos/lib/timer/Timer.nc"
-inline static uint32_t /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$TimerFrom$getNow(void ){
+inline static uint32_t /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__TimerFrom__getNow(void ){
 #line 125
   unsigned long __nesc_result;
 #line 125
 
 #line 125
-  __nesc_result = /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Timer$getNow();
+  __nesc_result = /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Timer__getNow();
 #line 125
 
 #line 125
@@ -4667,26 +4667,26 @@ inline static uint32_t /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$Tim
 }
 #line 125
 # 128 "/opt/tinyos-2.x/tos/lib/timer/VirtualizeTimerC.nc"
-static inline void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$TimerFrom$fired(void )
+static inline void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__TimerFrom__fired(void )
 {
-  /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$fireTimers(/*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$TimerFrom$getNow());
+  /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__fireTimers(/*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__TimerFrom__getNow());
 }
 
 # 72 "/opt/tinyos-2.x/tos/lib/timer/Timer.nc"
-inline static void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Timer$fired(void ){
+inline static void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Timer__fired(void ){
 #line 72
-  /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$TimerFrom$fired();
+  /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__TimerFrom__fired();
 #line 72
 }
 #line 72
 # 46 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-static inline  uint16_t /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$CC2int(/*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$cc_t x)
+static inline  uint16_t /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__CC2int(/*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__cc_t x)
 #line 46
 {
 #line 46
-  union /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$__nesc_unnamed4286 {
+  union /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3____nesc_unnamed4286 {
 #line 46
-    /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$cc_t f;
+    /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__cc_t f;
 #line 46
     uint16_t t;
   } 
@@ -4697,47 +4697,47 @@ static inline  uint16_t /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$CC2in
   return c.t;
 }
 
-static inline uint16_t /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$compareControl(void )
+static inline uint16_t /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__compareControl(void )
 {
-  /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$cc_t x = { 
+  /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__cc_t x = { 
   .cm = 1, 
   .ccis = 0, 
   .clld = 0, 
   .cap = 0, 
   .ccie = 0 };
 
-  return /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$CC2int(x);
+  return /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__CC2int(x);
 }
 
 #line 94
-static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Control$setControlAsCompare(void )
+static inline void /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Control__setControlAsCompare(void )
 {
-  * (volatile uint16_t * )386U = /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$compareControl();
+  * (volatile uint16_t * )386U = /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__compareControl();
 }
 
 # 36 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerControl.nc"
-inline static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Msp430TimerControl$setControlAsCompare(void ){
+inline static void /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Msp430TimerControl__setControlAsCompare(void ){
 #line 36
-  /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Control$setControlAsCompare();
+  /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Control__setControlAsCompare();
 #line 36
 }
 #line 36
 # 42 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430AlarmC.nc"
-static inline error_t /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Init$init(void )
+static inline error_t /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Init__init(void )
 {
-  /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Msp430TimerControl$disableEvents();
-  /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Msp430TimerControl$setControlAsCompare();
+  /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Msp430TimerControl__disableEvents();
+  /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Msp430TimerControl__setControlAsCompare();
   return SUCCESS;
 }
 
 # 51 "/opt/tinyos-2.x/tos/interfaces/Init.nc"
-inline static error_t RealMainP$SoftwareInit$init(void ){
+inline static error_t RealMainP__SoftwareInit__init(void ){
 #line 51
   unsigned char __nesc_result;
 #line 51
 
 #line 51
-  __nesc_result = /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC$0$Init$init();
+  __nesc_result = /*HilTimerMilliC.AlarmMilli32C.AlarmFrom.Msp430Alarm*/Msp430AlarmC__0__Init__init();
 #line 51
 
 #line 51
@@ -4746,48 +4746,48 @@ inline static error_t RealMainP$SoftwareInit$init(void ){
 }
 #line 51
 # 53 "/opt/tinyos-2.x/tos/lib/timer/Timer.nc"
-inline static void BlinkC$Timer2$startPeriodic(uint32_t dt){
+inline static void BlinkC__Timer2__startPeriodic(uint32_t dt){
 #line 53
-  /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$Timer$startPeriodic(2U, dt);
-#line 53
-}
-#line 53
-inline static void BlinkC$Timer1$startPeriodic(uint32_t dt){
-#line 53
-  /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$Timer$startPeriodic(1U, dt);
+  /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__startPeriodic(2U, dt);
 #line 53
 }
 #line 53
-inline static void BlinkC$Timer0$startPeriodic(uint32_t dt){
+inline static void BlinkC__Timer1__startPeriodic(uint32_t dt){
 #line 53
-  /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$Timer$startPeriodic(0U, dt);
+  /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__startPeriodic(1U, dt);
+#line 53
+}
+#line 53
+inline static void BlinkC__Timer0__startPeriodic(uint32_t dt){
+#line 53
+  /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__startPeriodic(0U, dt);
 #line 53
 }
 #line 53
 # 50 "BlinkC.nc"
-static inline void BlinkC$Boot$booted(void )
+static inline void BlinkC__Boot__booted(void )
 {
 
-  BlinkC$Timer0$startPeriodic(250);
-  BlinkC$Timer1$startPeriodic(500);
-  BlinkC$Timer2$startPeriodic(1000);
+  BlinkC__Timer0__startPeriodic(250);
+  BlinkC__Timer1__startPeriodic(500);
+  BlinkC__Timer2__startPeriodic(1000);
 }
 
 # 49 "/opt/tinyos-2.x/tos/interfaces/Boot.nc"
-inline static void RealMainP$Boot$booted(void ){
+inline static void RealMainP__Boot__booted(void ){
 #line 49
-  BlinkC$Boot$booted();
+  BlinkC__Boot__booted();
 #line 49
 }
 #line 49
 # 56 "/opt/tinyos-2.x/tos/interfaces/TaskBasic.nc"
-inline static error_t /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$updateFromTimer$postTask(void ){
+inline static error_t /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__updateFromTimer__postTask(void ){
 #line 56
   unsigned char __nesc_result;
 #line 56
 
 #line 56
-  __nesc_result = SchedulerBasicP$TaskBasic$postTask(/*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$updateFromTimer);
+  __nesc_result = SchedulerBasicP__TaskBasic__postTask(/*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__updateFromTimer);
 #line 56
 
 #line 56
@@ -4796,43 +4796,43 @@ inline static error_t /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$upda
 }
 #line 56
 # 133 "/opt/tinyos-2.x/tos/lib/timer/VirtualizeTimerC.nc"
-static inline void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$startTimer(uint8_t num, uint32_t t0, uint32_t dt, bool isoneshot)
+static inline void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__startTimer(uint8_t num, uint32_t t0, uint32_t dt, bool isoneshot)
 {
-  /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$Timer_t *timer = &/*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$m_timers[num];
+  /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer_t *timer = &/*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__m_timers[num];
 
 #line 136
   timer->t0 = t0;
   timer->dt = dt;
   timer->isoneshot = isoneshot;
   timer->isrunning = TRUE;
-  /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$updateFromTimer$postTask();
+  /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__updateFromTimer__postTask();
 }
 
 # 164 "/opt/tinyos-2.x/tos/system/SchedulerBasicP.nc"
-static inline void SchedulerBasicP$TaskBasic$default$runTask(uint8_t id)
+static inline void SchedulerBasicP__TaskBasic__default__runTask(uint8_t id)
 {
 }
 
 # 64 "/opt/tinyos-2.x/tos/interfaces/TaskBasic.nc"
-inline static void SchedulerBasicP$TaskBasic$runTask(uint8_t arg_0x40587b40){
+inline static void SchedulerBasicP__TaskBasic__runTask(uint8_t arg_0x40587b40){
 #line 64
   switch (arg_0x40587b40) {
 #line 64
-    case /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$fired:
+    case /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__fired:
 #line 64
-      /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$fired$runTask();
+      /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__fired__runTask();
 #line 64
       break;
 #line 64
-    case /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$updateFromTimer:
+    case /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__updateFromTimer:
 #line 64
-      /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$updateFromTimer$runTask();
+      /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__updateFromTimer__runTask();
 #line 64
       break;
 #line 64
     default:
 #line 64
-      SchedulerBasicP$TaskBasic$default$runTask(arg_0x40587b40);
+      SchedulerBasicP__TaskBasic__default__runTask(arg_0x40587b40);
 #line 64
       break;
 #line 64
@@ -4847,20 +4847,20 @@ static inline  void __nesc_disable_interrupt(void )
    __asm volatile ("nop");}
 
 # 124 "/opt/tinyos-2.x/tos/chips/msp430/McuSleepC.nc"
-static inline mcu_power_t McuSleepC$McuPowerOverride$default$lowestState(void )
+static inline mcu_power_t McuSleepC__McuPowerOverride__default__lowestState(void )
 #line 124
 {
   return MSP430_POWER_LPM4;
 }
 
 # 54 "/opt/tinyos-2.x/tos/interfaces/McuPowerOverride.nc"
-inline static mcu_power_t McuSleepC$McuPowerOverride$lowestState(void ){
+inline static mcu_power_t McuSleepC__McuPowerOverride__lowestState(void ){
 #line 54
   unsigned char __nesc_result;
 #line 54
 
 #line 54
-  __nesc_result = McuSleepC$McuPowerOverride$default$lowestState();
+  __nesc_result = McuSleepC__McuPowerOverride__default__lowestState();
 #line 54
 
 #line 54
@@ -4869,7 +4869,7 @@ inline static mcu_power_t McuSleepC$McuPowerOverride$lowestState(void ){
 }
 #line 54
 # 66 "/opt/tinyos-2.x/tos/chips/msp430/McuSleepC.nc"
-static inline mcu_power_t McuSleepC$getPowerState(void )
+static inline mcu_power_t McuSleepC__getPowerState(void )
 #line 66
 {
   mcu_power_t pState = MSP430_POWER_LPM3;
@@ -4933,59 +4933,59 @@ static inline  mcu_power_t mcombine(mcu_power_t m1, mcu_power_t m2)
 }
 
 # 104 "/opt/tinyos-2.x/tos/chips/msp430/McuSleepC.nc"
-static inline void McuSleepC$computePowerState(void )
+static inline void McuSleepC__computePowerState(void )
 #line 104
 {
-  McuSleepC$powerState = mcombine(McuSleepC$getPowerState(), 
-  McuSleepC$McuPowerOverride$lowestState());
+  McuSleepC__powerState = mcombine(McuSleepC__getPowerState(), 
+  McuSleepC__McuPowerOverride__lowestState());
 }
 
-static inline void McuSleepC$McuSleep$sleep(void )
+static inline void McuSleepC__McuSleep__sleep(void )
 #line 109
 {
   uint16_t temp;
 
 #line 111
-  if (McuSleepC$dirty) {
-      McuSleepC$computePowerState();
+  if (McuSleepC__dirty) {
+      McuSleepC__computePowerState();
     }
 
-  temp = McuSleepC$msp430PowerBits[McuSleepC$powerState] | 0x0008;
+  temp = McuSleepC__msp430PowerBits[McuSleepC__powerState] | 0x0008;
    __asm volatile ("bis  %0, r2" :  : "m"(temp));
   __nesc_disable_interrupt();
 }
 
 # 59 "/opt/tinyos-2.x/tos/interfaces/McuSleep.nc"
-inline static void SchedulerBasicP$McuSleep$sleep(void ){
+inline static void SchedulerBasicP__McuSleep__sleep(void ){
 #line 59
-  McuSleepC$McuSleep$sleep();
+  McuSleepC__McuSleep__sleep();
 #line 59
 }
 #line 59
 # 67 "/opt/tinyos-2.x/tos/system/SchedulerBasicP.nc"
-static __inline uint8_t SchedulerBasicP$popTask(void )
+static __inline uint8_t SchedulerBasicP__popTask(void )
 {
-  if (SchedulerBasicP$m_head != SchedulerBasicP$NO_TASK) 
+  if (SchedulerBasicP__m_head != SchedulerBasicP__NO_TASK) 
     {
-      uint8_t id = SchedulerBasicP$m_head;
+      uint8_t id = SchedulerBasicP__m_head;
 
 #line 72
-      SchedulerBasicP$m_head = SchedulerBasicP$m_next[SchedulerBasicP$m_head];
-      if (SchedulerBasicP$m_head == SchedulerBasicP$NO_TASK) 
+      SchedulerBasicP__m_head = SchedulerBasicP__m_next[SchedulerBasicP__m_head];
+      if (SchedulerBasicP__m_head == SchedulerBasicP__NO_TASK) 
         {
-          SchedulerBasicP$m_tail = SchedulerBasicP$NO_TASK;
+          SchedulerBasicP__m_tail = SchedulerBasicP__NO_TASK;
         }
-      SchedulerBasicP$m_next[id] = SchedulerBasicP$NO_TASK;
+      SchedulerBasicP__m_next[id] = SchedulerBasicP__NO_TASK;
       return id;
     }
   else 
     {
-      return SchedulerBasicP$NO_TASK;
+      return SchedulerBasicP__NO_TASK;
     }
 }
 
 #line 138
-static inline void SchedulerBasicP$Scheduler$taskLoop(void )
+static inline void SchedulerBasicP__Scheduler__taskLoop(void )
 {
   for (; ; ) 
     {
@@ -4993,21 +4993,21 @@ static inline void SchedulerBasicP$Scheduler$taskLoop(void )
 
       { __nesc_atomic_t __nesc_atomic = __nesc_atomic_start();
         {
-          while ((nextTask = SchedulerBasicP$popTask()) == SchedulerBasicP$NO_TASK) 
+          while ((nextTask = SchedulerBasicP__popTask()) == SchedulerBasicP__NO_TASK) 
             {
-              SchedulerBasicP$McuSleep$sleep();
+              SchedulerBasicP__McuSleep__sleep();
             }
         }
 #line 150
         __nesc_atomic_end(__nesc_atomic); }
-      SchedulerBasicP$TaskBasic$runTask(nextTask);
+      SchedulerBasicP__TaskBasic__runTask(nextTask);
     }
 }
 
 # 61 "/opt/tinyos-2.x/tos/interfaces/Scheduler.nc"
-inline static void RealMainP$Scheduler$taskLoop(void ){
+inline static void RealMainP__Scheduler__taskLoop(void ){
 #line 61
-  SchedulerBasicP$Scheduler$taskLoop();
+  SchedulerBasicP__Scheduler__taskLoop();
 #line 61
 }
 #line 61
@@ -5044,42 +5044,42 @@ __attribute((wakeup)) __attribute((interrupt(12)))  void sig_TIMERA0_VECTOR(void
 #line 11
 {
 #line 11
-  Msp430TimerCommonP$VectorTimerA0$fired();
+  Msp430TimerCommonP__VectorTimerA0__fired();
 }
 
 # 169 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerCapComP.nc"
-static void /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$Event$fired(void )
+static void /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__Event__fired(void )
 {
-  if (/*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$Control$getControl().cap) {
-    /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$Capture$captured(/*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$Capture$getEvent());
+  if (/*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__Control__getControl().cap) {
+    /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__Capture__captured(/*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__Capture__getEvent());
     }
   else {
 #line 174
-    /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP$0$Compare$fired();
+    /*Msp430TimerC.Msp430TimerA0*/Msp430TimerCapComP__0__Compare__fired();
     }
 }
 
 #line 169
-static void /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$Event$fired(void )
+static void /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__Event__fired(void )
 {
-  if (/*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$Control$getControl().cap) {
-    /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$Capture$captured(/*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$Capture$getEvent());
+  if (/*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__Control__getControl().cap) {
+    /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__Capture__captured(/*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__Capture__getEvent());
     }
   else {
 #line 174
-    /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP$1$Compare$fired();
+    /*Msp430TimerC.Msp430TimerA1*/Msp430TimerCapComP__1__Compare__fired();
     }
 }
 
 #line 169
-static void /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$Event$fired(void )
+static void /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__Event__fired(void )
 {
-  if (/*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$Control$getControl().cap) {
-    /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$Capture$captured(/*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$Capture$getEvent());
+  if (/*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__Control__getControl().cap) {
+    /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__Capture__captured(/*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__Capture__getEvent());
     }
   else {
 #line 174
-    /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP$2$Compare$fired();
+    /*Msp430TimerC.Msp430TimerA2*/Msp430TimerCapComP__2__Compare__fired();
     }
 }
 
@@ -5088,7 +5088,7 @@ __attribute((wakeup)) __attribute((interrupt(10)))  void sig_TIMERA1_VECTOR(void
 #line 12
 {
 #line 12
-  Msp430TimerCommonP$VectorTimerA1$fired();
+  Msp430TimerCommonP__VectorTimerA1__fired();
 }
 
 #line 13
@@ -5096,70 +5096,70 @@ __attribute((wakeup)) __attribute((interrupt(26)))  void sig_TIMERB0_VECTOR(void
 #line 13
 {
 #line 13
-  Msp430TimerCommonP$VectorTimerB0$fired();
+  Msp430TimerCommonP__VectorTimerB0__fired();
 }
 
 # 135 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerP.nc"
-static void /*Msp430TimerC.Msp430TimerB*/Msp430TimerP$1$Event$default$fired(uint8_t n)
+static void /*Msp430TimerC.Msp430TimerB*/Msp430TimerP__1__Event__default__fired(uint8_t n)
 {
 }
 
 # 28 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerEvent.nc"
-static void /*Msp430TimerC.Msp430TimerB*/Msp430TimerP$1$Event$fired(uint8_t arg_0x4061f4b0){
+static void /*Msp430TimerC.Msp430TimerB*/Msp430TimerP__1__Event__fired(uint8_t arg_0x4061f4b0){
 #line 28
   switch (arg_0x4061f4b0) {
 #line 28
     case 0:
 #line 28
-      /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP$3$Event$fired();
+      /*Msp430TimerC.Msp430TimerB0*/Msp430TimerCapComP__3__Event__fired();
 #line 28
       break;
 #line 28
     case 1:
 #line 28
-      /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP$4$Event$fired();
+      /*Msp430TimerC.Msp430TimerB1*/Msp430TimerCapComP__4__Event__fired();
 #line 28
       break;
 #line 28
     case 2:
 #line 28
-      /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP$5$Event$fired();
+      /*Msp430TimerC.Msp430TimerB2*/Msp430TimerCapComP__5__Event__fired();
 #line 28
       break;
 #line 28
     case 3:
 #line 28
-      /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP$6$Event$fired();
+      /*Msp430TimerC.Msp430TimerB3*/Msp430TimerCapComP__6__Event__fired();
 #line 28
       break;
 #line 28
     case 4:
 #line 28
-      /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP$7$Event$fired();
+      /*Msp430TimerC.Msp430TimerB4*/Msp430TimerCapComP__7__Event__fired();
 #line 28
       break;
 #line 28
     case 5:
 #line 28
-      /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP$8$Event$fired();
+      /*Msp430TimerC.Msp430TimerB5*/Msp430TimerCapComP__8__Event__fired();
 #line 28
       break;
 #line 28
     case 6:
 #line 28
-      /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP$9$Event$fired();
+      /*Msp430TimerC.Msp430TimerB6*/Msp430TimerCapComP__9__Event__fired();
 #line 28
       break;
 #line 28
     case 7:
 #line 28
-      /*Msp430TimerC.Msp430TimerB*/Msp430TimerP$1$Overflow$fired();
+      /*Msp430TimerC.Msp430TimerB*/Msp430TimerP__1__Overflow__fired();
 #line 28
       break;
 #line 28
     default:
 #line 28
-      /*Msp430TimerC.Msp430TimerB*/Msp430TimerP$1$Event$default$fired(arg_0x4061f4b0);
+      /*Msp430TimerC.Msp430TimerB*/Msp430TimerP__1__Event__default__fired(arg_0x4061f4b0);
 #line 28
       break;
 #line 28
@@ -5168,7 +5168,7 @@ static void /*Msp430TimerC.Msp430TimerB*/Msp430TimerP$1$Event$fired(uint8_t arg_
 }
 #line 28
 # 159 "/opt/tinyos-2.x/tos/system/SchedulerBasicP.nc"
-static error_t SchedulerBasicP$TaskBasic$postTask(uint8_t id)
+static error_t SchedulerBasicP__TaskBasic__postTask(uint8_t id)
 {
   { __nesc_atomic_t __nesc_atomic = __nesc_atomic_start();
 #line 161
@@ -5177,7 +5177,7 @@ static error_t SchedulerBasicP$TaskBasic$postTask(uint8_t id)
       {
         unsigned char __nesc_temp = 
 #line 161
-        SchedulerBasicP$pushTask(id) ? SUCCESS : EBUSY;
+        SchedulerBasicP__pushTask(id) ? SUCCESS : EBUSY;
 
         {
 #line 161
@@ -5192,65 +5192,65 @@ static error_t SchedulerBasicP$TaskBasic$postTask(uint8_t id)
 }
 
 # 96 "/opt/tinyos-2.x/tos/lib/timer/TransformAlarmC.nc"
-static void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$set_alarm(void )
+static void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__set_alarm(void )
 {
-  /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$to_size_type now = /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Counter$get();
+  /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__to_size_type now = /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Counter__get();
 #line 98
-  /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$to_size_type expires;
+  /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__to_size_type expires;
 #line 98
-  /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$to_size_type remaining;
+  /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__to_size_type remaining;
 
 
 
 
-  expires = /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$m_t0 + /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$m_dt;
+  expires = /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__m_t0 + /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__m_dt;
 
 
-  remaining = (/*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$to_size_type )(expires - now);
+  remaining = (/*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__to_size_type )(expires - now);
 
 
-  if (/*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$m_t0 <= now) 
+  if (/*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__m_t0 <= now) 
     {
-      if (expires >= /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$m_t0 && 
+      if (expires >= /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__m_t0 && 
       expires <= now) {
         remaining = 0;
         }
     }
   else {
-      if (expires >= /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$m_t0 || 
+      if (expires >= /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__m_t0 || 
       expires <= now) {
         remaining = 0;
         }
     }
 #line 121
-  if (remaining > /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$MAX_DELAY) 
+  if (remaining > /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__MAX_DELAY) 
     {
-      /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$m_t0 = now + /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$MAX_DELAY;
-      /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$m_dt = remaining - /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$MAX_DELAY;
-      remaining = /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$MAX_DELAY;
+      /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__m_t0 = now + /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__MAX_DELAY;
+      /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__m_dt = remaining - /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__MAX_DELAY;
+      remaining = /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__MAX_DELAY;
     }
   else 
     {
-      /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$m_t0 += /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$m_dt;
-      /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$m_dt = 0;
+      /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__m_t0 += /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__m_dt;
+      /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__m_dt = 0;
     }
-  /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$AlarmFrom$startAt((/*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$from_size_type )now << 5, 
-  (/*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$from_size_type )remaining << 5);
+  /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__AlarmFrom__startAt((/*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__from_size_type )now << 5, 
+  (/*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__from_size_type )remaining << 5);
 }
 
 # 69 "/opt/tinyos-2.x/tos/lib/timer/TransformCounterC.nc"
-static /*CounterMilli32C.Transform*/TransformCounterC$0$to_size_type /*CounterMilli32C.Transform*/TransformCounterC$0$Counter$get(void )
+static /*CounterMilli32C.Transform*/TransformCounterC__0__to_size_type /*CounterMilli32C.Transform*/TransformCounterC__0__Counter__get(void )
 {
-  /*CounterMilli32C.Transform*/TransformCounterC$0$to_size_type rv = 0;
+  /*CounterMilli32C.Transform*/TransformCounterC__0__to_size_type rv = 0;
 
 #line 72
   { __nesc_atomic_t __nesc_atomic = __nesc_atomic_start();
     {
-      /*CounterMilli32C.Transform*/TransformCounterC$0$upper_count_type high = /*CounterMilli32C.Transform*/TransformCounterC$0$m_upper;
-      /*CounterMilli32C.Transform*/TransformCounterC$0$from_size_type low = /*CounterMilli32C.Transform*/TransformCounterC$0$CounterFrom$get();
+      /*CounterMilli32C.Transform*/TransformCounterC__0__upper_count_type high = /*CounterMilli32C.Transform*/TransformCounterC__0__m_upper;
+      /*CounterMilli32C.Transform*/TransformCounterC__0__from_size_type low = /*CounterMilli32C.Transform*/TransformCounterC__0__CounterFrom__get();
 
 #line 76
-      if (/*CounterMilli32C.Transform*/TransformCounterC$0$CounterFrom$isOverflowPending()) 
+      if (/*CounterMilli32C.Transform*/TransformCounterC__0__CounterFrom__isOverflowPending()) 
         {
 
 
@@ -5259,14 +5259,14 @@ static /*CounterMilli32C.Transform*/TransformCounterC$0$to_size_type /*CounterMi
 
 
           high++;
-          low = /*CounterMilli32C.Transform*/TransformCounterC$0$CounterFrom$get();
+          low = /*CounterMilli32C.Transform*/TransformCounterC__0__CounterFrom__get();
         }
       {
-        /*CounterMilli32C.Transform*/TransformCounterC$0$to_size_type high_to = high;
-        /*CounterMilli32C.Transform*/TransformCounterC$0$to_size_type low_to = low >> /*CounterMilli32C.Transform*/TransformCounterC$0$LOW_SHIFT_RIGHT;
+        /*CounterMilli32C.Transform*/TransformCounterC__0__to_size_type high_to = high;
+        /*CounterMilli32C.Transform*/TransformCounterC__0__to_size_type low_to = low >> /*CounterMilli32C.Transform*/TransformCounterC__0__LOW_SHIFT_RIGHT;
 
 #line 90
-        rv = (high_to << /*CounterMilli32C.Transform*/TransformCounterC$0$HIGH_SHIFT_LEFT) | low_to;
+        rv = (high_to << /*CounterMilli32C.Transform*/TransformCounterC__0__HIGH_SHIFT_LEFT) | low_to;
       }
     }
 #line 92
@@ -5275,7 +5275,7 @@ static /*CounterMilli32C.Transform*/TransformCounterC$0$to_size_type /*CounterMi
 }
 
 # 51 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430TimerP.nc"
-static uint16_t /*Msp430TimerC.Msp430TimerB*/Msp430TimerP$1$Timer$get(void )
+static uint16_t /*Msp430TimerC.Msp430TimerB*/Msp430TimerP__1__Timer__get(void )
 {
 
 
@@ -5320,7 +5320,7 @@ __attribute((wakeup)) __attribute((interrupt(24)))  void sig_TIMERB1_VECTOR(void
 #line 14
 {
 #line 14
-  Msp430TimerCommonP$VectorTimerB1$fired();
+  Msp430TimerCommonP__VectorTimerB1__fired();
 }
 
 # 52 "/opt/tinyos-2.x/tos/system/RealMainP.nc"
@@ -5339,21 +5339,21 @@ __attribute((wakeup)) __attribute((interrupt(24)))  void sig_TIMERB1_VECTOR(void
 #line 60
       ;
 
-      RealMainP$Scheduler$init();
+      RealMainP__Scheduler__init();
 
 
 
 
 
-      RealMainP$PlatformInit$init();
-      while (RealMainP$Scheduler$runNextTask()) ;
+      RealMainP__PlatformInit__init();
+      while (RealMainP__Scheduler__runNextTask()) ;
 
 
 
 
 
-      RealMainP$SoftwareInit$init();
-      while (RealMainP$Scheduler$runNextTask()) ;
+      RealMainP__SoftwareInit__init();
+      while (RealMainP__Scheduler__runNextTask()) ;
     }
 #line 77
     __nesc_atomic_end(__nesc_atomic); }
@@ -5361,10 +5361,10 @@ __attribute((wakeup)) __attribute((interrupt(24)))  void sig_TIMERB1_VECTOR(void
 
   __nesc_enable_interrupt();
 
-  RealMainP$Boot$booted();
+  RealMainP__Boot__booted();
 
 
-  RealMainP$Scheduler$taskLoop();
+  RealMainP__Scheduler__taskLoop();
 
 
 
@@ -5373,14 +5373,14 @@ __attribute((wakeup)) __attribute((interrupt(24)))  void sig_TIMERB1_VECTOR(void
 }
 
 # 160 "/opt/tinyos-2.x/tos/chips/msp430/timer/Msp430ClockP.nc"
-static void Msp430ClockP$set_dco_calib(int calib)
+static void Msp430ClockP__set_dco_calib(int calib)
 {
   BCSCTL1 = (BCSCTL1 & ~0x07) | ((calib >> 8) & 0x07);
   DCOCTL = calib & 0xff;
 }
 
 # 16 "/opt/tinyos-2.x/tos/platforms/telosb/MotePlatformC.nc"
-static void MotePlatformC$TOSH_FLASH_M25P_DP_bit(bool set)
+static void MotePlatformC__TOSH_FLASH_M25P_DP_bit(bool set)
 #line 16
 {
   if (set) {
@@ -5396,15 +5396,15 @@ static void MotePlatformC$TOSH_FLASH_M25P_DP_bit(bool set)
 }
 
 # 123 "/opt/tinyos-2.x/tos/system/SchedulerBasicP.nc"
-static bool SchedulerBasicP$Scheduler$runNextTask(void )
+static bool SchedulerBasicP__Scheduler__runNextTask(void )
 {
   uint8_t nextTask;
 
   /* atomic removed: atomic calls only */
 #line 127
   {
-    nextTask = SchedulerBasicP$popTask();
-    if (nextTask == SchedulerBasicP$NO_TASK) 
+    nextTask = SchedulerBasicP__popTask();
+    if (nextTask == SchedulerBasicP__NO_TASK) 
       {
         {
           unsigned char __nesc_temp = 
@@ -5417,27 +5417,27 @@ static bool SchedulerBasicP$Scheduler$runNextTask(void )
       }
   }
 #line 134
-  SchedulerBasicP$TaskBasic$runTask(nextTask);
+  SchedulerBasicP__TaskBasic__runTask(nextTask);
   return TRUE;
 }
 
 # 89 "/opt/tinyos-2.x/tos/lib/timer/VirtualizeTimerC.nc"
-static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$updateFromTimer$runTask(void )
+static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__updateFromTimer__runTask(void )
 {
 
 
 
 
-  uint32_t now = /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$TimerFrom$getNow();
+  uint32_t now = /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__TimerFrom__getNow();
   int32_t min_remaining = (1UL << 31) - 1;
   bool min_remaining_isset = FALSE;
   uint8_t num;
 
-  /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$TimerFrom$stop();
+  /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__TimerFrom__stop();
 
-  for (num = 0; num < /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$NUM_TIMERS; num++) 
+  for (num = 0; num < /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__NUM_TIMERS; num++) 
     {
-      /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$Timer_t *timer = &/*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$m_timers[num];
+      /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer_t *timer = &/*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__m_timers[num];
 
       if (timer->isrunning) 
         {
@@ -5455,23 +5455,23 @@ static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$updateFromTime
   if (min_remaining_isset) 
     {
       if (min_remaining <= 0) {
-        /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$fireTimers(now);
+        /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__fireTimers(now);
         }
       else {
 #line 124
-        /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$TimerFrom$startOneShotAt(now, min_remaining);
+        /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__TimerFrom__startOneShotAt(now, min_remaining);
         }
     }
 }
 
 #line 62
-static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$fireTimers(uint32_t now)
+static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__fireTimers(uint32_t now)
 {
   uint8_t num;
 
-  for (num = 0; num < /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$NUM_TIMERS; num++) 
+  for (num = 0; num < /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__NUM_TIMERS; num++) 
     {
-      /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$Timer_t *timer = &/*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$m_timers[num];
+      /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer_t *timer = &/*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__m_timers[num];
 
       if (timer->isrunning) 
         {
@@ -5486,40 +5486,40 @@ static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$fireTimers(uin
 #line 79
                 timer->t0 += timer->dt;
                 }
-              /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$Timer$fired(num);
+              /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__fired(num);
               break;
             }
         }
     }
-  /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$updateFromTimer$postTask();
+  /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__updateFromTimer__postTask();
 }
 
 # 136 "/opt/tinyos-2.x/tos/lib/timer/TransformAlarmC.nc"
-static void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$Alarm$startAt(/*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$to_size_type t0, /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$to_size_type dt)
+static void /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__Alarm__startAt(/*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__to_size_type t0, /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__to_size_type dt)
 {
   { __nesc_atomic_t __nesc_atomic = __nesc_atomic_start();
     {
-      /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$m_t0 = t0;
-      /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$m_dt = dt;
-      /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC$0$set_alarm();
+      /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__m_t0 = t0;
+      /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__m_dt = dt;
+      /*HilTimerMilliC.AlarmMilli32C.Transform*/TransformAlarmC__0__set_alarm();
     }
 #line 143
     __nesc_atomic_end(__nesc_atomic); }
 }
 
 # 63 "/opt/tinyos-2.x/tos/lib/timer/AlarmToTimerC.nc"
-static void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$fired$runTask(void )
+static void /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__fired__runTask(void )
 {
-  if (/*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$m_oneshot == FALSE) {
-    /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$start(/*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Alarm$getAlarm(), /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$m_dt, FALSE);
+  if (/*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__m_oneshot == FALSE) {
+    /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__start(/*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Alarm__getAlarm(), /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__m_dt, FALSE);
     }
 #line 67
-  /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC$0$Timer$fired();
+  /*HilTimerMilliC.AlarmToTimerC*/AlarmToTimerC__0__Timer__fired();
 }
 
 # 143 "/opt/tinyos-2.x/tos/lib/timer/VirtualizeTimerC.nc"
-static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$Timer$startPeriodic(uint8_t num, uint32_t dt)
+static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__Timer__startPeriodic(uint8_t num, uint32_t dt)
 {
-  /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$startTimer(num, /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$TimerFrom$getNow(), dt, FALSE);
+  /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__startTimer(num, /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC__0__TimerFrom__getNow(), dt, FALSE);
 }
 
