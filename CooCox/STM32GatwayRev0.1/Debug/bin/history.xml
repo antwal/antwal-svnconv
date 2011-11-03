@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="4.5.2 -O0 -nostartfiles -Map=STM32GatwayRev0.1.map -mcpu=cortex-m3 -mthumb -LJ:\CooCox\STM32GatwayRev0.1 --gc-sections -TJ:\CooCox\STM32GatwayRev0.1\link.ld -g">
+      <target file="STM32GatwayRev0.1.elf" lastModified="132ef1baec8">
+         <source file="..\obj\stm32f10x_rtc.o" lastModified="132ef1b99d0"/>
+         <source file="..\obj\SDInterface.o" lastModified="132ef1b9a48"/>
+         <source file="..\obj\kernelHeap.o" lastModified="132ef1b9ad5"/>
+         <source file="..\obj\core.o" lastModified="132ef1b9b39"/>
+         <source file="..\obj\startup_stm32f10x_md_vl.o" lastModified="132ef1b9b89"/>
+         <source file="..\obj\stm32_pio.o" lastModified="132ef1b9c15"/>
+         <source file="..\obj\core_cm3.o" lastModified="132ef1b9ca1"/>
+         <source file="..\obj\timer.o" lastModified="132ef1b9d23"/>
+         <source file="..\obj\utility.o" lastModified="132ef1b9d7e"/>
+         <source file="..\obj\system_stm32f10x.o" lastModified="132ef1b9e00"/>
+         <source file="..\obj\STM32_USART.o" lastModified="132ef1b9ebe"/>
+         <source file="..\obj\task.o" lastModified="132ef1b9f4a"/>
+         <source file="..\obj\diskio.o" lastModified="132ef1b9fb8"/>
+         <source file="..\obj\stm32f10x_gpio.o" lastModified="132ef1ba063"/>
+         <source file="..\obj\serviceReq.o" lastModified="132ef1ba0d1"/>
+         <source file="..\obj\main.o" lastModified="132ef1ba185"/>
+         <source file="..\obj\stm_spi_master.o" lastModified="132ef1ba243"/>
+         <source file="..\obj\printf.o" lastModified="132ef1ba2d0"/>
+         <source file="..\obj\stm32f10x_rcc.o" lastModified="132ef1ba384"/>
+         <source file="..\obj\general.o" lastModified="132ef1ba47e"/>
+         <source file="..\obj\mbox.o" lastModified="132ef1ba55a"/>
+         <source file="..\obj\mm.o" lastModified="132ef1ba5c9"/>
+         <source file="..\obj\buffer.o" lastModified="132ef1ba62d"/>
+         <source file="..\obj\time.o" lastModified="132ef1ba6a5"/>
+         <source file="..\obj\event.o" lastModified="132ef1ba713"/>
+         <source file="..\obj\syscalls.o" lastModified="132ef1ba781"/>
+         <source file="..\obj\port.o" lastModified="132ef1ba7db"/>
+         <source file="..\obj\queue.o" lastModified="132ef1ba85e"/>
+         <source file="..\obj\mutex.o" lastModified="132ef1ba8cc"/>
+         <source file="..\obj\flag.o" lastModified="132ef1ba962"/>
+         <source file="..\obj\ff.o" lastModified="132ef1baaac"/>
+         <source file="..\obj\mmc_driver.o" lastModified="132ef1bab6b"/>
+         <source file="..\obj\arch.o" lastModified="132ef1babcf"/>
+         <source file="..\obj\misc.o" lastModified="132ef1bac51"/>
+         <source file="..\obj\sem.o" lastModified="132ef1bacbf"/>
+         <source file="..\obj\ReadInterface.o" lastModified="132ef1bad73"/>
+         <source file="..\obj\hook.o" lastModified="132ef1badd8"/>
+      </target>
+   </processor>
+</history>

@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="arm-none-eabi-gcc noversion nomachine -mcpu=cortex-m3 -mthumb -Wall -ffunction-sections -O0 -g -c -DSTM32F10X_MD_VL -DUSE_STDPERIPH_DRIVER -D__ASSEMBLY__ -DTINYOS2 -DSTM32F100RB -I. -ICOX -ICOX\COX_Peripheral -Icmsis_boot -Icmsis -Istm_lib -Istm_lib\inc -ICoOS\portable -ICoOS -ICoOS\kernel -IFAT">
+      <target file="SDInterface.o" lastModified="132ef1b9a48">
+         <source file="..\..\SDInterface.c" lastModified="132ef1442a0"/>
+      </target>
+      <target file="syscalls.o" lastModified="132ef1ba781">
+         <source file="..\..\syscalls\syscalls.c" lastModified="132eeb503cb"/>
+      </target>
+      <target file="stm32f10x_gpio.o" lastModified="132ef1ba063">
+         <source file="..\..\stm_lib\src\stm32f10x_gpio.c" lastModified="132eeb503cb"/>
+      </target>
+      <target file="event.o" lastModified="132ef1ba713">
+         <source file="..\..\CoOS\kernel\event.c" lastModified="132eeb5032b"/>
+      </target>
+      <target file="misc.o" lastModified="132ef1bac51">
+         <source file="..\..\stm_lib\src\misc.c" lastModified="132eeb503cb"/>
+      </target>
+      <target file="general.o" lastModified="132ef1ba47e">
+         <source file="..\..\FAT\general.c" lastModified="132eeedac8e"/>
+      </target>
+      <target file="stm_spi_master.o" lastModified="132ef1ba243">
+         <source file="..\..\COX\COX_Peripheral\stm_spi_master.c" lastModified="132eeb8170f"/>
+      </target>
+      <target file="system_stm32f10x.o" lastModified="132ef1b9e00">
+         <source file="..\..\cmsis_boot\system_stm32f10x.c" lastModified="132eeb50321"/>
+      </target>
+      <target file="sem.o" lastModified="132ef1bacbf">
+         <source file="..\..\CoOS\kernel\sem.c" lastModified="132eeb50335"/>
+      </target>
+      <target file="queue.o" lastModified="132ef1ba85e">
+         <source file="..\..\CoOS\kernel\queue.c" lastModified="132eeb50335"/>
+      </target>
+      <target file="diskio.o" lastModified="132ef1b9fb8">
+         <source file="..\..\FAT\diskio.c" lastModified="132dfb74ccd"/>
+      </target>
+      <target file="arch.o" lastModified="132ef1babcf">
+         <source file="..\..\CoOS\portable\arch.c" lastModified="132eeb5033f"/>
+      </target>
+      <target file="hook.o" lastModified="132ef1badd8">
+         <source file="..\..\CoOS\kernel\hook.c" lastModified="132eeb5032b"/>
+      </target>
+      <target file="mutex.o" lastModified="132ef1ba8cc">
+         <source file="..\..\CoOS\kernel\mutex.c" lastModified="132eeb5032b"/>
+      </target>
+      <target file="stm32_pio.o" lastModified="132ef1b9c15">
+         <source file="..\..\COX\COX_Peripheral\stm32_pio.c" lastModified="132eeb50367"/>
+      </target>
+      <target file="startup_stm32f10x_md_vl.o" lastModified="132ef1b9b89">
+         <source file="..\..\cmsis_boot\startup\startup_stm32f10x_md_vl.c" lastModified="132eeb50317"/>
+      </target>
+      <target file="serviceReq.o" lastModified="132ef1ba0d1">
+         <source file="..\..\CoOS\kernel\serviceReq.c" lastModified="132eeb5033f"/>
+      </target>
+      <target file="STM32_USART.o" lastModified="132ef1b9ebe">
+         <source file="..\..\COX\COX_Peripheral\STM32_USART.c" lastModified="132eeb50367"/>
+      </target>
+      <target file="mmc_driver.o" lastModified="132ef1bab6b">
+         <source file="..\..\mmc_driver.c" lastModified="132ef124db6"/>
+      </target>
+      <target file="stm32f10x_rtc.o" lastModified="132ef1b99d0">
+         <source file="..\..\stm_lib\src\stm32f10x_rtc.c" lastModified="132eeb503cb"/>
+      </target>
+      <target file="port.o" lastModified="132ef1ba7db">
+         <source file="..\..\CoOS\portable\GCC\port.c" lastModified="132eeb5033f"/>
+      </target>
+      <target file="utility.o" lastModified="132ef1b9d7e">
+         <source file="..\..\CoOS\kernel\utility.c" lastModified="132eeb5033f"/>
+      </target>
+      <target file="stm32f10x_rcc.o" lastModified="132ef1ba384">
+         <source file="..\..\stm_lib\src\stm32f10x_rcc.c" lastModified="132eeb503cb"/>
+      </target>
+      <target file="core_cm3.o" lastModified="132ef1b9ca1">
+         <source file="..\..\cmsis\core_cm3.c" lastModified="132eeb5030d"/>
+      </target>
+      <target file="core.o" lastModified="132ef1b9b39">
+         <source file="..\..\CoOS\kernel\core.c" lastModified="132eeb5032b"/>
+      </target>
+      <target file="kernelHeap.o" lastModified="132ef1b9ad5">
+         <source file="..\..\CoOS\kernel\kernelHeap.c" lastModified="132eeb5032b"/>
+      </target>
+      <target file="timer.o" lastModified="132ef1b9d23">
+         <source file="..\..\CoOS\kernel\timer.c" lastModified="132eeb5033f"/>
+      </target>
+      <target file="printf.o" lastModified="132ef1ba2d0">
+         <source file="..\..\stdio\printf.c" lastModified="132eeb503b7"/>
+      </target>
+      <target file="buffer.o" lastModified="132ef1ba62d">
+         <source file="..\..\buffer.c" lastModified="132eeb5030d"/>
+      </target>
+      <target file="flag.o" lastModified="132ef1ba962">
+         <source file="..\..\CoOS\kernel\flag.c" lastModified="132eeb5032b"/>
+      </target>
+      <target file="ff.o" lastModified="132ef1baaac">
+         <source file="..\..\FAT\ff.c" lastModified="132df372870"/>
+      </target>
+      <target file="ReadInterface.o" lastModified="132ef1bad73">
+         <source file="..\..\ReadInterface.c" lastModified="132ef1b664b"/>
+      </target>
+      <target file="main.o" lastModified="132ef1ba185">
+         <source file="..\..\main.c" lastModified="132ef1781e6"/>
+      </target>
+      <target file="mbox.o" lastModified="132ef1ba55a">
+         <source file="..\..\CoOS\kernel\mbox.c" lastModified="132eeb5032b"/>
+      </target>
+      <target file="mm.o" lastModified="132ef1ba5c9">
+         <source file="..\..\CoOS\kernel\mm.c" lastModified="132eeb5032b"/>
+      </target>
+      <target file="task.o" lastModified="132ef1b9f4a">
+         <source file="..\..\CoOS\kernel\task.c" lastModified="132eeb5033f"/>
+      </target>
+      <target file="time.o" lastModified="132ef1ba6a5">
+         <source file="..\..\CoOS\kernel\time.c" lastModified="132eeb5033f"/>
+      </target>
+   </processor>
+</history>
