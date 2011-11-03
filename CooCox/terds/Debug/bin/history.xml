@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="4.5.2 -O0 -nostartfiles -Map=terds.map -mcpu=cortex-m3 -mthumb -LJ:\CoCenter\CooIDE\workspace\terds --gc-sections -TJ:\CoCenter\CooIDE\workspace\terds\link.ld -g">
+      <target file="terds.elf" lastModified="130d515a996">
+         <source file="..\obj\core_cm3.o" lastModified="130d515a3ad"/>
+         <source file="..\obj\system_stm32f10x.o" lastModified="130d515a494"/>
+         <source file="..\obj\startup_stm32f10x_md.o" lastModified="130d515a516"/>
+         <source file="..\obj\stm32f10x_gpio.o" lastModified="130d515a61a"/>
+         <source file="..\obj\main.o" lastModified="130d515a692"/>
+         <source file="..\obj\stm32f10x_rcc.o" lastModified="130d515a7bf"/>
+         <source file="..\obj\GPIOExample.c.o" lastModified="130d515a87d"/>
+      </target>
+   </processor>
+</history>

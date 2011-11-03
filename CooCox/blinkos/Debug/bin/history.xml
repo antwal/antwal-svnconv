@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="4.5.2 -O0 -nostartfiles -Map=blinkos.map -mcpu=cortex-m3 -mthumb -LJ:\CoCenter\CooIDE\workspace\blinkos --gc-sections -TJ:\CoCenter\CooIDE\workspace\blinkos\link.ld -g">
+      <target file="blinkos.elf" lastModified="132af8b75ed">
+         <source file="..\obj\kernelHeap.o" lastModified="132af8b6db6"/>
+         <source file="..\obj\core.o" lastModified="132af8b6e1a"/>
+         <source file="..\obj\timer.o" lastModified="132af8b6ea6"/>
+         <source file="..\obj\utility.o" lastModified="132af8b6f00"/>
+         <source file="..\obj\task.o" lastModified="132af8b6f96"/>
+         <source file="..\obj\serviceReq.o" lastModified="132af8b7005"/>
+         <source file="..\obj\mbox.o" lastModified="132af8b7087"/>
+         <source file="..\obj\mm.o" lastModified="132af8b7109"/>
+         <source file="..\obj\time.o" lastModified="132af8b718b"/>
+         <source file="..\obj\event.o" lastModified="132af8b7203"/>
+         <source file="..\obj\CoOSAppFramework.o" lastModified="132af8b7267"/>
+         <source file="..\obj\port.o" lastModified="132af8b72cc"/>
+         <source file="..\obj\queue.o" lastModified="132af8b7344"/>
+         <source file="..\obj\mutex.o" lastModified="132af8b73b2"/>
+         <source file="..\obj\flag.o" lastModified="132af8b743e"/>
+         <source file="..\obj\arch.o" lastModified="132af8b74a2"/>
+         <source file="..\obj\sem.o" lastModified="132af8b7510"/>
+         <source file="..\obj\hook.o" lastModified="132af8b756b"/>
+      </target>
+   </processor>
+</history>

@@ -1,0 +1,94 @@
+
+#include "diskio.h"
+#include "di_msd.h"
+
+
+
+static
+DSTATUS Stat = STA_NOINIT;	/* Disk status */
+
+
+BYTE CardType;			/* b0:MMC, b1:SDv1, b2:SDv2, b3:Block addressing */
+
+
+
+
+DSTATUS disk_status ( BYTE drv)
+{
+	DSTATUS s = Stat;
+	BYTE ocr[4];
+
+	if (drv || !(INS)){
+		s = STA_NODISK | STA_NOINIT;
+	} else {
+		s &= ~STA_NODISK;
+		if (WP)						/* Check card write protection */
+			s |= STA_PROTECT;
+		else
+			s &= ~STA_PROTECT;
+		if (!(s & STA_NOINIT)) {
+			MSD_SendCmd(sd, MSD_READ_OCR, 0, 0xff);
+			if(MSD_GetResponse(sd, 0x0))
+			{
+				s |= STA_NOINIT;
+			}
+			sd->spi->Read(ocr,4);
+			SS_HIGH(sd);
+
+		}
+	}
+	Stat = s;
+	return s;
+}
+
+DSTATUS disk_initialize (BYTE Drv)   /* Physical drive nmuber (0) */
+{
+	DSTATUS s;
+
+	s = disk_status(sd,Drv);		/* Check if card is in the socket */
+	if (s & STA_NODISK) return s;
+
+	s = MSD_Init(sd);
+	if(s == COX_SUCCESS)		/* Initialization succeded */
+		s &= ~STA_NOINIT;
+	else						/* Initialization failed */
+		s |= STA_NOINIT;
+
+		Stat = s;
+		return s;
+}
+
+
+DRESULT disk_read (
+		BYTE drv,			/* Physical drive nmuber (0) */
+		BYTE *buff,			/* Pointer to the data buffer to store read data */
+		DWORD sector,		/* Start sector number (LBA) */
+		BYTE count			/* Sector count (1..128) */
+	)
+{
+	DSTATUS s;
+	s = disk_status(sd,drv);
+	if (s & STA_NOINIT) return RES_NOTRDY;
+	if (!count) return RES_PARERR;
+	if (!(CardType & CT_BLOCK)) sector *= 512;	/* Convert LBA to byte address if needed */
+
+	if (count == 1) {	/* Single block read */
+		if(MSD_ReadBlock(sd, sector, buff, 512))
+			count = 0;
+	}
+	else{		/* Multiple block read */
+		if(MSD_ReadBuffer( sd, sector, buff, count))
+			return RES_ERROR;
+		else
+			return RES_OK;
+	}
+
+	return count? RES_ERROR: RES_OK;
+}
+
+
+#if	_READONLY == 0
+DRESULT disk_write ( BYTE, const BYTE*, DWORD, BYTE);
+#endif
+DRESULT disk_ioctl ( BYTE, BYTE, void*);
+void	disk_timerproc (void);

@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="arm-none-eabi-gcc noversion nomachine -mcpu=cortex-m3 -mthumb -Wall -ffunction-sections -O0 -g3 -c -DSTM32F10X_MD_VL -DUSE_STDPERIPH_DRIVER -D__ASSEMBLY__ -DSTM32F100RB -Icmsis -Icmsis_boot -ICOX\COX_Peripheral -ICOX -I. -Istm_lib -Istm_lib\inc">
+      <target file="startup_stm32f10x_md_vl.o" lastModified="132ca162d14">
+         <source file="..\..\cmsis_boot\startup\startup_stm32f10x_md_vl.c" lastModified="132c90e0b5c"/>
+      </target>
+      <target file="syscalls.o" lastModified="132ca163339">
+         <source file="..\..\syscalls\syscalls.c" lastModified="132c9dbb102"/>
+      </target>
+      <target file="STM32_USART.o" lastModified="132ca162f81">
+         <source file="..\..\COX\COX_Peripheral\STM32_USART.c" lastModified="132c90e0b2a"/>
+      </target>
+      <target file="printf.o" lastModified="132ca163144">
+         <source file="..\..\stdio\printf.c" lastModified="132c9fb4123"/>
+      </target>
+      <target file="core_cm3.o" lastModified="132ca162d82">
+         <source file="..\..\cmsis\core_cm3.c" lastModified="132c90e0bc0"/>
+      </target>
+      <target file="system_stm32f10x.o" lastModified="132ca162eb9">
+         <source file="..\..\cmsis_boot\system_stm32f10x.c" lastModified="132c90e0b66"/>
+      </target>
+      <target file="main.o" lastModified="132ca163086">
+         <source file="..\..\main.c" lastModified="132c9946fe8"/>
+      </target>
+      <target file="stm32f10x_usart.o" lastModified="132ca1632c0">
+         <source file="..\..\stm_lib\src\stm32f10x_usart.c" lastModified="132ca15eab2"/>
+      </target>
+      <target file="stm32f10x_gpio.o" lastModified="132ca163035">
+         <source file="..\..\stm_lib\src\stm32f10x_gpio.c" lastModified="132c91b1ad6"/>
+      </target>
+      <target file="stm32f10x_rcc.o" lastModified="132ca163202">
+         <source file="..\..\stm_lib\src\stm32f10x_rcc.c" lastModified="132c91b1a9a"/>
+      </target>
+      <target file="USART_Print.o" lastModified="132ca162e2d">
+         <source file="..\..\example\USART_Print.c" lastModified="132ca12f8cc"/>
+      </target>
+   </processor>
+</history>

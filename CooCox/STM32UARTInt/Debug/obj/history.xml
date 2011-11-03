@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="arm-none-eabi-gcc noversion nomachine -mcpu=cortex-m3 -mthumb -Wall -ffunction-sections -O0 -g -c -DSTM32F10X_MD_VL -DUSE_STDPERIPH_DRIVER -D__ASSEMBLY__ -DSTM32F100RB -I. -ICOX -ICOX\COX_Peripheral -Icmsis_boot -Icmsis -Istm_lib -Istm_lib\inc">
+      <target file="startup_stm32f10x_md_vl.o" lastModified="132e511f223">
+         <source file="..\..\cmsis_boot\startup\startup_stm32f10x_md_vl.c" lastModified="132e482d6a4"/>
+      </target>
+      <target file="syscalls.o" lastModified="132e511f6fc">
+         <source file="..\..\syscalls\syscalls.c" lastModified="132e49005cf"/>
+      </target>
+      <target file="STM32_USART.o" lastModified="132e511f3d1">
+         <source file="..\..\COX\COX_Peripheral\STM32_USART.c" lastModified="132e4fd1fa8"/>
+      </target>
+      <target file="stm32f10x_rtc.o" lastModified="132e511f1d2">
+         <source file="..\..\stm_lib\src\stm32f10x_rtc.c" lastModified="132e4d47401"/>
+      </target>
+      <target file="printf.o" lastModified="132e511f58a">
+         <source file="..\..\stdio\printf.c" lastModified="132e4efa4cc"/>
+      </target>
+      <target file="core_cm3.o" lastModified="132e511f291">
+         <source file="..\..\cmsis\core_cm3.c" lastModified="132e482d745"/>
+      </target>
+      <target file="system_stm32f10x.o" lastModified="132e511f31d">
+         <source file="..\..\cmsis_boot\system_stm32f10x.c" lastModified="132e482d6cc"/>
+      </target>
+      <target file="main.o" lastModified="132e511f4fe">
+         <source file="..\..\main.c" lastModified="132e511c2e1"/>
+      </target>
+      <target file="stm32f10x_gpio.o" lastModified="132e511f47b">
+         <source file="..\..\stm_lib\src\stm32f10x_gpio.c" lastModified="132e4d36b86"/>
+      </target>
+      <target file="stm32f10x_rcc.o" lastModified="132e511f62a">
+         <source file="..\..\stm_lib\src\stm32f10x_rcc.c" lastModified="132e4832866"/>
+      </target>
+      <target file="buffer.o" lastModified="132e511f68e">
+         <source file="..\..\buffer.c" lastModified="132e4b3d5a4"/>
+      </target>
+      <target file="misc.o" lastModified="132e511f774">
+         <source file="..\..\stm_lib\src\misc.c" lastModified="132e4e099fc"/>
+      </target>
+   </processor>
+</history>

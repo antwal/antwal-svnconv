@@ -1,0 +1,262 @@
+#include "cox_serial.h"
+#include "STM32_USART.h"
+#include <stm32_pio.h>
+#include "stm32f10x.h"
+#include "buffer.h"
+#include <stdio.h>
+#include <CoOS.h>			              /*!< CoOS header file	         */
+
+
+/*---------------------------- Symbol Define -------------------------------*/
+#define STACK_SIZE_DEFAULT 100             /*!< Define a Default task size */
+
+
+/*---------------------------- Variable Define -------------------------------*/
+	OS_STK     task1_stk[STACK_SIZE_DEFAULT];	  /*!< Define "taskA" task stack */
+	OS_STK     task2_stk[STACK_SIZE_DEFAULT];	  /*!< Define "taskB" task stack */
+	OS_STK     task3_stk[STACK_SIZE_DEFAULT];	  /*!< Define "led" task stack   */
+	OS_STK     task4_stk[STACK_SIZE_DEFAULT];	  /*!< Define "led" task stack   */
+
+
+
+cBuffer recvBuffer;
+unsigned char buffer[50];
+
+//Decleration of   serial Ports
+COX_SERIAL_PI *myUSART1 = &pi_serial1;
+COX_SERIAL_PI *myUSART2 = &pi_serial2;
+
+//attach and initilize the leds on stm32 board
+COX_PIO_Dev LED0 = COX_PIN(2,8);
+COX_PIO_Dev LED1 = COX_PIN(2,9);
+
+//Usart event flag
+OS_FlagID flag;
+
+
+void USART1_IRQHandler(void)
+{
+	char ch;
+	StatusType result;
+	CoEnterISR ( );
+
+	//RXNE interrupt occured
+	//printf("uart%x\n\r",USART1->SR);
+	if((USART1->SR & 0x20) != (u16)RESET )
+	{
+		ch = (USART1->DR & (us16)0x01FF);
+		bufferAddToEnd(&recvBuffer, ch);
+		/* Set a flag that created by other test */
+		result = isr_SetFlag (flag);
+		if (result != E_OK)
+		{
+		     if (result == E_SEV_REQ_FULL)
+		     {
+		          printf("Service request queue is full !\n");
+		     }
+		}
+	}
+	CoExitISR ( );
+}
+
+void pchar(unsigned char c)
+{
+	USART2->DR =  (c & (us16)0x01FF);
+	while (!(USART2->SR & 0x0080));
+}
+
+
+
+
+void initSerial(void){
+	bufferInit(&recvBuffer, buffer, 50);
+	myUSART1->Init(9600);
+	myUSART2->Init(115200);
+	myUSART1->Cfg( COX_SERIAL_INT_CONF, RXNE_ENABLE,0);
+}
+
+/**
+ *
+	 *******************************************************************************
+	 * @brief       "taskA" task code
+	 * @param[in]   None
+	 * @param[out]  None
+	 * @retval      None
+	 * @par Description
+	 * @details    Just a task example of a clock
+	 *
+	 *******************************************************************************
+	 */
+	void task1 (void* pdata)
+	{
+
+	StatusType result;
+	unsigned char ch;
+	/* Create a flag with mannual reset, initial state: 0 */
+	      flag = CoCreateFlag (0, 0);
+	      if (result != E_OK)
+	      {
+	            if (result == E_CREATE_FAIL)
+	            {
+	                  printf("Failed to create a flag!\n");
+	            }
+	      }
+	      else
+	      {
+	            printf("Flag ID : %d \n", flag);
+	      }
+		for(;;){
+			/* Waiting for a flag, time-out:indefinetely */
+			      result = CoWaitForSingleFlag (flag, 0);
+			      if (result != E_OK)
+			      {
+			            if (result == E_INVALID_ID)
+			            {
+			                  printf("Invalid Flag ID !\n");
+			            }
+			            else if (result == E_CALL)
+			            {
+			                  printf("Error call in ISR !\n");
+			            }
+			            else if (result == E_TIMEOUT)
+			            {
+			                  printf("Time Out !\n");
+			            }
+			      }
+			           else
+			           {
+
+			            /* process Flag here */
+			        	   if(!bufferIsNotFull(&recvBuffer)){
+			        	       		printf("Buffer error \n\r");
+			        	       		while(0);
+			        	       	}
+			        	   	do{
+			        	      		ch = bufferGetFromFront(&recvBuffer);
+			        	       		printf(" %c",ch);
+
+			        	   	}while(bufferDataAvail(&recvBuffer));
+			        	    result = CoClearFlag (flag);
+			        	    if (result != E_OK)
+			        	    {
+			        	         if (result == E_INVALID_ID)
+			        	         {
+			        	               printf("Invalid flag ID !\n");
+			        	         }
+			        	    }
+			           }
+
+		}
+
+	}
+	/**
+	 *******************************************************************************
+	 * @brief       "task2" task code
+	 * @param[in]   None
+	 * @param[out]  None
+	 * @retval      None
+	 * @par Description
+	 * @details    task example to increment a variable
+	 *
+	 *******************************************************************************
+	 */
+	void task2 (void* pdata)
+	{
+
+	  for (;;)
+	  {
+
+		//  CoTickDelay (500);
+	  }
+	}
+
+
+	/**
+	 *******************************************************************************
+	 * @brief       "task3" task code
+	 * @param[in]   None
+	 * @param[out]  None
+	 * @retval      None
+	 * @par Description
+	 * @details    task example to increment a variable
+	 *******************************************************************************
+	 */
+	void task3 (void* pdata)
+	{
+	  for (;;)
+	  {
+
+		//CoTickDelay (10);
+	  }
+	}
+	/**
+	 *******************************************************************************
+	 * @brief       "task4" task code
+	 * @param[in]   None
+	 * @param[out]  None
+	 * @retval      None
+	 * @par Description
+	 * @details    task example to increment a variable
+	 *******************************************************************************
+	 */
+	void task4 (void* pdata)
+	{
+	  for (;;)
+	  {
+
+		//CoTickDelay (100);
+	  }
+	}
+
+
+
+
+
+
+
+int main(void)
+{
+
+
+
+	//Initilize the LED0 and LED1 structure
+	pi_pio.Init(LED0);
+	pi_pio.Init(LED1);
+
+	//configure the port as o/p port
+	pi_pio.Dir(LED0,1);
+	pi_pio.Dir(LED1,1);
+
+	/*!< Initial CooCox CoOS          */
+	CoInitOS();
+
+
+    /*!< Create three tasks	*/
+    CoCreateTask (task1,0,0,&task1_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
+    CoCreateTask (task2,0,0,&task2_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
+    CoCreateTask (task3,0,0,&task3_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
+    CoCreateTask (task4,0,0,&task4_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
+
+
+    CoStartOS ();			    /*!< Start multitask	           */
+
+
+   while (1);                /*!< The code don''t reach here	   */
+}
+
+
+/*
+    while(1)
+    {
+    	if(!bufferIsNotFull(&recvBuffer)){
+    		printf("Buffer error \n\r");
+    		while(0);
+    	}
+    	if(bufferDataAvail(&recvBuffer))
+    	{
+    		ch = bufferGetFromFront(&recvBuffer);
+    		printf(" %c",ch);
+    	}
+    }
+}
+*/

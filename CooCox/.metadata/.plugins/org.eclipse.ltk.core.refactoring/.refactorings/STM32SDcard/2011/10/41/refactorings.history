@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;STM32SDcard/COX/Driver/sd_card/di_msd.c&apos; to &apos;di_msd_SELF.c&apos;" description="Rename resource &apos;di_msd.c&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="COX/Driver/sd_card/di_msd.c" name="di_msd_SELF.c" stamp="1317753919207" updateReferences="true"/>
+</session>

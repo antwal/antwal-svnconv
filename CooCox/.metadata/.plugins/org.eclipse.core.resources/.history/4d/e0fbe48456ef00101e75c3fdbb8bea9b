@@ -1,0 +1,762 @@
+/***************************************************************************//**
+ * @file      : di_msd.c
+ * @brief     : MSD/SD Card Driver Interface
+ * @version	  : V1.0
+ * @date      : 25. Jun. 2010
+ * @author    : CooCox
+*******************************************************************************/
+#include "di_msd.h"
+
+uint8_t  MSD_Init(const MSD_Dev *sd);
+uint8_t  MSD_WriteBlock(const MSD_Dev *sd, uint32_t adr, const uint8_t* wbuf, uint32_t wlen);
+uint8_t  MSD_ReadBlock(const MSD_Dev *sd, uint32_t adr, uint8_t* rbuf, uint32_t rlen);
+uint8_t  MSD_WriteBuffer(const MSD_Dev *sd, uint32_t adr, const uint8_t* wbuf, uint32_t wlen);
+uint8_t  MSD_ReadBuffer(const MSD_Dev *sd, uint32_t adr,  uint8_t* rbuf, uint32_t rlen);
+uint8_t  MSD_GetCSDRegister(const MSD_Dev *sd, sMSD_CSD* MSD_csd);
+uint8_t  MSD_GetCIDRegister(const MSD_Dev *sd, sMSD_CID* MSD_cid);
+void     MSD_SendCmd(const MSD_Dev *sd, uint8_t Cmd, uint32_t Arg, uint8_t Crc);
+uint8_t  MSD_GetResponse(const MSD_Dev *sd, uint8_t Response);
+uint8_t  MSD_GetDataResponse(const MSD_Dev *sd);
+uint16_t MSD_GetStatus(const MSD_Dev *sd);
+uint8_t  MSD_GoIdleState(const MSD_Dev *sd);
+
+
+void SS_LOW(const MSD_Dev *MSD){MSD->pio->Out(MSD->cs_pin, 1);}
+void SS_HIGH(const MSD_Dev *MSD){MSD->pio->Out(MSD->cs_pin, 0);}
+/***************************************************************************//**
+ * @brief      Initializes the MSD/SD communication. 
+ * @param[in]  sd MSD/SD device selected 
+ * @return     The MSD Response: 
+ *               - COX_ERROR: Sequence failed
+ *               - COX_SUCCESS: Sequence succeed 
+*******************************************************************************/
+uint8_t MSD_Init(const MSD_Dev *sd)
+{
+  uint32_t i = 0;
+
+  /* Set MSD Chip Select pin as output */
+  sd->pio->Init(sd->cs_pin);   
+  sd->pio->Dir(sd->cs_pin, 1);   
+  
+  /* MSD chip select high */
+  SS_HIGH(sd);
+  
+  /* Send MSD_DUMMY byte 0xFF, 10 times with CS high*/
+  /* rise CS and MOSI for 80 clocks cycles */
+  for (i = 0; i <= 9; i++)
+  {
+    /* Send MSD_DUMMY byte 0xFF */
+    sd->spi->ReadWrite(MSD_DUMMY);    
+  }
+  
+  /*------------Put MSD in SPI mode--------------*/
+  /* MSD initialized and set to SPI mode properly */
+  return (MSD_GoIdleState(sd));
+}
+
+/***************************************************************************//**
+ * @brief      Writes a block on the MSD
+ * @param[in]  sd   : MSD/SD device selected 
+ * @param[in]  adr  : address to write on.
+ * @param[in]  wbuf : pointer to the buffer containing the data to be
+ *                    written on the MSD.
+ * @param[in]  wlen : number of data to write
+ * @return     The MSD Response: 
+ *               - COX_ERROR: Sequence failed
+ *               - COX_SUCCESS: Sequence succeed 
+*******************************************************************************/
+COX_Status MSD_WriteBlock(const MSD_Dev *sd, uint32_t adr, const uint8_t* wbuf, uint32_t wlen)
+{
+  COX_Status rvalue = COX_ERROR;
+
+  /* MSD chip select low */  
+  SS_LOW(sd);
+
+  /* Send CMD24 (MSD_WRITE_BLOCK) to write multiple block */
+  MSD_SendCmd(sd, MSD_WRITE_BLOCK, adr, 0xFF);
+
+  /* Check if the MSD acknowledged the write block command: R1 response (0x00: no errors) */
+  if (!MSD_GetResponse(sd, MSD_RESPONSE_NO_ERROR))
+  {
+    /* Send a MSD_DUMMY byte */	
+    sd->spi->ReadWrite(MSD_DUMMY);
+    /* Send the data token to signify the start of the data */	
+    sd->spi->ReadWrite(0xFE);
+    /* Write the block data to MSD : write count data by block */
+    sd->spi->Write(wbuf, wlen);
+
+    /* Put CRC bytes (not really needed by us, but required by MSD) */
+    sd->spi->ReadWrite(MSD_DUMMY);
+    sd->spi->ReadWrite(MSD_DUMMY);
+
+    /* Read data response */
+    if (MSD_GetDataResponse(sd) == MSD_DATA_OK) {
+      rvalue = COX_SUCCESS;
+    }
+  }
+
+  /* MSD chip select high */
+  SS_HIGH(sd);
+  /* Send MSD_DUMMY byte: 8 Clock pulses of delay */
+  sd->spi->ReadWrite(MSD_DUMMY);
+  /* Returns the reponse */
+  return rvalue;
+}
+
+/***************************************************************************//**
+ * @brief      Reads a block of data from the MSD
+ * @param[in]  sd   : MSD/SD device selected 
+ * @param[in]  adr  : MSD's internal address to read from.
+ * @param[in]  rbuf : pointer to the buffer that receives the data read
+ *                    from the MSD
+ * @param[in]  rlen : number of bytes to read from the MSD
+ * @return     The MSD Response: 
+ *               - COX_ERROR: Sequence failed
+ *               - COX_SUCCESS: Sequence succeed 
+*******************************************************************************/
+COX_Status MSD_ReadBlock(const MSD_Dev *sd, uint32_t adr, uint8_t* rbuf, uint32_t rlen)
+{
+  COX_Status rvalue = COX_ERROR;
+
+  /* MSD chip select low */
+  SS_LOW(sd);
+
+  /* Send CMD17 (MSD_READ_SINGLE_BLOCK) to read one block */
+  MSD_SendCmd(sd, MSD_READ_SINGLE_BLOCK, adr, 0xFF);
+
+  /* Check if the MSD acknowledged the read block command: R1 response (0x00: no errors) */
+  if (!MSD_GetResponse(sd, MSD_RESPONSE_NO_ERROR))
+  {
+    /* Now look for the data token to signify the start of the data */
+    if (!MSD_GetResponse(sd, MSD_START_DATA_SINGLE_BLOCK_READ))
+    {
+      /* Read the MSD block data : read NumByteToRead data */
+      sd->spi->Read(rbuf, rlen);
+      
+      /* Get CRC bytes (not really needed by us, but required by MSD) */
+      sd->spi->ReadWrite(MSD_DUMMY);
+      sd->spi->ReadWrite(MSD_DUMMY);
+      /* Set response value to success */
+      rvalue = COX_SUCCESS;
+    }
+  }
+
+  /* MSD chip select high */
+  SS_HIGH(sd);
+  /* Send MSD_DUMMY byte: 8 Clock pulses of delay */
+  sd->spi->ReadWrite(MSD_DUMMY);
+  /* Returns the reponse */
+  return rvalue;
+}
+
+/***************************************************************************//**
+ * @brief      Writes many blocks on the MSD
+ * @param[in]  sd   : MSD/SD device selected 
+ * @param[in]  adr  : MSD's internal address to read from.
+ * @param[in]  wbuf : pointer to the buffer containing the data to be
+ *                    written on the MSD
+ * @param[in]  wlen : number of data to write
+ * @return     The MSD Response: 
+ *               - COX_ERROR: Sequence failed
+ *               - COX_SUCCESS: Sequence succeed 
+*******************************************************************************/
+COX_Status MSD_WriteBuffer(const MSD_Dev *sd, uint32_t adr, const uint8_t* wbuf, uint32_t wlen)
+{
+  uint32_t NbrOfBlock = 0, Offset = 0;
+  COX_Status rvalue = COX_ERROR;
+
+  /* Calculate number of blocks to write */
+  NbrOfBlock = wlen / MSD_BLOCK_SIZE;
+  /* MSD chip select low */
+  SS_LOW(sd);
+
+  /* Data transfer */
+  while (NbrOfBlock --)
+  {
+    /* Send CMD24 (MSD_WRITE_BLOCK) to write blocks */
+    MSD_SendCmd(sd, MSD_WRITE_BLOCK, adr + Offset, 0xFF);
+
+    /* Check if the MSD acknowledged the write block command: R1 response (0x00: no errors) */
+    if (MSD_GetResponse(sd, MSD_RESPONSE_NO_ERROR))
+    {
+      return COX_ERROR;
+    }
+    /* Send MSD_DUMMY byte */
+    sd->spi->ReadWrite(MSD_DUMMY);
+    
+    /* Send the data token to signify the start of the data */
+    sd->spi->ReadWrite(MSD_START_DATA_SINGLE_BLOCK_WRITE);
+    /* Write the block data to MSD : write count data by block */
+    sd->spi->Write(wbuf, MSD_BLOCK_SIZE);
+    wbuf += MSD_BLOCK_SIZE;
+
+    /* Set next write address */
+    Offset += 512;
+    /* Put CRC bytes (not really needed by us, but required by MSD) */
+    sd->spi->ReadWrite(MSD_DUMMY);
+    sd->spi->ReadWrite(MSD_DUMMY);
+    /* Read data response */
+    if (MSD_GetDataResponse(sd) == MSD_DATA_OK) {
+      /* Set response value to success */
+      rvalue = COX_SUCCESS;
+    }
+    else {
+      /* Set response value to failure */
+      rvalue = COX_ERROR;
+    }
+  }
+
+  /* MSD chip select high */
+  SS_HIGH(sd);
+
+  /* Send MSD_DUMMY byte: 8 Clock pulses of delay */
+  sd->spi->ReadWrite(MSD_DUMMY);
+  /* Returns the reponse */
+  return rvalue;
+}
+
+/***************************************************************************//**
+ * @brief      Reads multiple block of data from the MSD
+ * @param[in]  sd   : MSD/SD device selected 
+ * @param[in]  adr  : MSD's internal address to read from.
+ * @param[in]  wbuf : pointer to the buffer that receives the data read
+ *                    from the MSD
+ * @param[in]  wlen : number of bytes to read from the MSD
+ * @return     The MSD Response: 
+ *               - COX_ERROR: Sequence failed
+ *               - COX_SUCCESS: Sequence succeed 
+*******************************************************************************/
+COX_Status MSD_ReadBuffer(const MSD_Dev *sd, uint32_t adr, uint8_t* rbuf, uint32_t rlen)
+{
+  uint32_t NbrOfBlock = 0, Offset = 0;
+  COX_Status rvalue = COX_ERROR;
+
+  /* Calculate number of blocks to read */
+  NbrOfBlock = rlen / MSD_BLOCK_SIZE;
+  /* MSD chip select low */
+  SS_LOW(sd);
+
+  /* Data transfer */
+  while (NbrOfBlock --) {
+    /* Send CMD17 (MSD_READ_SINGLE_BLOCK) to read one block */
+    MSD_SendCmd(sd, MSD_READ_SINGLE_BLOCK, adr + Offset, 0xFF);
+    /* Check if the MSD acknowledged the read block command: R1 response (0x00: no errors) */
+    if (MSD_GetResponse(sd, MSD_RESPONSE_NO_ERROR)) {
+      return  COX_ERROR;
+    }
+    /* Now look for the data token to signify the start of the data */
+    if (!MSD_GetResponse(sd, MSD_START_DATA_SINGLE_BLOCK_READ)) {
+      /* Read the MSD block data : read NumByteToRead data */
+      sd->spi->Read(rbuf, MSD_BLOCK_SIZE);
+      rbuf += MSD_BLOCK_SIZE;
+      
+      /* Set next read address*/
+      Offset += 512;
+      /* get CRC bytes (not really needed by us, but required by MSD) */
+      sd->spi->ReadWrite(MSD_DUMMY);
+      sd->spi->ReadWrite(MSD_DUMMY);
+      /* Set response value to success */
+      rvalue = COX_SUCCESS;
+    } else {
+      /* Set response value to failure */
+      rvalue = COX_ERROR;
+    }
+  }
+
+  /* MSD chip select high */
+  SS_HIGH(sd);
+  /* Send MSD_DUMMY byte: 8 Clock pulses of delay */
+  sd->spi->ReadWrite(MSD_DUMMY);
+  /* Returns the reponse */
+  return rvalue;
+}
+
+/***************************************************************************//**
+ * @brief      Read the CSD card register.
+ *             Reading the contents of the CSD register in SPI mode
+ *             is a simple read-block transaction
+ * @param[in]  sd      : MSD/SD device selected 
+ * @param[in]  MSD_csd : pointer on an SCD register structure 
+ * @return     The MSD Response: 
+ *               - COX_ERROR: Sequence failed
+ *               - COX_SUCCESS: Sequence succeed 
+*******************************************************************************/
+COX_Status MSD_GetCSDRegister(const MSD_Dev *sd, sMSD_CSD* MSD_csd)
+{
+  COX_Status rvalue = COX_ERROR;
+  uint8_t CSD_Tab[16];
+
+  /* MSD chip select low */
+  SS_LOW(sd);
+  /* Send CMD9 (CSD register) or CMD10(CSD register) */
+  MSD_SendCmd(sd, MSD_SEND_CSD, 0, 0xFF);
+
+  /* Wait for response in the R1 format (0x00 is no errors) */
+  if (!MSD_GetResponse(sd, MSD_RESPONSE_NO_ERROR)) {
+    if (!MSD_GetResponse(sd, MSD_START_DATA_SINGLE_BLOCK_READ)) {
+      sd->spi->Read(CSD_Tab, 16);      
+    }
+    /* Get CRC bytes (not really needed by us, but required by MSD) */
+    sd->spi->ReadWrite(MSD_DUMMY);
+    sd->spi->ReadWrite(MSD_DUMMY);
+    /* Set response value to success */
+    rvalue = COX_SUCCESS;
+  }
+
+  /* MSD chip select high */
+  SS_HIGH(sd);
+  /* Send MSD_DUMMY byte: 8 Clock pulses of delay */
+  sd->spi->ReadWrite(MSD_DUMMY);
+  /* Byte 0 */
+  MSD_csd->CSDStruct = (CSD_Tab[0] & 0xC0) >> 6;
+  MSD_csd->SysSpecVersion = (CSD_Tab[0] & 0x3C) >> 2;
+  MSD_csd->Reserved1 = CSD_Tab[0] & 0x03;
+  /* Byte 1 */
+  MSD_csd->TAAC = CSD_Tab[1] ;
+  /* Byte 2 */
+  MSD_csd->NSAC = CSD_Tab[2];
+  /* Byte 3 */
+  MSD_csd->MaxBusClkFrec = CSD_Tab[3];
+  /* Byte 4 */
+  MSD_csd->CardComdClasses = CSD_Tab[4] << 4;
+  /* Byte 5 */
+  MSD_csd->CardComdClasses |= (CSD_Tab[5] & 0xF0) >> 4;
+  MSD_csd->RdBlockLen = CSD_Tab[5] & 0x0F;
+  /* Byte 6 */
+  MSD_csd->PartBlockRead = (CSD_Tab[6] & 0x80) >> 7;
+  MSD_csd->WrBlockMisalign = (CSD_Tab[6] & 0x40) >> 6;
+  MSD_csd->RdBlockMisalign = (CSD_Tab[6] & 0x20) >> 5;
+  MSD_csd->DSRImpl = (CSD_Tab[6] & 0x10) >> 4;
+  MSD_csd->Reserved2 = 0; /* Reserved */
+  MSD_csd->DeviceSize = (CSD_Tab[6] & 0x03) << 10;
+  /* Byte 7 */
+  MSD_csd->DeviceSize |= (CSD_Tab[7]) << 2;
+  /* Byte 8 */
+  MSD_csd->DeviceSize |= (CSD_Tab[8] & 0xC0) >> 6;
+  MSD_csd->MaxRdCurrentVDDMin = (CSD_Tab[8] & 0x38) >> 3;
+  MSD_csd->MaxRdCurrentVDDMax = (CSD_Tab[8] & 0x07);
+  /* Byte 9 */
+  MSD_csd->MaxWrCurrentVDDMin = (CSD_Tab[9] & 0xE0) >> 5;
+  MSD_csd->MaxWrCurrentVDDMax = (CSD_Tab[9] & 0x1C) >> 2;
+  MSD_csd->DeviceSizeMul = (CSD_Tab[9] & 0x03) << 1;
+  /* Byte 10 */
+  MSD_csd->DeviceSizeMul |= (CSD_Tab[10] & 0x80) >> 7;
+  MSD_csd->EraseGrSize = (CSD_Tab[10] & 0x7C) >> 2;
+  MSD_csd->EraseGrMul = (CSD_Tab[10] & 0x03) << 3;
+  /* Byte 11 */
+  MSD_csd->EraseGrMul |= (CSD_Tab[11] & 0xE0) >> 5;
+  MSD_csd->WrProtectGrSize = (CSD_Tab[11] & 0x1F);
+  /* Byte 12 */
+  MSD_csd->WrProtectGrEnable = (CSD_Tab[12] & 0x80) >> 7;
+  MSD_csd->ManDeflECC = (CSD_Tab[12] & 0x60) >> 5;
+  MSD_csd->WrSpeedFact = (CSD_Tab[12] & 0x1C) >> 2;
+  MSD_csd->MaxWrBlockLen = (CSD_Tab[12] & 0x03) << 2;
+  /* Byte 13 */
+  MSD_csd->MaxWrBlockLen |= (CSD_Tab[13] & 0xc0) >> 6;
+  MSD_csd->WriteBlockPaPartial = (CSD_Tab[13] & 0x20) >> 5;
+  MSD_csd->Reserved3 = 0;
+  MSD_csd->ContentProtectAppli = (CSD_Tab[13] & 0x01);
+  /* Byte 14 */
+  MSD_csd->FileFormatGrouop = (CSD_Tab[14] & 0x80) >> 7;
+  MSD_csd->CopyFlag = (CSD_Tab[14] & 0x40) >> 6;
+  MSD_csd->PermWrProtect = (CSD_Tab[14] & 0x20) >> 5;
+  MSD_csd->TempWrProtect = (CSD_Tab[14] & 0x10) >> 4;
+  MSD_csd->FileFormat = (CSD_Tab[14] & 0x0C) >> 2;
+  MSD_csd->ECC = (CSD_Tab[14] & 0x03);
+  /* Byte 15 */
+  MSD_csd->CRC = (CSD_Tab[15] & 0xFE) >> 1;
+  MSD_csd->Reserved4 = 1;
+
+  /* Return the reponse */
+  return rvalue;
+}
+
+/***************************************************************************//**
+ * @brief      Read the CID card register.
+ *             Reading the contents of the CID register in SPI mode
+ *             is a simple read-block transaction
+ * @param[in]  sd      : MSD/SD device selected 
+ * @param[in]  MSD_cid : pointer on an CID register structure 
+ * @return     The MSD Response: 
+ *               - COX_ERROR: Sequence failed
+ *               - COX_SUCCESS: Sequence succeed 
+*******************************************************************************/
+COX_Status MSD_GetCIDRegister(const MSD_Dev *sd, sMSD_CID* MSD_cid)
+{ 
+  COX_Status rvalue = COX_ERROR;
+  uint8_t CID_Tab[16];
+
+  /* MSD chip select low */
+  SS_LOW(sd);
+  
+  /* Send CMD10 (CID register) */
+  MSD_SendCmd(sd, MSD_SEND_CID, 0, 0xFF);
+
+  /* Wait for response in the R1 format (0x00 is no errors) */
+  if (!MSD_GetResponse(sd, MSD_RESPONSE_NO_ERROR)) {
+    if (!MSD_GetResponse(sd, MSD_START_DATA_SINGLE_BLOCK_READ)) {
+      /* Store CID register value on CID_Tab */
+      sd->spi->Read(CID_Tab, 16);      
+    }
+    /* Get CRC bytes (not really needed by us, but required by MSD) */
+    sd->spi->ReadWrite(MSD_DUMMY);      
+    sd->spi->ReadWrite(MSD_DUMMY);      
+    /* Set response value to success */
+    rvalue = COX_SUCCESS;
+  }
+
+  /* MSD chip select high */
+  SS_HIGH(sd);
+  /* Send MSD_DUMMY byte: 8 Clock pulses of delay */
+  sd->spi->ReadWrite(MSD_DUMMY);      
+
+  /* Byte 0 */
+  MSD_cid->ManufacturerID = CID_Tab[0];
+  /* Byte 1 */
+  MSD_cid->OEM_AppliID = CID_Tab[1] << 8;
+  /* Byte 2 */
+  MSD_cid->OEM_AppliID |= CID_Tab[2];
+  /* Byte 3 */
+  MSD_cid->ProdName1 = CID_Tab[3] << 24;
+  /* Byte 4 */
+  MSD_cid->ProdName1 |= CID_Tab[4] << 16;
+  /* Byte 5 */
+  MSD_cid->ProdName1 |= CID_Tab[5] << 8;
+  /* Byte 6 */
+  MSD_cid->ProdName1 |= CID_Tab[6];
+  /* Byte 7 */
+  MSD_cid->ProdName2 = CID_Tab[7];
+  /* Byte 8 */
+  MSD_cid->ProdRev = CID_Tab[8];
+  /* Byte 9 */
+  MSD_cid->ProdSN = CID_Tab[9] << 24;
+  /* Byte 10 */
+  MSD_cid->ProdSN |= CID_Tab[10] << 16;
+  /* Byte 11 */
+  MSD_cid->ProdSN |= CID_Tab[11] << 8;
+  /* Byte 12 */
+  MSD_cid->ProdSN |= CID_Tab[12];
+  /* Byte 13 */
+  MSD_cid->Reserved1 |= (CID_Tab[13] & 0xF0) >> 4;
+  /* Byte 14 */
+  MSD_cid->ManufactDate = (CID_Tab[13] & 0x0F) << 8;
+  /* Byte 15 */
+  MSD_cid->ManufactDate |= CID_Tab[14];
+  /* Byte 16 */
+  MSD_cid->CRC = (CID_Tab[15] & 0xFE) >> 1;
+  MSD_cid->Reserved2 = 1;
+
+  /* Return the reponse */
+  return rvalue;
+}
+
+/***************************************************************************//**
+ * @brief      Send 5 bytes command to the MSD card.
+ * @param[in]  sd  : MSD/SD device selected 
+ * @param[in]  Cmd : the user expected command to send to MSD card 
+ * @param[in]  Arg : the command argument 
+ * @param[in]  Crc : the CRC 
+ * @return     None 
+*******************************************************************************/
+void MSD_SendCmd(const MSD_Dev *sd, uint8_t Cmd, uint32_t Arg, uint8_t Crc)
+{ 
+  uint8_t Frame[6];
+
+  /* Construct byte1 */
+  Frame[0] = (Cmd | 0x40);
+  /* Construct byte2 */
+  Frame[1] = (uint8_t)(Arg >> 24);
+  /* Construct byte3 */
+  Frame[2] = (uint8_t)(Arg >> 16);
+  /* Construct byte4 */
+  Frame[3] = (uint8_t)(Arg >> 8);
+  /* Construct byte5 */
+  Frame[4] = (uint8_t)(Arg);
+  /* Construct CRC: byte6 */
+  Frame[5] = (Crc);
+
+  SS_LOW(sd);
+  /* Send the Cmd bytes */
+  sd->spi->Write(Frame, 6);  
+}
+
+/***************************************************************************//**
+ * @brief      Get MSD card data response
+ * @param[in]  sd  : MSD/SD device selected 
+ * @return     The MSD status: Read data response xxx0<status>1
+ *               - status 010: Data accecpted
+ *               - status 101: Data rejected due to a crc error
+ *               - status 110: Data rejected due to a Write error.
+ *               - status 111: Data rejected due to other error.
+*******************************************************************************/
+uint8_t MSD_GetDataResponse(const MSD_Dev *sd)
+{
+  uint32_t i = 0;
+  uint8_t response, rvalue;
+
+  while (i <= 64)
+  {
+    /* Read resonse */
+    response = sd->spi->ReadWrite(MSD_DUMMY);
+    /* Mask unused bits */
+    response &= 0x1F;
+
+    switch (response) {
+    case MSD_DATA_OK:    
+      rvalue = MSD_DATA_OK;
+       break;
+      
+    case MSD_DATA_CRC_ERROR:
+      return MSD_DATA_CRC_ERROR;
+
+    case MSD_DATA_WRITE_ERROR:
+      return MSD_DATA_WRITE_ERROR;
+
+    default:    
+      rvalue = MSD_DATA_OTHER_ERROR;
+      break;      
+    }
+    /* Exit loop in case of data ok */
+    if (rvalue == MSD_DATA_OK) break;
+    /* Increment loop counter */
+    i++;
+  }
+  /* Wait null data */
+  while ((sd->spi->ReadWrite(MSD_DUMMY)) == 0);
+  
+  /* Return response */
+  return response;
+}
+
+/***************************************************************************//**
+ * @brief      Returns the MSD response
+ * @param[in]  sd  : MSD/SD device selected 
+ * @return     The MSD Response: 
+ *               - COX_ERROR: Sequence failed
+ *               - COX_SUCCESS: Sequence succeed
+*******************************************************************************/
+COX_Status MSD_GetResponse(const MSD_Dev *sd, uint8_t Response)
+{
+  uint32_t Count = 0x10;
+  uint8_t tmp;
+
+  /* Check if response is got or a timeout is happen */
+  while (((tmp = sd->spi->ReadWrite(MSD_DUMMY)) != Response) && Count) {
+	  printf("Re=0x%x\n",tmp);
+    Count--;
+  }
+
+  if (Count == 0) {
+    /* After time out */
+    return COX_ERROR;
+  } else {
+    /* Right response got */
+    return COX_SUCCESS;
+  }
+}
+
+/***************************************************************************//**
+ * @brief      Returns the MSD status.
+ * @param[in]  sd  : MSD/SD device selected 
+ * @return     The MSD status 
+*******************************************************************************/
+uint16_t MSD_GetStatus(const MSD_Dev *sd)
+{
+  uint16_t Status = 0;
+
+  /* MSD chip select low */
+  SS_LOW(sd);
+  /* Send CMD13 (MSD_SEND_STATUS) to get MSD status */
+  MSD_SendCmd(sd, MSD_SEND_STATUS, 0, 0xFF);
+
+  Status = sd->spi->ReadWrite(MSD_DUMMY);
+  Status |= (uint16_t)(sd->spi->ReadWrite(MSD_DUMMY) << 8);
+
+  /* MSD chip select high */
+  SS_HIGH(sd);
+  /* Send MSD_DUMMY byte 0xFF */
+  sd->spi->ReadWrite(MSD_DUMMY);
+
+  return Status;
+}
+
+/***************************************************************************//**
+ * @brief      Put MSD in Idle state
+ * @param[in]  sd  : MSD/SD device selected 
+ * @return     The MSD Response: 
+ *               - COX_ERROR: Sequence failed
+ *               - COX_SUCCESS: Sequence succeed 
+*******************************************************************************/
+COX_Status MSD_GoIdleState(const MSD_Dev *sd)
+{
+	uint8_t counter =0,ACMD1 = 1;
+	printf("Initialising mmc\n\r");
+  /* MSD chip select low */  
+	//SS_LOW(sd);
+  /* Send CMD0 (GO_IDLE_STATE) to put MSD in SPI mode */
+  MSD_SendCmd(sd, MSD_GO_IDLE_STATE, 0, 0x95);
+
+  /* Wait for In Idle State Response (R1 Format) equal to 0x01 */
+  if (MSD_GetResponse(sd, MSD_IN_IDLE_STATE)) {
+    /* No Idle State Response: return response failue */
+	  printf("IDLE:FAiled\n\r");
+    return COX_ERROR;
+  }
+
+  /*----------Activates the card initialization process-----------*/
+  /* Sendinf CMD8 to know if SDCARD supports 2.7v to 3.6 v*/
+  counter = 0x10;
+  do{
+	  /* MSD chip select high */
+	  SS_HIGH(sd);
+	  /* Send MSD_DUMMY byte 0xFF */
+	  sd->spi->ReadWrite(MSD_DUMMY);
+
+	  /* MSD chip select low */
+	  SS_LOW(sd);
+	  /* Send CMD1 (Activates the card process) until response equal to 0x0 */
+	   MSD_SendCmd(sd, MSD_SEND_IF_COND, 0x1AA, 0xFF);
+
+	   /* Wait for no error Response (R1 Format) equal to 0x1AA */
+  }
+  while(MSD_GetResponse(sd, 0x0) && counter-- > 0 );
+  if(counter == 0)
+  {
+	  printf("Voltage fail\n\r");
+	  return (MSD_VOLTAGE_FAIL);
+  }
+
+  /* CMD55 */
+  counter = 0x10;
+  do{
+	  MSD_SendCmd(sd, MSD_APP_CMD, 0, 0xFF);
+  }
+  while(MSD_GetResponse(sd, MSD_RESPONSE_NO_ERROR) && counter-- > 0);
+  if(counter == 0){
+	  return (MSD_FAIL);
+  }
+  printf("CMD55 first success\n\r");
+
+	  counter = 0x10;
+  do {
+    /* MSD chip select high */
+    SS_HIGH(sd);
+    /* Send MSD_DUMMY byte 0xFF */
+    sd->spi->ReadWrite(MSD_DUMMY);
+
+    /* MSD chip select low */
+    SS_LOW(sd);
+
+    /* Send CMD1 (Activates the card process) until response equal to 0x0 */
+    MSD_SendCmd(sd, MSD_SEND_OP_COND, 0x40000000, 0xFF);
+    /* Wait for no error Response (R1 Format) equal to 0x00 */
+  }
+  while (MSD_GetResponse(sd, MSD_RESPONSE_NO_ERROR) && counter-- > 0);
+  if(counter == 0){
+	  ACMD1 = 0;
+	  printf("ACMD1 Failed\n\r");
+  }
+  else{
+	  printf("SDCARD ver2\n\r");
+  }
+
+  // If above command Fails then only this should be executed
+  if(ACMD1 == 0){
+	  counter = 0x10;
+	  do{
+		  MSD_SendCmd(sd, MSD_APP_CMD, 0, 0xFF);
+	  }
+	  while(MSD_GetResponse(sd, MSD_RESPONSE_NO_ERROR) && counter-- > 0);
+	  if(counter == 0){
+		  return (MSD_FAIL);
+	  }
+	  printf("CMD55 success\n\r");
+
+	  // Sending Command CMD1
+	  counter = 0x10;
+	  do{
+  		  MSD_SendCmd(sd, MSD_SEND_OP_COND, 0, 0xFF);
+  	  }
+	  while(MSD_GetResponse(sd, MSD_RESPONSE_NO_ERROR) && counter-- > 0);
+	  if(counter == 0){
+		  printf("CMD1 Failed\n\r");
+		  ACMD1 = 1;
+	  }
+	  else printf("SD Ver1\n\r");
+  }
+
+  // Sending cmd1 to check if card is mmc
+  if(ACMD1 == 1){
+	  counter = 0x10;
+	  do{
+	  	  MSD_SendCmd(sd, MSD_SEND_OP_COND, 0, 0xFF);
+	   }
+	   while(MSD_GetResponse(sd, MSD_RESPONSE_NO_ERROR) && counter-- > 0);
+	   if(counter == 0){
+		  printf("CMD1 Failed\n\r");
+	  }
+  }
+
+  /* MSD chip select high */
+  SS_HIGH(sd);
+  /* Send MSD_DUMMY byte 0xFF */
+  sd->spi->ReadWrite(MSD_DUMMY);
+  return COX_SUCCESS;
+}
+
+/***************************************************************************//**
+ * @brief      Get MSD/SD device memory size
+ * @param[in]  sd  : MSD/SD device selected
+ * @return     Device size
+*******************************************************************************/
+uint32_t MSD_GetChipSize (const MSD_Dev *sd)
+{
+  uint8_t CSD_Tab[16];
+  uint16_t DeviceSize;
+  uint8_t  DeviceSizeMul;
+  uint8_t  RdBlockLen;
+
+
+  /* MSD chip select low */
+  SS_LOW(sd);
+  /* Send CMD9 (CSD register) or CMD10(CSD register) */
+  MSD_SendCmd(sd, MSD_SEND_CSD, 0, 0xFF);
+
+  /* Wait for response in the R1 format (0x00 is no errors) */
+  if (!MSD_GetResponse(sd, MSD_RESPONSE_NO_ERROR)) {
+    if (!MSD_GetResponse(sd, MSD_START_DATA_SINGLE_BLOCK_READ)) {
+      sd->spi->Read(CSD_Tab, 16);      
+    }
+    /* Get CRC bytes (not really needed by us, but required by MSD) */
+    sd->spi->ReadWrite(MSD_DUMMY);
+    sd->spi->ReadWrite(MSD_DUMMY);    
+  }
+
+  /* MSD chip select high */
+  SS_HIGH(sd);
+  /* Send MSD_DUMMY byte: 8 Clock pulses of delay */
+  sd->spi->ReadWrite(MSD_DUMMY);
+
+  RdBlockLen = CSD_Tab[5] & 0x0F;
+
+  DeviceSize = (CSD_Tab[6] & 0x03) << 10;  
+  DeviceSize |= (CSD_Tab[7]) << 2;  
+  DeviceSize |= (CSD_Tab[8] & 0xC0) >> 6;
+
+  DeviceSizeMul = (CSD_Tab[9] & 0x03) << 1;
+  DeviceSizeMul |= (CSD_Tab[10] & 0x80) >> 7;
+  
+  return ((DeviceSize + 1) * ((uint32_t)1 << (DeviceSizeMul + 2)) * ((uint32_t)1 << RdBlockLen));
+}
+
+/***************************************************************************//**
+ * @brief      Get MSD/SD device memory size
+ * @param[in]  sd  : MSD/SD internal address
+ * @return     Block size
+*******************************************************************************/
+uint32_t MSD_GetBlockSize (const MSD_Dev *sd)
+{
+	return  MSD_BLOCK_SIZE;
+}
+
+

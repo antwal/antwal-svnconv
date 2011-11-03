@@ -1,0 +1,288 @@
+
+
+
+/*
+ ***************************************************************************************
+ *					TinyOS-1.x
+ *					TOS Message
+ ***************************************************************************************
+ */
+
+#ifndef WSNPKT_H
+#define WSNPKT_H
+#include "TypeDefs.h"
+
+
+/*
+ * Synchronisation BITS
+ */
+#define START_BYTE 0X7E
+#define STOP_BYTE  0X7E
+#define ESC_CHAR  0X7D
+
+/*
+ * TinyOS Version
+ */
+//#define TINYOS1 1
+//#define TINYOS2 1
+//#define CC2430 1
+
+/*
+ * For Dynamic Routing
+ */
+//#define DYN_ROUTE 1
+//#define LEPSM 1
+//#define DOZER 1
+
+/*
+ * Remote Configuration
+ */
+//#define REMOTE_CONFIG
+//#define ONESHOT_CONFIG
+
+/*
+ * Raw Data Packet Types
+ */
+#if defined(TINYOS1) || defined(CC2430)
+#define P_PACKET_NO_ACK 0X42 // User packet with no Ack required in TinyOS-1.x//
+#else
+#define P_PACKET_NO_ACK 0X45 // User packet with no Ack required in TinyOS-2.x//
+#endif
+#define P_PACKET_ACK    0X41 // User packet. Ack required //
+
+
+
+/*
+ *Tos Msg Packet Types
+ */
+
+#define DISSMN_ACK_PKT    	AM_UDISSMNACK_MSG
+#define OFFLINE_DATA_PKT  	AM_UAGRI_MSG
+#define OFFLINE_DATA_ACK_PKT  	AM_UAGRI_ACK_MSG
+#define ONE_SHOT_PKT      	AM_UONESHOT_MSG
+#define BCAST_PKT         	AM_UDISSMN_MSG
+#define TIME_SOURCE_PKT   	AM_UARTTIMESYNC_MSG
+#define TIME_SYNC_PKT	  0xAA
+
+enum {
+    AM_UDISSMN_MSG      = 49,	   // Dissmn MSG
+    AM_UONESHOT_MSG     = 50,	   // One Shot MSG
+    AM_UAGRI_MSG        = 51,      // Data MSG
+    AM_UAGRI_ACK_MSG 	= 53,	   // Data Ack MSG
+    AM_UDISSMNACK_MSG   = 52,      // Dissmn Ack MSG
+    AM_UARTTIMESYNC_MSG = 0xA9     // Time Sync MSG
+};
+
+
+
+/*
+ * TOS Address
+ */
+#define TOSH_BCAST_ADDR 0xFFFF
+#define TOSH_UART_ADDR  0x7E00
+
+
+
+/*
+ * Packet Header Lengths
+ */
+#if defined (TINYOS2)
+	#define RAWPKT_HEADER_LEN 3
+	#define TOS_HEADER_LEN 	  7
+	#define TOS_FOOTER_LEN 	  2
+
+#elif defined (CC2430)
+	#define RAWPKT_HEADER_LEN 2
+	#define TOS_HEADER_LEN 	  11
+	#define TOS_FOOTER_LEN 	  2
+#else
+	#define RAWPKT_HEADER_LEN 2
+	#define TOS_HEADER_LEN 	  5
+	#define TOS_FOOTER_LEN 	  2
+#endif
+
+#ifdef DYN_ROUTE 		// Check whether dynamic routing is enabled
+  #ifdef DOZER
+	#define ROUTE_HEADER_LEN  2
+  #endif
+  #ifdef LEPSM
+	#define ROUTE_HEADER_LEN  7
+  #endif
+  #ifdef CTP
+	#define ROUTE_HEADER_LEN  0
+  #endif
+#else
+	#define ROUTE_HEADER_LEN  4
+#endif
+
+
+/*
+ * Data Packet Size
+ */
+
+#define TOSH_DATA_LENGTH 40 	// node_id(1) + crop_id(2) + plot_id(2) + Readings(2*MAXSENSORS) + RouteHeader(7), maximum size
+#define TOSH_MSG_LENGTH  TOSH_DATA_LENGTH + TOS_HEADER_LEN + TOS_FOOTER_LEN
+#define UAGRI_DATA_LEN  (TOSH_DATA_LENGTH - ROUTE_HEADER_LEN)
+
+#define SENSOR_DATA_LEN  22	// not used
+#define MAX_DATAPKT_SIZE 40	// not used
+
+
+/* HSS Data Packet */
+typedef struct HSSDataPkt{
+	INT8U  MoteID;
+	INT8U  ParameterName;
+	INT8S  AppId[30];
+	FP32   ParameterValue1;
+	//time_t TimeStamp;
+}HSSDataPkt;
+
+
+
+/*
+ * Group Id
+ */
+#define WSN_GROUP_ID 0x88
+
+
+/*
+ * Route MSG into which sensor data is embedded
+ */
+#if defined(TINYOS1) || defined(CC2430)
+typedef struct RouteMsg{
+        INT16U sourceAddr;
+        INT16U originAddr;
+	#if defined(DYN_ROUTE) && defined(LEPSM)
+	INT16U sequenceNo;
+        INT8U hopcount;
+	#endif
+        INT8U data[(TOSH_DATA_LENGTH - ROUTE_HEADER_LEN)];
+}RouteMsg;
+#endif
+
+
+/*
+ * U-Agri Application
+ */
+
+
+// Number of Sensors per Mote
+#define  MAX_SENSORS 10  		   // On MDA300 sensor board
+
+
+/*
+ * Sensed & One Shot Data Packets
+ */
+#if defined(TINYOS1) || defined(CC2430)
+typedef struct SensedData{
+ INT8U node_id;
+ INT8U sensor_id;
+ INT8S crop_id[2];			   // changed
+ INT16U plot_id;
+ INT16U value;
+// INT32U Gtimestamp;
+} __attribute__ ((packed)) SensedData;
+#endif
+
+#if defined(TINYOS2)
+typedef struct SensedData{
+ INT16U node_id;
+ INT8U sensor_id;
+ INT8S crop_id[1];
+ INT16U plot_id;
+ INT16U value;
+// INT32U Gtimestamp;
+} __attribute__ ((packed)) SensedData;
+#endif
+
+#if defined(TINYOS1) || defined(CC2430)
+// One Shot Data
+typedef struct OneShotData{
+  INT8U node_id;
+  INT8U crop_id[2];
+  INT16U plot_id;
+  INT16U value[MAX_SENSORS];
+//  INT32U timestamp;
+} __attribute__ ((packed)) OneShotData;
+#endif
+
+#if defined(TINYOS2)
+typedef struct OneShotData{
+  INT16U node_id;
+  INT8U type;
+  INT8U crop_id[1];
+  INT16U plot_id;
+  INT16U value[MAX_SENSORS];
+//  INT32U timestamp;
+} __attribute__ ((packed)) OneShotData;
+#endif
+
+
+
+/* Parameter names */
+#define TEMPERATURE               0x00
+#define RELATIVE_HUMIDITY         0X01
+#define VOLTAGE                   0x02
+#define RAIN_FALL		  0X03
+#define SOIL_MOISTURE             0X04
+#define SOIL_TEMPERATURE          0X05
+#define WIND_SPEED	          0X06
+#define WIND_DIRECTION            0X07
+#define LEAF_WETNESS              0X08
+#define SOLAR_RADIATION           0X09
+#define HTF_TEMPERATURE           0x0A
+#define HTF_RELATIVE_HUMIDITY     0X0B
+#define LEAF_WETNESS1		  0x0C
+#define ALL                       0x0D
+
+
+/*
+ * Tinyos-1.x TOS MSG
+ */
+#ifdef TINYOS1
+typedef struct Tos_Msg{
+        INT16U addr;
+        INT8U type;
+        INT8U group;
+        INT8U length;
+        INT8U data[TOSH_DATA_LENGTH];
+        INT16U crc;
+  /*    INT16U strength;
+        INT8U ack;
+        INT16U time;
+        INT8U sendSecurityMode;
+        INT8U receiveSecurityMode;*/
+}Tos_Msg;
+#endif
+
+#ifdef TINYOS2
+typedef struct Tos_Msg{
+	INT16U dest;
+	INT16U src;
+	INT8U length;
+	INT8U group;
+	INT8U type;
+        INT8U data[TOSH_DATA_LENGTH];
+        INT16U crc;
+}Tos_Msg;
+#endif
+
+#ifdef CC2430
+typedef struct Tos_Msg{
+        INT8U length;
+        INT16U fcf;
+        INT8U  data_seq_no;
+        INT16U group;
+        INT16U dest;
+        INT16U src;
+        INT8U type;
+        INT8U data[TOSH_DATA_LENGTH];
+	INT16U crc;			// rssi and correlation are mapped as crc (Used in dissmination)
+        //INT8U rssi;
+        //INT8U correlation;
+}__attribute__ ((packed)) Tos_Msg;
+#endif
+
+
+
+#endif

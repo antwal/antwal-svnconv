@@ -1,0 +1,3 @@
+
+Debug/bin\blinkos.elf:     file format elf32-littlearm
+

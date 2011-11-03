@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="4.5.2 -O0 -nostartfiles -Map=EFMGPIO.map -mcpu=cortex-m3 -mthumb -LJ:\CoCenter\CooIDE\workspace\EFMGPIO --gc-sections -TJ:\CoCenter\CooIDE\workspace\EFMGPIO\link.ld -g">
+      <target file="EFMGPIO.elf" lastModified="132b4db18c2">
+         <source file="..\obj\efm32_system.o" lastModified="132b4db133e"/>
+         <source file="..\obj\core_cm3.o" lastModified="132b4db13b6"/>
+         <source file="..\obj\main.o" lastModified="132b4db1410"/>
+         <source file="..\obj\startup_efm32.o" lastModified="132b4db1493"/>
+         <source file="..\obj\GPIO_Blink.o" lastModified="132b4db1597"/>
+         <source file="..\obj\system_efm32.o" lastModified="132b4db169b"/>
+         <source file="..\obj\efm32_assert.o" lastModified="132b4db16e2"/>
+         <source file="..\obj\efm32_gpio.o" lastModified="132b4db17d2"/>
+      </target>
+   </processor>
+</history>

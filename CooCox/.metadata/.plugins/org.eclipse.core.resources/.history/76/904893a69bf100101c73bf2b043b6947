@@ -1,0 +1,455 @@
+/***************************************************************************//**
+ * @file      : stm_rtc.c
+ * @brief     : stm32f1xx RTC Interface
+ * @version   : V1.0
+ * @date      : 21. February. 2011
+ * @author    : CooCox
+*******************************************************************************/
+
+#include "stm32f10x.h"
+#include "stm32_rtc.h"
+
+/**RTC Set Alarm Event*/
+RTC_Event_Handler Rtc_Alarm_Event = COX_NULL;
+RTC_Event_Handler Rtc_Sec_event = COX_NULL;
+RTC_Event_Handler Rtc_Overflow_event = COX_NULL;
+
+
+extern  vu32 TimeDisplay ;
+
+
+/** brief  Bit_SET and Bit_RESET enumeration */
+typedef enum
+{ Bit_RESET = 0,
+  Bit_SET
+}BitAction;
+
+
+/***************************************************************************//**
+ * @brief    : Sets or clears the selected data port bit.
+ * @param[in]          : - GPIOx: where x can be (A..E) to select the GPIO peripheral.
+ * @param[in]            - GPIO_Pin: specifies the port bit to be written.
+ * @                  This parameter can be one of GPIO_Pin_x where x can be (0..15).
+ * @param[in]            - BitVal: specifies the value to be written to the selected bit.
+ * @                  This parameter can be one of the BitAction enum values:
+ * @                    - Bit_RESET: to clear the port pin
+ * @                    - Bit_SET: to set the port pin
+ * @Return         : None
+*******************************************************************************/
+void STM_GPIO_WriteBit(GPIO_TypeDef* GPIOx, us16 GPIO_Pin, BitAction BitVal)
+{
+  if (BitVal != Bit_RESET)
+  {
+    GPIOx->BSRR = GPIO_Pin;
+  }
+  else
+  {
+    GPIOx->BRR = GPIO_Pin;
+  }
+}
+
+
+/**************************************************************************//**
+ * @brief    	   : Reads the specified output data port bit.
+ * @param[in]          : - GPIOx: where x can be (A..E) to select the GPIO peripheral.
+ * @param[in]               : - GPIO_Pin:  specifies the port bit to read.
+ * @                  This parameter can be GPIO_Pin_x where x can be (0..15).
+ * @Return         : The output port pin value.
+*******************************************************************************/
+ui8 STM_GPIO_ReadOutputDataBit(GPIO_TypeDef* GPIOx, us16 GPIO_Pin)
+{
+  ui8 bitstatus = 0x00;
+
+  if ((GPIOx->ODR & GPIO_Pin) != (ul32)Bit_RESET)
+  {
+    bitstatus = (ui8)Bit_SET;
+  }
+  else
+  {
+    bitstatus = (ui8)Bit_RESET;
+  }
+  return bitstatus;
+}
+
+
+/***************************************************************************//**
+ * @brief     RTC Handler
+ * @param[in] None
+ * @return    None
+*******************************************************************************/
+void RTC_IRQHandler(void)
+{
+	/*  Second Interrupt */
+	if( RTC->CRL & RTC_IT_SEC )
+	{
+		/* Clear the RTC Second interrupt */
+		/* Clear the coressponding RTC pending bit */
+		RTC->CRL &= (us16)~RTC_IT_SEC;
+		/* Toggle led connected to PC.06 pin each 1s */
+		STM_GPIO_WriteBit(GPIOC, GPIO_Pin_6, (BitAction)(1-STM_GPIO_ReadOutputDataBit(GPIOC, GPIO_Pin_6)));
+
+		/* Enable time update */
+		TimeDisplay = 1;
+		/* Wait until last write operation on RTC registers has finished */
+		/* Loop until RTOFF flag is set */
+		while ((RTC->CRL & RTC_FLAG_RTOFF) == (us16)RESET)
+		{
+		}
+		/* Reset RTC Counter when Time is 23:59:59 */
+		/*Here time period of tick is 1Second*/
+		if(((ul32)(((ul32)RTC->CNTH << 16 ) | (us16)(RTC->CNTL))) == 0x00015180)
+		{
+			/* Set the CNF flag to enter in the Configuration Mode */
+			RTC->CRL |= CRL_CNF_Set;
+
+			/* Set RTC COUNTER MSB word */
+			RTC->CNTH = (0x0 & RTC_MSB_Mask) >> 16;
+			/* Set RTC COUNTER LSB word */
+			RTC->CNTL = (0x0 & RTC_LSB_Mask);
+			/* Reset the CNF flag to exit from the Configuration Mode */
+			RTC->CRL &= CRL_CNF_Reset;
+			/* Wait until last write operation on RTC registers has finished */
+			/* Loop until RTOFF flag is set */
+			while ((RTC->CRL & RTC_FLAG_RTOFF) == (us16)RESET)
+			{
+			}
+		}
+		if(Rtc_Sec_event != COX_NULL)
+			Rtc_Sec_event();
+	}
+	if(RTC->CRL & RTC_IT_ALR)
+	{
+		if(Rtc_Alarm_Event != COX_NULL)
+			Rtc_Alarm_Event();
+			/* Clear the RTC Alarm interrupt */
+			/* Clear the coressponding RTC pending bit */
+			RTC->CRL &= (us16)~RTC_IT_ALR;
+	}
+	if(RTC->CRL & RTC_IT_OW)
+	{
+		if(Rtc_Overflow_event != COX_NULL)
+			Rtc_Overflow_event();
+			/* Clear the RTC OverFlow interrupt */
+			/* Clear the coressponding RTC pending bit */
+			RTC->CRL &= (us16)~RTC_IT_OW;
+	}
+
+}
+
+
+/***************************************************************************//**
+ * @brief     Initializes the RTC peripheral
+ * @param[in] None
+ * @return    None
+*******************************************************************************/
+COX_Status STM_RTC_Init (void)
+{
+	ul32 tmp = 0;
+	ul32 statusreg = 0;
+	FlagStatus bitstatus = RESET;
+
+	/* Enable PWR and BKP clocks */
+	RCC->APB1ENR |= (RCC_APB1Periph_PWR | RCC_APB1Periph_BKP);
+
+	/* Allow access to BKP Domain */
+	*(vu32 *) CR_DBP_BB = (ul32)ENABLE;
+
+	/* Reset Backup Domain */
+	*(vu32 *) BDCR_BDRST_BB = (ul32)ENABLE;
+	*(vu32 *) BDCR_BDRST_BB = (ul32)DISABLE;
+
+	/* Enable LSE */
+	/* Reset LSEON and LSEBYP bits before configuring the LSE */
+	/* Reset LSEON bit */
+	*(vu8 *) BDCR_BASE = RCC_LSE_OFF;
+	/* Reset LSEBYP bit */
+	*(vu8 *) BDCR_BASE = RCC_LSE_OFF;
+    /* Set LSEON bit */
+    *(vu8 *) BDCR_BASE = RCC_LSE_ON;
+	RCC->BDCR |= RCC_LSE_ON;
+
+    /* Wait till LSE is ready */
+    do{
+    	/* Get the RCC register index */
+    	tmp = RCC_FLAG_LSERDY >> 5;
+    	if (tmp == 1)               /* The flag to check is in CR register */
+    	{
+    	    statusreg = RCC->CR;
+    	}
+    	else if (tmp == 2)          /* The flag to check is in BDCR register */
+    	{
+    	    statusreg = RCC->BDCR;
+    	}
+    	else                       /* The flag to check is in CSR register */
+    	{
+    	    statusreg = RCC->CSR;
+    	}
+    	/* Get the flag position */
+    	tmp = RCC_FLAG_LSERDY & FLAG_Mask;
+    	if ((statusreg & ((ul32)1 << tmp)) != (ul32)RESET)
+    	{
+    	    bitstatus = SET;
+    	}
+    	else
+    	{
+    	    bitstatus = RESET;
+    	}
+    }while(bitstatus == RESET );
+
+    /* Select LSE as RTC Clock Source */
+    /* Select the RTC clock source */
+    RCC->BDCR |= RCC_RTCCLKSource_LSE;
+
+    /* Enable RTC Clock */
+    *(vu32 *) BDCR_RTCEN_BB = (ul32)ENABLE;
+
+    /* Wait for RTC registers synchronization */
+    /* Clear RSF flag */
+    RTC->CRL &= (us16)~RTC_FLAG_RSF;
+    /* Loop until RSF flag is set */
+    while ((RTC->CRL & RTC_FLAG_RSF) == (us16)RESET)
+    {
+    }
+
+    /* Wait until last write operation on RTC registers has finished */
+    /* Loop until RTOFF flag is set */
+    while ((RTC->CRL & RTC_FLAG_RTOFF) == (us16)RESET)
+    {
+    }
+
+    /* Wait until last write operation on RTC registers has finished */
+    /* Loop until RTOFF flag is set */
+    while ((RTC->CRL & RTC_FLAG_RTOFF) == (us16)RESET)
+    {
+    }
+
+    /* RTC period = RTCCLK/RTC_PR = (32.768 KHz)/(32767+1) */
+    /* Set the CNF flag to enter in the Configuration Mode */
+    RTC->CRL |= CRL_CNF_Set;
+    /* Set RTC PRESCALER MSB word */
+    RTC->PRLH = (32768 & PRLH_MSB_Mask) >> 0x10;
+    /* Set RTC PRESCALER LSB word */
+    RTC->PRLL = (32768 & RTC_LSB_Mask);
+    /* Reset the CNF flag to exit from the Configuration Mode */
+    RTC->CRL &= CRL_CNF_Reset;
+    if((RTC->CRL & 0x8) == 0)
+    	RTC->CRL |= 0x10;
+	/* Loop until RTOFF flag is set */
+    while ((RTC->CRL & RTC_FLAG_RTOFF) == (us16)RESET)
+    {
+    }
+	return COX_SUCCESS;
+}
+
+
+/***************************************************************************//**
+ * @brief     Start RTC Timer
+ * @param[in] None
+ * @return    None
+*******************************************************************************/
+void STM_RTC_Start (void)
+{
+	/* Loop until RTOFF flag is set */
+	while ((RTC->CRL & RTC_FLAG_RTOFF) == (u16)RESET)
+	{
+	}
+
+	/* Set the CNF flag to enter in the Configuration Mode */
+	RTC->CRL |= CRL_CNF_Set;
+
+	/* Wait until last write operation on RTC registers has finished */
+	/* Loop until RTOFF flag is set */
+	while ((RTC->CRL & RTC_FLAG_RTOFF) == (u16)RESET)
+	{
+	}
+}
+
+
+/***************************************************************************//**
+ * @brief     Stop RTC Timer
+ * @param[in] None
+ * @return    None
+*******************************************************************************/
+void STM_RTC_Stop (void)
+{
+	/* Loop until RTOFF flag is set */
+	while ((RTC->CRL & RTC_FLAG_RTOFF) == (u16)RESET)
+	{
+	}
+
+	/* Reset the CNF flag to exit from the Configuration Mode */
+	RTC->CRL &= CRL_CNF_Reset;
+
+	/* Wait until last write operation on RTC registers has finished */
+	/* Loop until RTOFF flag is set */
+	while ((RTC->CRL & RTC_FLAG_RTOFF) == (u16)RESET)
+	{
+	}
+}
+
+
+/***************************************************************************//**
+ * @brief     Read RTC Timer
+ * @param[in] tm : Pointer to a Time structure that contains time value
+ * @return    None
+*******************************************************************************/
+void STM_RTC_Read (Time *tm)
+{
+	us16 value_1 = 0;
+	ul32 value_2 = 0;
+
+	value_1 = RTC->CNTL;
+	value_2 = (((ul32)RTC->CNTH<<16 ) | value_1);
+
+	/* Compute  hours */
+	tm->hour = value_2/3600;
+	/* Compute minutes */
+	tm->min = (value_2 % 3600)/60;
+	/* Compute seconds */
+	tm->sec = (value_2 % 3600)% 60;
+}
+
+
+/***************************************************************************//**
+ * @brief     Set RTC Time
+ * @param[in] tm : Pointer to a Time structure that contains time value
+ * @return    - COX_SUCCESS : Success
+ *            - COX_ERROR : Failed to set
+*******************************************************************************/
+COX_Status STM_RTC_Write (Time *tm)
+{
+	ul32 value_t;
+
+	/* Check tm struct member is correct or not*/
+	if( tm->sec>59 && tm->sec<0)
+		return COX_ERROR;
+	if( tm->min>59 && tm->min<0)
+		return COX_ERROR;
+	if( tm->hour>23 && tm->hour<0)
+		return COX_ERROR;
+	if( tm->mday>31 && tm->mday<0)
+		return COX_ERROR;
+	if( tm->mon>12 && tm->mon<0)
+		return COX_ERROR;
+
+	/*Set Time to RTC Counter Register*/
+	value_t = (tm->hour * 3600 + tm->min * 60 + tm->sec);
+
+	/* Set RTC COUNTER MSB word */
+	RTC->CNTH = (value_t & RTC_MSB_Mask)>>16;
+
+	/* Set RTC COUNTER LSB word */
+	RTC->CNTL = (value_t & RTC_LSB_Mask);
+
+	// This is to show that RTC is configured
+	*(vu16 *) (BKP_BASE + ((us16)0x0004)) = 0xA5A5;
+
+	return COX_SUCCESS;
+}
+
+
+/***************************************************************************//**
+ * @brief     Set alarm time
+ * @param[in] tm : Pointer to a Time structure that contains alarm time value
+ * @param[in] handler : Alarm handler function
+ * @return    - COX_SUCCESS : Success
+ *            - COX_ERROR : Failed to set
+*******************************************************************************/
+COX_Status STM_RTC_Alarm (Time *tm, RTC_Event_Handler handler)
+{
+	ul32 value_t;
+	if(handler != COX_NULL) {
+
+	    if(tm == COX_NULL)
+	    	return COX_ERROR;
+
+		/* Check tm struct member value is correct or not*/
+		if( tm->sec>59 && tm->sec<0)
+			return COX_ERROR;
+		if( tm->min>59 && tm->min<0)
+			return COX_ERROR;
+		if( tm->hour>23 && tm->hour<0)
+			return COX_ERROR;
+		if( tm->mday>31 && tm->mday<0)
+			return COX_ERROR;
+		if( tm->mon>12 && tm->mon<0)
+			return COX_ERROR;
+
+		value_t = (tm->hour*3600 + tm->min*60 + tm->sec);
+		/* Set the ALARM MSB word */
+		RTC->ALRH = (value_t & RTC_MSB_Mask) >> 16;
+		/* Set the ALARM LSB word */
+		RTC->ALRL = (value_t & RTC_LSB_Mask);
+
+		Rtc_Alarm_Event = handler;  /* Setup Alarm event handler */
+	    RTC->CRH = 0x2; 			/* Enable Alarm Event */
+	  }
+
+	  else {
+		Rtc_Alarm_Event = COX_NULL;
+	    RTC->CRH &= 0x5;            /* Disable Alarm Event */
+	  }
+
+	return COX_SUCCESS;
+}
+
+
+/***************************************************************************//**
+ * @brief     Set RTC Event
+ * @param[in] event : Event type, should be one of the following :
+ *                     - RTC_EVENT_IT_OW :   Overflow interrupt Event
+ *                     - RTC_EVENT_IT_ALR :  Alarm interrupt Event
+ *                     - RTC_EVENT_IT_SEC :  Second interrupt  Event
+ * @param[in] handler : Event handler function
+ * @param[in] art     : Argument, not used
+ * @return    - COX_SUCCESS : Success
+ *            - COX_ERROR : Failed to set
+ * Note : Only one event is available at the same time.
+*******************************************************************************/
+COX_Status STM_RTC_Event (uint8_t event, RTC_Event_Handler handler, uint32_t arg)
+{
+	COX_Status return_status = COX_ERROR;
+
+	switch(event) {
+	case RTC_EVENT_IT_OW:
+		RTC->CRH = 0x00;
+		RTC->CRH = 0x04;             /* Enable the RTC Overflow Interrupt*/
+		return_status =  COX_SUCCESS;
+		break;
+	case RTC_EVENT_IT_ALR:           /* Enable the RTC Alarm Interrupt  */
+		RTC->CRH = 0x00;
+		RTC->CRH = 0x02;
+		return_status =  COX_SUCCESS;
+		break;
+	case RTC_EVENT_IT_SEC:           /* Enable the RTC Second Interrupt */
+		RTC->CRH = 0x00;
+		RTC->CRH = 0x01;
+		return_status =  COX_SUCCESS;
+		break;
+	default : break;
+	  }
+	if(((event == RTC_EVENT_IT_OW)|| (event == RTC_EVENT_IT_ALR)||(event == RTC_EVENT_IT_SEC)) && (handler != COX_NULL))
+	{
+		if(event == RTC_EVENT_IT_SEC)
+			Rtc_Sec_event = handler;
+		else if(event == RTC_EVENT_IT_ALR)
+			Rtc_Alarm_Event = handler;
+		else if(event == RTC_EVENT_IT_OW)
+			Rtc_Overflow_event = handler;
+	}
+	return COX_SUCCESS;
+}
+
+
+/***************************************************************************//**
+ * @brief Define RTC Interface
+*******************************************************************************/
+COX_RTC_PI pi_rtc = {
+  STM_RTC_Init,
+  STM_RTC_Start,
+  STM_RTC_Stop,
+  STM_RTC_Read,
+  STM_RTC_Write,
+  STM_RTC_Alarm,
+  STM_RTC_Event,
+};

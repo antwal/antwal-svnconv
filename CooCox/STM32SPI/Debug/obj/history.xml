@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="arm-none-eabi-gcc noversion nomachine -mcpu=cortex-m3 -mthumb -Wall -ffunction-sections -O0 -g -c -DSTM32F10X_MD_VL -DUSE_STDPERIPH_DRIVER -D__ASSEMBLY__ -DSTM32F100RB -I. -ICOX -ICOX\COX_Peripheral -Icmsis_boot -Icmsis -Istm_lib -Istm_lib\inc">
+      <target file="SPI_Example.o" lastModified="132cfa96065">
+         <source file="..\..\example\SPI_Example.c" lastModified="132cf9ff5a9"/>
+      </target>
+      <target file="startup_stm32f10x_md_vl.o" lastModified="132cfa95b27">
+         <source file="..\..\cmsis_boot\startup\startup_stm32f10x_md_vl.c" lastModified="132cb08c6b9"/>
+      </target>
+      <target file="syscalls.o" lastModified="132cfa96015">
+         <source file="..\..\syscalls\syscalls.c" lastModified="132cb108b3a"/>
+      </target>
+      <target file="STM32_USART.o" lastModified="132cfa95cad">
+         <source file="..\..\COX\COX_Peripheral\STM32_USART.c" lastModified="132ce269e44"/>
+      </target>
+      <target file="printf.o" lastModified="132cfa95efc">
+         <source file="..\..\stdio\printf.c" lastModified="132cb148a7d"/>
+      </target>
+      <target file="core_cm3.o" lastModified="132cfa95b81">
+         <source file="..\..\cmsis\core_cm3.c" lastModified="132cb08c731"/>
+      </target>
+      <target file="system_stm32f10x.o" lastModified="132cfa95bf9">
+         <source file="..\..\cmsis_boot\system_stm32f10x.c" lastModified="132cb08c6e1"/>
+      </target>
+      <target file="stm_spi_master.o" lastModified="132cfa95e66">
+         <source file="..\..\COX\COX_Peripheral\stm_spi_master.c" lastModified="132cfa940a1"/>
+      </target>
+      <target file="stm32f10x_spi.o" lastModified="132cfa9610f">
+         <source file="..\..\stm_lib\src\stm32f10x_spi.c" lastModified="132cb1c5de8"/>
+      </target>
+      <target file="main.o" lastModified="132cfa95da8">
+         <source file="..\..\main.c" lastModified="132ce32a879"/>
+      </target>
+      <target file="stm32f10x_gpio.o" lastModified="132cfa95d44">
+         <source file="..\..\stm_lib\src\stm32f10x_gpio.c" lastModified="132cb1c5e74"/>
+      </target>
+      <target file="stm32f10x_rcc.o" lastModified="132cfa95fa7">
+         <source file="..\..\stm_lib\src\stm32f10x_rcc.c" lastModified="132cb109ffd"/>
+      </target>
+   </processor>
+</history>

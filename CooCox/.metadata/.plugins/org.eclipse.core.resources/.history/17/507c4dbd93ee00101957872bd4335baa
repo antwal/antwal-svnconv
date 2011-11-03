@@ -1,0 +1,21 @@
+
+#include "di_msd.h"
+#include "cox_spi.h"
+#include "cox_pio.h"
+
+
+int main(void)
+{
+	COX_PIO_Dev CS = COX_PIN(2,7);			// PORTC7
+
+	MSD_Dev *MSD;							// MSD instance
+
+	// Initialising the variables required for MSD
+	MSD-> cs_pin = CS;
+	MSD-> pio = &pi_pio;
+	MSD-> spi = &pi_spi1;
+
+    while(1)
+    {
+    }
+}

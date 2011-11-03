@@ -1,0 +1,184 @@
+/**************************************************************************//**
+ * @file      : di_msd.h
+ * @brief     : MSD/SD Card Driver Interface
+ * @version   : V1.0
+ * @date      : 25. Jun. 2010
+ * @author    : CooCox
+*******************************************************************************
+Pin assignment:                                                              \n
+                                                                             \n
+                           ChipSelect +-------------+                        \n
+      MCU_PIN*------- - - - - - ------+             |                        \n
+                                      |             |                        \n
+                                      |             |                        \n
+  |----------+   CLK            Clock |             |                        \n
+  |          +------- - - - - - ------+ MSD/SD Card |                        \n
+  |          |   MOSI          DataIn |             |                        \n
+  |    SPI   +------- - - - - - ------+             |                        \n
+  |          |   MISO         DataOut |             |                        \n
+  |          +------- - - - - - ------+             |                        \n
+  +----------+                        +-------------+                        \n
+******************************************************************************/
+#ifndef __SPI_MSD_H
+#define __SPI_MSD_H
+
+
+#include "cox_types.h"
+#include "cox_pio.h"
+#include "cox_spi.h"
+
+#define MSD_BLOCK_SIZE    512    /* Block Size */
+
+#define MSD_DUMMY         0xFF   /* Dummy byte */
+
+/* Card type flags (CardType) */
+#define CT_MMC		0x01		/* MMC ver 3 */
+#define CT_SD1		0x02		/* SD ver 1 */
+#define CT_SD2		0x04		/* SD ver 2 */
+#define CT_SDC		(CT_SD1|CT_SD2)	/* SD */
+#define CT_BLOCK	0x08		/* Block addressing */
+
+
+extern uint8_t CardType;			/* b0:MMC, b1:SDv1, b2:SDv2, b3:Block addressing */
+
+/* Start Data tokens  */
+/* Tokens (necessary because at nop/idle (and CS active) only 0xff is on the data/command line) */
+#define MSD_START_DATA_SINGLE_BLOCK_READ    0xFE  /* Data token start byte, Start Single Block Read */
+#define MSD_START_DATA_MULTIPLE_BLOCK_READ  0xFE  /* Data token start byte, Start Multiple Block Read */
+#define MSD_START_DATA_SINGLE_BLOCK_WRITE   0xFE  /* Data token start byte, Start Single Block Write */
+#define MSD_START_DATA_MULTIPLE_BLOCK_WRITE 0xFD  /* Data token start byte, Start Multiple Block Write */
+#define MSD_STOP_DATA_MULTIPLE_BLOCK_WRITE  0xFD  /* Data toke stop byte, Stop Multiple Block Write */
+
+/* MSD functions return */
+#define MSD_SUCCESS       0x00
+#define MSD_FAIL          0xFF
+#define MSD_VOLTAGE_FAIL	0x01
+
+/* MSD reponses and error flags */
+#define MSD_RESPONSE_NO_ERROR      0x00
+#define MSD_IN_IDLE_STATE          0x01
+#define MSD_ERASE_RESET            0x02
+#define MSD_ILLEGAL_COMMAND        0x04
+#define MSD_COM_CRC_ERROR          0x08
+#define MSD_ERASE_SEQUENCE_ERROR   0x10
+#define MSD_ADDRESS_ERROR          0x20
+#define MSD_PARAMETER_ERROR        0x40
+#define MSD_RESPONSE_FAILURE       0xFF
+
+/* Data response error */
+#define MSD_DATA_OK                0x05
+#define MSD_DATA_CRC_ERROR         0x0B
+#define MSD_DATA_WRITE_ERROR       0x0D
+#define MSD_DATA_OTHER_ERROR       0xFF
+
+/* Commands: CMDxx = CMD-number | 0x40 */
+#define MSD_GO_IDLE_STATE          0   /* CMD0=0x40 */
+#define MSD_SEND_OP_COND           1   /* CMD1=0x41 */
+#define MSD_SEND_IF_COND			8
+#define MSD_SEND_CSD               9   /* CMD9=0x49 */
+#define MSD_SEND_CID               10  /* CMD10=0x4A */
+#define MSD_STOP_TRANSMISSION      12  /* CMD12=0x4C */
+#define MSD_SEND_STATUS            13  /* CMD13=0x4D */
+#define MSD_SET_BLOCKLEN           16  /* CMD16=0x50 */
+#define MSD_READ_SINGLE_BLOCK      17  /* CMD17=0x51 */
+#define MSD_READ_MULTIPLE_BLOCK    18  /* CMD18=0x52 */
+#define MSD_SET_BLOCK_COUNT        23  /* CMD23=0x57 */
+#define MSD_WRITE_BLOCK            24  /* CMD24=0x58 */
+#define MSD_WRITE_MULTIPLE_BLOCK   25  /* CMD25=0x59 */
+#define MSD_PROGRAM_CSD            27  /* CMD27=0x5B */
+#define MSD_SET_WRITE_PROT         28  /* CMD28=0x5C */
+#define MSD_CLR_WRITE_PROT         29  /* CMD29=0x5D */
+#define MSD_SEND_WRITE_PROT        30  /* CMD30=0x5E */
+#define MSD_TAG_SECTOR_START       32  /* CMD32=0x60 */
+#define MSD_TAG_SECTOR_END         33  /* CMD33=0x61 */
+#define MSD_UNTAG_SECTOR           34  /* CMD34=0x62 */
+#define MSD_TAG_ERASE_GROUP_START  35  /* CMD35=0x63 */
+#define MSD_TAG_ERASE_GROUP_END    36  /* CMD36=0x64 */
+#define MSD_UNTAG_ERASE_GROUP      37  /* CMD37=0x65 */
+#define MSD_ERASE                  38  /* CMD38=0x66 */
+//#define MSD_READ_OCR               39  /* CMD39=0x67 */
+#define MSD_CRC_ON_OFF             40  /* CMD40=0x68 */
+#define MSD_APP_CMD					55
+#define MSD_READ_OCR				58
+
+/** Exported types ------------------------------------------------------------*/
+typedef struct _MSD_CSD      /*Card Specific Data*/
+{
+  uint8_t  CSDStruct;            /* CSD structure */
+  uint8_t  SysSpecVersion;       /* System specification version */
+  uint8_t  Reserved1;            /* Reserved */
+  uint8_t  TAAC;                 /* Data read access-time 1 */
+  uint8_t  NSAC;                 /* Data read access-time 2 in CLK cycles */
+  uint8_t  MaxBusClkFrec;        /* Max. bus clock frequency */
+  uint16_t CardComdClasses;      /* Card command classes */
+  uint8_t  RdBlockLen;           /* Max. read data block length */
+  uint8_t  PartBlockRead;        /* Partial blocks for read allowed */
+  uint8_t  WrBlockMisalign;      /* Write block misalignment */
+  uint8_t  RdBlockMisalign;      /* Read block misalignment */
+  uint8_t  DSRImpl;              /* DSR implemented */
+  uint8_t  Reserved2;            /* Reserved */
+  uint16_t DeviceSize;           /* Device Size */
+  uint8_t  MaxRdCurrentVDDMin;   /* Max. read current @ VDD min */
+  uint8_t  MaxRdCurrentVDDMax;   /* Max. read current @ VDD max */
+  uint8_t  MaxWrCurrentVDDMin;   /* Max. write current @ VDD min */
+  uint8_t  MaxWrCurrentVDDMax;   /* Max. write current @ VDD max */
+  uint8_t  DeviceSizeMul;        /* Device size multiplier */
+  uint8_t  EraseGrSize;          /* Erase group size */
+  uint8_t  EraseGrMul;           /* Erase group size multiplier */
+  uint8_t  WrProtectGrSize;      /* Write protect group size */
+  uint8_t  WrProtectGrEnable;    /* Write protect group enable */
+  uint8_t  ManDeflECC;           /* Manufacturer default ECC */
+  uint8_t  WrSpeedFact;          /* Write speed factor */
+  uint8_t  MaxWrBlockLen;        /* Max. write data block length */
+  uint8_t  WriteBlockPaPartial;  /* Partial blocks for write allowed */
+  uint8_t  Reserved3;            /* Reserded */
+  uint8_t  ContentProtectAppli;  /* Content protection application */
+  uint8_t  FileFormatGrouop;     /* File format group */
+  uint8_t  CopyFlag;             /* Copy flag (OTP) */
+  uint8_t  PermWrProtect;        /* Permanent write protection */
+  uint8_t  TempWrProtect;        /* Temporary write protection */
+  uint8_t  FileFormat;           /* File Format */
+  uint8_t  ECC;                  /* ECC code */
+  uint8_t  CRC;                  /* CRC */
+  uint8_t  Reserved4;            /* always 1*/
+} sMSD_CSD;
+
+typedef struct _MSD_CID      /*Card Identification Data*/
+{
+  uint8_t  ManufacturerID;       /* ManufacturerID */
+  uint16_t OEM_AppliID;          /* OEM/Application ID */
+  uint32_t ProdName1;            /* Product Name part1 */
+  uint8_t  ProdName2;            /* Product Name part2*/
+  uint8_t  ProdRev;              /* Product Revision */
+  uint32_t ProdSN;               /* Product Serial Number */
+  uint8_t  Reserved1;            /* Reserved1 */
+  uint16_t ManufactDate;         /* Manufacturing Date */
+  uint8_t  CRC;                  /* CRC */
+  uint8_t  Reserved2;            /* always 1*/
+} sMSD_CID;
+
+/* MSD Device Definition -----------------------------------------------------*/
+typedef struct
+{
+  uint16_t     cs_pin;          /* Pin of te CS  */
+  COX_PIO_PI  *pio;             /* The PIO Interface to use */
+  COX_SPI_PI  *spi;             /* The SPI Interface to use */
+} MSD_Dev;
+
+extern uint8_t MSD_Init(const MSD_Dev *sd);
+extern COX_Status MSD_WriteBuffer(const MSD_Dev *sd, uint32_t adr, const uint8_t* wbuf, uint32_t wlen);
+extern COX_Status MSD_ReadBuffer(const MSD_Dev *sd, uint32_t adr, uint8_t* rbuf, uint32_t rlen);
+extern COX_Status MSD_WriteBlock(const MSD_Dev *sd, uint32_t adr, const uint8_t* wbuf, uint32_t wlen);
+extern COX_Status MSD_ReadBlock(const MSD_Dev *sd, uint32_t adr, uint8_t* rbuf, uint32_t rlen);
+extern COX_Status MSD_GetCSDRegister(const MSD_Dev *sd, sMSD_CSD* MSD_csd);
+extern COX_Status MSD_GetCIDRegister(const MSD_Dev *sd, sMSD_CID* MSD_cid);
+extern COX_Status MSD_GoIdleState(const MSD_Dev *sd);
+extern uint16_t MSD_GetStatus(const MSD_Dev *sd);
+extern uint32_t MSD_GetChipSize (const MSD_Dev *sd);
+extern uint32_t MSD_GetBlockSize (const MSD_Dev *sd);
+extern void SS_LOW(const MSD_Dev *sd);
+extern void SS_HIGH(const MSD_Dev *sd);
+
+#endif /* __MSD_H */
+
+

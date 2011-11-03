@@ -1,0 +1,37 @@
+
+#include "di_msd.h"
+#include "cox_spi.h"
+#include "cox_pio.h"
+#include "STM32_USART.h"
+#include <stdio.h>
+
+
+int main(void)
+{
+	COX_Status ret;
+	COX_PIO_Dev CS = COX_PIN(2,7);			// PORTC7
+
+	MSD_Dev *MSD;							// MSD instance
+
+	// Initializing the variables required for MSD
+	MSD-> cs_pin = CS;
+	MSD-> pio = &pi_pio;
+	MSD-> spi = &pi_spi1;
+
+	MSD->spi->Init(COX_SPI_MODE1, 8);
+
+	MSD->spi->Cfg(COX_SPI_CFG_MODE,COX_SPI_MODE1,0);
+	MSD->spi->Cfg(COX_SPI_CFG_RATE,SPI_BaudRatePrescaler_4,0);
+	MSD->spi->Cfg(COX_SPI_CFG_BITS,8,0);
+	MSD->spi->Cfg(COX_SPI_CFG_FSB,COX_MSPI_FSB_LSB,0);
+
+	ret = MSD_Init(MSD);
+	if(ret == SUCCESS)
+	printf("Init Succes\n\r");
+	else
+		printf("Init Failed\n\r");
+
+    while(1)
+    {
+    }
+}

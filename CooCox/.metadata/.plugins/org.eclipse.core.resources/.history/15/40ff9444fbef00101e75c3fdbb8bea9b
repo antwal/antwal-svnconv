@@ -1,0 +1,192 @@
+
+#include "diskio.h"
+#include "di_msd.h"
+
+
+
+static
+DSTATUS Stat = STA_NOINIT;	/* Disk status */
+
+
+BYTE CardType;			/* b0:MMC, b1:SDv1, b2:SDv2, b3:Block addressing */
+extern MSD_Dev *sd;
+
+void deselect(void)
+{
+	SS_LOW(sd);
+}
+
+
+DSTATUS disk_status ( BYTE drv)
+{
+	DSTATUS s = Stat;
+	BYTE ocr[4];
+
+	if (drv || !(INS)){
+		s = STA_NODISK | STA_NOINIT;
+	} else {
+		s &= ~STA_NODISK;
+		if (WP)						/* Check card write protection */
+			s |= STA_PROTECT;
+		else
+			s &= ~STA_PROTECT;
+		if (!(s & STA_NOINIT)) {
+			MSD_SendCmd(sd, MSD_READ_OCR, 0, 0xff);
+			if(MSD_GetResponse(sd, 0x0))
+			{
+				s |= STA_NOINIT;
+			}
+			sd->spi->Read(ocr,4);
+			SS_HIGH(sd);
+
+		}
+	}
+	Stat = s;
+	return s;
+}
+
+DSTATUS disk_initialize (BYTE Drv)   /* Physical drive nmuber (0) */
+{
+	DSTATUS s;
+
+	s = disk_status(Drv);		/* Check if card is in the socket */
+	if (s & STA_NODISK) return s;
+
+	s = MSD_Init(sd);
+	if(s == COX_SUCCESS)		/* Initialization succeded */
+		s &= ~STA_NOINIT;
+	else						/* Initialization failed */
+		s |= STA_NOINIT;
+
+		Stat = s;
+		return s;
+}
+
+
+DRESULT disk_read (
+		BYTE drv,			/* Physical drive nmuber (0) */
+		BYTE *buff,			/* Pointer to the data buffer to store read data */
+		DWORD sector,		/* Start sector number (LBA) */
+		BYTE count			/* Sector count (1..128) */
+	)
+{
+	DSTATUS s;
+	s = disk_status(drv);
+	if (s & STA_NOINIT) return RES_NOTRDY;
+	if (!count) return RES_PARERR;
+	if (!(CardType & CT_BLOCK)) sector *= 512;	/* Convert LBA to byte address if needed */
+
+	if (count == 1) {	/* Single block read */
+		if(MSD_ReadBlock(sd, sector, buff, 512))
+			count = 0;
+	}
+	else{		/* Multiple block read */
+		if(MSD_ReadBuffer( sd, sector, buff, count))
+			return RES_ERROR;
+		else
+			return RES_OK;
+	}
+
+	return count? RES_ERROR: RES_OK;
+}
+
+
+#if	_READONLY == 0
+DRESULT disk_write (
+		BYTE drv,			/* Physical drive nmuber (0) */
+		const BYTE *buff,	/* Pointer to the data to be written */
+		DWORD sector,		/* Start sector number (LBA) */
+		BYTE count			/* Sector count (1..128) */
+	)
+{
+	DSTATUS s;
+
+
+		s = disk_status(drv);
+		if (s & STA_NOINIT) return RES_NOTRDY;
+		if (s & STA_PROTECT) return RES_WRPRT;
+		if (!count) return RES_PARERR;
+		if (!(CardType & CT_BLOCK)) sector *= 512;	/* Convert LBA to byte address if needed */
+
+		if (count == 1) {	/* Single block write */
+			if(MSD_WriteBlock(sd, sector, buff, count))
+				count = 0;
+		}
+		else	/* Multiple block write */
+		{
+			 if(MSD_WriteBuffer(sd, sector, buff, count))
+				count = 0;
+		}
+
+		return count ? RES_ERROR:RES_OK;
+}
+#endif
+
+/*-----------------------------------------------------------------------*/
+/* Miscellaneous Functions                                               */
+/*-----------------------------------------------------------------------*/
+
+DRESULT disk_ioctl (
+	BYTE drv,		/* Physical drive nmuber (0) */
+	BYTE ctrl,		/* Control code */
+	void *buff		/* Buffer to send/receive control data */
+)
+{
+	DRESULT res;
+	BYTE n, csd[16];
+	WORD cs;
+
+
+	if (disk_status(drv) & STA_NOINIT)					/* Check if card is in the socket */
+		return RES_NOTRDY;
+
+	res = RES_ERROR;
+	switch (ctrl) {
+		case CTRL_SYNC :		/* Make sure that no pending write process */
+			//if (select()) {
+				deselect();
+				res = RES_OK;
+			//}
+			break;
+
+		case GET_SECTOR_COUNT :	/* Get number of sectors on the disk (DWORD) */
+			 /* MSD chip select low */
+			  SS_LOW(sd);
+			  /* Send CMD9 (CSD register) or CMD10(CSD register) */
+			  MSD_SendCmd(sd, MSD_SEND_CSD, 0, 0xFF);
+
+			  /* Wait for response in the R1 format (0x00 is no errors) */
+			  if (!MSD_GetResponse(sd, MSD_RESPONSE_NO_ERROR)) {
+			    if (!MSD_GetResponse(sd, MSD_START_DATA_SINGLE_BLOCK_READ)) {
+			      sd->spi->Read(csd, 16);
+			    }
+			    /* Get CRC bytes (not really needed by us, but required by MSD) */
+			    sd->spi->ReadWrite(MSD_DUMMY);
+			    sd->spi->ReadWrite(MSD_DUMMY);
+
+				if ((csd[0] >> 6) == 1) {	/* SDC ver 2.00 */
+					cs= csd[9] + ((WORD)csd[8] << 8) + 1;
+					*(DWORD*)buff = (DWORD)cs << 10;
+				} else {					/* SDC ver 1.XX or MMC */
+					n = (csd[5] & 15) + ((csd[10] & 128) >> 7) + ((csd[9] & 3) << 1) + 2;
+					cs = (csd[8] >> 6) + ((WORD)csd[7] << 2) + ((WORD)(csd[6] & 3) << 10) + 1;
+					*(DWORD*)buff = (DWORD)cs << (n - 9);
+				}
+				res = RES_OK;
+			}
+			break;
+
+		case GET_BLOCK_SIZE :	/* Get erase block size in unit of sector (DWORD) */
+			*(DWORD*)buff = 128;
+			res = RES_OK;
+			break;
+
+		default:
+			res = RES_PARERR;
+	}
+
+	deselect();
+
+	return res;
+}
+void	disk_timerproc (void);

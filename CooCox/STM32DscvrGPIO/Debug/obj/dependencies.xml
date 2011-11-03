@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dependencies>
+   <includePath signature="/Icmsis /Icmsis_boot /Istm_lib\inc /Istm_lib /I.">
+      <source file="..\..\cmsis_boot\system_stm32f10x.h" lastModified="1311971598a">
+      </source>
+      <source file="..\..\cmsis_boot\system_stm32f10x.c" lastModified="13119715971">
+         <include file="..\..\cmsis_boot\stm32f10x.h"/>
+      </source>
+      <source file="..\..\cmsis_boot\startup\startup_stm32f10x_md_vl.c" lastModified="131197158a2">
+      </source>
+      <source file="..\..\cmsis_boot\stm32f10x_conf.h" lastModified="1311971594d">
+      </source>
+   </includePath>
+   <includePath signature="/Istm_lib\inc /Istm_lib /ICOX\COX_Peripheral /ICOX /Icmsis /Icmsis_boot /I.">
+      <source file="..\..\cmsis_boot\system_stm32f10x.h" lastModified="1311971598a">
+      </source>
+      <source file="..\..\stm_lib\inc\stm32f10x_rcc.h" lastModified="13128774083">
+         <include file="..\..\cmsis_boot\stm32f10x.h"/>
+      </source>
+      <source file="..\..\cmsis_boot\stm32f10x.h" lastModified="13119715ca3">
+         <include file="..\..\cmsis\core_cm3.h"/>
+         <include file="..\..\cmsis_boot\system_stm32f10x.h"/>
+         <include file="..\..\cmsis_boot\stm32f10x_conf.h"/>
+      </source>
+      <source file="..\..\COX\COX_Peripheral\cox_types.h" lastModified="13127a6a53b">
+      </source>
+      <source file="..\..\stm_lib\src\stm32f10x_gpio.c" lastModified="1312877400b">
+         <include file="..\..\stm_lib\inc\stm32f10x_gpio.h"/>
+         <include file="..\..\stm_lib\inc\stm32f10x_rcc.h"/>
+      </source>
+      <source file="..\..\stm_lib\src\stm32f10x_rcc.c" lastModified="131287740a1">
+         <include file="..\..\stm_lib\inc\stm32f10x_rcc.h"/>
+      </source>
+      <source file="..\..\cmsis_boot\system_stm32f10x.c" lastModified="13119715971">
+         <include file="..\..\cmsis_boot\stm32f10x.h"/>
+      </source>
+      <source file="..\..\example\GPIO_Blink.c" lastModified="13128cfc7eb">
+         <include file="..\..\cmsis_boot\stm32f10x.h"/>
+         <include file="..\..\stm_lib\inc\stm32f10x_gpio.h"/>
+         <include file="..\..\stm_lib\inc\stm32f10x_rcc.h"/>
+      </source>
+      <source file="..\..\cmsis_boot\startup\startup_stm32f10x_md_vl.c" lastModified="131197158a2">
+      </source>
+      <source file="..\..\cmsis\core_cm3.h" lastModified="131197161e0">
+      </source>
+      <source file="..\..\cmsis_boot\stm32f10x_conf.h" lastModified="1311971594d">
+      </source>
+      <source file="..\..\COX\COX_Peripheral\cox_serial.h" lastModified="13127a6a149">
+         <include file="..\..\COX\COX_Peripheral\cox_types.h"/>
+      </source>
+      <source file="..\..\COX\COX_Peripheral\STM32_USART.h" lastModified="13127a69f4b">
+         <include file="..\..\COX\COX_Peripheral\cox_serial.h"/>
+      </source>
+      <source file="..\..\cmsis\core_cm3.c" lastModified="13119715dd3">
+      </source>
+      <source file="..\..\stm_lib\inc\stm32f10x_gpio.h" lastModified="1312877400b">
+         <include file="..\..\cmsis_boot\stm32f10x.h"/>
+      </source>
+      <source file="..\..\COX\COX_Peripheral\STM32_USART.c" lastModified="13127a69f4b">
+         <include file="..\..\cmsis_boot\stm32f10x.h"/>
+         <include file="..\..\COX\COX_Peripheral\STM32_USART.h"/>
+      </source>
+   </includePath>
+</dependencies>

@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="4.5.2 -O0 -nostartfiles -Map=STM32uartself.map -mcpu=cortex-m3 -mthumb -LJ:\CoCenter\CooIDE\workspace\STM32uartself --gc-sections -TJ:\CoCenter\CooIDE\workspace\STM32uartself\link.ld -g">
+      <target file="STM32uartself.elf" lastModified="132ce261243">
+         <source file="..\obj\startup_stm32f10x_md_vl.o" lastModified="132ce260cb4"/>
+         <source file="..\obj\core_cm3.o" lastModified="132ce260d23"/>
+         <source file="..\obj\system_stm32f10x.o" lastModified="132ce260da5"/>
+         <source file="..\obj\STM32_USART.o" lastModified="132ce260e63"/>
+         <source file="..\obj\stm32f10x_gpio.o" lastModified="132ce260f2b"/>
+         <source file="..\obj\main.o" lastModified="132ce260f86"/>
+         <source file="..\obj\printf.o" lastModified="132ce261026"/>
+         <source file="..\obj\stm32f10x_rcc.o" lastModified="132ce2610d0"/>
+         <source file="..\obj\stm32f10x_usart.o" lastModified="132ce26117a"/>
+         <source file="..\obj\syscalls.o" lastModified="132ce2611e8"/>
+      </target>
+   </processor>
+</history>

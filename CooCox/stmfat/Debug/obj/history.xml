@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="arm-none-eabi-gcc noversion nomachine -mcpu=cortex-m3 -mthumb -Wall -ffunction-sections -O0 -g3 -c -DSTM32F103C8 -Iinc -I.">
+      <target file="iDisk.o" lastModified="132afe4df3f">
+         <source file="..\..\src\iDisk.c" lastModified="132afe401d5"/>
+      </target>
+      <target file="simpleread&write!.o" lastModified="132afe4dbff">
+         <source file="..\..\example\simpleread&write!.c" lastModified="132afe4b943"/>
+      </target>
+      <target file="unicodetogb2312.o" lastModified="132afe4dd36">
+         <source file="..\..\src\unicodetogb2312.c" lastModified="132afe401fd"/>
+      </target>
+      <target file="iFAT32.o" lastModified="132afe4db4b">
+         <source file="..\..\src\iFAT32.c" lastModified="132afe46d37"/>
+      </target>
+      <target file="syscalls.o" lastModified="132afe4dec6">
+         <source file="..\..\syscalls\syscalls.c" lastModified="132afe4022f"/>
+      </target>
+      <target file="iFAT.o" lastModified="132afe4de08">
+         <source file="..\..\src\iFAT.c" lastModified="132afe401f3"/>
+      </target>
+      <target file="main.o" lastModified="132afe4db9b">
+         <source file="..\..\main.c" lastModified="132afe4c780"/>
+      </target>
+   </processor>
+</history>

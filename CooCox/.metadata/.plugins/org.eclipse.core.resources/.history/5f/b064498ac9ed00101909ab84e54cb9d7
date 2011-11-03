@@ -1,0 +1,9 @@
+#include "STM32_USART.h"
+
+int main(void)
+{
+
+    while(1)
+    {
+    }
+}

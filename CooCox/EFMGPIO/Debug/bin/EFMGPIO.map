@@ -1,0 +1,435 @@
+
+Allocating common symbols
+Common symbol       size              file
+
+SystemCoreClock     0x4               ..\obj\system_efm32.o
+msTicks             0x4               ..\obj\GPIO_Blink.o
+
+Discarded input sections
+
+ .text          0x00000000        0x0 ..\obj\efm32_system.o
+ .data          0x00000000        0x0 ..\obj\efm32_system.o
+ .bss           0x00000000        0x0 ..\obj\efm32_system.o
+ .text          0x00000000        0x0 ..\obj\core_cm3.o
+ .data          0x00000000        0x0 ..\obj\core_cm3.o
+ .bss           0x00000000        0x0 ..\obj\core_cm3.o
+ .text.__get_PSP
+                0x00000000       0x10 ..\obj\core_cm3.o
+ .text.__set_PSP
+                0x00000000        0x8 ..\obj\core_cm3.o
+ .text.__get_MSP
+                0x00000000       0x10 ..\obj\core_cm3.o
+ .text.__set_MSP
+                0x00000000        0x8 ..\obj\core_cm3.o
+ .text.__get_BASEPRI
+                0x00000000       0x20 ..\obj\core_cm3.o
+ .text.__set_BASEPRI
+                0x00000000       0x18 ..\obj\core_cm3.o
+ .text.__get_PRIMASK
+                0x00000000       0x20 ..\obj\core_cm3.o
+ .text.__set_PRIMASK
+                0x00000000       0x18 ..\obj\core_cm3.o
+ .text.__get_FAULTMASK
+                0x00000000       0x20 ..\obj\core_cm3.o
+ .text.__set_FAULTMASK
+                0x00000000       0x18 ..\obj\core_cm3.o
+ .text.__get_CONTROL
+                0x00000000       0x20 ..\obj\core_cm3.o
+ .text.__set_CONTROL
+                0x00000000       0x18 ..\obj\core_cm3.o
+ .text.__REV    0x00000000       0x24 ..\obj\core_cm3.o
+ .text.__REV16  0x00000000       0x24 ..\obj\core_cm3.o
+ .text.__REVSH  0x00000000       0x24 ..\obj\core_cm3.o
+ .text.__RBIT   0x00000000       0x24 ..\obj\core_cm3.o
+ .text.__LDREXB
+                0x00000000       0x24 ..\obj\core_cm3.o
+ .text.__LDREXH
+                0x00000000       0x24 ..\obj\core_cm3.o
+ .text.__LDREXW
+                0x00000000       0x24 ..\obj\core_cm3.o
+ .text.__STREXB
+                0x00000000       0x2c ..\obj\core_cm3.o
+ .text.__STREXH
+                0x00000000       0x2c ..\obj\core_cm3.o
+ .text.__STREXW
+                0x00000000       0x28 ..\obj\core_cm3.o
+ .text          0x00000000        0x0 ..\obj\main.o
+ .data          0x00000000        0x0 ..\obj\main.o
+ .bss           0x00000000        0x0 ..\obj\main.o
+ .text          0x00000000        0x0 ..\obj\startup_efm32.o
+ .data          0x00000000        0x0 ..\obj\startup_efm32.o
+ .bss           0x00000000        0x0 ..\obj\startup_efm32.o
+ .text          0x00000000        0x0 ..\obj\GPIO_Blink.o
+ .data          0x00000000        0x0 ..\obj\GPIO_Blink.o
+ .bss           0x00000000        0x0 ..\obj\GPIO_Blink.o
+ .text          0x00000000        0x0 ..\obj\system_efm32.o
+ .bss           0x00000000        0x0 ..\obj\system_efm32.o
+ .text.SystemHFXOClockGet
+                0x00000000       0x14 ..\obj\system_efm32.o
+ .text.SystemHFXOClockSet
+                0x00000000       0x30 ..\obj\system_efm32.o
+ .text.SystemLFRCOClockGet
+                0x00000000       0x10 ..\obj\system_efm32.o
+ .text.SystemLFXOClockGet
+                0x00000000       0x14 ..\obj\system_efm32.o
+ .text.SystemLFXOClockSet
+                0x00000000       0x30 ..\obj\system_efm32.o
+ .text          0x00000000        0x0 ..\obj\efm32_assert.o
+ .data          0x00000000        0x0 ..\obj\efm32_assert.o
+ .bss           0x00000000        0x0 ..\obj\efm32_assert.o
+ .text          0x00000000        0x0 ..\obj\efm32_gpio.o
+ .data          0x00000000        0x0 ..\obj\efm32_gpio.o
+ .bss           0x00000000        0x0 ..\obj\efm32_gpio.o
+ .text.BITBAND_Peripheral
+                0x00000000       0x30 ..\obj\efm32_gpio.o
+ .text.GPIO_DbgLocationSet
+                0x00000000       0x30 ..\obj\efm32_gpio.o
+ .text.GPIO_DriveModeSet
+                0x00000000       0x4c ..\obj\efm32_gpio.o
+ .text.GPIO_IntConfig
+                0x00000000       0xd0 ..\obj\efm32_gpio.o
+ .text.GPIO_PinInGet
+                0x00000000       0x40 ..\obj\efm32_gpio.o
+ .text.GPIO_PinOutClear
+                0x00000000       0x40 ..\obj\efm32_gpio.o
+ .text.GPIO_PinOutGet
+                0x00000000       0x40 ..\obj\efm32_gpio.o
+ .text.GPIO_PinOutSet
+                0x00000000       0x40 ..\obj\efm32_gpio.o
+ .text.GPIO_PinOutToggle
+                0x00000000       0x40 ..\obj\efm32_gpio.o
+ .text.GPIO_PortInGet
+                0x00000000       0x3c ..\obj\efm32_gpio.o
+ .text.GPIO_PortOutClear
+                0x00000000       0x3c ..\obj\efm32_gpio.o
+ .text.GPIO_PortOutGet
+                0x00000000       0x3c ..\obj\efm32_gpio.o
+ .text.GPIO_PortOutSet
+                0x00000000       0x3c ..\obj\efm32_gpio.o
+ .text.GPIO_PortOutToggle
+                0x00000000       0x3c ..\obj\efm32_gpio.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+rom              0x00000000         0x00020000         xr
+ram              0x20000000         0x00004000         xrw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+                0x20004000                _eram = 0x20004000
+
+.text           0x00000000      0x7d4
+ *(.isr_vector .isr_vector.*)
+ .isr_vector    0x00000000       0xb8 ..\obj\startup_efm32.o
+                0x00000000                g_pfnVectors
+ *(.text .text.* .gnu.linkonce.t.*)
+ .text.SYSTEM_ChipRevisionGet
+                0x000000b8       0x50 ..\obj\efm32_system.o
+                0x000000b8                SYSTEM_ChipRevisionGet
+ .text.main     0x00000108        0xc ..\obj\main.o
+                0x00000108                main
+ .text.Default_Reset_Handler
+                0x00000114       0x68 ..\obj\startup_efm32.o
+                0x00000114                Default_Reset_Handler
+                0x00000114                Reset_Handler
+ .text.Default_Handler
+                0x0000017c        0x8 ..\obj\startup_efm32.o
+                0x0000017c                TIMER2_IRQHandler
+                0x0000017c                DebugMon_Handler
+                0x0000017c                USART0_TX_IRQHandler
+                0x0000017c                I2C0_IRQHandler
+                0x0000017c                HardFault_Handler
+                0x0000017c                LEUART1_IRQHandler
+                0x0000017c                USART1_RX_IRQHandler
+                0x0000017c                PendSV_Handler
+                0x0000017c                NMI_Handler
+                0x0000017c                USART1_TX_IRQHandler
+                0x0000017c                ADC0_IRQHandler
+                0x0000017c                UsageFault_Handler
+                0x0000017c                LEUART0_IRQHandler
+                0x0000017c                GPIO_EVEN_IRQHandler
+                0x0000017c                UART0_TX_IRQHandler
+                0x0000017c                RTC_IRQHandler
+                0x0000017c                TIMER0_IRQHandler
+                0x0000017c                LCD_IRQHandler
+                0x0000017c                PCNT2_IRQHandler
+                0x0000017c                UART0_RX_IRQHandler
+                0x0000017c                LETIMER0_IRQHandler
+                0x0000017c                TIMER1_IRQHandler
+                0x0000017c                UDMA_IRQHandler
+                0x0000017c                USART2_RX_IRQHandler
+                0x0000017c                PCNT0_IRQHandler
+                0x0000017c                PCNT1_IRQHandler
+                0x0000017c                ACMP0_IRQHandler
+                0x0000017c                USART0_RX_IRQHandler
+                0x0000017c                MemManage_Handler
+                0x0000017c                SVC_Handler
+                0x0000017c                DAC0_IRQHandler
+                0x0000017c                CMU_IRQHandler
+                0x0000017c                GPIO_ODD_IRQHandler
+                0x0000017c                AES_IRQHandler
+                0x0000017c                VCMP_IRQHandler
+                0x0000017c                IMEM_IRQHandler
+                0x0000017c                BusFault_Handler
+                0x0000017c                USART2_TX_IRQHandler
+ .text.NVIC_SetPriority
+                0x00000184       0x58 ..\obj\GPIO_Blink.o
+ .text.SysTick_Config
+                0x000001dc       0x54 ..\obj\GPIO_Blink.o
+ .text.SystemCoreClockUpdate
+                0x00000230        0xc ..\obj\GPIO_Blink.o
+ .text.CHIP_Init
+                0x0000023c      0x1a0 ..\obj\GPIO_Blink.o
+ .text.GPIO_Blink
+                0x000003dc       0xbc ..\obj\GPIO_Blink.o
+                0x000003dc                GPIO_Blink
+ .text.SysTick_Handler
+                0x00000498       0x1c ..\obj\GPIO_Blink.o
+                0x00000498                SysTick_Handler
+ .text.Delay    0x000004b4       0x2c ..\obj\GPIO_Blink.o
+                0x000004b4                Delay
+ .text.SystemCoreClockGet
+                0x000004e0       0x38 ..\obj\system_efm32.o
+                0x000004e0                SystemCoreClockGet
+ .text.SystemHFClockGet
+                0x00000518       0xd0 ..\obj\system_efm32.o
+                0x00000518                SystemHFClockGet
+ .text.SystemInit
+                0x000005e8        0xc ..\obj\system_efm32.o
+                0x000005e8                SystemInit
+ .text.GPIO_PinModeSet
+                0x000005f4      0x180 ..\obj\efm32_gpio.o
+                0x000005f4                GPIO_PinModeSet
+ .text.GPIO_PortOutSetVal
+                0x00000774       0x60 ..\obj\efm32_gpio.o
+                0x00000774                GPIO_PortOutSetVal
+ *(.glue_7t)
+ .glue_7t       0x00000000        0x0 linker stubs
+ *(.glue_7)
+ .glue_7        0x00000000        0x0 linker stubs
+ *(.rodata .rodata* .gnu.linkonce.r.*)
+
+.vfp11_veneer   0x000007d4        0x0
+ .vfp11_veneer  0x00000000        0x0 linker stubs
+
+.v4_bx          0x000007d4        0x0
+ .v4_bx         0x00000000        0x0 linker stubs
+
+.ARM.extab
+ *(.ARM.extab* .gnu.linkonce.armextab.*)
+
+.ARM.exidx
+ *(.ARM.exidx* .gnu.linkonce.armexidx.*)
+                0x000007d4                . = ALIGN (0x4)
+                0x000007d4                _etext = .
+                0x000007d4                _sidata = .
+
+.data           0x20000000        0x8 load address 0x000007d4
+                0x20000000                _sdata = .
+ *(.data .data.*)
+ .data          0x20000000        0x8 ..\obj\system_efm32.o
+                0x20000008                . = ALIGN (0x4)
+                0x20000008                _edata = .
+
+.bss            0x20000008        0x8 load address 0x000007dc
+                0x20000008                _sbss = .
+ *(.bss .bss.*)
+ *(COMMON)
+ COMMON         0x20000008        0x4 ..\obj\GPIO_Blink.o
+                0x20000008                msTicks
+ COMMON         0x2000000c        0x4 ..\obj\system_efm32.o
+                0x2000000c                SystemCoreClock
+                0x20000010                . = ALIGN (0x4)
+                0x20000010                _ebss = .
+
+.co_stack       0x20000010      0x400 load address 0x000007e4
+                0x20000010                . = ALIGN (0x8)
+ *(.co_stack .co_stack.*)
+ .co_stack      0x20000010      0x400 ..\obj\startup_efm32.o
+                0x20000010                pulStack
+                0x20000410                . = ALIGN (0x4)
+                0x20000410                _end = .
+LOAD ..\obj\efm32_system.o
+LOAD ..\obj\core_cm3.o
+LOAD ..\obj\main.o
+LOAD ..\obj\startup_efm32.o
+LOAD ..\obj\GPIO_Blink.o
+LOAD ..\obj\system_efm32.o
+LOAD ..\obj\efm32_assert.o
+LOAD ..\obj\efm32_gpio.o
+START GROUP
+LOAD j:/cocenter/cooide/gcc/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2\libgcc.a
+LOAD j:/cocenter/cooide/gcc/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2\libc.a
+END GROUP
+OUTPUT(EFMGPIO.elf elf32-littlearm)
+
+.debug_abbrev   0x00000000      0x7b3
+ .debug_abbrev  0x00000000       0xdb ..\obj\efm32_system.o
+ .debug_abbrev  0x000000db       0xd7 ..\obj\core_cm3.o
+ .debug_abbrev  0x000001b2       0x38 ..\obj\main.o
+ .debug_abbrev  0x000001ea       0xa5 ..\obj\startup_efm32.o
+ .debug_abbrev  0x0000028f      0x1f8 ..\obj\GPIO_Blink.o
+ .debug_abbrev  0x00000487      0x18a ..\obj\system_efm32.o
+ .debug_abbrev  0x00000611       0x14 ..\obj\efm32_assert.o
+ .debug_abbrev  0x00000625      0x18e ..\obj\efm32_gpio.o
+
+.debug_info     0x00000000     0x1cfa
+ .debug_info    0x00000000      0x1ba ..\obj\efm32_system.o
+ .debug_info    0x000001ba      0x54c ..\obj\core_cm3.o
+ .debug_info    0x00000706       0x4a ..\obj\main.o
+ .debug_info    0x00000750      0x134 ..\obj\startup_efm32.o
+ .debug_info    0x00000884      0x92c ..\obj\GPIO_Blink.o
+ .debug_info    0x000011b0      0x41a ..\obj\system_efm32.o
+ .debug_info    0x000015ca       0x25 ..\obj\efm32_assert.o
+ .debug_info    0x000015ef      0x70b ..\obj\efm32_gpio.o
+
+.debug_line     0x00000000     0x100c
+ .debug_line    0x00000000      0x23e ..\obj\efm32_system.o
+ .debug_line    0x0000023e      0x2e0 ..\obj\core_cm3.o
+ .debug_line    0x0000051e       0x5f ..\obj\main.o
+ .debug_line    0x0000057d       0x9b ..\obj\startup_efm32.o
+ .debug_line    0x00000618      0x339 ..\obj\GPIO_Blink.o
+ .debug_line    0x00000951      0x281 ..\obj\system_efm32.o
+ .debug_line    0x00000bd2       0xa5 ..\obj\efm32_assert.o
+ .debug_line    0x00000c77      0x395 ..\obj\efm32_gpio.o
+
+.debug_macinfo  0x00000000   0x1f2eb7
+ .debug_macinfo
+                0x00000000    0x7a734 ..\obj\efm32_system.o
+ .debug_macinfo
+                0x0007a734     0x2ac0 ..\obj\core_cm3.o
+ .debug_macinfo
+                0x0007d1f4     0x21ca ..\obj\main.o
+ .debug_macinfo
+                0x0007f3be     0x2200 ..\obj\startup_efm32.o
+ .debug_macinfo
+                0x000815be    0x7a797 ..\obj\GPIO_Blink.o
+ .debug_macinfo
+                0x000fbd55    0x7a743 ..\obj\system_efm32.o
+ .debug_macinfo
+                0x00176498     0x2200 ..\obj\efm32_assert.o
+ .debug_macinfo
+                0x00178698    0x7a81f ..\obj\efm32_gpio.o
+
+.debug_loc      0x00000000      0xb38
+ .debug_loc     0x00000000       0x38 ..\obj\efm32_system.o
+ .debug_loc     0x00000038      0x3f0 ..\obj\core_cm3.o
+ .debug_loc     0x00000428       0x2c ..\obj\main.o
+ .debug_loc     0x00000454       0x64 ..\obj\startup_efm32.o
+ .debug_loc     0x000004b8      0x170 ..\obj\GPIO_Blink.o
+ .debug_loc     0x00000628      0x190 ..\obj\system_efm32.o
+ .debug_loc     0x000007b8      0x380 ..\obj\efm32_gpio.o
+
+.debug_pubnames
+                0x00000000      0x454
+ .debug_pubnames
+                0x00000000       0x2d ..\obj\efm32_system.o
+ .debug_pubnames
+                0x0000002d      0x159 ..\obj\core_cm3.o
+ .debug_pubnames
+                0x00000186       0x1b ..\obj\main.o
+ .debug_pubnames
+                0x000001a1       0x4a ..\obj\startup_efm32.o
+ .debug_pubnames
+                0x000001eb       0x4b ..\obj\GPIO_Blink.o
+ .debug_pubnames
+                0x00000236       0xd5 ..\obj\system_efm32.o
+ .debug_pubnames
+                0x0000030b      0x149 ..\obj\efm32_gpio.o
+
+.debug_pubtypes
+                0x00000000      0x207
+ .debug_pubtypes
+                0x00000000       0x60 ..\obj\efm32_system.o
+ .debug_pubtypes
+                0x00000060       0x50 ..\obj\core_cm3.o
+ .debug_pubtypes
+                0x000000b0       0x9e ..\obj\GPIO_Blink.o
+ .debug_pubtypes
+                0x0000014e       0x2f ..\obj\system_efm32.o
+ .debug_pubtypes
+                0x0000017d       0x8a ..\obj\efm32_gpio.o
+
+.debug_aranges  0x00000000      0x270
+ .debug_aranges
+                0x00000000       0x20 ..\obj\efm32_system.o
+ .debug_aranges
+                0x00000020       0xc8 ..\obj\core_cm3.o
+ .debug_aranges
+                0x000000e8       0x20 ..\obj\main.o
+ .debug_aranges
+                0x00000108       0x28 ..\obj\startup_efm32.o
+ .debug_aranges
+                0x00000130       0x50 ..\obj\GPIO_Blink.o
+ .debug_aranges
+                0x00000180       0x58 ..\obj\system_efm32.o
+ .debug_aranges
+                0x000001d8       0x98 ..\obj\efm32_gpio.o
+
+.debug_ranges   0x00000000      0x200
+ .debug_ranges  0x00000000       0x10 ..\obj\efm32_system.o
+ .debug_ranges  0x00000010       0xb8 ..\obj\core_cm3.o
+ .debug_ranges  0x000000c8       0x10 ..\obj\main.o
+ .debug_ranges  0x000000d8       0x18 ..\obj\startup_efm32.o
+ .debug_ranges  0x000000f0       0x40 ..\obj\GPIO_Blink.o
+ .debug_ranges  0x00000130       0x48 ..\obj\system_efm32.o
+ .debug_ranges  0x00000178       0x88 ..\obj\efm32_gpio.o
+
+.debug_str      0x00000000      0xd6b
+ .debug_str     0x00000000      0x138 ..\obj\efm32_system.o
+                                0x16c (size before relaxing)
+ .debug_str     0x00000138      0x178 ..\obj\core_cm3.o
+                                0x229 (size before relaxing)
+ .debug_str     0x000002b0       0x31 ..\obj\main.o
+                                 0x3d (size before relaxing)
+ .debug_str     0x000002e1       0xa9 ..\obj\startup_efm32.o
+                                 0xd4 (size before relaxing)
+ .debug_str     0x0000038a      0x61b ..\obj\GPIO_Blink.o
+                                0x711 (size before relaxing)
+ .debug_str     0x000009a5       0xf3 ..\obj\system_efm32.o
+                                0x2bb (size before relaxing)
+ .debug_str     0x00000a98       0x41 ..\obj\efm32_assert.o
+                                 0x4d (size before relaxing)
+ .debug_str     0x00000ad9      0x292 ..\obj\efm32_gpio.o
+                                0x4f7 (size before relaxing)
+
+.comment        0x00000000       0x2a
+ .comment       0x00000000       0x2a ..\obj\efm32_system.o
+                                 0x2b (size before relaxing)
+ .comment       0x00000000       0x2b ..\obj\core_cm3.o
+ .comment       0x00000000       0x2b ..\obj\main.o
+ .comment       0x00000000       0x2b ..\obj\startup_efm32.o
+ .comment       0x00000000       0x2b ..\obj\GPIO_Blink.o
+ .comment       0x00000000       0x2b ..\obj\system_efm32.o
+ .comment       0x00000000       0x2b ..\obj\efm32_assert.o
+ .comment       0x00000000       0x2b ..\obj\efm32_gpio.o
+
+.ARM.attributes
+                0x00000000       0x31
+ .ARM.attributes
+                0x00000000       0x31 ..\obj\efm32_system.o
+ .ARM.attributes
+                0x00000031       0x31 ..\obj\core_cm3.o
+ .ARM.attributes
+                0x00000062       0x31 ..\obj\main.o
+ .ARM.attributes
+                0x00000093       0x31 ..\obj\startup_efm32.o
+ .ARM.attributes
+                0x000000c4       0x31 ..\obj\GPIO_Blink.o
+ .ARM.attributes
+                0x000000f5       0x31 ..\obj\system_efm32.o
+ .ARM.attributes
+                0x00000126       0x31 ..\obj\efm32_assert.o
+ .ARM.attributes
+                0x00000157       0x31 ..\obj\efm32_gpio.o
+
+.debug_frame    0x00000000      0x6c8
+ .debug_frame   0x00000000       0x2c ..\obj\efm32_system.o
+ .debug_frame   0x0000002c      0x280 ..\obj\core_cm3.o
+ .debug_frame   0x000002ac       0x2c ..\obj\main.o
+ .debug_frame   0x000002d8       0x48 ..\obj\startup_efm32.o
+ .debug_frame   0x00000320       0xdc ..\obj\GPIO_Blink.o
+ .debug_frame   0x000003fc       0xec ..\obj\system_efm32.o
+ .debug_frame   0x000004e8      0x1e0 ..\obj\efm32_gpio.o

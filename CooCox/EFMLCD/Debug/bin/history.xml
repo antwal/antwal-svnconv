@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="4.5.2 -O0 -nostartfiles -Map=EFMLCD.map -mcpu=cortex-m3 -mthumb -LJ:\CoCenter\CooIDE\workspace\EFMLCD --gc-sections -TJ:\CoCenter\CooIDE\workspace\EFMLCD\link.ld -g">
+      <target file="EFMLCD.elf" lastModified="132b5117187">
+         <source file="..\obj\efm32_system.o" lastModified="132b5116996"/>
+         <source file="..\obj\core_cm3.o" lastModified="132b5116a04"/>
+         <source file="..\obj\efm32_emu.o" lastModified="132b5116aea"/>
+         <source file="..\obj\LCD_Display.o" lastModified="132b5116c53"/>
+         <source file="..\obj\efm32_cmu.o" lastModified="132b5116d75"/>
+         <source file="..\obj\main.o" lastModified="132b5116db1"/>
+         <source file="..\obj\startup_efm32.o" lastModified="132b5116e15"/>
+         <source file="..\obj\efm32_lcd.o" lastModified="132b5116ee8"/>
+         <source file="..\obj\system_efm32.o" lastModified="132b5116f9c"/>
+         <source file="..\obj\efm32_assert.o" lastModified="132b5117028"/>
+      </target>
+   </processor>
+</history>

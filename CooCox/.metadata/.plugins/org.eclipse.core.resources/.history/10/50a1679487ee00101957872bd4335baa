@@ -1,0 +1,36 @@
+#include<stm_spi_master.h>
+
+void SPI_Example(void)
+{
+	uint8_t i,data1= 0x10,data2=0x20;
+	uint8_t wbuf[10] = {0x11,0x12,0x13,0x14,0x15,0x16,0x17,0x18,0x19,0x20};
+	printf("in SPI\n\r");
+	/*SPI1 As Master Service,SPI2 As Slave Service,SPI1 transmit data to SPI2*/
+	pi_spi1.Init(COX_SPI_MODE1, 8);
+	pi_spi2.Init(COX_SPI_MODE1, 8);
+
+	pi_spi1.Cfg(COX_SPI_CFG_MODE,COX_SPI_MODE1,0);
+	pi_spi1.Cfg(COX_SPI_CFG_RATE,SPI_BaudRatePrescaler_4,0);
+	pi_spi1.Cfg(COX_SPI_CFG_BITS,8,0);
+	pi_spi1.Cfg(COX_SPI_CFG_FSB,COX_MSPI_FSB_LSB,0);
+
+	pi_spi2.Cfg(COX_SPI_CFG_MODE,COX_SPI_MODE1,0);
+	pi_spi2.Cfg(COX_SPI_CFG_RATE,SPI_BaudRatePrescaler_4,0);
+	pi_spi2.Cfg(COX_SPI_CFG_BITS,8,0);
+	pi_spi2.Cfg(COX_SPI_CFG_FSB,COX_MSPI_FSB_LSB,0);
+
+	printf("After spi init \n\r");
+	for(i =0;i<1;i++){
+		//printf("Writing\n\r");
+		pi_spi1.Write(wbuf, 10);
+	}
+
+	for(i =0;i<10;i++)
+	{
+		//printf("Reading\n\r");
+		pi_spi1.ReadWrite(data1);
+		data2 = pi_spi2.ReadWrite(0xFF);
+		printf("data=%d\n\r",data2);
+		++data1 ;
+	}
+}

@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="4.5.2 -O0 -nostartfiles -Map=STM32FAT.map -mcpu=cortex-m3 -mthumb -LJ:\CoCenter\CooIDE\workspace\STM32FAT --gc-sections -TJ:\CoCenter\CooIDE\workspace\STM32FAT\link.ld -g">
+      <target file="STM32FAT.elf" lastModified="132dfe5c15e">
+         <source file="..\obj\startup_stm32f10x_md_vl.o" lastModified="132dfe5b909"/>
+         <source file="..\obj\stm32_pio.o" lastModified="132dfe5b9c8"/>
+         <source file="..\obj\core_cm3.o" lastModified="132dfe5ba4a"/>
+         <source file="..\obj\system_stm32f10x.o" lastModified="132dfe5bacc"/>
+         <source file="..\obj\STM32_USART.o" lastModified="132dfe5bb94"/>
+         <source file="..\obj\diskio.o" lastModified="132dfe5bc02"/>
+         <source file="..\obj\main.o" lastModified="132dfe5bc85"/>
+         <source file="..\obj\stm_spi_master.o" lastModified="132dfe5bd43"/>
+         <source file="..\obj\printf.o" lastModified="132dfe5bdd9"/>
+         <source file="..\obj\stm32f10x_rcc.o" lastModified="132dfe5be83"/>
+         <source file="..\obj\syscalls.o" lastModified="132dfe5bee7"/>
+         <source file="..\obj\ff.o" lastModified="132dfe5c03c"/>
+         <source file="..\obj\mmc_driver.o" lastModified="132dfe5c0fa"/>
+      </target>
+   </processor>
+</history>

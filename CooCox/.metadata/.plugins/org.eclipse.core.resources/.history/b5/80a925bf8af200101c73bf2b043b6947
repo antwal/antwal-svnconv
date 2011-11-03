@@ -1,0 +1,83 @@
+/*****************************************************************************************************
+ *			 FUNTION THAT READS THE DATA ARRIVED AT THE PORT			     *
+ *****************************************************************************************************/
+
+
+#include "WSNPacket.h"
+#include "GlobalVariables.h"
+
+ // Message to be added on to queue //
+MSG DataMsg;
+
+void Read_Data(uint8_t data)
+{
+
+    uint8_t ch;
+
+    uint8_t PktStartRecd = 0;
+    INT32S i = 0, j, res;//, Status;
+
+
+    /* Wait for the Start Byte for Synchronisation of Data Flow */
+    printf( "I am waiting for 0x7E\n");
+
+    while(1) {
+      	// select function............ //
+        res = select(FD+1, &Readfds, (fd_set *)0, (fd_set *)0, NULL); // &Timeout);
+       	if (0 > res) {
+        	perror("select:");
+       		syslog(LOG_ERR, "select failed due to following reasons\n: %s\n", strerror(errno));
+	        continue;
+		}
+//		printf(".................\n");
+
+		do {
+	       	res = read(FD,&ch,1);
+	       	if(res <= 0) {
+				//perror("read:");
+		        break;
+		    }
+
+			if (PktStartRecd) {
+				if ((i == 1) && (ch == START_BYTE)) {
+					continue;
+				}
+           		// Reading data from the Port
+				DataMsg.DataBuffer[i++] = ch;
+
+				if (ch == STOP_BYTE) {
+      		        printf("\nData Recd is: ");
+        	        for (j=0; j < i; j++)
+                	{
+			            printf("\t%x ",DataMsg.DataBuffer[j]);
+	                }
+	                printf("\n");
+       				WSNDecoderQueueId = Get_WSN_Decoder_Queue_Id();
+
+					// TimeStamping the Pkt on the Gateway
+	                // Adding the DataBuffer to the WSN Decoder Queue
+					//TimeStamp = (time_t*)&DataMsg.DataBuffer[MAX_BUFF_SIZE - 4];
+					//time(TimeStamp);
+	                Write_Queue(WSNDecoderQueueId, &DataMsg);
+
+					PktStartRecd = 0;
+					i = 0;
+
+					printf("+++++++++++++++++\n");
+				}
+
+			} else {
+				if (ch == START_BYTE) {
+	       			//syslog(LOG_DEBUG, "started receiving data\n");
+					//printf("Res: %d\t ch: 0X%x\n", res, ch);
+					PktStartRecd = 1;
+	           		DataMsg.DataBuffer[i++] = START_BYTE;
+				} else { printf("%c", ch); }
+			}
+
+		} while(1);
+
+    }
+
+}
+

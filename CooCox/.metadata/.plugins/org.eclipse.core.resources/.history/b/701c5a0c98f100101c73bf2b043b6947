@@ -1,0 +1,13 @@
+void RTC_Timer(void);
+
+int main(void)
+{
+
+    //automatically added by CoIDE
+	RTC_Timer();
+
+	while(1)
+    {
+    }
+}
+

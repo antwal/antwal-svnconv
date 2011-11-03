@@ -1,0 +1,513 @@
+/***************************************************************************//**
+ * @file      : stm_spi_master.c
+ * @brief     : stm32f1xx SPI Interface
+ * @version   : V1.0
+ * @date      : 4. March. 2011
+ * @author    : CooCox
+*******************************************************************************/
+
+#include "stm32f10x.h"
+#include "stm_spi_master.h"
+
+
+#define RCC_PCLK2_72M   (72000000UL)
+#define RCC_PCLK1_36M   (36000000UL)
+
+/** RCC Flag */
+#define RCC_FLAG_HSERDY                  ((ul32)0x20000)
+#define RCC_APB1ENR_SPI3EN               ((uint32_t)0x00008000)  /*!< SPI 3 clock enable */
+
+#define CR_HSEON_Reset            ((uint32_t)0xFFFEFFFF)
+#define CR_HSEON_Set              ((uint32_t)0x00010000)
+#define CR_HSEBYP_Reset           ((uint32_t)0xFFFBFFFF)
+
+#define _RCC_HSE
+
+/***************************************************************************//**
+ * @brief     SPI1 Handler
+ * @param[in] None
+ * @return    None
+*******************************************************************************/
+void SPI1_IRQHandler(void)
+{
+
+
+}
+
+
+/***************************************************************************//**
+ * @brief     SPI2 Handler
+ * @param[in] None
+ * @return    None
+*******************************************************************************/
+void SPI2_IRQHandler(void)
+{
+
+
+}
+
+
+/*****************************************************************************//**
+ * @brief     Setup SPI clock rate
+ * @param[in] SPIx :select the spix, should be:
+ * 								-SPI1
+ * 								-SPI2
+ * 								-SPI3
+ * @param[in] rate : Clock rate, should be:
+ * 								-SPI_BaudRatePrescaler_2
+ * 								-SPI_BaudRatePrescaler_4
+ * 								-SPI_BaudRatePrescaler_8
+ * 								-SPI_BaudRatePrescaler_16
+ * 								-SPI_BaudRatePrescaler_32
+ * 								-SPI_BaudRatePrescaler_64
+ * 								-SPI_BaudRatePrescaler_128
+ * 								-SPI_BaudRatePrescaler_256
+ * @return    Previous clock rate
+*******************************************************************************/
+static uint32_t STM32_SPI_SetRate (SPI_TypeDef * SPIx,uint32_t rate)
+{
+	uint32_t spi_clk_bak;
+	uint32_t prescale;
+	if(SPIx == SPI1 )
+	{
+		prescale = (SPI1->CR1 & SPI_CR1_BR)>>3;
+		spi_clk_bak = RCC_PCLK2_72M / (2 << prescale );
+
+	}
+	else if(SPIx == SPI2 )
+	{
+		prescale = (SPI2->CR1 & SPI_CR1_BR)>>3;
+		spi_clk_bak = RCC_PCLK1_36M / (2 << prescale );
+	}
+	switch(rate)
+	{
+		case SPI_BaudRatePrescaler_2 :
+			SPIx->CR1 &=0xFFC7;
+			break;
+		case SPI_BaudRatePrescaler_4 :
+			SPIx->CR1 &=0xFFCF;
+			SPIx->CR1 |=0x0008;
+			break;
+		case SPI_BaudRatePrescaler_8 :
+			SPIx->CR1 &=0xFFC7;
+			SPIx->CR1 |=0x0010;
+			break;
+		case SPI_BaudRatePrescaler_16 :
+			SPIx->CR1 &=0xFFC7;
+			SPIx->CR1 |=0x0018;
+			break;
+		case SPI_BaudRatePrescaler_32 :
+			SPIx->CR1 &=0xFFC7;
+			SPIx->CR1 |=0x0020;
+			break;
+		case SPI_BaudRatePrescaler_64 :
+			SPIx->CR1 &=0xFFC7;
+			SPIx->CR1 |=0x0028;
+			break;
+		case SPI_BaudRatePrescaler_128 :
+			SPIx->CR1 &=0xFFC7;
+			SPIx->CR1 |=0x0030;
+			break;
+		case SPI_BaudRatePrescaler_256 :
+			SPIx->CR1 &=0xFFC7;
+			SPIx->CR1 |=0x0038;
+			break;
+		default: break;
+	}
+	return spi_clk_bak;
+}
+
+
+/***************************************************************************//**
+ * @brief     Initializes the SPIx peripheral
+ * @param[in] SPIx :select the SPIx, should be:
+ * 								-SPI1
+ * 								-SPI2
+ * 								-SPI3
+ * @param[in] mode : SPI transmission mode, should be:
+ * 								-COX_SPI_MODE0
+ * 								-COX_SPI_MODE1
+ * 								-COX_SPI_MODE2
+ * 								-COX_SPI_MODE3
+ * @param[in] rate : Clock rate should be:
+ * 								-SPI_BaudRatePrescaler_2
+ * 								-SPI_BaudRatePrescaler_4
+ * 								-SPI_BaudRatePrescaler_8
+ * 								-SPI_BaudRatePrescaler_16
+ * 								-SPI_BaudRatePrescaler_32
+ * 								-SPI_BaudRatePrescaler_64
+ * 								-SPI_BaudRatePrescaler_128
+ * 								-SPI_BaudRatePrescaler_256
+ * @return    Result, should be:
+ *             -COX_SUCCESS
+ *             -COX_ERROR
+*******************************************************************************/
+static COX_Status STM32_SPI_Init (SPI_TypeDef * SPIx, uint8_t mode,  uint32_t rate)
+{
+	uint32_t i32TimeOut;
+
+	/* Initializes pins */
+	if(SPIx == SPI1 )
+	{
+		/* Enable SPI1 and GPIOA clocks */
+		RCC->APB2ENR |= (RCC_APB2ENR_SPI1EN |RCC_APB2ENR_IOPAEN);
+
+		/* Configure SPI1 pins: NSS, SCK, MISO and MOSI */
+		GPIOA->CRL |= (GPIO_CRL_MODE5 | GPIO_CRL_MODE6 | GPIO_CRL_MODE7 );
+		GPIOA->CRL &= 0x333FFFFF;
+		GPIOA->CRL |= (GPIO_CRL_CNF5_1 | GPIO_CRL_CNF6_1 | GPIO_CRL_CNF7_1);
+	}
+	else if(SPIx == SPI2)
+	{
+		/* Enable SPI2 and GPIOB clocks */
+		RCC->APB1ENR |= RCC_APB1ENR_SPI2EN;
+		RCC->APB2ENR |= RCC_APB2ENR_IOPBEN;
+
+		/* Configure SPI2 pins: NSS, SCK, MISO and MOSI */
+		GPIOB->CRH |= (GPIO_CRH_MODE13 | GPIO_CRH_MODE14 | GPIO_CRH_MODE15 );
+		GPIOB->CRH &= 0x333FFFFF;
+		GPIOB->CRH |= (GPIO_CRH_CNF13_1 | GPIO_CRH_CNF14_1 | GPIO_CRH_CNF15_1);
+	}
+	else if(SPIx == SPI3)
+	{
+		/* Enable SPI3 and GPIOB clocks */
+		RCC->APB1ENR |= RCC_APB1ENR_SPI3EN ;
+		RCC->APB2ENR |= RCC_APB2ENR_IOPBEN;
+
+		/* Configure SPI3 pins: NSS, SCK, MISO and MOSI */
+		GPIOB->CRL |= (GPIO_CRL_MODE3 | GPIO_CRL_MODE4 | GPIO_CRL_MODE5 );
+		GPIOB->CRL &= 0xFF333FFF;
+		GPIOB->CRL |= (GPIO_CRL_CNF3_1 | GPIO_CRL_CNF4_1 | GPIO_CRL_CNF5_1);
+	}
+
+	/*  Set clock rate for SPI peripheral */
+	STM32_SPI_SetRate(SPIx,rate);
+
+	/* Disable SPIx  */
+	SPIx->CR1 &= 0xFFBF;
+
+	/* Mode select */
+	if(mode == COX_SPI_MODE0)
+	{
+		SPIx->CR1 &= ~SPI_CR1_CPHA;
+		SPIx->CR1 &= ~SPI_CR1_CPOL;
+	}
+	else if(mode == COX_SPI_MODE1)
+	{
+		SPIx->CR1 |= SPI_CR1_CPHA;
+		SPIx->CR1 &= ~SPI_CR1_CPOL;
+	}
+	else if(mode == COX_SPI_MODE2)
+	{
+		SPIx->CR1 &= ~SPI_CR1_CPHA;
+		SPIx->CR1 |= SPI_CR1_CPOL;
+	}
+	else
+	{
+		SPIx->CR1 |= SPI_CR1_CPHA;
+		SPIx->CR1 |= SPI_CR1_CPOL;
+	}
+
+
+	if(SPIx == SPI1 )
+	{
+		/* transmits  NSS   */
+		SPI1->CR1 |= 0x200;
+		/* transmits  NSS   */
+		SPI1->CR1 |= 0x100;
+
+		/* SPI Master Service configuration */
+		SPI1->CR1 |= SPI_CR1_MSTR ;
+	}
+	else if(SPIx == SPI2 )
+	{
+		/* transmits  NSS   */
+		SPI2->CR1 |= 0x200;
+		/* transmits  NSS   */
+		SPI1->CR1 |= 0x100;
+
+		/* SPI Slave Service configuration */
+		SPI2->CR1 &= 0xFFFB ;
+
+	}
+  
+	/* Enable SPIx  */
+	SPIx->CR1 |= SPI_CR1_SPE ;
+
+	/* Enable SPIx Tx buffer empty Interrupt */
+	//SPIx->CR2 |= 0x80;
+
+	/* Enable SPIx Rx buffer empty Interrupt */
+	//SPIx->CR2 |= 0x40;
+
+	/* Enable SPIx Error Interrupt */
+	//SPIx->CR2 |= 0x20;
+
+	/*if(SPIx == SPI1 )
+		NVIC_EnableIRQ(SPI1_IRQn);
+	else if(SPIx == SPI2 )
+		NVIC_EnableIRQ(SPI2_IRQn);
+*/
+	/* Check busy*/
+	i32TimeOut = 0x10000;
+	while((SPIx->SR & SPI_SR_BSY) != 0)
+	{
+		i32TimeOut--;
+		if(i32TimeOut <= 0)
+			return COX_ERROR;
+	}
+	return COX_SUCCESS;
+}
+
+
+/*****************************************************************************//**
+ * @brief     Read write a data
+ * @param[in] SPIx :select the spi, should be:
+ * 								-SPI1
+ * 								-SPI2
+ * 								-SPI3
+ * @param[in] The data to Read write
+ * @return    Data received
+*******************************************************************************/
+static uint32_t STM32_SPI_ReadWrite (SPI_TypeDef * SPIx,uint32_t send_data)
+{
+	uint32_t read_data;
+
+	/* Check busy*/
+	while((SPIx->SR & SPI_SR_BSY) != 0);
+
+	/* Loop while TX buffer is  empty */
+	while((SPIx->SR & SPI_SR_TXE) == 0);
+
+	/* Send data through the SPIx peripheral */
+	SPIx->DR = send_data;
+
+	/* Check busy*/
+	while((SPIx->SR & SPI_SR_BSY) != 0);
+	/* Loop while RX buffer is not empty */
+	while((SPIx->SR & SPI_SR_RXNE )== 0);
+	/* Return the data read from the SPI bus */
+	read_data = SPIx->DR ;
+	printf("read=0x%x\t");
+	return read_data;
+}
+
+
+/*****************************************************************************//**
+ * @brief     Transmit a block data through SPI peripheral
+ * @param[in] eSpiPort :select the spi, should be:
+ * 								-SPI1
+ * 								-SPI2
+ * 								-SPI3
+ * @param[in] wbuf : Pointer to transmit data
+ * @param[in] wlen : Length of transfer data
+ * @return    Actual Data length has been transferred
+*******************************************************************************/
+static uint32_t STM32_SPI_Write (SPI_TypeDef * SPIx,const void *wbuf, uint32_t wlen)
+{
+	uint32_t i;
+	uint8_t data_size;
+
+	/* 8bits or 16bits */
+	if((SPIx->CR1 & SPI_CR1_DFF) == 0)
+		data_size = 8;
+	else
+		data_size = 16;
+
+	for(i=0; i<wlen; i++) {
+		if(data_size == 8)
+			STM32_SPI_ReadWrite(SPIx, ((uint8_t *)wbuf)[i]);
+		else
+			STM32_SPI_ReadWrite(SPIx, ((uint16_t *)wbuf)[i]);
+	}
+	return wlen;
+}
+
+
+/*****************************************************************************//**
+ * @brief     Receive a block data from SPI peripheral
+ * @param[in] eSpiPort :select the spi, should be:
+ * 								-SPI1
+ * 								-SPI2
+ * 								-SPI3
+ * @param[in] rbuf : Pointer to receive data
+ * @param[in] wlen : Length of transfer data
+ * @return    Actual Data length has been received
+*******************************************************************************/
+static uint32_t STM32_SPI_Read (SPI_TypeDef * SPIx,void *rbuf, uint32_t rlen)
+{
+	uint32_t i;
+	uint8_t data_size;
+
+	/* 8bits or 16bits */
+	if((SPIx->CR1 & SPI_CR1_DFF) == 0)
+		data_size = 8;
+	else data_size = 16;
+
+	for(i=0; i<rlen; i++) {
+		if(data_size == 8)
+			((uint8_t *)rbuf)[i] = STM32_SPI_ReadWrite(SPIx, 0xFF);
+		else
+			((uint16_t *)rbuf)[i] = STM32_SPI_ReadWrite(SPIx, 0xFFFF);
+	}
+
+  return rlen;
+}
+
+
+/*****************************************************************************//**
+ * @brief     Configure the SPI peripheral
+ * @param[in] eSpiPort :select the spi, should be:
+ * 								-SPI1
+ * 								-SPI2
+ * 								-SPI3
+ * @param[in] index : Specify the option, should be:
+ * 							  	COX_SPI_CFG_MODE  = 0,  < SPI mode
+ *								COX_SPI_CFG_RATE  = 1,  < SPI clock rate
+ * 								COX_SPI_CFG_BITS  = 2,  < The number of bits per transfer
+ * 								COX_SPI_CFG_FSB   = 3,  < Data transfer order
+ * @param[in] arg : Argument of the specified option
+ * @return    Result, may be :
+ *              -COX_ERROR £ºerror occurred, parameter is not supported
+ *              -COX_SUCCESS
+*********************************************************************************/
+static COX_Status STM32_SPI_Cfg (SPI_TypeDef * SPIx, uint8_t index, uint32_t arg, uint32_t *pre_arg)
+{
+	COX_Status flag = COX_ERROR;
+	uint32_t arg_bak;
+
+	switch(index) {
+	case COX_SPI_CFG_MODE:
+		/*  Define SPIx different Mode           */
+
+		/* Disable SPIx  */
+		SPIx->CR1 &= 0xFFBF;
+		if(arg == COX_SPI_MODE0)
+		{
+			SPIx->CR1 &= ~SPI_CR1_CPHA;
+			SPIx->CR1 &= ~SPI_CR1_CPOL;
+		}
+	  	else if(arg == COX_SPI_MODE1)
+	  	{
+	  		SPIx->CR1 |= SPI_CR1_CPHA;
+	  		SPIx->CR1 &= ~SPI_CR1_CPOL;
+	  	}
+	  	else if(arg == COX_SPI_MODE2)
+	  	{
+	  		SPIx->CR1 &= ~SPI_CR1_CPHA;
+	  		SPIx->CR1 |= SPI_CR1_CPOL;
+	  	}
+	  	else
+	  	{
+	  		SPIx->CR1 |= SPI_CR1_CPHA;
+	  		SPIx->CR1 |= SPI_CR1_CPOL;
+	  	}
+		/* Enable SPIx  */
+		SPIx->CR1 |= SPI_CR1_SPE ;
+		flag  = COX_SUCCESS;
+		break;
+
+	case COX_SPI_CFG_RATE:
+
+		/*  config  SPIx Baudrate           */
+		arg_bak = STM32_SPI_SetRate(SPIx,arg);
+		flag  = COX_SUCCESS;
+		break;
+
+	case COX_SPI_CFG_BITS:
+
+		/*  Define SPIx Data frame length   */
+		if(arg == 8) {
+			SPIx->CR1 &= ~SPI_CR1_DFF;
+		}
+		else if(arg == 16) {
+			SPIx->CR1 |= SPI_CR1_DFF;
+		}
+		flag  = COX_SUCCESS;
+		break;
+
+	case COX_SPI_CFG_FSB:
+
+		/*  Define SPIx data frame format ,LSB or MSB*/
+		if(arg == COX_MSPI_FSB_MSB)
+		{
+			SPIx->CR1 &= ~SPI_CR1_LSBFIRST;
+		}
+		else if(COX_MSPI_FSB_LSB)
+		{
+			SPIx->CR1 |= SPI_CR1_LSBFIRST;
+		}
+		flag  = COX_SUCCESS;
+		break;
+
+	default: break;
+	}
+	if((flag == COX_SUCCESS) && (pre_arg != COX_NULL))
+	{
+		pre_arg = &arg_bak;
+	}
+ 	return flag;
+}
+
+
+static COX_Status STM32_SPI1_Init (uint8_t mode,  uint32_t rate)   { return STM32_SPI_Init(SPI1, mode, rate);  }
+static COX_Status STM32_SPI2_Init (uint8_t mode,  uint32_t rate)   { return STM32_SPI_Init(SPI2, mode, rate);  }
+static COX_Status STM32_SPI3_Init (uint8_t mode,  uint32_t rate)   { return STM32_SPI_Init(SPI3, mode, rate);  }
+
+static uint32_t STM32_SPI1_ReadWrite(uint32_t send_data) { return STM32_SPI_ReadWrite(SPI1, send_data); }
+static uint32_t STM32_SPI2_ReadWrite(uint32_t send_data) { return STM32_SPI_ReadWrite(SPI2, send_data); }
+static uint32_t STM32_SPI3_ReadWrite(uint32_t send_data) { return STM32_SPI_ReadWrite(SPI3, send_data); }
+
+
+static uint32_t STM32_SPI1_Write(const void *wbuf, uint32_t wlen ) { return STM32_SPI_Write(SPI1, wbuf ,wlen); }
+static uint32_t STM32_SPI2_Write(const void *wbuf, uint32_t wlen ) { return STM32_SPI_Write(SPI2, wbuf ,wlen); }
+static uint32_t STM32_SPI3_Write(const void *wbuf, uint32_t wlen ) { return STM32_SPI_Write(SPI3, wbuf ,wlen); }
+
+
+static uint32_t STM32_SPI1_Read(void *rbuf, uint32_t rlen ) { return STM32_SPI_Read(SPI1,rbuf, rlen); }
+static uint32_t STM32_SPI2_Read(void *rbuf, uint32_t rlen ) { return STM32_SPI_Read(SPI2,rbuf, rlen); }
+static uint32_t STM32_SPI3_Read(void *rbuf, uint32_t rlen ) { return STM32_SPI_Read(SPI3,rbuf, rlen); }
+
+
+static COX_Status STM32_SPI1_Cfg(uint8_t index, uint32_t arg, uint32_t *pre_arg) { return STM32_SPI_Cfg(SPI1, index, arg, pre_arg); }
+static COX_Status STM32_SPI2_Cfg(uint8_t index, uint32_t arg, uint32_t *pre_arg) { return STM32_SPI_Cfg(SPI2, index, arg, pre_arg); }
+static COX_Status STM32_SPI3_Cfg(uint8_t index, uint32_t arg, uint32_t *pre_arg) { return STM32_SPI_Cfg(SPI3, index, arg, pre_arg); }
+
+
+/*****************************************************************************//**
+ * Define STM32xx CoX SPI Peripheral Interface based on SPI1
+*******************************************************************************/
+COX_SPI_PI pi_spi1 =
+{
+	STM32_SPI1_Init,
+	STM32_SPI1_Write,
+	STM32_SPI1_Read,
+	STM32_SPI1_ReadWrite,
+	STM32_SPI1_Cfg,
+};
+
+
+/*****************************************************************************//**
+ * Define STM32xx CoX SPI Peripheral Interface based on SPI2
+*******************************************************************************/
+COX_SPI_PI pi_spi2 =
+{
+	STM32_SPI2_Init,
+	STM32_SPI2_Write,
+	STM32_SPI2_Read,
+	STM32_SPI2_ReadWrite,
+	STM32_SPI2_Cfg,
+};
+
+
+/*****************************************************************************//**
+ * Define STM32xx CoX SPI Peripheral Interface based on SPI3
+*******************************************************************************/
+COX_SPI_PI pi_spi3 =
+{
+	STM32_SPI3_Init,
+	STM32_SPI3_Write,
+	STM32_SPI3_Read,
+	STM32_SPI3_ReadWrite,
+	STM32_SPI3_Cfg,
+};

@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="arm-none-eabi-gcc noversion nomachine -mcpu=cortex-m3 -mthumb -Wall -ffunction-sections -O0 -g -c -DSTM32F10X_MD_VL -DUSE_STDPERIPH_DRIVER -D__ASSEMBLY__ -DSTM32F100RB -I. -ICOX -ICOX\COX_Peripheral -Icmsis_boot -Icmsis -Istm_lib -Istm_lib\inc">
+      <target file="startup_stm32f10x_md_vl.o" lastModified="132d4aeaf0c">
+         <source file="..\..\cmsis_boot\startup\startup_stm32f10x_md_vl.c" lastModified="132cf1f98b7"/>
+      </target>
+      <target file="syscalls.o" lastModified="132d4aeb6fd">
+         <source file="..\..\syscalls\syscalls.c" lastModified="132cf200afb"/>
+      </target>
+      <target file="mmc_driver.o" lastModified="132d4aeb85b">
+         <source file="..\..\mmc_driver.c" lastModified="132d491c093"/>
+      </target>
+      <target file="STM32_USART.o" lastModified="132d4aeb309">
+         <source file="..\..\COX\COX_Peripheral\STM32_USART.c" lastModified="132cf1fd654"/>
+      </target>
+      <target file="printf.o" lastModified="132d4aeb59e">
+         <source file="..\..\stdio\printf.c" lastModified="132cf657c5d"/>
+      </target>
+      <target file="core_cm3.o" lastModified="132d4aeb010">
+         <source file="..\..\cmsis\core_cm3.c" lastModified="132cf1f9961"/>
+      </target>
+      <target file="system_stm32f10x.o" lastModified="132d4aeb088">
+         <source file="..\..\cmsis_boot\system_stm32f10x.c" lastModified="132cf1f98cb"/>
+      </target>
+      <target file="stm_spi_master.o" lastModified="132d4aeb4c2">
+         <source file="..\..\COX\COX_Peripheral\stm_spi_master.c" lastModified="132d3b32968"/>
+      </target>
+      <target file="main.o" lastModified="132d4aeb3fa">
+         <source file="..\..\main.c" lastModified="132d49c73e8"/>
+      </target>
+      <target file="stm32f10x_rcc.o" lastModified="132d4aeb67b">
+         <source file="..\..\stm_lib\src\stm32f10x_rcc.c" lastModified="132cf560622"/>
+      </target>
+      <target file="sdcard.o" lastModified="132d4aeb24b">
+         <source file="..\..\sdcard.c" lastModified="132d41e7d32"/>
+      </target>
+      <target file="stm32_pio.o" lastModified="132d4aeaf8e">
+         <source file="..\..\COX\COX_Peripheral\stm32_pio.c" lastModified="132cf1f9c78"/>
+      </target>
+   </processor>
+</history>

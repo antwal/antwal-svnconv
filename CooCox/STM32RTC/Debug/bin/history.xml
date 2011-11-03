@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="4.5.2 -O0 -nostartfiles -Map=STM32RTC.map -mcpu=cortex-m3 -mthumb -LJ:\CoCenter\CooIDE\workspace\STM32RTC --gc-sections -TJ:\CoCenter\CooIDE\workspace\STM32RTC\link.ld -g">
+      <target file="STM32RTC.elf" lastModified="132e3424ccd">
+         <source file="..\obj\stm32f10x_rtc.o" lastModified="132e3424717"/>
+         <source file="..\obj\startup_stm32f10x_md_vl.o" lastModified="132e3424767"/>
+         <source file="..\obj\stm32_pio.o" lastModified="132e3424807"/>
+         <source file="..\obj\core_cm3.o" lastModified="132e3424875"/>
+         <source file="..\obj\system_stm32f10x.o" lastModified="132e34248ed"/>
+         <source file="..\obj\main.o" lastModified="132e342493d"/>
+         <source file="..\obj\printf.o" lastModified="132e34249d4"/>
+         <source file="..\obj\stm32f10x_rcc.o" lastModified="132e3424a7e"/>
+         <source file="..\obj\syscalls.o" lastModified="132e3424aec"/>
+         <source file="..\obj\misc.o" lastModified="132e3424b64"/>
+         <source file="..\obj\RTC_Example.o" lastModified="132e3424bdc"/>
+         <source file="..\obj\stm32_rtc.o" lastModified="132e3424c69"/>
+      </target>
+   </processor>
+</history>

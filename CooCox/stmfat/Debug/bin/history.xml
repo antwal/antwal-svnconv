@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="4.5.2 -O0 -nostartfiles -Map=stmfat.map -mcpu=cortex-m3 -mthumb -LJ:\CoCenter\CooIDE\workspace\stmfat --gc-sections -TJ:\CoCenter\CooIDE\workspace\stmfat\link.ld -g">
+      <target file="stmfat.elf" lastModified="132afe4e13d">
+         <source file="..\obj\iFAT32.o" lastModified="132afe4db4b"/>
+         <source file="..\obj\main.o" lastModified="132afe4db9b"/>
+         <source file="..\obj\simpleread&write!.o" lastModified="132afe4dbff"/>
+         <source file="..\obj\unicodetogb2312.o" lastModified="132afe4dd36"/>
+         <source file="..\obj\iFAT.o" lastModified="132afe4de08"/>
+         <source file="..\obj\syscalls.o" lastModified="132afe4dec6"/>
+         <source file="..\obj\iDisk.o" lastModified="132afe4df3f"/>
+      </target>
+   </processor>
+</history>

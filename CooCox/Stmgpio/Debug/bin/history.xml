@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="4.5.2 -O0 -nostartfiles -Map=Stmgpio.map -mcpu=cortex-m3 -mthumb -LJ:\CoCenter\CooIDE\workspace\Stmgpio --gc-sections -TJ:\CoCenter\CooIDE\workspace\Stmgpio\link.ld -g">
+      <target file="Stmgpio.elf" lastModified="132c8e7b61f">
+         <source file="..\obj\stm32_pio.o" lastModified="132c8e7b05f"/>
+         <source file="..\obj\core_cm3.o" lastModified="132c8e7b0e1"/>
+         <source file="..\obj\system_stm32f10x.o" lastModified="132c8e7b181"/>
+         <source file="..\obj\startup_stm32f10x_md.o" lastModified="132c8e7b1ef"/>
+         <source file="..\obj\stm32f10x_gpio.o" lastModified="132c8e7b2c2"/>
+         <source file="..\obj\main.o" lastModified="132c8e7b312"/>
+         <source file="..\obj\stm32f10x_rcc.o" lastModified="132c8e7b3e4"/>
+         <source file="..\obj\syscalls.o" lastModified="132c8e7b45c"/>
+         <source file="..\obj\GPIO_Example.o" lastModified="132c8e7b4ca"/>
+      </target>
+   </processor>
+</history>

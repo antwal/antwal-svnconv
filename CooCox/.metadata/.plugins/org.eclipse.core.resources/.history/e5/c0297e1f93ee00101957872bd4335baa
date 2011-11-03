@@ -1,0 +1,14 @@
+
+#include "di_msd.h"
+#include "cox_spi.h"
+#include "cox_pio.h"
+
+
+int main(void)
+{
+
+	MSD
+    while(1)
+    {
+    }
+}

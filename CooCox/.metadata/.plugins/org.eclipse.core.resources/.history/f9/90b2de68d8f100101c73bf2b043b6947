@@ -1,0 +1,751 @@
+/***************************************************************************//**
+ * @file      : STM32_USART.c
+ * @brief     : STM32F10x Serial Peripheral Interface
+ * @version   : V1.0
+ * @date      : 17. Feb. 2011
+ * @author    : CooCox
+*******************************************************************************/
+#include "stm32f10x.h"
+#include "STM32_USART.h"
+#include "stm32f10x_rcc.h"
+
+
+static uc8 APBAHBPrescTable[16] = {0, 0, 0, 0, 1, 2, 3, 4, 1, 2, 3, 4, 6, 7, 8, 9};
+static uc8 ADCPrescTable[4] = {2, 4, 6, 8};
+ErrorStatus HSEStartUpStatus;
+
+
+void USART1_IRQHandler(void)
+{
+	//RXNE interrupt occured
+	if(USART1->SR &= 0x20 )
+	{
+		STM_UART_Read(UASRT1, buff, 1);
+	}
+}
+
+/***************************************************************************//**
+ * @Function Name  : GPIO_Init
+ * @Description    : Initializes the GPIOx peripheral according to the specified
+ *                  parameters in the GPIO_InitStruct.
+ * @Input          : - GPIOx: where x can be (A..E) to select the GPIO peripheral.
+ *                  - GPIO_InitStruct: pointer to a GPIO_InitTypeDef structure that
+ *                    contains the configuration information for the specified GPIO
+ *                    peripheral.
+ * @Output         : None
+ * @Return         : None
+*******************************************************************************/
+void STM_GPIO_Init(GPIO_TypeDef* GPIOx, GPIO_InitTypeDef* GPIO_InitStruct)
+{
+	ul32 currentmode = 0x00, currentpin = 0x00, pinpos = 0x00, pos = 0x00;
+	ul32 tmpreg = 0x00, pinmask = 0x00;
+
+
+	/* GPIO Mode Configuration */
+	currentmode = ((ul32)GPIO_InitStruct->GPIO_Mode) & ((ul32)0x0F);
+	if ((((ul32)GPIO_InitStruct->GPIO_Mode) & ((ul32)0x10)) != 0x00)
+	{
+		/* Output mode */
+		currentmode |= (ul32)GPIO_InitStruct->GPIO_Speed;
+	}
+
+	/********************* GPIO CRL Configuration******************** */
+	/* Configure the eight low port pins */
+	if (((ul32)GPIO_InitStruct->GPIO_Pin & ((ul32)0x00FF)) != 0x00)
+	{
+		tmpreg = GPIOx->CRL;
+
+		for (pinpos = 0x00; pinpos < 0x08; pinpos++)
+		{
+			pos = ((ul32)0x01) << pinpos;
+			/* Get the port pins position */
+			currentpin = (GPIO_InitStruct->GPIO_Pin) & pos;
+
+			if (currentpin == pos)
+			{
+				pos = pinpos << 2;
+				/* Clear the corresponding low control register bits */
+				pinmask = ((ul32)0x0F) << pos;
+				tmpreg &= ~pinmask;
+
+				/* Write the mode configuration in the corresponding bits */
+				tmpreg |= (currentmode << pos);
+
+				/* Reset the corresponding ODR bit */
+				if (GPIO_InitStruct->GPIO_Mode == GPIO_Mode_IPD)
+				{
+					GPIOx->BRR = (((ul32)0x01) << pinpos);
+				}
+				/* Set the corresponding ODR bit */
+				if (GPIO_InitStruct->GPIO_Mode == GPIO_Mode_IPU)
+				{
+					GPIOx->BSRR = (((ul32)0x01) << pinpos);
+				}
+			}
+		}
+		GPIOx->CRL = tmpreg;
+		tmpreg = 0;
+	}
+
+	/************************** GPIO CRH Configuration ******************/
+	/* Configure the eight high port pins */
+	if (GPIO_InitStruct->GPIO_Pin > 0x00FF)
+	{
+		tmpreg = GPIOx->CRH;
+		for (pinpos = 0x00; pinpos < 0x08; pinpos++)
+		{
+			pos = (((ul32)0x01) << (pinpos + 0x08));
+			/* Get the port pins position */
+			currentpin = ((GPIO_InitStruct->GPIO_Pin) & pos);
+			if (currentpin == pos)
+			{
+				pos = pinpos << 2;
+				/* Clear the corresponding high control register bits */
+				pinmask = ((ul32)0x0F) << pos;
+				tmpreg &= ~pinmask;
+
+				/* Write the mode configuration in the corresponding bits */
+				tmpreg |= (currentmode << pos);
+
+				/* Reset the corresponding ODR bit */
+				if (GPIO_InitStruct->GPIO_Mode == GPIO_Mode_IPD)
+				{
+					GPIOx->BRR = (((ul32)0x01) << (pinpos + 0x08));
+				}
+				/* Set the corresponding ODR bit */
+				if (GPIO_InitStruct->GPIO_Mode == GPIO_Mode_IPU)
+				{
+					GPIOx->BSRR = (((ul32)0x01) << (pinpos + 0x08));
+				}
+			}
+		}
+		GPIOx->CRH = tmpreg;
+	}
+}
+
+
+/***************************************************************************//**
+ * @brief  Checks whether the specified RCC flag is set or not.
+ * @param  RCC_FLAG: specifies the flag to check.
+ * @Return         : The new state of RCC_FLAG (SET or RESET).
+*******************************************************************************/
+FlagStatus STM_RCC_GetFlagStatus(uint8_t RCC_FLAG)
+{
+	uint32_t tmp = 0;
+	uint32_t statusreg = 0;
+	FlagStatus bitstatus = RESET;
+	/* Get the RCC register index */
+	tmp = RCC_FLAG >> 5;
+	if (tmp == 1)               /* The flag to check is in CR register */
+	{
+		statusreg = RCC->CR;
+	}
+	else if (tmp == 2)          /* The flag to check is in BDCR register */
+	{
+		statusreg = RCC->BDCR;
+	}
+	else                       /* The flag to check is in CSR register */
+	{
+		statusreg = RCC->CSR;
+	}
+	/* Get the flag position */
+	tmp = RCC_FLAG & FLAG_Mask;
+	if ((statusreg & ((uint32_t)1 << tmp)) != (uint32_t)RESET)
+	{
+		bitstatus = SET;
+	}
+	else
+	{
+		bitstatus = RESET;
+	}
+	/* Return the flag status */
+	return bitstatus;
+}
+
+
+/***************************************************************************//**
+  * @brief  Waits for HSE start-up.
+  * @param  None
+  * @return An ErrorStatus enumuration value:
+  * 			- SUCCESS: HSE oscillator is stable and ready to use
+  * 			- ERROR: HSE oscillator not yet ready
+*******************************************************************************/
+ErrorStatus STM_RCC_WaitForHSEStartUp(void)
+{
+	__IO uint32_t StartUpCounter = 0;
+	ErrorStatus status = ERROR;
+	FlagStatus HSEStatus = RESET;
+
+	/* Wait till HSE is ready and if Time out is reached exit */
+	do
+	{
+		HSEStatus = STM_RCC_GetFlagStatus(RCC_FLAG_HSERDY);
+		StartUpCounter++;
+	} while((StartUpCounter != HSEStartUp_TimeOut) && (HSEStatus == RESET));
+
+	if (STM_RCC_GetFlagStatus(RCC_FLAG_HSERDY) != RESET)
+	{
+		status = SUCCESS;
+	}
+	else
+	{
+		status = ERROR;
+	}
+	return (status);
+}
+
+
+/***************************************************************************//**
+ * @Function Name  : RCC_Configuration
+ * @Description    : Configures the different system clocks.
+ * @Input          : None
+ * @Output         : None
+ * @Return         : None
+*******************************************************************************/
+void STM_RCC_Configuration(USART_TypeDef *USARTx)
+{
+		RCC_DeInit ();                    /* RCC system reset(for debug purpose)*/
+	      RCC_HSEConfig (RCC_HSE_ON);       /* Enable HSE                         */
+
+	      /* Wait till HSE is ready                                               */
+	      while (RCC_GetFlagStatus(RCC_FLAG_HSERDY) == RESET);
+
+	      RCC_HCLKConfig   (RCC_SYSCLK_Div1);   /* HCLK   = SYSCLK                */
+	      if(USARTx == USART1){
+	      RCC_PCLK2Config  (RCC_HCLK_Div1);     /* PCLK2  = HCLK                  */
+	      }
+	      else if(USARTx == USART2 || USARTx == USART3){
+	    	  RCC_PCLK1Config  (RCC_HCLK_Div1);     /* PCLK1  = HCLK/2                */
+		 }
+
+	      /* Flash 2 wait state */
+        /* Sets the Latency value */
+   	        FLASH->ACR &= (u32)0x00000038;
+	      	FLASH->ACR |= FLASH_Latency_2;
+
+	      	/* Enable Prefetch Buffer */
+	      	FLASH->ACR &= ACR_PRFTBE_Mask;
+	      	FLASH->ACR |= FLASH_PrefetchBuffer_Enable;
+
+	      /* PLLCLK = 8MHz * 3 = 24 MHz                                           */
+	      RCC_PLLConfig (0x00010000, RCC_PLLMul_3);
+
+	      RCC_PLLCmd (ENABLE);                  /* Enable PLL                     */
+
+	      /* Wait till PLL is ready                                               */
+	      while (RCC_GetFlagStatus(RCC_FLAG_PLLRDY) == RESET);
+
+	      /* Select PLL as system clock source                                    */
+	      RCC_SYSCLKConfig (RCC_SYSCLKSource_PLLCLK);
+
+	      /* Wait till PLL is used as system clock source                         */
+	      while (RCC_GetSYSCLKSource() != 0x08);
+
+	      if(USARTx == USART1){
+	      /* Enable USART1 and GPIOA clock                                        */
+	      RCC_APB2PeriphClockCmd (RCC_APB2Periph_USART1 | RCC_APB2Periph_GPIOA, ENABLE);
+	      }
+	      else if (USARTx == USART2)
+	      {
+	    	  RCC_APB2PeriphClockCmd( RCC_APB2Periph_GPIOA, ENABLE);
+	    	  RCC_APB1PeriphClockCmd (RCC_APB1Periph_USART2 , ENABLE);
+	      }
+	      else if( USARTx == USART3)
+	      {
+	    	  RCC_APB2PeriphClockCmd( RCC_APB2Periph_GPIOB, ENABLE);
+	    	  RCC_APB1PeriphClockCmd (RCC_APB1Periph_USART3, ENABLE);
+	      }
+
+
+}
+
+/***************************************************************************//**
+ * @Function Name  : RCC_GetClocksFreq
+ * @Description    : Returns the frequencies of different on chip clocks.
+ * @Input          : - RCC_Clocks: pointer to a RCC_ClocksTypeDef structure which
+ *                    will hold the clocks frequencies.
+ * @Output         : None
+ * @Return         : None
+*******************************************************************************/
+void STM_RCC_GetClockFreq(RCC_ClockTypeDef* RCC_Clocks)
+{
+	u32 tmp = 0, pllmull = 0, pllsource = 0, presc = 0;
+	/* Get SYSCLK source */
+	tmp = RCC->CFGR & CFGR_SWS_Mask;
+
+	switch (tmp)
+	{
+		case 0x00:  /* HSI used as system clock */
+	      RCC_Clocks->SYSCLK_Frequency = HSI_Value;
+	      break;
+
+		case 0x04:  /* HSE used as system clock */
+	      RCC_Clocks->SYSCLK_Frequency = HSE_Value;
+	      break;
+
+		case 0x08:  /* PLL used as system clock */
+	      /* Get PLL clock source and multiplication factor */
+	      pllmull = RCC->CFGR & CFGR_PLLMull_Mask;
+	      pllmull = ( pllmull >> 18) + 2;
+	      pllsource = RCC->CFGR & CFGR_PLLSRC_Mask;
+	      if (pllsource == 0x00)
+	      {
+	    	/* HSI oscillator clock divided by 2 selected as PLL clock entry */
+	        RCC_Clocks->SYSCLK_Frequency = (HSI_Value >> 1) * pllmull;
+	      }
+	      else
+	      {
+	    	/* HSE selected as PLL clock entry */
+	        if ((RCC->CFGR & CFGR_PLLXTPRE_Mask) != (u32)RESET)
+	        {
+	          /* HSE oscillator clock divided by 2 */
+	          RCC_Clocks->SYSCLK_Frequency = (HSE_Value >> 1) * pllmull;
+	        }
+	        else
+	        {
+	          RCC_Clocks->SYSCLK_Frequency = HSE_Value * pllmull;
+	        }
+	      }
+	      break;
+	    default:
+	      RCC_Clocks->SYSCLK_Frequency = HSI_Value;
+	      break;
+	  }
+
+	/* Compute HCLK, PCLK1, PCLK2 and ADCCLK clocks frequencies */
+	/* Get HCLK prescaler */
+	tmp = RCC->CFGR & CFGR_HPRE_Set_Mask;
+	tmp = tmp >> 4;
+	presc = APBAHBPrescTable[tmp];
+
+	/* HCLK clock frequency */
+	RCC_Clocks->HCLK_Frequency = RCC_Clocks->SYSCLK_Frequency >> presc;
+
+	/* Get PCLK1 prescaler */
+	tmp = RCC->CFGR & CFGR_PPRE1_Set_Mask;
+	tmp = tmp >> 8;
+	presc = APBAHBPrescTable[tmp];
+
+	/* PCLK1 clock frequency */
+	RCC_Clocks->PCLK1_Frequency = RCC_Clocks->HCLK_Frequency >> presc;
+
+	/* Get PCLK2 prescaler */
+	tmp = RCC->CFGR & CFGR_PPRE2_Set_Mask;
+	tmp = tmp >> 11;
+	presc = APBAHBPrescTable[tmp];
+
+	/* PCLK2 clock frequency */
+	RCC_Clocks->PCLK2_Frequency = RCC_Clocks->HCLK_Frequency >> presc;
+
+	/* Get ADCCLK prescaler */
+	tmp = RCC->CFGR & CFGR_ADCPRE_Set_Mask;
+	tmp = tmp >> 14;
+	presc = ADCPrescTable[tmp];
+
+	/* ADCCLK clock frequency */
+	RCC_Clocks->ADCCLK_Frequency = RCC_Clocks->PCLK2_Frequency / presc;
+}
+
+
+/***************************************************************************//**
+ * @brief     Initializes the USARTx peripheral
+ * @param[in] USARTx : UART peripheral selected, should be
+ *                    UART1, UART2, UART3
+ * @param[in] rate  : Baudrate
+ * @return    COX_SUCCESS or COX_ERROR
+*******************************************************************************/
+static COX_Status STM_UART_Init (USART_TypeDef *USARTx, uint32_t baudrate)
+{
+	ul32 tmpreg = 0x00, apbclock = 0x00;
+	ul32 integerdivider = 0x00;
+	ul32 fractionaldivider = 0x00;
+	RCC_ClockTypeDef RCC_ClocksStatus;
+	USART_InitTypeDef USART_InitStructure;
+	GPIO_InitTypeDef GPIO_InitStructure;
+
+	//STM_RCC_Configuration();			// This is not required because system init is already doing the same
+	// RCC Peripheral clock configuration
+	if(USARTx == USART1){
+		/* Enable USART1 and GPIOA clock                                        */
+		RCC_APB2PeriphClockCmd (RCC_APB2Periph_USART1 | RCC_APB2Periph_GPIOA, ENABLE);
+		}
+		else if (USARTx == USART2)
+		{
+			  RCC_APB2PeriphClockCmd( RCC_APB2Periph_GPIOA, ENABLE);
+		  	  RCC_APB1PeriphClockCmd (RCC_APB1Periph_USART2 , ENABLE);
+		}
+		else if( USARTx == USART3)
+		{
+		   	  RCC_APB2PeriphClockCmd( RCC_APB2Periph_GPIOB, ENABLE);
+		   	  RCC_APB1PeriphClockCmd (RCC_APB1Periph_USART3, ENABLE);
+		}
+
+		if(USARTx == USART1)
+	{
+	  /* Enable USART1 and GPIOA clock */
+	  RCC->APB2ENR |= (RCC_APB2Periph_USART1 | RCC_APB2Periph_GPIOA);
+
+	  /* Configure USART1 Tx (PA.09) as alternate function push-pull */
+	  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;
+	  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+	  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	  STM_GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+	  /* Configure USART1 Rx (PA.10) as input floating */
+	  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
+	  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+	  STM_GPIO_Init(GPIOA, &GPIO_InitStructure);
+	}
+	else if(USARTx == USART2)
+	{
+	  /* Enable USART2 and GPIOA clock */
+	  RCC->APB1ENR |= (RCC_APB1Periph_USART2 | RCC_APB2Periph_GPIOA);
+
+	  /* Configure USART2 Tx (PA.02) as alternate function push-pull */
+	  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
+	  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+	  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	  STM_GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+	  /* Configure USART2 Rx (PA.3) as input floating */
+	  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
+	  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+	  STM_GPIO_Init(GPIOA, &GPIO_InitStructure);
+	}
+	else if(USARTx == USART3)
+	{
+	  /* Enable USART3 and GPIOB clock */
+	  RCC->APB1ENR |= (RCC_APB1Periph_USART3 | RCC_APB2Periph_GPIOB);
+
+	  /* Configure USART3 Tx (PB.10) as alternate function push-pull */
+	  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
+	  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+	  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	  STM_GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+	  /* Configure USART3 Rx (PB.11) as input floating */
+	  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
+	  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+	  STM_GPIO_Init(GPIOB, &GPIO_InitStructure);
+	}
+
+	/** USARTx configuration */
+	USART_InitStructure.USART_BaudRate = baudrate;
+	USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+	USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
+	USART_InitStructure.USART_Clock = USART_Clock_Disable;
+	USART_InitStructure.USART_CPOL = USART_CPOL_Low;
+	USART_InitStructure.USART_CPHA = USART_CPHA_2Edge;
+	USART_InitStructure.USART_LastBit = USART_LastBit_Disable;
+
+	/*  USART CR2 Configuration *************************************************/
+	/* Configure the USART  Clock, CPOL, CPHA and LastBit */
+	/* Set CPOL bit according to USART_CPOL value */
+	if(USART_InitStructure.USART_CPOL)
+		USARTx->CR2 |=0x400;
+	/* Set Clock bit according to USART_Clock value */
+	if(USART_InitStructure.USART_Clock)
+		USARTx->CR2 |=0x800;
+	/* Set LBCL bit according to USART_LastBit value */
+	if(USART_InitStructure.USART_LastBit)
+		USARTx->CR2 |=0x100;
+	/* Set CPHA bit according to USART_CPHA value */
+	if(USART_InitStructure.USART_CPHA)
+		USARTx->CR2 |=0x200;
+
+	/*  USART CR1 Configuration *********************************************/
+	/* Configure the USART  mode  */
+	/* Set TE and RE bits according to USART_Mode value */
+	if(USART_InitStructure.USART_Mode == USART_Mode_Rx)
+		USARTx->CR1 |=0x04;
+	else if(USART_InitStructure.USART_Mode == USART_Mode_Tx)
+		USARTx->CR1 |=0x08;
+
+	/*  USART CR3 Configuration **********************************************/
+	/* Configure the USART HFC */
+	tmpreg = 0x00;
+	tmpreg = USARTx->CR3;
+	/* Clear CTSE and RTSE bits */
+	tmpreg &= CR3_CLEAR_Mask;
+	/* Set CTSE and RTSE bits according to USART_HardwareFlowControl value */
+	tmpreg |= USART_InitStructure.USART_HardwareFlowControl;
+	/* Write to USART CR3 */
+	USARTx->CR3 = (us16)tmpreg;
+
+	/*  USART BRR Configuration *********************************************/
+	tmpreg = 0x00;
+	/* Configure the USART Baud Rate *********/
+	STM_RCC_GetClockFreq(&RCC_ClocksStatus);
+	if ((*(ul32*)&USARTx) == USART1_BASE)
+	{
+		apbclock = RCC_ClocksStatus.PCLK2_Frequency;
+	}
+	else
+	{
+		apbclock = RCC_ClocksStatus.PCLK1_Frequency;
+	}
+	/* Determine the integer part */
+	integerdivider = ((0x19 * apbclock) / (0x04 * (USART_InitStructure.USART_BaudRate)));
+	tmpreg = (integerdivider / 0x64) << 0x04;
+	/* Determine the fractional part */
+	fractionaldivider = integerdivider - (0x64 * (tmpreg >> 0x04));
+	tmpreg |= ((((fractionaldivider * 0x10) + 0x32) / 0x64)) & ((u8)0x0F);
+	/* Write to USART BRR */
+	USARTx->BRR = (us16)tmpreg;
+    /* Enable the selected USART by setting the RUN bit in the CR1 register */
+    USARTx->CR1 |= CR1_RUN_Set;
+
+
+    /* Enable the selected USART Transmitter and Receiver data */
+    USARTx->CR1 |= 0xC;
+	return COX_SUCCESS;
+}
+
+
+/***************************************************************************//**
+ * @brief     Send a block of data via UART peripheral
+ * @param[in] USARTx : USART peripheral selected, should be
+ *                    UART1, UART2, UART3
+ * @param[in] wbuf  : Pointer to Transmit buffer
+ * @param[in] wlen  : Length of transmit buffer
+ * @return    Number of bytes sent
+*******************************************************************************/
+static uint32_t STM_UART_Write (USART_TypeDef *USARTx, const void* wbuf, uint32_t wlen)
+{
+	uint32_t  u32Count;
+	const uint8_t *tx_buf = wbuf;
+
+	for(u32Count=0; u32Count<wlen; u32Count++) {
+		/* Transmit Data */
+		USARTx->DR =  (tx_buf[u32Count] & (us16)0x01FF);
+		while (!(USARTx->SR & 0x0080));
+	}
+	return wlen;
+}
+
+
+
+/***************************************************************************//**
+ * @brief     Receive a block of data via UART peripheral
+ * @param[in] USARTx : UART peripheral selected, should be
+ *                    USART1, USART2, USART3
+ * @param[in] wbuf  : Pointer to receive buffer
+ * @param[in] wlen  : Length of receive buffer
+ * @return    Number of bytes received
+*******************************************************************************/
+static uint32_t STM_UART_Read (USART_TypeDef *USARTx, void *rbuf, uint32_t rlen)
+{
+	uint32_t  u32Count;
+	uint16_t *rx_buf = rbuf;
+	for (u32Count=0; u32Count < rlen; u32Count++)
+	{
+	    rx_buf[u32Count] = (USARTx->DR & (us16)0x01FF); /* Get Data from UART RX  */
+	}
+	return rlen;
+}
+
+
+/***************************************************************************//**
+ * @brief     Configurate the baudrate
+ * @param[in] USARTx : USART peripheral selected, should be
+ *                    USART1, USART2, USART3
+ * @param[in] rate  : Baudrate
+ * @return    Previous baudrate
+*******************************************************************************/
+static uint32_t STM_UART_SetRate(USART_TypeDef *USARTx, uint32_t baudrate)
+{
+	ul32 tmpreg = 0x00, apbclock = 0x00;
+	ul32 integerdivider = 0x00;
+	ul32 fractionaldivider = 0x00;
+	/*  USART BRR Configuration *********************************************/
+	tmpreg = 0x00;
+	RCC_ClockTypeDef RCC_ClocksStatus;
+	/* Configure the USART Baud Rate *********/
+	STM_RCC_GetClockFreq(&RCC_ClocksStatus);
+	if ((*(ul32*)&USARTx) == USART1_BASE)
+	{
+		apbclock = RCC_ClocksStatus.PCLK2_Frequency;
+	}
+	else
+	{
+		apbclock = RCC_ClocksStatus.PCLK1_Frequency;
+	}
+
+	/* Determine the integer part */
+	integerdivider = ((0x19 * apbclock) / (0x04 * baudrate));
+	tmpreg = (integerdivider / 0x64) << 0x04;
+
+	/* Determine the fractional part */
+	fractionaldivider = integerdivider - (0x64 * (tmpreg >> 0x04));
+	tmpreg |= ((((fractionaldivider * 0x10) + 0x32) / 0x64)) & ((u8)0x0F);
+
+	/* Write to USART BRR */
+	USARTx->BRR = (us16)tmpreg;
+	return 0;
+}
+
+
+/***************************************************************************//**
+ * @brief     Configure the USARTx peripheral
+ * @param[in] USARTx : USART peripheral selected, should be
+ *                    USART1, USART2, USART3
+ * @param[in] index : Configuration index, it should be :
+ *                      -COX_SERIAL_CFG_RATE : Set baudrate
+ *                      -COX_SERIAL_CFG_BITS : Number of data bits, arg should be
+ *                         @8 : 8 bit data mode
+ *                         @9 : 9 bit data mode (default)
+ *                      -COX_SERIAL_CFG_STOP_BITS : Number of stop bits, arg should be
+ *                         @COX_SERIAL_STOPBIT_1 : 1 Stop Bits (default)
+ *                         @COX_SERIAL_STOPBIT_1_5: 1.5 Stop Bits
+ *                         @COX_SERIAL_STOPBIT_2 : 1 Stop Bits
+ *                         @COX_SERIAL_STOPBIT_0_5 : 0.5 Stop Bits
+ *                      -COX_SERIAL_CFG_PARITY : Parity selection, arg should be
+ *                         @COX_SERIAL_PARITY_NONE : No parity (default)
+ *                         @COX_SERIAL_PARITY_ODD  : Odd parity
+ *                         @COX_SERIAL_PARITY_EVEN : Even parity
+ * @param[in] arg : Configuration argument
+ * @param[in] pre_arg : Return previous configuration
+ * @return    COX_SUCCESS or COX_ERROR
+*******************************************************************************/
+static COX_Status STM_UART_Cfg (USART_TypeDef *USARTx, uint8_t index, uint32_t arg, uint32_t *pre_arg)
+{
+	COX_Status err = COX_ERROR;
+	uint32_t arg_bak;
+	switch(index) {
+		/* Baudrate */
+		case COX_SERIAL_CFG_RATE:
+		    arg_bak = STM_UART_SetRate(USARTx, arg);
+		    err = COX_SUCCESS; break;
+		/* Data format */
+		case COX_SERIAL_CFG_BITS:
+		    switch(USARTx->CR1 & 0x1000) {
+		    case 0: arg_bak = 8; break;
+		    case 1: arg_bak = 9; break;
+		    default : break;
+		    }
+		    switch(arg) {
+		    case 8:
+		      USARTx->CR1 &= 0xEFFF;
+		      err = COX_SUCCESS; break;
+		    case 9:
+		      USARTx->CR1 |= 0x1000;
+		      err = COX_SUCCESS; break;
+		    default : break;
+		    };
+		    break;
+		/* Stop bits */
+		case COX_SERIAL_CFG_STOP_BITS:
+		    switch(USARTx->CR2 & 0x3000) {
+		    case 0: arg_bak = COX_SERIAL_STOPBIT_1; break;
+		    case 1: arg_bak = COX_SERIAL_STOPBIT_0_5; break;
+		    case 2: arg_bak = COX_SERIAL_STOPBIT_2; break;
+		    case 3: arg_bak = COX_SERIAL_STOPBIT_1_5; break;
+		    default : break;
+		    }
+		    switch(arg) {
+		    case COX_SERIAL_STOPBIT_0_5:
+		      USARTx->CR2 |= 0x1000;
+		      USARTx->CR2 &= 0xDFFF;
+		      err = COX_SUCCESS; break;
+		    case COX_SERIAL_STOPBIT_1:
+			  USARTx->CR2 &= 0xEFFF;
+			  USARTx->CR2 &= 0xDFFF;
+		      err = COX_SUCCESS; break;
+		    case COX_SERIAL_STOPBIT_1_5:
+		      USARTx->CR2 |= 0x1000;
+		      USARTx->CR2 |= 0x2000;
+		      err = COX_SUCCESS; break;
+		    case COX_SERIAL_STOPBIT_2:
+		      USARTx->CR2 &= 0xEFFF;
+		      USARTx->CR2 |= 0x2000;
+		      err = COX_SUCCESS; break;
+		    }
+		    break;
+		/* Parity select */
+		case COX_SERIAL_CFG_PARITY:
+		    switch(USARTx->CR1 & 0x400) {
+	    	    case 0: arg_bak = COX_SERIAL_PARITY_NONE; break;
+		    	case 1:
+		    		if(USARTx->CR1 & 0x200)
+		    			arg_bak = COX_SERIAL_PARITY_ODD;
+		    		else
+		    			arg_bak = COX_SERIAL_PARITY_EVEN;
+		    		break;
+		    	default : break;
+		    }
+			 switch(arg) {
+			    case COX_SERIAL_PARITY_NONE:
+			      USARTx->CR1 &= 0xFBFF;
+			      err = COX_SUCCESS; break;
+			    case COX_SERIAL_PARITY_ODD :
+			      USARTx->CR1 |= 0x400;
+			      USARTx->CR1 |= 0x200;
+			      err = COX_SUCCESS; break;
+			    case COX_SERIAL_PARITY_EVEN:
+				  USARTx->CR1 |= 0x400;
+				  USARTx->CR1 &= 0xDFF;
+			      err = COX_SUCCESS; break;
+			    default: break;
+			    }
+			 break;
+		default: break;
+	};
+	/* Return previous configuration argument */
+	if((err == COX_SUCCESS) && (pre_arg != COX_NULL)) {
+	    *pre_arg = arg_bak;
+	}
+	return err;
+}
+
+
+static COX_Status STM_Serial1_Init (uint32_t baudrate) { return STM_UART_Init((USART_TypeDef *)USART1, baudrate); }
+static COX_Status STM_Serial2_Init (uint32_t baudrate) { return STM_UART_Init((USART_TypeDef *)USART2, baudrate); }
+static COX_Status STM_Serial3_Init (uint32_t baudrate) { return STM_UART_Init((USART_TypeDef *)USART3, baudrate); }
+
+
+static uint32_t STM_Serial1_Write (const void* wbuf, uint32_t wlen) { return STM_UART_Write ((USART_TypeDef *)USART1, wbuf, wlen); }
+static uint32_t STM_Serial2_Write (const void* wbuf, uint32_t wlen) { return STM_UART_Write ((USART_TypeDef *)USART2, wbuf, wlen); }
+static uint32_t STM_Serial3_Write (const void* wbuf, uint32_t wlen) { return STM_UART_Write ((USART_TypeDef *)USART3, wbuf, wlen); }
+
+
+static uint32_t STM_Serial1_Read (void *rbuf, uint32_t rlen) { return STM_UART_Read ((USART_TypeDef *)USART1, rbuf, rlen); }
+static uint32_t STM_Serial2_Read (void *rbuf, uint32_t rlen) { return STM_UART_Read ((USART_TypeDef *)USART2, rbuf, rlen); }
+static uint32_t STM_Serial3_Read (void *rbuf, uint32_t rlen) { return STM_UART_Read ((USART_TypeDef *)USART3, rbuf, rlen); }
+
+
+static COX_Status STM_Serial1_Cfg (uint8_t index, uint32_t arg, uint32_t *pre_arg) { return STM_UART_Cfg ((USART_TypeDef *)USART1, index, arg, pre_arg); }
+static COX_Status STM_Serial2_Cfg (uint8_t index, uint32_t arg, uint32_t *pre_arg) { return STM_UART_Cfg ((USART_TypeDef *)USART2, index, arg, pre_arg); }
+static COX_Status STM_Serial3_Cfg (uint8_t index, uint32_t arg, uint32_t *pre_arg) { return STM_UART_Cfg ((USART_TypeDef *)USART3, index, arg, pre_arg); }
+
+
+/***************************************************************************//**
+ * Define stm32f10x COX Serial Interface based on UART1
+*******************************************************************************/
+COX_SERIAL_PI pi_serial1 = {
+	STM_Serial1_Init,
+	STM_Serial1_Write,
+	STM_Serial1_Read,
+	STM_Serial1_Cfg,
+};
+
+
+/***************************************************************************//**
+ * Define stm32f10x COX Serial Interface based on UART2
+*******************************************************************************/
+COX_SERIAL_PI pi_serial2 = {
+	STM_Serial2_Init,
+	STM_Serial2_Write,
+	STM_Serial2_Read,
+	STM_Serial2_Cfg,
+};
+
+
+/***************************************************************************//**
+ * Define stm32f10x COX Serial Interface based on UART3
+*******************************************************************************/
+COX_SERIAL_PI pi_serial3 = {
+	STM_Serial3_Init,
+	STM_Serial3_Write,
+	STM_Serial3_Read,
+	STM_Serial3_Cfg,
+};

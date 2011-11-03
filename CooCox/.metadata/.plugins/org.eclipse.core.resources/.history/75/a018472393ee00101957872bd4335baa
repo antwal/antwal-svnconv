@@ -1,0 +1,18 @@
+
+#include "di_msd.h"
+#include "cox_spi.h"
+#include "cox_pio.h"
+
+
+int main(void)
+{
+	COX_PIO_Dev CS = COX_PIN(2,7);
+
+	MSD_Dev *MSD;
+	MSD-> cs_pin =7;
+	MSD->pio =
+
+    while(1)
+    {
+    }
+}

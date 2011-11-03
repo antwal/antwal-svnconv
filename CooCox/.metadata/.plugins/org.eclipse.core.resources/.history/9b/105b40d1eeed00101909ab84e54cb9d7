@@ -1,0 +1,17 @@
+void SPI_Example(void);
+
+
+COX_SERIAL_PI *UART1 = &pi_serial2;
+
+int main(void)
+{
+	UART1->Init(115200);
+
+    //automatically added by CoIDE
+	SPI_Example();
+
+	while(1)
+    {
+    }
+}
+

@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="4.5.2 -O0 -nostartfiles -Map=trial.map -mcpu=cortex-m3 -mthumb -LJ:\CoCenter\CooIDE\workspace\trial --gc-sections -TJ:\CoCenter\CooIDE\workspace\trial\link.ld -g">
+      <target file="trial.elf" lastModified="130d19434a7">
+         <source file="..\obj\core_cm3.o" lastModified="130d194311d"/>
+         <source file="..\obj\system_stm32f10x.o" lastModified="130d19431a6"/>
+         <source file="..\obj\startup_stm32f10x_md.o" lastModified="130d19431eb"/>
+         <source file="..\obj\stm32f10x_gpio.o" lastModified="130d194329c"/>
+         <source file="..\obj\main.o" lastModified="130d19432cd"/>
+         <source file="..\obj\stm32f10x_rcc.o" lastModified="130d1943374"/>
+         <source file="..\obj\GPIO_Blink.o" lastModified="130d19433ed"/>
+      </target>
+   </processor>
+</history>

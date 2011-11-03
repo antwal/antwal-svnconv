@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="arm-none-eabi-gcc noversion nomachine -mcpu=cortex-m3 -mthumb -Wall -ffunction-sections -O0 -g -c -DSTM32F10X_MD_VL -DUSE_STDPERIPH_DRIVER -D__ASSEMBLY__ -DSTM32F100RB -I. -Icmsis -ICOX -ICOX\COX_Peripheral -Icmsis_boot -Istm_lib -Istm_lib\inc -IFAT">
+      <target file="startup_stm32f10x_md_vl.o" lastModified="132dfe5b909">
+         <source file="..\..\cmsis_boot\startup\startup_stm32f10x_md_vl.c" lastModified="132df822fb5"/>
+      </target>
+      <target file="syscalls.o" lastModified="132dfe5bee7">
+         <source file="..\..\syscalls\syscalls.c" lastModified="132d4af27b0"/>
+      </target>
+      <target file="mmc_driver.o" lastModified="132dfe5c0fa">
+         <source file="..\..\mmc_driver.c" lastModified="132dfb6002c"/>
+      </target>
+      <target file="STM32_USART.o" lastModified="132dfe5bb94">
+         <source file="..\..\COX\COX_Peripheral\STM32_USART.c" lastModified="132d4af4774"/>
+      </target>
+      <target file="printf.o" lastModified="132dfe5bdd9">
+         <source file="..\..\stdio\printf.c" lastModified="132dfc4d989"/>
+      </target>
+      <target file="core_cm3.o" lastModified="132dfe5ba4a">
+         <source file="..\..\cmsis\core_cm3.c" lastModified="132d4af324a"/>
+      </target>
+      <target file="system_stm32f10x.o" lastModified="132dfe5bacc">
+         <source file="..\..\cmsis_boot\system_stm32f10x.c" lastModified="132df29b3f4"/>
+      </target>
+      <target file="stm_spi_master.o" lastModified="132dfe5bd43">
+         <source file="..\..\COX\COX_Peripheral\stm_spi_master.c" lastModified="132d4b14445"/>
+      </target>
+      <target file="main.o" lastModified="132dfe5bc85">
+         <source file="..\..\main.c" lastModified="132dfe51f25"/>
+      </target>
+      <target file="ff.o" lastModified="132dfe5c03c">
+         <source file="..\..\FAT\ff.c" lastModified="132df372870"/>
+      </target>
+      <target file="stm32f10x_rcc.o" lastModified="132dfe5be83">
+         <source file="..\..\stm_lib\src\stm32f10x_rcc.c" lastModified="132d4b1b214"/>
+      </target>
+      <target file="stm32_pio.o" lastModified="132dfe5b9c8">
+         <source file="..\..\COX\COX_Peripheral\stm32_pio.c" lastModified="132d4b18083"/>
+      </target>
+      <target file="diskio.o" lastModified="132dfe5bc02">
+         <source file="..\..\FAT\diskio.c" lastModified="132dfb74ccd"/>
+      </target>
+   </processor>
+</history>

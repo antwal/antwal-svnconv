@@ -1,0 +1,67 @@
+
+
+//#include "mmc.h"
+#include "cox_spi.h"
+#include "cox_pio.h"
+#include "STM32_USART.h"
+#include <stdio.h>
+#include "stm32_pio.h"
+#include<stm_spi_master.h>
+#include "di_msd.h"
+
+COX_SERIAL_PI *UART = &pi_serial2;
+sMSD_CID *cid;
+
+
+	// Initializing the variables required for MSD
+
+int main(void)
+{
+	COX_Status ret;
+	uint32_t Size;
+
+	COX_PIO_Dev CS = COX_PIN(2,7);			// PORTC7
+
+	UART->Init(115200);
+	printf("Start\n\r");
+
+
+	MSD_Dev *MSD;							// MSD instance
+
+	MSD-> cs_pin = CS;
+		MSD-> pio = &pi_pio;
+		MSD-> spi = &pi_spi1;
+
+	MSD->pio->Init(MSD->cs_pin);
+	MSD->pio->Dir(MSD->cs_pin,1);
+
+
+	MSD->spi->Cfg(COX_SPI_CFG_MODE,COX_SPI_MODE0,0);
+	MSD->spi->Cfg(COX_SPI_CFG_RATE,SPI_BaudRatePrescaler_8,0);
+	MSD->spi->Cfg(COX_SPI_CFG_BITS,8,0);
+	MSD->spi->Cfg(COX_SPI_CFG_FSB,COX_MSPI_FSB_MSB,0);
+	ret = MSD->spi->Init(COX_SPI_MODE0, 8);
+		if(ret == COX_SUCCESS)
+			printf("Spi INit done\n\r");
+
+	//ret = initialize(MSD);				// uses SDCARD.c
+	ret = MSD_Init(MSD);					// mmc_driver.c
+	if(ret == COX_SUCCESS)
+	printf("Init Succes\n\r");
+	else
+		printf("Init Failed\n\r");
+
+	Size = MSD_GetChipSize(MSD);
+	printf("SD Card Size is=%d\n\r",Size);
+
+//	ret = MSD_GetCIDRegister(MSD, cid);
+	if(ret == COX_SUCCESS)
+		printf("CID Succes\n\r");
+	else
+	printf("CID Failed\n\r");
+
+	//printf("Manf=0%x, Prod Name=%s",cid->ManufacturerID,(char *)cid->ProdName1);
+    while(1)
+    {
+    }
+}

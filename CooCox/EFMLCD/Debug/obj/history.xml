@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="arm-none-eabi-gcc noversion nomachine -mcpu=cortex-m3 -mthumb -Wall -ffunction-sections -O0 -g3 -c -DEFM32G890F128 -Icmsis -Icmsis_boot -Iefm32lib\inc -Iefm32lib -I.">
+      <target file="efm32_emu.o" lastModified="132b5116aea">
+         <source file="..\..\efm32lib\src\efm32_emu.c" lastModified="13098239230"/>
+      </target>
+      <target file="startup_efm32.o" lastModified="132b5116e15">
+         <source file="..\..\cmsis_boot\startup\startup_efm32.c" lastModified="132b4f4304f"/>
+      </target>
+      <target file="efm32_cmu.o" lastModified="132b5116d75">
+         <source file="..\..\efm32lib\src\efm32_cmu.c" lastModified="13098239230"/>
+      </target>
+      <target file="efm32_lcd.o" lastModified="132b5116ee8">
+         <source file="..\..\efm32lib\src\efm32_lcd.c" lastModified="132b4f42243"/>
+      </target>
+      <target file="LCD_Display.o" lastModified="132b5116c53">
+         <source file="..\..\example\LCD_Display.c" lastModified="132b4f45673"/>
+      </target>
+      <target file="efm32_system.o" lastModified="132b5116996">
+         <source file="..\..\efm32lib\src\efm32_system.c" lastModified="13098253810"/>
+      </target>
+      <target file="core_cm3.o" lastModified="132b5116a04">
+         <source file="..\..\cmsis\core_cm3.c" lastModified="132b4f43103"/>
+      </target>
+      <target file="main.o" lastModified="132b5116db1">
+         <source file="..\..\main.c" lastModified="132b4f465b4"/>
+      </target>
+      <target file="system_efm32.o" lastModified="132b5116f9c">
+         <source file="..\..\cmsis_boot\system_efm32.c" lastModified="132b4f43063"/>
+      </target>
+      <target file="efm32_assert.o" lastModified="132b5117028">
+         <source file="..\..\efm32lib\src\efm32_assert.c" lastModified="132b4f43167"/>
+      </target>
+   </processor>
+</history>

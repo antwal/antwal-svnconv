@@ -1,0 +1,23 @@
+#include "STM32_USART.h"
+#include <stdio.h>
+
+
+void SPI_Example(void);
+
+
+COX_SERIAL_PI *UART1 = &pi_serial2;
+
+int main(void)
+{
+	UART1->Init(115200);
+	SPI_Example();
+
+
+    //automatically added by CoIDE
+
+	printf("Start\n\r");
+	while(1)
+    {
+    }
+}
+

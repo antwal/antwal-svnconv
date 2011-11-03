@@ -1,0 +1,58 @@
+/*****************************************************************************************************
+ *			 FUNTION THAT READS THE DATA ARRIVED AT THE PORT			     *
+ *****************************************************************************************************/
+
+
+#include "WSNPacket.h"
+#define MAX_BUFF_SIZE 64
+/*
+ * Structures
+ */
+typedef struct Message {
+	INT8U DataBuffer[MAX_BUFF_SIZE];
+}MSG;
+
+
+// Message to be added on to queue , taken two buffer packet //
+MSG DataMsg[2];
+
+
+void Read_Data(uint8_t ch){
+	static buf = 0;
+    static uint8_t PktStartRecd = 0;
+    static int32_t i = 0, j, res;//, Status;
+
+
+	if (PktStartRecd) {
+		if ((i == 1) && (ch == START_BYTE)) {
+			return ;
+		}
+    // Reading data from the Port
+	DataMsg.DataBuffer[buf][i++] = ch;
+	if (ch == STOP_BYTE) {
+        printf("\nData Recd is: ");
+        for (j=0; j < i; j++){
+        	printf("\t%x ",DataMsg.DataBuffer[buf][j]);
+	    }
+        printf("\n");
+        //put the data in the queue , change according to MSG QUEUE IN COOCOX
+        WSNDecoderQueueId = Get_WSN_Decoder_Queue_Id();
+        Write_Queue(WSNDecoderQueueId, &DataMsg[buf]);
+        PktStartRecd = 0;
+		i = 0;
+		buf ^= 0x1 ;  //change the buffer to be used
+		printf("+++++++++++++++++\n");
+	}
+	else {
+		if (ch == START_BYTE) {
+			PktStartRecd = 1;
+	        DataMsg.DataBuffer[buf][i++] = START_BYTE;
+		} else { printf("%c", ch); }
+	}
+
+
+
+	}
+}
+
+

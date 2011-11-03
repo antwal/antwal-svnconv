@@ -1,0 +1,14 @@
+#include "STM32_USART.h"
+#include <stdio.h>
+
+int main(void)
+{
+	COX_SERIAL_PI UART1 = &pi_serial1;
+	uint32_t tmp;
+	UART1->Init(115200);
+	printf("Hello, here we are\n\r");
+	while(1)
+    {
+
+    }
+}

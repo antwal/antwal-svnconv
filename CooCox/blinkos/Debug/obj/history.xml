@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="arm-none-eabi-gcc noversion nomachine -mcpu=cortex-m3 -mthumb -Wall -ffunction-sections -O0 -g3 -c -DEFM32G280F128 -ICoOS\kernel -ICoOS -ICoOS\portable -I.">
+      <target file="timer.o" lastModified="132af8b6ea6">
+         <source file="..\..\CoOS\kernel\timer.c" lastModified="132af86b111"/>
+      </target>
+      <target file="mbox.o" lastModified="132af8b7087">
+         <source file="..\..\CoOS\kernel\mbox.c" lastModified="132af86b035"/>
+      </target>
+      <target file="event.o" lastModified="132af8b7203">
+         <source file="..\..\CoOS\kernel\event.c" lastModified="132af86b003"/>
+      </target>
+      <target file="mutex.o" lastModified="132af8b73b2">
+         <source file="..\..\CoOS\kernel\mutex.c" lastModified="132af86b05d"/>
+      </target>
+      <target file="hook.o" lastModified="132af8b756b">
+         <source file="..\..\CoOS\kernel\hook.c" lastModified="132af86b00d"/>
+      </target>
+      <target file="serviceReq.o" lastModified="132af8b7005">
+         <source file="..\..\CoOS\kernel\serviceReq.c" lastModified="132af86b0d5"/>
+      </target>
+      <target file="time.o" lastModified="132af8b718b">
+         <source file="..\..\CoOS\kernel\time.c" lastModified="132af86b111"/>
+      </target>
+      <target file="CoOSAppFramework.o" lastModified="132af8b7267">
+         <source file="..\..\example\CoOSAppFramework.c" lastModified="132af87623d"/>
+      </target>
+      <target file="queue.o" lastModified="132af8b7344">
+         <source file="..\..\CoOS\kernel\queue.c" lastModified="132af86b0c1"/>
+      </target>
+      <target file="kernelHeap.o" lastModified="132af8b6db6">
+         <source file="..\..\CoOS\kernel\kernelHeap.c" lastModified="132af86b02b"/>
+      </target>
+      <target file="sem.o" lastModified="132af8b7510">
+         <source file="..\..\CoOS\kernel\sem.c" lastModified="132af86b0cb"/>
+      </target>
+      <target file="port.o" lastModified="132af8b72cc">
+         <source file="..\..\CoOS\portable\GCC\port.c" lastModified="132af86b157"/>
+      </target>
+      <target file="task.o" lastModified="132af8b6f96">
+         <source file="..\..\CoOS\kernel\task.c" lastModified="132af86b0f3"/>
+      </target>
+      <target file="core.o" lastModified="132af8b6e1a">
+         <source file="..\..\CoOS\kernel\core.c" lastModified="132af86b003"/>
+      </target>
+      <target file="arch.o" lastModified="132af8b74a2">
+         <source file="..\..\CoOS\portable\arch.c" lastModified="132af86b143"/>
+      </target>
+      <target file="mm.o" lastModified="132af8b7109">
+         <source file="..\..\CoOS\kernel\mm.c" lastModified="132af86b049"/>
+      </target>
+      <target file="flag.o" lastModified="132af8b743e">
+         <source file="..\..\CoOS\kernel\flag.c" lastModified="132af86b003"/>
+      </target>
+      <target file="utility.o" lastModified="132af8b6f00">
+         <source file="..\..\CoOS\kernel\utility.c" lastModified="132af86b125"/>
+      </target>
+   </processor>
+</history>

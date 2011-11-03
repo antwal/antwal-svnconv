@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="arm-none-eabi-gcc noversion nomachine -mcpu=cortex-m3 -mthumb -Wall -ffunction-sections -O0 -g3 -c -DEFM32G280F128 -ICoOS\kernel -ICoOS -ICoOS\portable -Istk bsp -Icmsis -Icmsis_boot -Iefm32lib\inc -Iefm32lib -I.">
+      <target file="timer.o" lastModified="132aaf38a3b">
+         <source file="..\..\CoOS\kernel\timer.c" lastModified="132aaf36e4d"/>
+      </target>
+      <target file="mbox.o" lastModified="132aaf38d20">
+         <source file="..\..\CoOS\kernel\mbox.c" lastModified="132aaf36e1b"/>
+      </target>
+      <target file="event.o" lastModified="132aaf38f1f">
+         <source file="..\..\CoOS\kernel\event.c" lastModified="132aaf36e07"/>
+      </target>
+      <target file="mutex.o" lastModified="132aaf39073">
+         <source file="..\..\CoOS\kernel\mutex.c" lastModified="132aaf36e1b"/>
+      </target>
+      <target file="core_cm3.o" lastModified="132aaf38991">
+         <source file="..\..\cmsis\core_cm3.c" lastModified="132aaf30988"/>
+      </target>
+      <target file="hook.o" lastModified="132aaf39344">
+         <source file="..\..\CoOS\kernel\hook.c" lastModified="132aaf36e07"/>
+      </target>
+      <target file="startup_efm32.o" lastModified="132aaf38c9e">
+         <source file="..\..\cmsis_boot\startup\startup_efm32.c" lastModified="132aaf308fb"/>
+      </target>
+      <target file="serviceReq.o" lastModified="132aaf38bd6">
+         <source file="..\..\CoOS\kernel\serviceReq.c" lastModified="132aaf36e43"/>
+      </target>
+      <target file="time.o" lastModified="132aaf38e9d">
+         <source file="..\..\CoOS\kernel\time.c" lastModified="132aaf36e4d"/>
+      </target>
+      <target file="queue.o" lastModified="132aaf39005">
+         <source file="..\..\CoOS\kernel\queue.c" lastModified="132aaf36e43"/>
+      </target>
+      <target file="kernelHeap.o" lastModified="132aaf38882">
+         <source file="..\..\CoOS\kernel\kernelHeap.c" lastModified="132aaf36e1b"/>
+      </target>
+      <target file="system_efm32.o" lastModified="132aaf3922c">
+         <source file="..\..\cmsis_boot\system_efm32.c" lastModified="132aaf308fb"/>
+      </target>
+      <target file="sem.o" lastModified="132aaf3929a">
+         <source file="..\..\CoOS\kernel\sem.c" lastModified="132aaf36e43"/>
+      </target>
+      <target file="port.o" lastModified="132aaf38f8d">
+         <source file="..\..\CoOS\portable\GCC\port.c" lastModified="132aaf36e4d"/>
+      </target>
+      <target file="stk.o" lastModified="132aaf39435">
+         <source file="..\..\stk bsp\stk.c" lastModified="132aaf35bf4"/>
+      </target>
+      <target file="task.o" lastModified="132aaf38b5d">
+         <source file="..\..\CoOS\kernel\task.c" lastModified="132aaf36e43"/>
+      </target>
+      <target file="core.o" lastModified="132aaf38905">
+         <source file="..\..\CoOS\kernel\core.c" lastModified="132aaf36e07"/>
+      </target>
+      <target file="arch.o" lastModified="132aaf3915a">
+         <source file="..\..\CoOS\portable\arch.c" lastModified="132aaf36e4d"/>
+      </target>
+      <target file="mm.o" lastModified="132aaf38da2">
+         <source file="..\..\CoOS\kernel\mm.c" lastModified="132aaf36e1b"/>
+      </target>
+      <target file="flag.o" lastModified="132aaf390ff">
+         <source file="..\..\CoOS\kernel\flag.c" lastModified="132aaf36e07"/>
+      </target>
+      <target file="efm32_assert.o" lastModified="132aaf392e0">
+         <source file="..\..\efm32lib\src\efm32_assert.c" lastModified="132aaf30a0a"/>
+      </target>
+      <target file="utility.o" lastModified="132aaf38ab3">
+         <source file="..\..\CoOS\kernel\utility.c" lastModified="132aaf36e4d"/>
+      </target>
+      <target file="efm32_gpio.o" lastModified="132aaf39511">
+         <source file="..\..\efm32lib\src\efm32_gpio.c" lastModified="132aaf30a82"/>
+      </target>
+      <target file="main.o" lastModified="132aaf38c3a">
+         <source file="..\..\main.c" lastModified="132aaf1be3c"/>
+      </target>
+   </processor>
+</history>

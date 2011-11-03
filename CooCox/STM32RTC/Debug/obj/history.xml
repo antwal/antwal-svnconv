@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="arm-none-eabi-gcc noversion nomachine -mcpu=cortex-m3 -mthumb -Wall -ffunction-sections -O0 -g -c -DSTM32F10X_MD_VL -DUSE_STDPERIPH_DRIVER -D__ASSEMBLY__ -DSTM32F100RB -I. -ICOX -ICOX\COX_Peripheral -Icmsis_boot -Icmsis -Istm_lib -Istm_lib\inc">
+      <target file="startup_stm32f10x_md_vl.o" lastModified="132e3424767">
+         <source file="..\..\cmsis_boot\startup\startup_stm32f10x_md_vl.c" lastModified="132e2a4e41b"/>
+      </target>
+      <target file="syscalls.o" lastModified="132e3424aec">
+         <source file="..\..\syscalls\syscalls.c" lastModified="132e2a50d2e"/>
+      </target>
+      <target file="stm32_rtc.o" lastModified="132e3424c69">
+         <source file="..\..\COX\COX_Peripheral\stm32_rtc.c" lastModified="132e33ae0cd"/>
+      </target>
+      <target file="stm32f10x_rtc.o" lastModified="132e3424717">
+         <source file="..\..\stm_lib\src\stm32f10x_rtc.c" lastModified="132e2ecbf9f"/>
+      </target>
+      <target file="printf.o" lastModified="132e34249d4">
+         <source file="..\..\stdio\printf.c" lastModified="132e2a50cb6"/>
+      </target>
+      <target file="core_cm3.o" lastModified="132e3424875">
+         <source file="..\..\cmsis\core_cm3.c" lastModified="132e2a4e4c5"/>
+      </target>
+      <target file="system_stm32f10x.o" lastModified="132e34248ed">
+         <source file="..\..\cmsis_boot\system_stm32f10x.c" lastModified="132e2a4e42f"/>
+      </target>
+      <target file="RTC_Example.o" lastModified="132e3424bdc">
+         <source file="..\..\example\RTC_Example.c" lastModified="132e3423d6d"/>
+      </target>
+      <target file="main.o" lastModified="132e342493d">
+         <source file="..\..\main.c" lastModified="132e3123fc1"/>
+      </target>
+      <target file="stm32f10x_rcc.o" lastModified="132e3424a7e">
+         <source file="..\..\stm_lib\src\stm32f10x_rcc.c" lastModified="132e2ecc0ad"/>
+      </target>
+      <target file="stm32_pio.o" lastModified="132e3424807">
+         <source file="..\..\COX\COX_Peripheral\stm32_pio.c" lastModified="132e313aa6c"/>
+      </target>
+      <target file="misc.o" lastModified="132e3424b64">
+         <source file="..\..\stm_lib\src\misc.c" lastModified="132e313f267"/>
+      </target>
+   </processor>
+</history>

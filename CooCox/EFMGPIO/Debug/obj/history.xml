@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="arm-none-eabi-gcc noversion nomachine -mcpu=cortex-m3 -mthumb -Wall -ffunction-sections -O0 -g3 -c -DEFM32G890F128 -Icmsis -Icmsis_boot -Iefm32lib\inc -Iefm32lib -I.">
+      <target file="GPIO_Blink.o" lastModified="132b4db1597">
+         <source file="..\..\example\GPIO_Blink.c" lastModified="132b4ba9e69"/>
+      </target>
+      <target file="core_cm3.o" lastModified="132b4db13b6">
+         <source file="..\..\cmsis\core_cm3.c" lastModified="132b4b9eed8"/>
+      </target>
+      <target file="efm32_assert.o" lastModified="132b4db16e2">
+         <source file="..\..\efm32lib\src\efm32_assert.c" lastModified="132b4b9ef3d"/>
+      </target>
+      <target file="system_efm32.o" lastModified="132b4db169b">
+         <source file="..\..\cmsis_boot\system_efm32.c" lastModified="132b4b9ee10"/>
+      </target>
+      <target file="efm32_system.o" lastModified="132b4db133e">
+         <source file="..\..\efm32lib\src\efm32_system.c" lastModified="13098253810"/>
+      </target>
+      <target file="efm32_gpio.o" lastModified="132b4db17d2">
+         <source file="..\..\efm32lib\src\efm32_gpio.c" lastModified="132b4b9e3ee"/>
+      </target>
+      <target file="startup_efm32.o" lastModified="132b4db1493">
+         <source file="..\..\cmsis_boot\startup\startup_efm32.c" lastModified="132b4b9ee06"/>
+      </target>
+      <target file="main.o" lastModified="132b4db1410">
+         <source file="..\..\main.c" lastModified="132b4baadfb"/>
+      </target>
+   </processor>
+</history>

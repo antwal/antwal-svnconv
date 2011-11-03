@@ -1,0 +1,13 @@
+void SPI_Example(void);
+
+int main(void)
+{
+
+    //automatically added by CoIDE
+	SPI_Example();
+
+	while(1)
+    {
+    }
+}
+
