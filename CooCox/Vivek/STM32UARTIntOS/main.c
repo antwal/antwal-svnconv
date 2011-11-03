@@ -8,19 +8,20 @@
 
 
 /*---------------------------- Symbol Define -------------------------------*/
-#define STACK_SIZE_DEFAULT 100             /*!< Define a Default task size */
+#define STACK_SIZE_DEFAULT 200             /*!< Define a Default task size */
+//#define STACK_SIZE_DEFAULT1 400             /*!< Define a Default task size */
 
 
 /*---------------------------- Variable Define -------------------------------*/
 	OS_STK     task1_stk[STACK_SIZE_DEFAULT];	  /*!< Define "taskA" task stack */
-	OS_STK     task2_stk[STACK_SIZE_DEFAULT];	  /*!< Define "taskB" task stack */
-	OS_STK     task3_stk[STACK_SIZE_DEFAULT];	  /*!< Define "led" task stack   */
+	OS_STK     task2_stk[100];	  /*!< Define "taskB" task stack */
+	OS_STK     task3_stk[100];	  /*!< Define "led" task stack   */
 	OS_STK     task4_stk[STACK_SIZE_DEFAULT];	  /*!< Define "led" task stack   */
 
 
 
 cBuffer recvBuffer;
-unsigned char buffer[10];
+unsigned char buffer[50];
 
 //Decleration of   serial Ports
 COX_SERIAL_PI *myUSART1 = &pi_serial1;
@@ -44,17 +45,22 @@ void *MailQueue[MAIL_QUEUE_SIZE];
 void USART1_IRQHandler(void)
 {
 	char ch;
+	static char count = 0;
 	StatusType result;
-	CoEnterISR ( );
+	CoEnterISR ();
 
 	//RXNE interrupt occured
 	//printf("uart%x\n\r",USART1->SR);
 	if((USART1->SR & 0x20) != (u16)RESET )
 	{
+		count ++;
 		ch = (USART1->DR & (us16)0x01FF);
 		bufferAddToEnd(&recvBuffer, ch);
-		/* Set a flag that created by other test */
-		result = isr_SetFlag (flag);
+		//if(count > 10){
+			/* Set a flag that created by other test */
+			result = isr_SetFlag (flag);
+			count = 0;
+		//}
 		if (result != E_OK)
 		{
 		     if (result == E_SEV_REQ_FULL)
@@ -76,7 +82,7 @@ void pchar(unsigned char c)
 
 
 void initSerial(void){
-	bufferInit(&recvBuffer, buffer, 10);
+	bufferInit(&recvBuffer, buffer, 50);
 	myUSART1->Init(57600);
 	myUSART2->Init(115200);
 	myUSART1->Cfg( COX_SERIAL_INT_CONF, RXNE_ENABLE,0);
@@ -150,7 +156,7 @@ void initSerial(void){
 			        				printf("Invalid flag ID !\n");
 			        			}
 			        		}
-			        		printf(" %c",ch);
+			        		//printf("\t%x ",ch);
 			        		//put the messaage in the queue
 			        		 Read_Data(ch);
 
@@ -259,8 +265,8 @@ int main(void)
 
     /*!< Create three tasks	*/
     CoCreateTask (task1,0,0,&task1_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
-    CoCreateTask (task2,0,1,&task2_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
-    CoCreateTask (task3,0,2,&task3_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
+    CoCreateTask (task2,0,1,&task2_stk[100-1],100);
+    CoCreateTask (task3,0,2,&task3_stk[100-1],100);
     CoCreateTask (task4,0,3,&task4_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
 
 

@@ -52,7 +52,7 @@ systick frequency (Hz).
 /*!< 
 max systerm api call num in ISR.	                         
 */
-#define CFG_MAX_SERVICE_REQUEST (5)
+#define CFG_MAX_SERVICE_REQUEST (05)
 
 /*!< 
 Enable(1) or disable(0) order list schedule.

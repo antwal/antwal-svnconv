@@ -7,6 +7,7 @@
 #include "TypeDefs.h"
 #include "stdint.h"
 #include "string.h"
+#include <stdio.h>
 
 #define MAX_BUFF_SIZE 64
 
@@ -28,6 +29,7 @@ void Read_Data(unsigned char ch){
     static int i = 0, j, res; //, Status;
     StatusType result;
 
+    static uint8_t cur,last;
 
 	if (PktStartRecd) {
 		if ((i == 1) && (ch == START_BYTE)) {
@@ -35,12 +37,20 @@ void Read_Data(unsigned char ch){
 		}
 		// Reading data from the Port
 		DataMsg[buf].DataBuffer[i++] = ch;
+
 		if (ch == STOP_BYTE) {
-			printf("\nData Recd is: ");
-			for (j=0; j < i; j++){
-				printf("\t%x ",DataMsg[buf].DataBuffer[j]);
+			cur = DataMsg[buf].DataBuffer[2];
+			if(!(cur == last+1)){
+				printf("MISSED: 0x%x\n",DataMsg[buf].DataBuffer[2]);
 			}
-			printf(" \n");
+			last = DataMsg[buf].DataBuffer[2];
+
+		//	printf("\nData is: ");
+
+			//for (j=0; j < i; j++){
+				//printf("\t%x ",DataMsg[buf].DataBuffer[j]);
+			//}
+			//printf(" \n");
 			result = CoPostQueueMail (raw_queue_id, (void *) &DataMsg[buf]);
 			if (result != E_OK){
 				 if (result == E_INVALID_ID){
@@ -54,18 +64,17 @@ void Read_Data(unsigned char ch){
 			PktStartRecd = 0;
 			i = 0;
 			buf ^= 0x1 ;  //change the buffer to be used
-			printf("+++++++++++++++++\n");
+			//printf("+++++++++++++++++\n");
 		}
+	}
 		else {
 			if (ch == START_BYTE) {
 				PktStartRecd = 1;
 				DataMsg[buf].DataBuffer[i++] = START_BYTE;
-			} else { printf(" %c", ch); }
+			} //else {printf(" %c", ch); }
 		}
 
-
-
-	}
+	//}
 }
 
 
@@ -98,7 +107,10 @@ void wsnPacketDecoding(void ){
 
 			memcpy(&DataMsg.DataBuffer[0], &ToSMessage->data[0 + ROUTE_HEADER_LEN], UAGRI_DATA_LEN);
 //TODO		Time stamp needs to be added over here
-			printf("successfully added tos packet");
+			//printf("successfully added tos packet");
+		}
+		else{
+			printf("Discarded\n");
 		}
 
     }
