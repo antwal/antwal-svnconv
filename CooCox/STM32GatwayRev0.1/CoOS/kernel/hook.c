@@ -41,7 +41,7 @@ void CoIdleTask(void* pdata)
 /**
  *******************************************************************************
  * @brief      Hook for stack overflow	 
- * @param[in]  taskID	Piont to the task which lead to stack overflow.		 
+ * @param[in]  taskID	Point to the task which lead to stack overflow.
  * @param[out] None 
  * @retval     None	 
  *

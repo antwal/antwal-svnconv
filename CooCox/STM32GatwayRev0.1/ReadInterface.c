@@ -76,7 +76,9 @@ void Read_Data(unsigned char ch){
 				//printf("\t%x ",DataMsg[buf].DataBuffer[j]);
 			//}
 			//printf(" \n");
-			result = CoPostQueueMail (raw_queue_id, (void *) &DataMsg[buf]);
+			//result = CoPostQueueMail (raw_queue_id, (void *) &DataMsg[buf]);
+			/* Calling from Interrupt context*/
+			result = isr_PostQueueMail (raw_queue_id, (void *) &DataMsg[buf]);
 			if (result != E_OK){
 				 if (result == E_INVALID_ID){
 					 printf("Invalid Queue ID ! \n");
@@ -85,7 +87,7 @@ void Read_Data(unsigned char ch){
                      printf("The Queue is full !\n");
 				 }
 			}
-
+			printf("len=%d\n\r",i);
 			PktStartRecd = 0;
 			i = 0;
 			buf ^= 0x1 ;  //change the buffer to be used

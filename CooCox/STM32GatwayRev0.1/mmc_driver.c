@@ -84,7 +84,7 @@ COX_Status MSD_WriteBlock(const MSD_Dev *sd, uint32_t adr, const uint8_t* wbuf, 
      while(MSD_GetResponse(sd, MSD_RESPONSE_NO_ERROR ) && counter > 0);
 
   	  if(counter > 0){
-  	   printf("Write SUCC=%ld\n\r",wlen);
+  	   //printf("Write SUCC=%ld\n\r",wlen);
     /* Send a MSD_DUMMY byte */
    sd->spi->ReadWrite(MSD_DUMMY);
     /* Send the data token to signify the start of the data */
@@ -98,7 +98,7 @@ COX_Status MSD_WriteBlock(const MSD_Dev *sd, uint32_t adr, const uint8_t* wbuf, 
 
     /* Read data response */
     if (MSD_GetDataResponse(sd) == MSD_DATA_OK) {
-    	printf("Write\n\r");
+    	//printf("Write\n\r");
       rvalue = COX_SUCCESS;
     }
   }
@@ -137,10 +137,10 @@ COX_Status MSD_ReadBlock(const MSD_Dev *sd, uint32_t adr, uint8_t* rbuf, uint32_
    }
    while(MSD_GetResponse(sd, MSD_RESPONSE_NO_ERROR ) && counter > 0);
    if(counter > 0){
-	   printf("Read SUCC\n\r");
+	   //printf("Read SUCC\n\r");
     /* Now look for the data token to signify the start of the data */
     if (!MSD_GetResponse(sd, MSD_START_DATA_SINGLE_BLOCK_READ))
-    { printf("Read\n\r");
+    { //printf("Read\n\r");
       /* Read the MSD block data : read NumByteToRead data */
       sd->spi->Read(rbuf, rlen);
 
@@ -524,7 +524,7 @@ uint8_t MSD_GetDataResponse(const MSD_Dev *sd)
 	 // delay();
     /* Read resonse */
     response = sd->spi->ReadWrite(MSD_DUMMY);
-    printf("RES=0x%x\t",response);
+   // printf("RES=0x%x\t",response);
     /* Mask unused bits */
     response &= 0x1F;
 
@@ -622,7 +622,7 @@ COX_Status MSD_GoIdleState(const MSD_Dev *sd)
 {
 	uint8_t counter =0,ACMD1 = 1;
 
-	printf("Initialising mmc\n\r");
+	//printf("Initialising mmc\n\r");
 
 	/* MSD chip select low */
 	SS_LOW(sd);
@@ -636,7 +636,7 @@ COX_Status MSD_GoIdleState(const MSD_Dev *sd)
   /* Wait for In Idle State Response (R1 Format) equal to 0x01 */
   if (!(counter > 0)) {
     /* No Idle State Response: return response failue */
-	  printf("IDLE:FAiled\n\r");
+	  //printf("IDLE:FAiled\n\r");
 	  SS_HIGH(sd);
     return COX_ERROR;
   }
@@ -660,7 +660,7 @@ COX_Status MSD_GoIdleState(const MSD_Dev *sd)
   while(MSD_GetResponse(sd, 0x0) && counter-- > 0 );
   if(!(counter > 0))
   {
-	  printf("Voltage fail\n\r");
+	  //printf("Voltage fail\n\r");
 	  SS_HIGH(sd);
 	  return (MSD_VOLTAGE_FAIL);
   }
@@ -673,10 +673,10 @@ COX_Status MSD_GoIdleState(const MSD_Dev *sd)
   }
   while(MSD_GetResponse(sd, MSD_IN_IDLE_STATE ) && counter > 0);
   if(!(counter > 0)){
-	 printf("counter=%d\n\r",counter);
+	 //printf("counter=%d\n\r",counter);
   }
   else
-  printf("CMD55 first success\n\r");
+  //printf("CMD55 first success\n\r");
 
 	  counter = 0x1;
   do {
@@ -696,11 +696,11 @@ COX_Status MSD_GoIdleState(const MSD_Dev *sd)
   while (MSD_GetResponse(sd, MSD_RESPONSE_NO_ERROR) && counter > 0);
   if(!(counter > 0)){
 	  ACMD1 = 0;
-	  printf("ACMD1 Failed\n\r");
+	  //printf("ACMD1 Failed\n\r");
   }
   else{
 	  CardType = CT_SD2;
-	  printf("SDCARD ver2\n\r");
+	  //printf("SDCARD ver2\n\r");
   }
 
   // If above command Fails then only this should be executed
@@ -712,7 +712,7 @@ COX_Status MSD_GoIdleState(const MSD_Dev *sd)
 	  }
 	  while(MSD_GetResponse(sd, MSD_IN_IDLE_STATE) && counter > 0);
 	  if(counter > 0){
-		  printf("CMD55 success\n\r");
+		  //printf("CMD55 success\n\r");
 	  }
 
 	  // Sending Command CMD1
@@ -723,11 +723,11 @@ COX_Status MSD_GoIdleState(const MSD_Dev *sd)
   	  }
 	  while(MSD_GetResponse(sd, MSD_RESPONSE_NO_ERROR) && counter > 0);
 	  if(counter == 0){
-		  printf("CMD1 Failed\n\r");
+		  //printf("CMD1 Failed\n\r");
 		  ACMD1 = 1;
 	  }
 	  else{
-		  printf("SD Ver1\n\r");
+		  //printf("SD Ver1\n\r");
 		  CardType = CT_SD1;
 	  }
   }
@@ -741,7 +741,7 @@ COX_Status MSD_GoIdleState(const MSD_Dev *sd)
 	   }
 	   while(MSD_GetResponse(sd, MSD_RESPONSE_NO_ERROR) && counter > 0);
 	   if(!(counter >0)){
-		  printf("CMD1 Failed\n\r");
+		  //printf("CMD1 Failed\n\r");
 	  }
 	   else{ CardType = CT_MMC;}
   }
@@ -751,7 +751,7 @@ COX_Status MSD_GoIdleState(const MSD_Dev *sd)
     MSD_SendCmd(sd,MSD_SET_BLOCKLEN, 512, 1);
   	while(MSD_GetResponse(sd, MSD_RESPONSE_NO_ERROR) && counter > 0);
   	if(counter > 0){
-  		printf("Block set\n\r");
+  		//printf("Block set\n\r");
   	}
   	else{
   		SS_HIGH(sd);

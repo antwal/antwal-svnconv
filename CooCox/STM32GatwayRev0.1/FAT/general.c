@@ -10,7 +10,8 @@ void die (		/* Stop with dying message */
 	{
 		printf("Failed with rc=%d\r\n",rc);
 		SS_HIGH(sd);
-		for (;;) ;
+		//for (;;) ;
+		return;
 	}
 
 	/*---------------------------------------------------------*/

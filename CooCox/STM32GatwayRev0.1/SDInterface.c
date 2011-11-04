@@ -10,7 +10,7 @@ extern void die(FRESULT);
 
 extern OS_EventID sd_queue_id;
 
-FRESULT SdInterface(MSD_Dev *sd)
+FRESULT SdInterface(void)
 {
 	//COX_Status ret;
 	//uint32_t Size;
@@ -24,12 +24,13 @@ FRESULT SdInterface(MSD_Dev *sd)
 	StatusType result;
 	void *msg;
 	BYTE Data[UAGRI_DATA_LEN];
+//TODO: Two buffers are reqd
 
 	/* Wait for a mail, time-out:0 */
 	msg = CoPendQueueMail (sd_queue_id, 0, &result);
 	if (result != E_OK){
 		if (result == E_INVALID_ID){
-			printf("Invalid Queue ID !\n");
+			printf("IQID !\n");
 		}
 	}
 	else
@@ -42,11 +43,11 @@ FRESULT SdInterface(MSD_Dev *sd)
 	/* Register volume work area (never fails) */
 	f_mount(0, &fatfs);
 
-	printf("Open a file \r\n");
-	rc = f_open(&fil, "./root/DATA.txt", FA_WRITE );//| FA_CREATE_ALWAYS);
+	//printf("Open\r\n");
+	rc = f_open(&fil, "./root/Data.txt", FA_WRITE );//| FA_CREATE_ALWAYS);
 	if (rc) die(rc);
 
-	printf("OSize=%d\n\r",(uint16_t)f_size(&fil));
+	//printf("OSize=%d\n\r",(uint16_t)f_size(&fil));
 
 	// Reaching to the end of the file
 	f_lseek(&fil, f_size(&fil));

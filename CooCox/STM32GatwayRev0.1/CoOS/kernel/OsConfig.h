@@ -32,7 +32,7 @@ Defines the lowest priority that be assigned.
 /*!< 
 Max number of tasks that can be running.		     
 */			
-#define CFG_MAX_USER_TASKS      (5)
+#define CFG_MAX_USER_TASKS      (4)
 
 /*!< 
 Idle task stack size(word).		                         
@@ -251,7 +251,7 @@ Enable(1) or disable(0) mutex management.
 Max number of mutex.(must be less than 255).      
 */ 
 #if CFG_MUTEX_EN >0
-#define CFG_MAX_MUTEX           (10)			
+#define CFG_MAX_MUTEX           (10)
 #endif
 
 /*---------------------- Utility Management Config --------------------------*/

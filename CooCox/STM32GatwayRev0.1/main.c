@@ -20,15 +20,15 @@
 
 
 /*---------------------------- Symbol Define -------------------------------*/
-#define STACK_SIZE_DEFAULT 200             /*!< Define a Default task size */
+#define STACK_SIZE_DEFAULT 100             /*!< Define a Default task size */
 //#define STACK_SIZE_DEFAULT1 400             /*!< Define a Default task size */
 
 
 /*---------------------------- Variable Define -------------------------------*/
-	OS_STK     task1_stk[STACK_SIZE_DEFAULT];	  /*!< Define "taskA" task stack */
+	//OS_STK     task1_stk[STACK_SIZE_DEFAULT];	  /*!< Define "taskA" task stack */
 	OS_STK     task2_stk[100];	  /*!< Define "taskB" task stack */
-	OS_STK     task3_stk[100];	  /*!< Define "led" task stack   */
-	OS_STK     task4_stk[STACK_SIZE_DEFAULT];	  /*!< Define "led" task stack   */
+	OS_STK     task3_stk[STACK_SIZE_DEFAULT+300];	  /*!< Define "led" task stack   */
+	//OS_STK     task4_stk[STACK_SIZE_DEFAULT];	  /*!< Define "led" task stack   */
 
 
 
@@ -36,8 +36,8 @@
 MSD_Dev sd_var;
 MSD_Dev *sd= &sd_var;							// MSD instance
 
-cBuffer recvBuffer;
-unsigned char buffer[50];
+//cBuffer recvBuffer;
+//unsigned char buffer[50];
 
 //Decleration of   serial Ports
 COX_SERIAL_PI *myUSART1 = &pi_serial1;
@@ -59,7 +59,7 @@ void *SDQueue[MAIL_QUEUE_SIZE];
 
 extern void Read_Data(unsigned char );
 extern void wsnPacketDecoding(void );
-extern FRESULT SdInterface(MSD_Dev *sd);
+extern FRESULT SdInterface(void);
 
 uint8_t sdConfig(void)
 {
@@ -76,10 +76,10 @@ uint8_t sdConfig(void)
 	sd->pio->Dir(sd->cs_pin,1);
 
 	sd->spi->Cfg(COX_SPI_CFG_MODE,COX_SPI_MODE0,0);
-	sd->spi->Cfg(COX_SPI_CFG_RATE,SPI_BaudRatePrescaler_128,0);
+	sd->spi->Cfg(COX_SPI_CFG_RATE,SPI_BaudRatePrescaler_8,0);
 	sd->spi->Cfg(COX_SPI_CFG_BITS,8,0);
 	sd->spi->Cfg(COX_SPI_CFG_FSB,COX_MSPI_FSB_MSB,0);
-	ret = sd->spi->Init(COX_SPI_MODE0, 128);
+	ret = sd->spi->Init(COX_SPI_MODE0, 8);
 
 	return ret;
 }
@@ -96,21 +96,10 @@ void USART1_IRQHandler(void)
 	//printf("uart%x\n\r",USART1->SR);
 	if((USART1->SR & 0x20) != (u16)RESET )
 	{
-		count ++;
+		//count ++;
 		ch = (USART1->DR & (us16)0x01FF);
-		bufferAddToEnd(&recvBuffer, ch);
-		//if(count > 10){
-			/* Set a flag that created by other test */
-			result = isr_SetFlag (flag);
-			count = 0;
-		//}
-		if (result != E_OK)
-		{
-		     if (result == E_SEV_REQ_FULL)
-		     {
-		          printf("Service request queue is full !\n");
-		     }
-		}
+		Read_Data(ch);
+
 	}
 	CoExitISR ( );
 }
@@ -125,7 +114,7 @@ void pchar(unsigned char c)
 
 
 void initSerial(void){
-	bufferInit(&recvBuffer, buffer, 50);
+	//bufferInit(&recvBuffer, buffer, 50);
 	myUSART1->Init(57600);
 	myUSART2->Init(115200);
 	myUSART1->Cfg( COX_SERIAL_INT_CONF, RXNE_ENABLE,0);
@@ -145,77 +134,6 @@ void initSerial(void){
 	 */
 	void task1 (void* pdata)
 	{
-		unsigned char ch;
-		StatusType result;
-
-	// Create a flag with mannual reset, initial state: 0
-	      flag = CoCreateFlag (0, 0);
-	      if (flag != E_OK){
-	            if (flag == E_CREATE_FAIL){
-	            	printf("Failed to create a flag!\n");
-	            }
-	      }
-	      else{
-	            printf("Flag ID : %d \n", flag);
-	      }
-
-	  // Create a message queue for storing the received characters
-	      raw_queue_id = CoCreateQueue(MailQueue,MAIL_QUEUE_SIZE,EVENT_SORT_TYPE_FIFO);
-      	  if (raw_queue_id == E_CREATE_FAIL){
-                printf("Create a queue fail !\n");
-      	  }
-          else{
-                printf("Queue ID : %d \n", raw_queue_id);
-          }
-      	// Message queue for forwarding data packet from wsn decoding to SDcard writer task
-      	sd_queue_id = CoCreateQueue(SDQueue,MAIL_QUEUE_SIZE,EVENT_SORT_TYPE_FIFO);
-      	if (raw_queue_id == E_CREATE_FAIL){
-      			printf("Create a queue fail !\n");
-      		}
-      	else{
-      			printf("Queue ID : %d \n", sd_queue_id);
-      		}
-
-		for(;;){
-			// Waiting for a flag, time-out:indefinetely
-			 	  pi_pio.Out(LED0, 1);      /*Output hign level to turn on LED0 */
-			      result = CoWaitForSingleFlag (flag, 0);
-			      pi_pio.Out(LED0, 0);      /*Output hign level to turn off LED0 */
-			      if (result != E_OK){
-			            if (result == E_INVALID_ID){
-			                  printf("Invalid Flag ID !\n");
-			            }
-			            else if (result == E_CALL){
-			                  printf("Error call in ISR !\n");
-			            }
-			            else if (result == E_TIMEOUT){
-			                  printf("Time Out !\n");
-			            }
-			      }
-			      else {
-			            //process Flag here
-		        	   if(!bufferIsNotFull(&recvBuffer)){
-	        	       		printf("Buffer error \n\r");
-	        	       		while(0);
-	        	       	}
-		        	   do{
-			        		ch = bufferGetFromFront(&recvBuffer);
-			        		result = CoClearFlag (flag);
-			        		if (result != E_OK){
-			        			if (result == E_INVALID_ID){
-			        				printf("Invalid flag ID !\n");
-			        			}
-			        		}
-			        		//printf("\t%x ",ch);
-			        		//put the messaage in the queue
-			        		 Read_Data(ch);
-
-		        	   }while(bufferDataAvail(&recvBuffer));
-
-
-			      }
-
-		}//end for
 
 	}//end task 1
 
@@ -260,7 +178,8 @@ void initSerial(void){
 		sdConfig();
 		  for (;;)
 		  {
-			  SdInterface(sd);
+			  wsnPacketDecoding();
+			  SdInterface();
 		  }
 	}
 	/**
@@ -277,10 +196,11 @@ void initSerial(void){
 	{
 		//StatusType result;
 		//void *msg;
+
 	  for (;;)
 	  	  {
 
-		  wsnPacketDecoding();
+		 // wsnPacketDecoding();
 
 	  	  }
 	}
@@ -293,6 +213,7 @@ void initSerial(void){
 
 int main(void)
 {
+	OS_TID task_1, task_2,task_3,task_4;
 	//Initilize serial configuration
 	initSerial();
 
@@ -309,11 +230,27 @@ int main(void)
 
 
     /*!< Create three tasks	*/
-    CoCreateTask (task1,0,0,&task1_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
-    CoCreateTask (task2,0,1,&task2_stk[100-1],100);
-    CoCreateTask (task3,0,2,&task3_stk[100-1],100);
-    CoCreateTask (task4,0,3,&task4_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
+   // task_1 = CoCreateTask (task1,0,0,&task1_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
+    task_2 = CoCreateTask (task2,0,1,&task2_stk[100-1],100);
+    task_3 = CoCreateTask (task3,0,3,&task3_stk[STACK_SIZE_DEFAULT+300-1],STACK_SIZE_DEFAULT+300);
+   // task_4 = CoCreateTask (task4,0,2,&task4_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
 
+    // Create a message queue for storing the received characters
+    	      raw_queue_id = CoCreateQueue(MailQueue,MAIL_QUEUE_SIZE,EVENT_SORT_TYPE_FIFO);
+          	  if (raw_queue_id == E_CREATE_FAIL){
+                    printf("Cqfail !\n");
+          	  }
+              else{
+                    printf("QID%d\n", raw_queue_id);
+              }
+          	// Message queue for forwarding data packet from wsn decoding to SDcard writer task
+          	sd_queue_id = CoCreateQueue(SDQueue,MAIL_QUEUE_SIZE,EVENT_SORT_TYPE_FIFO);
+          	if (raw_queue_id == E_CREATE_FAIL){
+          			printf("Cqfail\n");
+          		}
+          	else{
+          			printf("QID%d\n", sd_queue_id);
+          		}
 
     CoStartOS ();			    /*!< Start multitask	           */
 

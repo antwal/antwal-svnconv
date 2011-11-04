@@ -39,14 +39,14 @@
 				<pathentry include="J:/CoCenter/CooIDE/gcc/Sourcery G++ Lite/arm-none-eabi/include" kind="inc" path="" system="true"/>
 				<pathentry include="J:/CoCenter/CooIDE/gcc/Sourcery G++ Lite/lib/gcc/arm-none-eabi/4.5.2/include" kind="inc" path="" system="true"/>
 				<pathentry include="J:/CoCenter/CooIDE/gcc/Sourcery G++ Lite/lib/gcc/arm-none-eabi/4.5.2/include-fixed" kind="inc" path="" system="true"/>
-				<pathentry include="J:/CoCenter/CooIDE/workspace/STM32FAT" kind="inc" path="" system="true"/>
-				<pathentry include="J:/CoCenter/CooIDE/workspace/STM32FAT/cmsis" kind="inc" path="" system="true"/>
-				<pathentry include="J:/CoCenter/CooIDE/workspace/STM32FAT/cmsis_boot" kind="inc" path="" system="true"/>
-				<pathentry include="J:/CoCenter/CooIDE/workspace/STM32FAT/COX" kind="inc" path="" system="true"/>
-				<pathentry include="J:/CoCenter/CooIDE/workspace/STM32FAT/COX/COX_Peripheral" kind="inc" path="" system="true"/>
-				<pathentry include="J:/CoCenter/CooIDE/workspace/STM32FAT/FAT" kind="inc" path="" system="true"/>
-				<pathentry include="J:/CoCenter/CooIDE/workspace/STM32FAT/stm_lib" kind="inc" path="" system="true"/>
-				<pathentry include="J:/CoCenter/CooIDE/workspace/STM32FAT/stm_lib/inc" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CooCox/STM32FAT" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CooCox/STM32FAT/cmsis" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CooCox/STM32FAT/cmsis_boot" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CooCox/STM32FAT/COX" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CooCox/STM32FAT/COX/COX_Peripheral" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CooCox/STM32FAT/FAT" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CooCox/STM32FAT/stm_lib" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CooCox/STM32FAT/stm_lib/inc" kind="inc" path="" system="true"/>
 				<pathentry kind="mac" name="__GNUC__" path="" value=""/>
 				<pathentry kind="mac" name="STM32F10X_MD_VL" path="" value=""/>
 				<pathentry kind="mac" name="USE_STDPERIPH_DRIVER" path="" value=""/>
