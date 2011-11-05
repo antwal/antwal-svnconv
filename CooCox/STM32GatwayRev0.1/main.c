@@ -104,6 +104,8 @@ void USART1_IRQHandler(void)
 	CoExitISR ( );
 }
 
+
+/* Used For printf function*/
 void pchar(unsigned char c)
 {
 	USART2->DR =  (c & (us16)0x01FF);

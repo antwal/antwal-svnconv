@@ -20,7 +20,7 @@ extern OS_EventID raw_queue_id;
 extern OS_EventID sd_queue_id;
 
 // Message to be added on to queue , taken two buffer packet //
-MSG DataMsg[2];
+MSG DataMsg[8];
 
 
 
@@ -90,8 +90,11 @@ void Read_Data(unsigned char ch){
 			printf("len=%d\n\r",i);
 			PktStartRecd = 0;
 			i = 0;
-			buf ^= 0x1 ;  //change the buffer to be used
-			//printf("+++++++++++++++++\n");
+			buf += 1 ;  				//change the buffer to be used
+
+			if( !(buf%8) )			// If buffer is 8
+				buf = 0;
+
 		}
 	}
 		else {
@@ -105,7 +108,9 @@ void Read_Data(unsigned char ch){
 }
 
 
-//This is called by task 2 to eat the MsgQ of created by read interface
+/*----------------------------------------------------------------------------*/
+/*	  This is called by task 2 to eat the MsgQ of created by read interface   */
+/*----------------------------------------------------------------------------*/
 void wsnPacketDecoding(void ){
 	MSG DataMsg;
 	StatusType result;
@@ -132,13 +137,15 @@ void wsnPacketDecoding(void ){
 			ToSMessage = (Tos_Msg *)&DataMsg.DataBuffer[RAWPKT_HEADER_LEN];
 
 
-			memcpy(&DataMsg.DataBuffer[0], &ToSMessage->data[0 + ROUTE_HEADER_LEN], UAGRI_DATA_LEN);
-//TODO		Time stamp needs to be added over here
-			//printf("successfully added tos packet");
+			memcpy(&DataMsg.DataBuffer[0], &ToSMessage->data[0 + ROUTE_HEADER_LEN], sizeof(struct SensedData));
+//TODO		Time stamp + BaseStnIdneeds to be added over here
+
+			DataMsg.DataBuffer[sizeof(struct SensedData)] = BaseStnId;
+			DataMsg.DataBuffer[sizeof(struct SensedData) + 1 ] = ;
 
 
 			// Post the data to the sdcard queue
-			result = CoPostQueueMail (sd_queue_id, (void *) &DataMsg);
+			/*result = CoPostQueueMail (sd_queue_id, (void *) &DataMsg);
 			if (result != E_OK){
 				if (result == E_INVALID_ID){
 					printf("Invalid Queue ID ! \n");
@@ -146,7 +153,7 @@ void wsnPacketDecoding(void ){
 				else if (result == E_MBOX_FULL){
 					printf("The Queue is full !\n");
 				}
-			}
+			}*/
 		}
 		else{
 			printf("Discarded\n");
