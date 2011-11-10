@@ -1,15 +1,18 @@
-CFLAGS += -DPC
+CFLAGS += -DPC 
+CFLAGS += -Wall
 LFLAGS += -lpthread
 
-all: modeminit.o buffer.o
-	gcc -o modeminit buffer.o modeminit.o $(CFLAGS) $(LFLAGS)
+all: modemInterface.o buffer.o ntp.o
+	gcc -o modemInterface buffer.o modemInterface.o ntp.o $(CFLAGS) $(LFLAGS)
 
-modeminit.o: modeminit.c
-	gcc -o modeminit.o -c modeminit.c $(CFLAGS)
+modeminit.o: modemInterface.c
+	gcc -o modemInterface.o -c modemInterface.c $(CFLAGS)
 
 buffer.o: buffer.c
 	gcc -o buffer.o -c buffer.c $(CFLAGS)
 
+ntp.o: ntp.c
+	gcc -o ntp.o -c ntp.c $(CFLAGS)
 
 clean:
-	rm -rf *.o modeminit
+	rm -rf *.o modemInterface
