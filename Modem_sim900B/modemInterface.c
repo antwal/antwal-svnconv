@@ -16,6 +16,7 @@
 
 	#include "buffer.h"
 	#include "ntp.h"
+	#include "http.h"
 
 	#define serial_tx_ready()       1               							// Transmitter empty
 	#define serial_send(a)          write(fd, &a, 1)        					// Transmit char a
@@ -121,12 +122,19 @@ typedef enum {
 	mdmIPFail,						// IP unable to get
 	mdmConnectFail,					// Socket conncetion failed
 	mdmTimeOut,						// Response timedout
-	mdmSendingFail					// If sending fails
+	mdmSendFail,					// If sending fails
+	mdmReadFail
 	
 }mdmStatus;
 
 // Takes the return values
 mdmStatus res;
+
+/* used to indicate if any write operation is done or not
+	toggle = 0; // write not done or same payload is requested to be read in small chunk
+	toggle = 1; // write done so new packet is available to be read
+*/
+uint8_t toggle = 0, count;
 
 /* Function Declarations*/
 mdmStatus mdmInit(mdmIface *mdm);
@@ -137,7 +145,7 @@ mdmStatus mdmShut(mdmIface *mdm);
 mdmStatus mdmTCPConnect(mdmIface *mdm, server *obj);
 mdmStatus mdmUDPConnect(mdmIface *mdm, server *obj);
 mdmStatus mdmRead(mdmIface *mdm, char *buffer, uint32_t len);
-mdmStatus mdmWrite(mdmIface *mdm, char *buffer, uint32_t len);
+mdmStatus mdmWrite(mdmIface *mdm, char *buffer, uint32_t len,uint8_t send);
 
 
 /*
@@ -190,9 +198,9 @@ mdmStatus mdmWrite(mdmIface *mdm, char *buffer, uint32_t len);
 					serial_get(addr4);                  					// get character
 	#ifdef PC
 					if(addr4 != '\r')
-					fprintf(stderr,"%c",addr4);
-					else
-					fprintf(stderr,"\n");
+					fprintf(stdout,"%c",addr4);
+					//else
+					//fprintf(stdout,"\n");
 	#endif
 					if (resp[addr2] == addr4) 
 					{
@@ -256,12 +264,32 @@ mdmStatus mdmWrite(mdmIface *mdm, char *buffer, uint32_t len);
 						break;
 					
 				case IP:
-						res = serialMatch(mdm, "ERROR", timeout);
-						if(res != mdmOK){										// that means error has not occured					
+						//res = serialMatch(mdm, "ERROR", timeout);
+						//if(res != mdmOK){										// that means error has not occured					
 						//strncpy(mdm->minfo->ip_addr,mBuffer,15);
-						res = mdmOK;
+						do{
+							if(serial_rx_ready())
+							{
+								serial_get(res);
+								//printf("0x%x\n",res);
+							}
 						}
-						else	res = mdmFail;
+						while(res == '\r' || res == '\n');
+						
+						do{
+							if(serial_rx_ready())
+							{
+								mdm->minfo->ip_addr[addr2++]= res; 
+								serial_get(res);
+								//printf("0x%x\n",res);
+							}
+						}
+						while(res != '\r');
+						
+						printf("IP:%s\n",mdm->minfo->ip_addr);
+						res = mdmOK;
+						//}
+						//else	res = mdmFail;
 
 						break;
 				case ERROR:
@@ -281,13 +309,15 @@ mdmStatus mdmWrite(mdmIface *mdm, char *buffer, uint32_t len);
 		char lBuff[20];
 		
 		do{
-		res = sendwait(mdm, "AT+CIPSTATUS\r", "STATE:",200);
-		}
-		while(res != mdmOK);
-		
-		/* CIPSTATUS output is like- STATE: IP INITIAL*/
-		res = serialCopy(lBuff, ' ', '\r');
-		printf("\n\nstatus is %s\n\n",lBuff);
+			do{
+			res = sendwait(mdm, "AT+CIPSTATUS\r", "STATE:",200);
+			}
+			while(res != mdmOK);
+			
+			count = 0;
+			/* CIPSTATUS output is like- STATE: IP INITIAL*/
+			res = serialCopy(lBuff, ' ', '\r');
+			printf("\n\nstatus is %s\n\n",lBuff);
 		
 			if(!strcmp(lBuff, "IP INITIAL"))
 				state = FORCED;
@@ -295,21 +325,14 @@ mdmStatus mdmWrite(mdmIface *mdm, char *buffer, uint32_t len);
 			if(!strcmp(lBuff,"PDP DEACT"))
 				state = PDPDEACT;
 			else 
-			// If TCP connection is closed restart the TCP connection using CIPSTART
 			if(!strcmp(lBuff,"TCP CLOSED"))
 			{	
-				//if(state == TCPCONNECT || state == UDPCONNECT)
 				state = CLOSE;
-				//else
-				//state = CLOSE;
 			}
 			else
 			if(!strcmp(lBuff,"UDP CLOSED"))
 			{	
-				//if(state == TCPCONNECT || state == UDPCONNECT)
 				state = CLOSE;
-				//else
-				//state = CLOSE;
 			}
 			else
 			if(!strcmp(lBuff, "IP START"))
@@ -317,7 +340,6 @@ mdmStatus mdmWrite(mdmIface *mdm, char *buffer, uint32_t len);
 			else
 			if(!strcmp(lBuff, "IP STATUS"))
 			{
-				printf("IN IP\n");
 				state = IP;
 			}
 			else
@@ -329,6 +351,10 @@ mdmStatus mdmWrite(mdmIface *mdm, char *buffer, uint32_t len);
 			else
 			if(!strcmp(lBuff, "CONNECT OK"))
 				state = CONNECT;
+			else
+				count = 1;
+		}
+		while(count ==1);
 		
 		return res;
 	}
@@ -336,9 +362,8 @@ mdmStatus mdmWrite(mdmIface *mdm, char *buffer, uint32_t len);
 
 
 	mdmStatus mdmFSM(mdmIface *mdm)
-	{
-		uint8_t count;
-		
+	{		
+		res = mdmInit(mdm);
 		state = CLOSE;
 		
 	res = mdmState(mdm);
@@ -366,11 +391,14 @@ mdmStatus mdmWrite(mdmIface *mdm, char *buffer, uint32_t len);
 			case IPGPRSACT:
 			case IPCONFIG:
 				state = IP;
+				res = sendwait(mdm, "AT+CIPHEAD=1\r", "OK", 200);
 				res = sendwait(mdm, "AT+CIFSR\r", "", 500);
 				break;
 					
 			case IP:
+				res = sendwait(mdm, "AT+CIPHEAD=1\r", "OK", 200);
 				res = sendwait(mdm, "AT+CIFSR\r", "", 500);
+				
 				break;
 			
 			case CONNECT:
@@ -405,8 +433,10 @@ mdmStatus mdmInit(mdmIface *mdm)
 	{
 		res = sendwait(mdm,"\rATH\r", "OK", 200);
 		res = sendwait(mdm,"ATZ\r", "OK",200);
-		res = sendwait(mdm,"AT&FS11=55\r", "OK", 300);	 									// Init modem
 		res = sendwait(mdm,"\rAT S7=45 S0=0 L1 V1 X4 &c1 E0 Q0\r", "OK", 100);
+		//res = sendwait(mdm,"AT&FS11=55\r", "OK", 300);	 	
+		res = sendwait(mdm, "ATE0\r", "OK",100);
+		
 	}
 	state = INIT;
 	if(res != mdmOK)
@@ -461,7 +491,6 @@ mdmStatus mdmNWControl(mdmIface *mdm,uint8_t attach)
 */
 mdmStatus mdmIPup(mdmIface *mdm)
 {
-	uint8_t count ;
 	res = mdmOK;
 	if(state == NWATT)
 	{
@@ -479,12 +508,6 @@ mdmStatus mdmIPup(mdmIface *mdm)
 		if(!(count > 0))
 			return mdmIPFail;
 	
-	// If till this point things are successful that means we reach IP state
-		state = IP;
-		res = sendwait(mdm, "AT+CIFSR\r", "", 500);
-	
-		if(res != mdmOK)
-			return mdmIPFail;
 	
 	/* Display IP head in RECV data(e.g. +IPD,5:test1)
 	*  It let us to distinguish between data and AT response
@@ -494,6 +517,14 @@ mdmStatus mdmIPup(mdmIface *mdm)
 		res = sendwait(mdm, "AT+CIPHEAD=1\r", "OK", 200);
 		if(res != mdmOK)
 			return mdmFail;
+	
+	// If till this point things are successful that means we reach IP state
+		state = IP;
+		res = sendwait(mdm, "AT+CIFSR\r", "", 500);
+	
+		if(res != mdmOK)
+			return mdmIPFail;
+	
 	}
 	
 	return res;
@@ -505,17 +536,29 @@ mdmStatus mdmIPup(mdmIface *mdm)
 */
 mdmStatus mdmTCPConnect(mdmIface *mdm, server *obj)
 {
-	char *cmd;
-	if(state == IP)
-	{
-		state = CONNECTING;
-		sprintf(cmd, "AT+CIPSTART=\"TCP\",\"%s\",%s\r",obj->addr, obj->port);
-		res = sendwait(mdm, cmd, "NNECT OK", 1000);
+	char *cmd = (char *)malloc(50);
 	
-		if(res!= mdmOK)
-			return mdmConnectFail;
+	count = 3;
+	do{
+	printf("IN tcp connect\n");
+		state = CONNECTING;
+		mdmState(mdm);
+		count --;
+		if(state == IP || state == CLOSE)
+		{
+			state = CONNECTING;
+			sprintf(cmd, "AT+CIPSTART=\"TCP\",\"%s\",%s\r",obj->addr, obj->port);
+			res = sendwait(mdm, cmd, "NNECT OK", 1000);
+	
+			if(res == mdmTimeOut)
+				printf("Timeout\n");
+		}
 	}
-	state = CONNECT;
+	while(res != mdmOK && count > 0);
+	
+	if(count > 0)
+		state = CONNECT;
+	
 	return res;
 }
 
@@ -526,19 +569,29 @@ mdmStatus mdmTCPConnect(mdmIface *mdm, server *obj)
 mdmStatus mdmUDPConnect(mdmIface *mdm, server *obj)
 {
 	char *cmd = (char *)malloc(50);
-	printf("IN udp connect\n");
-	if(state == IP)
-	{
-		state = CONNECTING;
-		sprintf(cmd, "AT+CIPSTART=\"UDP\",\"%s\",%s\r",obj->addr, obj->port);
-		res = sendwait(mdm, cmd, "NNECT OK",2000);
 	
-		if(res == mdmTimeOut)
-			printf("Timeout\n");
-		if(res!= mdmOK)
-			return mdmConnectFail;
+	count =3;
+	do
+	{
+	printf("IN udp connect\n");
+		state = CONNECTING;
+		mdmState(mdm);
+		count --;
+		if(state == IP|| state == CLOSE)
+		{
+			
+			sprintf(cmd, "AT+CIPSTART=\"UDP\",\"%s\",%s\r",obj->addr, obj->port);
+			res = sendwait(mdm, cmd, "NNECT OK",1000);
+	
+			if(res == mdmTimeOut)
+				printf("Timeout\n");
+		}
 	}
+	while(res != mdmOK && count > 0);
+	
+	if(count > 0)
 	state = CONNECT;
+	
 	return res;
 }
 
@@ -547,28 +600,56 @@ mdmStatus mdmUDPConnect(mdmIface *mdm, server *obj)
 *	It writes the data to the open socket whether it is UDP or TCP
 *	@buffer - this is the buffer which will be sent
 *	@len	- length of the buffer
+*	@send   - this tells if the buffer should be sent or just kept in the modem buffer
 */
-mdmStatus mdmWrite(mdmIface *mdm, char *buffer, uint32_t len)
+mdmStatus mdmWrite(mdmIface *mdm, char *buffer, uint32_t len, uint8_t send)
 {
-	uint8_t count = 3,i;									// Number of retries to send the PAcket
+	uint8_t i;									// Number of retries to send the PAcket
+	count = 3;
+	
+if(state == CONNECT){
 	do{
-	res = sendwait(mdm, "AT+CIPSEND\r", ">", 200);
-	
-	for(i = 0; i< len; i++)
-	{
-		serial_send(buffer[i]);
+		i = 3;
+		do
+		{
+			i --;
+			res = sendwait(mdm, "AT+CIPSEND\r", ">", 200);
+		}
+		while(res != mdmOK && count > 0);
+		
+		if(i > 0)
+		{
+			for(i = 0; i< len; i++)
+			{
+				serial_send(buffer[i]);
+			}
+			
+		}
+		else
+		{
+			count = 0;
+			break;
+		}
+		
+		if(send == 1)
+		{	
+			i = 0x1a;
+			serial_send(i);									// Sending Ctrl+Z
+			res = serialMatch(mdm, "SEND OK", 5000);
+			count--;
+		}
 	}
-	i = 0x1a;
-	serial_send(i);									// Sending Ctrl+Z
-	res = serialMatch(mdm, "SEND OK", 10000);
-	count--;
-	}
-	while(res != mdmOK && count > 3);
+	while(res != mdmOK && count > 0);
 	
-	if(count < 3)
-	return mdmOK;
+	if(count > 0){
+		toggle = 1;
+		printf("write success\n");
+		return mdmOK;
+	}
 	else
-	return mdmSendingFail;
+	return mdmSendFail;
+ }
+ return mdmSendFail;
 	
 }
 
@@ -579,62 +660,84 @@ mdmStatus mdmWrite(mdmIface *mdm, char *buffer, uint32_t len)
 */
 mdmStatus mdmRead(mdmIface *mdm, char *buffer, uint32_t len)
 {
-	char data = 0, i= 0, count;
-//	char *lbuff;
-	uint32_t paylen = 0;
+	char data = 0, i= 0;
+	static uint32_t paylen = 0;
+	static uint32_t dataRead = 0;
 	
-	count = 3;
-	do{
-		count --;
-		res = serialMatch(mdm, "+IPD,", 2000);
-	}
-	while(res != mdmOK && count > 0);
 	
-	if(count > 0)
-	{
-		do
+	
+	printf("IN read\n");
+	if(toggle == 1){
+		count = 3;
+		toggle = 0;
+		do{
+			count --;
+			res = serialMatch(mdm, "+IPD,", 2000);
+		}
+		while(res != mdmOK && count > 0);
+	
+		if(count > 0)
 		{
-			if(serial_rx_ready())
+			count = 0;
+			do
 			{
-				serial_get(data);							// Payload length
-				if(data == ':')
-					break;
+				if(serial_rx_ready())
+				{
+					serial_get(data);							// Payload length
+					if(data == ':')
+						break;
 				
 			
-				if(i!= 0)
-					paylen *=10;
+					if(i!= 0)
+						paylen *=10;
 				
-				paylen += (char)atoi(&data);
-				i++;
+					paylen += (char)atoi(&data);
+					i++;
+				}
 			}
+			while(1);
+			printf("PAYLOAD len=%d\n",paylen);
 		}
-		while(1);
-		printf("PAYLOAD len=%d\n",paylen);
-		
-		
-		if(paylen < len)							// Data received is lesser than requested	
-			len = paylen;	
-		//serial_get(data);							// colon
-	
-		i = 0;
-		TIME_SET(0);
-		
-		do{
-			if(serial_rx_ready())
-			{
-				serial_get(buffer[i]);
-				//printf("0x%x\n", (char)buffer[i]);
-				i++;
-				TIME_SET(0);
-			}
-				
-		}
-		while((len != i) && (TIME < 1000));
-		
-		return res;
+		else 
+		return mdmReadFail;
 	}
 	
-	return mdmSendingFail;
+	if(paylen <= dataRead)
+	{	
+		dataRead = 0;
+		return mdmReadFail;
+	}
+			
+	if(paylen < len)							// Data received is lesser than requested	
+		len = paylen;	
+	
+	i = 0;
+	TIME_SET(0);
+		
+	do{
+		if(serial_rx_ready())
+		{
+			serial_get(buffer[i]);
+			printf("%c", (char)buffer[i]);
+			i++;
+			TIME_SET(0);
+		}
+				
+	}
+	while((len != i) && (TIME < 1000));
+		
+	dataRead += i;
+	
+	
+	if(i == 0)
+		count ++;
+	// This means data is not there in the buffer; time to tell
+	if(count > 2)
+		return mdmReadFail;
+	
+	printf("\ntotal=%d read=%d\n",paylen,dataRead);
+	return i;									// Number of bytes read
+
 }
 
 /*
@@ -644,9 +747,31 @@ mdmStatus mdmRead(mdmIface *mdm, char *buffer, uint32_t len)
 */
 mdmStatus mdmClose(mdmIface *mdm)
 {
-	res = sendwait(mdm, "AT+CIPCLOSE\r", "LOSE OK", 1000);
+	count = 5;
 	
-	state = CLOSE;
+	res = mdmState(mdm);
+	if(state == CONNECT)
+	{// TCP connection closing takes more time than the UDP
+		do{
+			mdmState(mdm);
+			count --;
+			if(state == CONNECT)
+			{
+				res = sendwait(mdm, "AT+CIPCLOSE\r", "LOSE OK", 1000);
+			}
+			else if(state == CLOSE)
+				{
+					res = mdmOK;
+					break;
+				}
+		}
+		while(res != mdmOK && count > 0);
+		
+		if(count > 0 || res == mdmOK)
+		state = CLOSE;
+		else 
+		state = PDPDEACT;			// SHUT the connection
+	}
 	return res;
 	
 }
@@ -657,7 +782,13 @@ mdmStatus mdmClose(mdmIface *mdm)
 */
 mdmStatus mdmShut(mdmIface *mdm)
 {
-	res = sendwait(mdm, "AT+CIPSHUT", "OK", 1000);
+	count = 5;
+	do{
+		count --;
+		res = sendwait(mdm, "AT+CIPSHUT", "SHUT OK", 1000);
+	}
+	while(res != mdmOK && count > 0);
+	
 	state = SHUT;
 	return res;
 }
@@ -672,19 +803,26 @@ mdmStatus mdmShut(mdmIface *mdm)
 			 
 		}
 		options.c_cflag |= (CS8);  								// RTS flow control of input
-		cfsetspeed(&options, B9600);    						// Set 19200 baud
+		cfsetspeed(&options, B115200);    						// Set 19200 baud
 	}
 
 
 	/* Main Function */
 	int main(void) {
-
+		char *get,*host;
 		pthread_t timer_thread;											// timer thread which keeps updating timer at 10ms
 		pthread_t read_thread;											// Reads data from serial port and keeps in the modem buffer
 		
 		server *udp = (server *)malloc(sizeof(server));
+		server *tcp = (server *)malloc(sizeof(server));
 		if(udp == NULL)
 			printf("Mmmry Err\n");
+		
+		tcp->port = malloc(4);
+		tcp->addr = malloc(20);
+		
+		tcp->port = "80";
+		tcp->addr = "www.ubicomp.in";
 		
 		udp->port = malloc(4);
 		udp->addr = malloc(20);
@@ -698,6 +836,7 @@ mdmStatus mdmShut(mdmIface *mdm)
 		mdmIface modm;
 		
 		modm.minfo = (mdmInfo *)malloc(sizeof(mdmInfo));
+		modm.minfo->ip_addr = malloc(15);
 		
 		bufferInit(&modem_buffer, mBuffer, MaxRx);
 
@@ -722,25 +861,48 @@ mdmStatus mdmShut(mdmIface *mdm)
 		res = mdmFSM(&modm);
 		
 		if(res == mdmOK){
-	  printf("Modem initialised successfully\n");
+		printf("Modem initialised successfully\n");
 		//printf("\nIP:%s\n",modm.minfo->ip_addr);
 		res = mdmUDPConnect(&modm, udp);
 		printf("\n");
 		
 		sendNTPRequest(ntp); 		// Initialise the ntp structure
 		
-		res = mdmWrite(&modm,(char *) ntp, 48);
+		res = mdmWrite(&modm,(char *) ntp, 48,1);
 		
 		res = mdmRead(&modm,(char *) ntp, 48);
 		
-		if(res == mdmOK)
+		if(res != mdmReadFail)
 		NtpDCall(ntp);
 		
 		res = mdmClose(&modm);
 		}
+		
+		if(res == mdmOK){
+		
+		res = mdmFSM(&modm);
+		
+		host = modm.minfo->ip_addr;
+		printf("ip:%s\n",host);
+		
+		// Build Login Query	
+	    get = build_get_query(host, LOGINPAGE, FORMDATA, "name="USERNAME"&pass="PASSWORD"&form_id=user_login&op=Log%20in");
+	    fprintf(stderr, "Query is:\n<<START>>\n%s\n<<END>>\n", get);
+		
+		res = mdmTCPConnect(&modm, tcp);
+		
+		res = mdmWrite(&modm, get, strlen(get), 1);
+		
+		do{
+		res = mdmRead(&modm, get, 20);
+		//printf("Data Read=%d\n",res);
+		}
+		while(res != mdmReadFail);
+	
+		}
 		else
 	  printf("Modem initialised FAiled\n");
-
+	
 		
 		
 		//sleep(5);
