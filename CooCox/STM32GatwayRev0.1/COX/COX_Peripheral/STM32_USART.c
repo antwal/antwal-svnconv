@@ -16,14 +16,20 @@ static uc8 ADCPrescTable[4] = {2, 4, 6, 8};
 ErrorStatus HSEStartUpStatus;
 
 
-void NVIC_Configuration(void)
+void NVIC_Configuration_uart(USART_TypeDef *USARTx)
  {
 
     NVIC_InitTypeDef NVIC_InitStructure;
     /* Configure one bit for preemption priority */
      NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);
     /* Enable the RTC Interrupt */
-    NVIC_InitStructure.NVIC_IRQChannel = 37;			//IRQn_Type.USART1_IRQn;
+     if(USARTx == USART1)
+    	 NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;			//IRQn_Type.USART1_IRQn;
+     if(USARTx == USART2)
+    	 NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;			//IRQn_Type.USART2_IRQn;
+     if(USARTx == USART3)
+         NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;			//IRQn_Type.USART3_IRQn;
+
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
@@ -697,7 +703,7 @@ static COX_Status STM_UART_Cfg (USART_TypeDef *USARTx, uint8_t index, uint32_t a
 			 break;
 
 			 case COX_SERIAL_INT_CONF:
-				 	NVIC_Configuration();
+				 	NVIC_Configuration_uart(USARTx);
 				 switch(arg){
 				 case RXNE_ENABLE:
 					 USARTx->CR1 |= 0x20;

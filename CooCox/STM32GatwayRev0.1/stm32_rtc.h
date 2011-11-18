@@ -9,6 +9,7 @@
 #define __COX_STM32_RTC_H
 
 #include "cox_rtc.h"
+#include "stdint.h"
 
 typedef unsigned long  ul32;
 typedef unsigned short us16;
@@ -68,6 +69,26 @@ typedef enum {
 	RTC_EVENT_IT_ALR  = 1,   /* !<Alarm interrupt Event     */
 	RTC_EVENT_IT_SEC  = 2,   /* !<Second interrupt  Event   */
 } LPC_RTC_EVENT_Def;
+
+/* Time Structure*/
+typedef struct {
+us16  YYYY;				// Year
+uint8_t MM;				// Month
+uint8_t DD;				// Day
+uint8_t hh;				// Hour in 24 hr fmt
+uint8_t mm;				// minute
+uint8_t ss;				// Seconds
+}TIME;
+
+
+void Cur_Time(TIME *);
+void RTC_WaitForSynchro(void);
+void RTC_WaitForLastTask(void);
+void RTC_WaitForSynchro(void);
+void RCC_ClearFlag(void);
+uint8_t RCC_GetFlagStatus(uint8_t);
+void NVIC_Configuration_rtc(void);
+uint8_t gmtime( uint32_t time, TIME *tm, uint8_t ntp);
 
 extern COX_RTC_PI pi_rtc;
 

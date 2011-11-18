@@ -25,6 +25,7 @@
 						<entry flags="" kind="includePath" name="COX"/>
 						<entry flags="" kind="includePath" name="COX/COX_Peripheral"/>
 						<entry flags="" kind="includePath" name="FAT"/>
+						<entry flags="" kind="includePath" name="Modem"/>
 						<entry flags="" kind="includePath" name="stm_lib"/>
 						<entry flags="" kind="includePath" name="stm_lib/inc"/>
 						<entry flags="" kind="macro" name="__GNUC__" value=""/>
@@ -52,6 +53,7 @@
 				<pathentry include="J:/CooCox/STM32GatwayRev0.1/COX" kind="inc" path="" system="true"/>
 				<pathentry include="J:/CooCox/STM32GatwayRev0.1/COX/COX_Peripheral" kind="inc" path="" system="true"/>
 				<pathentry include="J:/CooCox/STM32GatwayRev0.1/FAT" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CooCox/STM32GatwayRev0.1/Modem" kind="inc" path="" system="true"/>
 				<pathentry include="J:/CooCox/STM32GatwayRev0.1/stm_lib" kind="inc" path="" system="true"/>
 				<pathentry include="J:/CooCox/STM32GatwayRev0.1/stm_lib/inc" kind="inc" path="" system="true"/>
 				<pathentry kind="mac" name="__GNUC__" path="" value=""/>

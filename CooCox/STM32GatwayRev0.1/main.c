@@ -16,7 +16,10 @@
 //#include "Type.h"
 #include "ff.h"
 #include "diskio.h"
+#include "modem.h"
 
+// Basestaion ID
+uint8_t BaseStnId = 11;
 
 
 /*---------------------------- Symbol Define -------------------------------*/
@@ -26,8 +29,8 @@
 
 /*---------------------------- Variable Define -------------------------------*/
 	//OS_STK     task1_stk[STACK_SIZE_DEFAULT];	  /*!< Define "taskA" task stack */
-	OS_STK     task2_stk[100];	  /*!< Define "taskB" task stack */
-	OS_STK     task3_stk[STACK_SIZE_DEFAULT+300];	  /*!< Define "led" task stack   */
+	OS_STK     task2_stk[300];	  /*!< Define "taskB" task stack */
+	//OS_STK     task3_stk[400];	  /*!< Define "led" task stack   */
 	//OS_STK     task4_stk[STACK_SIZE_DEFAULT];	  /*!< Define "led" task stack   */
 
 
@@ -42,6 +45,11 @@ MSD_Dev *sd= &sd_var;							// MSD instance
 //Decleration of   serial Ports
 COX_SERIAL_PI *myUSART1 = &pi_serial1;
 COX_SERIAL_PI *myUSART2 = &pi_serial2;
+extern COX_SERIAL_PI *myUSART3;
+
+uint32_t TIME_TICK;									// 10 millseconds counter
+void TIME_SET(uint16_t a){ TIME_TICK=a;}                      	// Set 10 millisecond counter to value 'a'
+
 
 //attach and initilize the leds on stm32 board
 COX_PIO_Dev LED0 = COX_PIN(2,8);
@@ -58,8 +66,8 @@ void *MailQueue[MAIL_QUEUE_SIZE];
 void *SDQueue[MAIL_QUEUE_SIZE];
 
 extern void Read_Data(unsigned char );
-extern void wsnPacketDecoding(void );
-extern FRESULT SdInterface(void);
+extern char* wsnPacketDecoding(void );
+extern FRESULT SDInterface(char *);
 
 uint8_t sdConfig(void)
 {
@@ -76,10 +84,10 @@ uint8_t sdConfig(void)
 	sd->pio->Dir(sd->cs_pin,1);
 
 	sd->spi->Cfg(COX_SPI_CFG_MODE,COX_SPI_MODE0,0);
-	sd->spi->Cfg(COX_SPI_CFG_RATE,SPI_BaudRatePrescaler_8,0);
+	sd->spi->Cfg(COX_SPI_CFG_RATE,SPI_BaudRatePrescaler_2,0);
 	sd->spi->Cfg(COX_SPI_CFG_BITS,8,0);
 	sd->spi->Cfg(COX_SPI_CFG_FSB,COX_MSPI_FSB_MSB,0);
-	ret = sd->spi->Init(COX_SPI_MODE0, 8);
+	ret = sd->spi->Init(COX_SPI_MODE0, 2);
 
 	return ret;
 }
@@ -117,11 +125,18 @@ void pchar(unsigned char c)
 
 void initSerial(void){
 	//bufferInit(&recvBuffer, buffer, 50);
-	myUSART1->Init(57600);
+	//myUSART1->Init(57600);
 	myUSART2->Init(115200);
-	myUSART1->Cfg( COX_SERIAL_INT_CONF, RXNE_ENABLE,0);
+	myUSART3->Init(9600);
+	//myUSART1->Cfg( COX_SERIAL_INT_CONF, RXNE_ENABLE,0);
+	myUSART3->Cfg( COX_SERIAL_INT_CONF, RXNE_ENABLE,0);
 }
 
+
+void TmrCallBack(void)
+{
+	TIME_TICK ++;
+}
 /**
  *
 	 *******************************************************************************
@@ -153,14 +168,28 @@ void initSerial(void){
 	 */
 	void task2 (void* pdata)
 	{
+		OS_TCID sftmr;
+		mdmIface modm;
+		sftmr = CoCreateTmr(TMR_TYPE_PERIODIC,
+		                                  1,
+		                                  1,
+		                                  TmrCallBack);
+		CoStartTmr (sftmr);
+		TIME_SET(0);
 
-		  for (;;)
+
+		ntp_time(&modm);
+		for (;;)
 		  {
-			  pi_pio.Out(LED1, 1);      /* Output hign level to turn on LED0 */
-			  CoTickDelay (100);
+			  if(TIME_TICK == 200)
+			  {pi_pio.Out(LED1, 1);      /* Output hign level to turn on LED0 */
+			  //CoTickDelay (100);
+			  TIME_SET(0);
+			  }
 
+			  if(TIME_TICK == 100)
 			  pi_pio.Out(LED1, 0);      /* Output low level to turn off LED0 */
-			  CoTickDelay (100);
+			  //CoTickDelay (100);
 		  }
 	}
 
@@ -180,8 +209,8 @@ void initSerial(void){
 		sdConfig();
 		  for (;;)
 		  {
-			  wsnPacketDecoding();
-			  SdInterface();
+			  SDInterface(wsnPacketDecoding());
+
 		  }
 	}
 	/**
@@ -215,7 +244,7 @@ void initSerial(void){
 
 int main(void)
 {
-	OS_TID task_1, task_2,task_3,task_4;
+	OS_TID task_2,task_3;
 	//Initilize serial configuration
 	initSerial();
 
@@ -227,14 +256,16 @@ int main(void)
 	pi_pio.Dir(LED0,1);
 	pi_pio.Dir(LED1,1);
 
+	// Initialising RTC clk
+	RTC_Timer();
 	/*!< Initial CooCox CoOS          */
 	CoInitOS();
 
 
     /*!< Create three tasks	*/
    // task_1 = CoCreateTask (task1,0,0,&task1_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
-    task_2 = CoCreateTask (task2,0,1,&task2_stk[100-1],100);
-    task_3 = CoCreateTask (task3,0,3,&task3_stk[STACK_SIZE_DEFAULT+300-1],STACK_SIZE_DEFAULT+300);
+    task_2 = CoCreateTask (task2,0,2,&task2_stk[200-1],200);
+   // task_3 = CoCreateTask (task3,0,1,&task3_stk[STACK_SIZE_DEFAULT+400-1],STACK_SIZE_DEFAULT+400);
    // task_4 = CoCreateTask (task4,0,2,&task4_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
 
     // Create a message queue for storing the received characters

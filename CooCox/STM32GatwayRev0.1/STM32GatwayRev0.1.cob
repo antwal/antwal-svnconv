@@ -13,11 +13,9 @@
     <Component id="bfa102a1-96ed-11df-80ae-001d7d723e56" name="RCC"/>
     <Component id="bfd66a81-96ed-11df-80ae-001d7d723e56" name="BKP"/>
     <Component id="bfe42621-96ed-11df-80ae-001d7d723e56" name="GPIO"/>
-    <Component id="c00bf971-96ed-11df-80ae-001d7d723e56" name="RTC"/>
     <Component id="994b0730-4bc0-11e0-8e4a-001d7dcd0baf" name="CMSIS Boot"/>
     <Component id="64d2c4e0-4e11-11e0-8ec0-001d7dcd0baf" name="MISC"/>
     <Component id="a865c5c1-4ea4-11e0-a9e4-e005c591a256" name="STM32_PIO"/>
-    <Component id="35d620e1-4ea9-11e0-a9e4-e005c591a256" name="STM32_RTC"/>
     <Component id="a3913240-4eaf-11e0-9fc8-e005c591a256" name="STM32_SPI"/>
     <Component id="f3105e00-4eb8-11e0-a913-001fd0c63d33" name="STM32_USART"/>
   </Components>

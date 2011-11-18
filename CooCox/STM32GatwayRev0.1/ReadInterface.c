@@ -8,6 +8,7 @@
 #include "stdint.h"
 #include "string.h"
 #include <stdio.h>
+#include "stm32_rtc.h"
 
 #define MAX_BUFF_SIZE 64
 
@@ -22,9 +23,7 @@ extern OS_EventID sd_queue_id;
 // Message to be added on to queue , taken two buffer packet //
 MSG DataMsg[8];
 
-
-
-
+extern uint8_t BaseStnId;
 /*
  * The function is called by the WSN Decoder Engine to parse
  * the raw Data packet received from the MIB(Mote Interafce Board)510/600.
@@ -69,7 +68,7 @@ void Read_Data(unsigned char ch){
 				printf("MISSED: 0x%x\n",DataMsg[buf].DataBuffer[2]);
 			}
 			last = DataMsg[buf].DataBuffer[2];
-
+			printf("RCVD=%d\n\r",DataMsg[buf].DataBuffer[2]);
 		//	printf("\nData is: ");
 
 			//for (j=0; j < i; j++){
@@ -111,12 +110,13 @@ void Read_Data(unsigned char ch){
 /*----------------------------------------------------------------------------*/
 /*	  This is called by task 2 to eat the MsgQ of created by read interface   */
 /*----------------------------------------------------------------------------*/
-void wsnPacketDecoding(void ){
+char * wsnPacketDecoding(void ){
 	MSG DataMsg;
 	StatusType result;
 	void *msg;
 	Tos_Msg *ToSMessage;		// Tos_Msg received //
-
+	uint8_t j;
+	TIME cur_time;
 
 	 /* Wait for a mail, time-out:0 */
 	msg = CoPendQueueMail (raw_queue_id, 0, &result);
@@ -136,28 +136,51 @@ void wsnPacketDecoding(void ){
 			/********* Get Tos_Msg from the Raw Packet ******/
 			ToSMessage = (Tos_Msg *)&DataMsg.DataBuffer[RAWPKT_HEADER_LEN];
 
-
-			memcpy(&DataMsg.DataBuffer[0], &ToSMessage->data[0 + ROUTE_HEADER_LEN], sizeof(struct SensedData));
-//TODO		Time stamp + BaseStnIdneeds to be added over here
-
-			DataMsg.DataBuffer[sizeof(struct SensedData)] = BaseStnId;
-			DataMsg.DataBuffer[sizeof(struct SensedData) + 1 ] = ;
+			/*
+			 * Here we'll add 0xA5A5 to the beginning of teh packet such that we can discriminate
+			 * between number of packets
+			 */
 
 
-			// Post the data to the sdcard queue
-			/*result = CoPostQueueMail (sd_queue_id, (void *) &DataMsg);
-			if (result != E_OK){
-				if (result == E_INVALID_ID){
-					printf("Invalid Queue ID ! \n");
-				}
-				else if (result == E_MBOX_FULL){
-					printf("The Queue is full !\n");
-				}
+			DataMsg.DataBuffer[0] = 0xA5;
+			DataMsg.DataBuffer[1] = 0xA5;
+			memmove(&DataMsg.DataBuffer[2], &ToSMessage->data[0 + ROUTE_HEADER_LEN], sizeof(struct SensedData));
+//DONE		Time stamp + BaseStnIdneeds to be added over here
+
+			DataMsg.DataBuffer[sizeof(struct SensedData) + 2] = BaseStnId;
+
+			Cur_Time( &cur_time);							// Get the current time
+
+
+			// Appneding the timestamp to the data packet
+			memcpy(&DataMsg.DataBuffer[sizeof(struct SensedData) + 3], &cur_time, sizeof(TIME));
+
+			/*
+			 *  Here Add 0xA5A5 to the end to make the complete Packet
+			 */
+			DataMsg.DataBuffer[DATA_LEN-2] = 0xA5;
+			DataMsg.DataBuffer[DATA_LEN-1] = 0xA5;
+
+			/* Now data looks like 0xA5A5 + data + basestnid + Timestamp + 0xA5A5
+			 * Data PAcket Formation is done
+			 * Now its time to store the data in the SDcard
+			 */
+			// Printf What we've got
+
+			printf("Data= %d",DataMsg.DataBuffer[6]);
+			/*for (j=0; j < DATA_LEN; j++){
+				printf("\t%x ",DataMsg.DataBuffer[j]);
 			}*/
+			printf("\n\r");
+
+		//	SDInterface(&DataMsg.DataBuffer[0]);
 		}
 		else{
 			printf("Discarded\n");
 		}
+
+		// return the Data Buffer
+		return &DataMsg.DataBuffer[0];
 
     }
 

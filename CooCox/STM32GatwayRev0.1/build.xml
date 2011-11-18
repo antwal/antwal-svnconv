@@ -54,6 +54,7 @@
       <includepath path="CoOS"/>
       <includepath path="CoOS/kernel"/>
       <includepath path="FAT"/>
+      <includepath path="Modem"/>
       
       <!-- arm-none-eabi-gcc compiler arguments -->
       <compilerarg value="-mcpu=cortex-m3"/>

@@ -22,6 +22,7 @@ RTC_Event_Handler Rtc_Overflow_event = COX_NULL;
 #define SECS_YR				31536000UL						// Seconds per Yr
 #define	LEAPYEAR(year)	(!((year) % 4) && (((year) % 100) || !((year) % 400)))
 #define	YEARSIZE(year)	(LEAPYEAR(year) ? 366 : 365)
+#define TimeZone		22									//GMT+2 = +8; GMT+5:30= 22
 
 /* To generate Alarms */
 #define HOURLY				0
@@ -30,27 +31,9 @@ RTC_Event_Handler Rtc_Overflow_event = COX_NULL;
 #define AFTER_EACH_15MIN	3
 #define ONE_SHOT			4
 
-typedef struct TIME{
-us16  YYYY;				// Year
-uint8_t MM;				// Month
-uint8_t DD;				// Day
-uint8_t hh;				// Hour in 24 hr fmt
-uint8_t mm;				// minute
-uint8_t ss;				// Seconds
-}TIME;
+extern TIME *tm;
 
-
-// Default time
-TIME def= {
-		2011,			// Year 2011
-		1,				// January
-		1,				// 1st day
-		00,				// Midnight
-		00,				// 0 minutes
-		00				// 0 seconds
-};
-
-TIME *tm = &def;
+COX_Status STM_RTC_Write (TIME *tm);
 
 uint8_t monthlen(uint8_t isleapyear,uint8_t month){
 	if(month==1){
@@ -81,38 +64,123 @@ uint8_t monthlen(uint8_t isleapyear,uint8_t month){
  * @param ntp : This tells if the time is from NTP or from local RTC
  * @return 	  : is always success
  */
-uint8_t gmtime(const uint32_t time, TIME *tm, uint8_t ntp)
+uint8_t gmtime( uint32_t time, TIME *tm, uint8_t ntp)
 {
-	uint8_t i;
 	uint32_t dayclock;
     uint16_t dayno;
-
+    uint16_t zone = 15 * 60;
     // If time is from NTP else continue with current year
-    if(ntp)
+    if(ntp){
     	tm->YYYY = EPOCH_YR;
-
+    	time += zone * TimeZone;
+    }
 	dayclock = time % SECS_DAY;
 	dayno = time / SECS_DAY;
-
+	tm->DD = dayno+1;
 	tm->ss = dayclock % 60UL;
 	tm->mm = (dayclock % 3600UL) / 60;
 	tm->hh = dayclock / 3600UL;
 
+	// IT does not touch the year if days are less than 366
 	while (dayno >= YEARSIZE(tm->YYYY)) {
 		dayno -= YEARSIZE(tm->YYYY);
 		tm->YYYY++;
 	}
 
 	tm->MM = 0;
-	while (dayno >= monthlen(LEAPYEAR(tm_year),tm->MM)) {
-		dayno -= monthlen(LEAPYEAR(tm_year),tm->MM);
+	while (dayno >= monthlen(LEAPYEAR(tm->YYYY),tm->MM)) {
+		dayno -= monthlen(LEAPYEAR(tm->YYYY),tm->MM);
 		tm->MM++;
 	}
+	tm->MM++;
 
+	if(ntp)
+	{
+		STM_RTC_Write (tm);				// Writing time to RTC
+	}
 	return(COX_SUCCESS);
 }
 
+/**
+  * @brief  Waits until last write operation on RTC registers has finished.
+  * @note   This function must be called before any write to RTC registers.
+  * @param  None
+  * @retval None
+  */
+void RTC_WaitForLastTask(void)
+{
+  /* Loop until RTOFF flag is set */
+  while ((RTC->CRL & RTC_FLAG_RTOFF) == (uint16_t)RESET)
+  {
+  }
+}
 
+/**
+  * @brief  Waits until the RTC registers (RTC_CNT, RTC_ALR and RTC_PRL)
+  *   are synchronized with RTC APB clock.
+  * @note   This function must be called before any read operation after an APB reset
+  *   or an APB clock stop.
+  * @param  None
+  * @retval None
+  */
+void RTC_WaitForSynchro(void)
+{
+  /* Clear RSF flag */
+  RTC->CRL &= (uint16_t)~RTC_FLAG_RSF;
+  /* Loop until RSF flag is set */
+  while ((RTC->CRL & RTC_FLAG_RSF) == (uint16_t)RESET)
+  {
+  }
+}
+
+/**
+  * @brief  Checks whether the specified RTC flag is set or not.
+  * @param  RTC_FLAG: specifies the flag to check.
+  *   This parameter can be one the following values:
+  *     @arg RTC_FLAG_RTOFF: RTC Operation OFF flag
+  *     @arg RTC_FLAG_RSF: Registers Synchronized flag
+  *     @arg RTC_FLAG_OW: Overflow flag
+  *     @arg RTC_FLAG_ALR: Alarm flag
+  *     @arg RTC_FLAG_SEC: Second flag
+  * @retval The new state of RTC_FLAG (SET or RESET).
+  */
+FlagStatus RTC_GetFlagStatus(uint16_t RTC_FLAG)
+{
+  FlagStatus bitstatus = RESET;
+
+  /* Check the parameters */
+  assert_param(IS_RTC_GET_FLAG(RTC_FLAG));
+
+  if ((RTC->CRL & RTC_FLAG) != (uint16_t)RESET)
+  {
+    bitstatus = SET;
+  }
+  else
+  {
+    bitstatus = RESET;
+  }
+  return bitstatus;
+}
+
+/**
+  * @brief  Clears the RTC's pending flags.
+  * @param  RTC_FLAG: specifies the flag to clear.
+  *   This parameter can be any combination of the following values:
+  *     @arg RTC_FLAG_RSF: Registers Synchronized flag. This flag is cleared only after
+  *                        an APB reset or an APB Clock stop.
+  *     @arg RTC_FLAG_OW: Overflow flag
+  *     @arg RTC_FLAG_ALR: Alarm flag
+  *     @arg RTC_FLAG_SEC: Second flag
+  * @retval None
+  */
+void RTC_ClearFlag(uint16_t RTC_FLAG)
+{
+  /* Check the parameters */
+  assert_param(IS_RTC_CLEAR_FLAG(RTC_FLAG));
+
+  /* Clear the corresponding RTC flag */
+  RTC->CRL &= (uint16_t)~RTC_FLAG;
+}
 
 /***************************************************************************//**
  * @brief     RTC Handler
@@ -137,12 +205,14 @@ void RTC_IRQHandler(void)
 
 		/* Reset RTC Counter when Time is 31:Dec:23:59:59 */
 		if(LEAPYEAR(tm->YYYY))
-			yr_end = SEC__YR + SECS_DAY;
+			yr_end = SECS_YR + SECS_DAY;
 		else
 			yr_end = SECS_YR;
 
 		if(((ul32)(((ul32)RTC->CNTH << 16 ) | (us16)(RTC->CNTL))) == yr_end)
 		{
+			// Happy New Year
+			tm->YYYY++;
 			/* Set the CNF flag to enter in the Configuration Mode */
 			RTC->CRL |= CRL_CNF_Set;
 
@@ -354,10 +424,10 @@ void STM_RTC_Read (TIME *tm)
  *	GET THE CURRENT TIME
  */
 
-TIME* Cur_Time(void)
+void Cur_Time(TIME *tim)
 {
-	STM_RTC_Read(tm);
-	return (tm);					// Return the Cuurent time read after gmtime
+	STM_RTC_Read(tim);
+	tim->YYYY = tm->YYYY;
 }
 /***************************************************************************//**
  * @brief     Set RTC Time
@@ -439,14 +509,14 @@ COX_Status STM_RTC_Alarm (uint8_t freq, TIME *tm, RTC_Event_Handler handler)
 
 		switch(freq){
 		case HOURLY:
-				tm = Cur_Time();
+				Cur_Time(tm);
 				//tm->hh + 1;
 				tm->mm = 0;
 				tm->ss = 0;
 			break;
 
 		case DAILY:
-				tm = Cur_Time();
+				Cur_Time(tm);
 
 				//tm->hh + 1;
 				tm->mm = 0;

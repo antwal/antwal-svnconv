@@ -130,7 +130,7 @@ Enable(1) or disable(0) stack overflow checkout .
 /*!< 
 Enable(1) or disable(0) memory management.	      
 */
-#define CFG_MM_EN               (1)   
+#define CFG_MM_EN               (1)
 
 /*!< 
 Max number of memory.(must be less than 32).      
@@ -145,7 +145,7 @@ Max number of memory.(must be less than 32).
 /*!< 
 Enable(1) or disable(0) kernel heap management.	      
 */
-#define CFG_KHEAP_EN            (1)  		
+#define CFG_KHEAP_EN            (0)
 
 /*!< 
 Kernel heap size(word).      
@@ -251,7 +251,7 @@ Enable(1) or disable(0) mutex management.
 Max number of mutex.(must be less than 255).      
 */ 
 #if CFG_MUTEX_EN >0
-#define CFG_MAX_MUTEX           (10)
+#define CFG_MAX_MUTEX           (5)
 #endif
 
 /*---------------------- Utility Management Config --------------------------*/

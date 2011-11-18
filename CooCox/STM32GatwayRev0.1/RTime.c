@@ -4,8 +4,29 @@
 
 #include "stm32f10x_bkp.h"
 #include <stdio.h>
+#include <stdint.h>
 #include "misc.h"
 #include "stm32_rtc.h"
+#include "stm32f10x.h"
+//#include "stm32f10x.h"
+
+#define RCC_FLAG_PINRST                  ((uint8_t)0x7A)
+#define RCC_FLAG_PORRST                  ((uint8_t)0x7B)
+
+void Periodic(void);
+uint16_t BKP_ReadBackupRegister(uint16_t BKP_DR);
+// Default time
+TIME def= {
+		2011,			// Year 2011
+		1,				// January
+		1,				// 1st day
+		00,				// Midnight
+		00,				// 0 minutes
+		00				// 0 seconds
+};
+
+TIME *tm = &def;
+
 
 void RTC_Timer(void)
 {
@@ -14,8 +35,9 @@ void RTC_Timer(void)
 	COX_RTC_PI *rtc = &pi_rtc;
 
     /* NVIC configuration */
-    NVIC_Configuration();
+    NVIC_Configuration_rtc();
 
+    printf("IN RTC\n\r");
     if (BKP_ReadBackupRegister(BKP_DR1) != 0xA5A5)
     {
         /* Backup data register value is not correct or not yet programmed (when
@@ -31,10 +53,10 @@ void RTC_Timer(void)
         /* Adjust time by values entred by the user on the hyperterminal */
         rtc->Start();
 
-        status = rtc->Write(&tm);
+        status = rtc->Write(tm);
         rtc->Stop();
 
-       	rtc->Read(&tm);
+       	rtc->Read(tm);
 
         rtc->Event(RTC_EVENT_IT_SEC, Periodic, 0);
 
@@ -70,7 +92,7 @@ void RTC_Timer(void)
 
 
 
-void NVIC_Configuration(void)
+void NVIC_Configuration_rtc(void)
 {
 	NVIC_InitTypeDef NVIC_InitStructure1;
 
@@ -78,7 +100,7 @@ void NVIC_Configuration(void)
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
 
 	/* Enable the RTC Interrupt */
-	NVIC_InitStructure1.NVIC_IRQChannel = RTC_IRQChannel;
+	NVIC_InitStructure1.NVIC_IRQChannel = RTC_IRQn;
 	NVIC_InitStructure1.NVIC_IRQChannelPreemptionPriority = 1;
 	NVIC_InitStructure1.NVIC_IRQChannelSubPriority = 0;
 	NVIC_InitStructure1.NVIC_IRQChannelCmd = ENABLE;
@@ -123,4 +145,13 @@ uint16_t BKP_ReadBackupRegister(uint16_t BKP_DR)
   tmp += BKP_DR;
 
   return (*(__IO uint16_t *) tmp);
+}
+
+void Periodic(void)
+{
+	//TIME *tm;
+	Cur_Time(tm);
+
+	printf("Time is: %d:%d:%d - %d,%d,%d\r",tm->hh,tm->mm, tm->ss, tm->DD,tm ->MM, tm->YYYY);
+
 }

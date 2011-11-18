@@ -521,7 +521,7 @@ uint8_t MSD_GetDataResponse(const MSD_Dev *sd)
 
   while (i <= 64)
   {
-	 // delay();
+	  //delay();
     /* Read resonse */
     response = sd->spi->ReadWrite(MSD_DUMMY);
    // printf("RES=0x%x\t",response);
@@ -577,7 +577,7 @@ COX_Status MSD_GetResponse(const MSD_Dev *sd, uint8_t Response)
 
   if (Count == 0) {
     /* After time out */
-	  //printf("NO\t");
+	  printf("NO\t");
     return COX_ERROR;
   } else {
     /* Right response got */
@@ -746,9 +746,12 @@ COX_Status MSD_GoIdleState(const MSD_Dev *sd)
 	   else{ CardType = CT_MMC;}
   }
 
-  	  counter = 0x1;
+  	  counter = 0x2;
   // Send MMC CMD16(SET_BLOCKLEN) to 512 bytes
     MSD_SendCmd(sd,MSD_SET_BLOCKLEN, 512, 1);
+    do{
+    counter --;
+    }
   	while(MSD_GetResponse(sd, MSD_RESPONSE_NO_ERROR) && counter > 0);
   	if(counter > 0){
   		//printf("Block set\n\r");
