@@ -219,6 +219,7 @@ void BKP_SetRTCCalibrationValue(uint8_t CalibrationValue)
   * @param  Data: data to write
   * @retval None
   */
+
 void BKP_WriteBackupRegister(uint16_t BKP_DR, uint16_t Data)
 {
   __IO uint32_t tmp = 0;
@@ -238,6 +239,7 @@ void BKP_WriteBackupRegister(uint16_t BKP_DR, uint16_t Data)
   *   This parameter can be BKP_DRx where x:[1, 42]
   * @retval The content of the specified Data Backup Register
   */
+
 uint16_t BKP_ReadBackupRegister(uint16_t BKP_DR)
 {
   __IO uint32_t tmp = 0;

@@ -7,8 +7,6 @@
 #include <CoOS.h>			              /*!< CoOS header file	         */
 
 
-	#define MaxRx   100     			// Maximum size of receive buffer
-	#define MaxTx   100      			// Maximum size of transmit buffer
 
 	#include "modem.h"
 	#include "buffer.h"
@@ -17,7 +15,7 @@
 	COX_SERIAL_PI *myUSART3 = &pi_serial3;
 
 	#define serial_tx_ready()       1               							// Transmitter empty
-	#define serial_send(a)          myUSART3->Write(&a, 1);		        					// Transmit char a
+	#define serial_send(a)          myUSART3->Write(&a, 1)      					// Transmit char a
 	#define serial_rx_ready()       bufferDataAvail(&modem_buffer) 				// Receiver full
 	#define serial_get(buff)        buff = bufferGetFromFront(&modem_buffer)   	// Receive char from modem
 	#define serial_error()          0                               			// USART error
@@ -25,7 +23,7 @@
 
 
 	unsigned char err;									// Stores the error number
-	char APaddr[] = "\"gprssouth.cellone.in\"\r";
+	const char APaddr[] = "\"gprssouth.cellone.in\"\r";
 
 	unsigned char signal[2];							// Stores signal strength
 	char ipAddr[20] = {'\0'};								// used to store ip address
@@ -53,8 +51,8 @@
 
 	unsigned char state = SHUT;
 	unsigned char addr1, addr2, addr3, addr4;      		// Assigned IP address
-	cBuffer modem_buffer;								// Receive Buffer for modem
-	unsigned char mBuffer[MaxRx];
+extern	cBuffer modem_buffer;								// Receive Buffer for modem
+extern 	unsigned char *mBuffer;
 
 
 
@@ -82,11 +80,13 @@
 		{
 			//count ++;
 			ch = (USART3->DR & (us16)0x01FF);
-			if(bufferIsNotFull(&modem_buffer))
+			if(bufferIsNotFull(&modem_buffer)){
 				bufferAddToEnd(&modem_buffer, ch);					// Keeping data into the buffer
-			else{}
-				printf("Buffer Full, %c\n",ch);
-
+				//printf("-%c",ch);
+			}
+			else{
+				printf("Buffer Full %c\n",ch);
+			}
 		}
 		CoExitISR ( );
 	}
@@ -256,7 +256,7 @@
 
 			do{
 				do{
-				res = sendwait(mdm, "AT+CIPSTATUS\r", "STATE:",200);
+				res = sendwait(mdm, "AT+CIPSTATUS\r", "STATE:",1000);
 				}
 				while(res != mdmOK);
 
@@ -382,6 +382,7 @@
 			res = sendwait(mdm,"ATZ\r", "OK",200);
 			res = sendwait(mdm,"\rAT S7=45 S0=0 L1 V1 X4 &c1 E0 Q0\r", "OK", 100);
 			//res = sendwait(mdm,"AT&FS11=55\r", "OK", 300);
+			//res = sendwait(mdm,"AT+IFC=0,0\r","OK",300); //for configuring no flow control
 			res = sendwait(mdm, "ATE0\r", "OK",100);
 
 		}
@@ -550,7 +551,7 @@
 		do
 		{
 			count --;
-			res = sendwait(mdm, "AT+CIPSEND\r", ">", 200);
+			res = sendwait(mdm, "AT+CIPSEND\r", ">", 1000);
 		}
 		while(res != mdmOK && count > 0);
 		}

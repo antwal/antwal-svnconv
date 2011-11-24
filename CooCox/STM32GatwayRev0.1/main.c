@@ -39,8 +39,16 @@ uint8_t BaseStnId = 11;
 MSD_Dev sd_var;
 MSD_Dev *sd= &sd_var;							// MSD instance
 
+#define MaxRx   100     			// Maximum size of receive buffer
+#define MaxTx   100      			// Maximum size of transmit buffer
+
+
 //cBuffer recvBuffer;
 //unsigned char buffer[50];
+cBuffer modem_buffer;								// Receive Buffer for modem
+unsigned char mBuffer[MaxRx];
+
+
 
 //Decleration of   serial Ports
 COX_SERIAL_PI *myUSART1 = &pi_serial1;
@@ -113,6 +121,7 @@ void USART1_IRQHandler(void)
 }
 
 
+
 /* Used For printf function*/
 void pchar(unsigned char c)
 {
@@ -125,11 +134,17 @@ void pchar(unsigned char c)
 
 void initSerial(void){
 	//bufferInit(&recvBuffer, buffer, 50);
+	bufferInit(&modem_buffer, mBuffer, MaxRx);
 	//myUSART1->Init(57600);
 	myUSART2->Init(115200);
+
 	myUSART3->Init(9600);
+
 	//myUSART1->Cfg( COX_SERIAL_INT_CONF, RXNE_ENABLE,0);
 	myUSART3->Cfg( COX_SERIAL_INT_CONF, RXNE_ENABLE,0);
+
+	//enable the interrupts for usart3
+	NVIC_Configuration_uart(&myUSART3);
 }
 
 
@@ -148,7 +163,7 @@ void TmrCallBack(void)
 	 * @details    Just a task example of a clock
 	 *
 	 *******************************************************************************
-	 */
+*/
 	void task1 (void* pdata)
 	{
 
@@ -204,6 +219,7 @@ void TmrCallBack(void)
 	 * @details    task example to increment a variable
 	 *******************************************************************************
 	 */
+
 	void task3 (void* pdata)
 	{
 		sdConfig();

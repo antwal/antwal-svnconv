@@ -115,6 +115,7 @@ void NVIC_Configuration_rtc(void)
   * @param  Data: data to write
   * @retval None
   */
+#if 0
 void BKP_WriteBackupRegister(uint16_t BKP_DR, uint16_t Data)
 {
   __IO uint32_t tmp = 0;
@@ -146,6 +147,7 @@ uint16_t BKP_ReadBackupRegister(uint16_t BKP_DR)
 
   return (*(__IO uint16_t *) tmp);
 }
+#endif
 
 void Periodic(void)
 {
