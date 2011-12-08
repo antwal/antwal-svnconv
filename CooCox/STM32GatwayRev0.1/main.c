@@ -66,6 +66,15 @@ COX_PIO_Dev LED1 = COX_PIN(2,9);
 //Usart event flag
 OS_FlagID flag;
 
+//The mutex is used to get mutual access to the data file  storing the WSN data
+OS_MutexID file_mutex;
+
+//Used to get the mutual access to GSM Gprs Modem
+OS_MutexID modem_mutex;
+
+//Used to get the mutual access to the Uart2 used for printf
+OS_MutexID printf_mutex;
+
 //Queue for Processing the data recieved
 #define MAIL_QUEUE_SIZE 8
 OS_EventID raw_queue_id;				// Queue for raw packet forwading between task 1 and 2
@@ -134,13 +143,19 @@ void pchar(unsigned char c)
 
 void initSerial(void){
 	//bufferInit(&recvBuffer, buffer, 50);
+
+	//Initilize the buffer for Modem
 	bufferInit(&modem_buffer, mBuffer, MaxRx);
-	//myUSART1->Init(57600);
+
+	myUSART1->Init(57600);
+	myUSART1->Cfg( COX_SERIAL_INT_CONF, RXNE_ENABLE,0);
+
+	//Usart for printf-debugging purpose
 	myUSART2->Init(115200);
 
+	//Usart for communication with the Modem
 	myUSART3->Init(9600);
 
-	//myUSART1->Cfg( COX_SERIAL_INT_CONF, RXNE_ENABLE,0);
 	myUSART3->Cfg( COX_SERIAL_INT_CONF, RXNE_ENABLE,0);
 
 	//enable the interrupts for usart3
@@ -193,19 +208,22 @@ void TmrCallBack(void)
 		TIME_SET(0);
 
 
+
 		ntp_time(&modm);
 		for (;;)
 		  {
-			  if(TIME_TICK == 200)
-			  {pi_pio.Out(LED1, 1);      /* Output hign level to turn on LED0 */
+			  if(TIME_TICK == 200){
+			   pi_pio.Out(LED1, 1);      /* Output hign level to turn on LED0 */
 			  //CoTickDelay (100);
 			  TIME_SET(0);
 			  }
 
 			  if(TIME_TICK == 100)
 			  pi_pio.Out(LED1, 0);      /* Output low level to turn off LED0 */
-			  //CoTickDelay (100);
+
+			  CoTickDelay (100);
 		  }
+
 	}
 
 
@@ -261,8 +279,11 @@ void TmrCallBack(void)
 int main(void)
 {
 	OS_TID task_2,task_3;
+
+
 	//Initilize serial configuration
 	initSerial();
+
 
 	//Initilize the LED0 and LED1 structure
 	pi_pio.Init(LED0);
@@ -281,7 +302,7 @@ int main(void)
     /*!< Create three tasks	*/
    // task_1 = CoCreateTask (task1,0,0,&task1_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
     task_2 = CoCreateTask (task2,0,2,&task2_stk[200-1],200);
-   // task_3 = CoCreateTask (task3,0,1,&task3_stk[STACK_SIZE_DEFAULT+400-1],STACK_SIZE_DEFAULT+400);
+   //task_3 = CoCreateTask (task3,0,1,&task3_stk[STACK_SIZE_DEFAULT+1280-1],STACK_SIZE_DEFAULT+128);
    // task_4 = CoCreateTask (task4,0,2,&task4_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
 
     // Create a message queue for storing the received characters

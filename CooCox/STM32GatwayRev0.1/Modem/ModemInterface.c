@@ -15,7 +15,7 @@
 	COX_SERIAL_PI *myUSART3 = &pi_serial3;
 
 	#define serial_tx_ready()       1               							// Transmitter empty
-	#define serial_send(a)          myUSART3->Write(&a, 1)      					// Transmit char a
+	#define serial_send(a)          myUSART3->Write(&a, 1)      				// Transmit char a
 	#define serial_rx_ready()       bufferDataAvail(&modem_buffer) 				// Receiver full
 	#define serial_get(buff)        buff = bufferGetFromFront(&modem_buffer)   	// Receive char from modem
 	#define serial_error()          0                               			// USART error
@@ -23,7 +23,7 @@
 
 
 	unsigned char err;									// Stores the error number
-	const char APaddr[] = "\"gprssouth.cellone.in\"\r";
+	const char APaddr[] = "\"gprssouth.cellone.in\"\r\n";
 
 	unsigned char signal[2];							// Stores signal strength
 	char ipAddr[20] = {'\0'};								// used to store ip address
@@ -76,6 +76,7 @@ extern 	unsigned char *mBuffer;
 
 		//RXNE interrupt occured
 		//printf("uart%x\n\r",USART1->SR);
+
 		if((USART3->SR & 0x20) != (u16)RESET )
 		{
 			//count ++;
@@ -213,6 +214,7 @@ extern 	unsigned char *mBuffer;
 							//res = serialMatch(mdm, "ERROR", timeout);
 							//if(res != mdmOK){										// that means error has not occured
 							//strncpy(mdm->minfo->ip_addr,mBuffer,15);
+							TIME_SET(0);
 							do{
 								if(serial_rx_ready())
 								{
@@ -220,8 +222,9 @@ extern 	unsigned char *mBuffer;
 									//printf("0x%x\n",res);
 								}
 							}
-							while(res == '\r' || res == '\n');
+							while(TIME_TICK < 100 && (res == '\r' || res == '\n' ));
 
+							TIME_SET(0);
 							do{
 								if(serial_rx_ready())
 								{
@@ -230,7 +233,7 @@ extern 	unsigned char *mBuffer;
 									//printf("0x%x\n",res);
 								}
 							}
-							while(res != '\r');
+							while(TIME_TICK < 100 && res != '\r');
 
 							printf("IP:%s\n",mdm->minfo->ip_addr);
 							res = mdmOK;
@@ -253,10 +256,10 @@ extern 	unsigned char *mBuffer;
 		mdmStatus mdmState(mdmIface *mdm)
 		{
 			char lBuff[20];
-
+			printf("in mdmState\n");
 			do{
 				do{
-				res = sendwait(mdm, "AT+CIPSTATUS\r", "STATE:",1000);
+				res = sendwait(mdm, "AT+CIPSTATUS\r", "STATE:",100);
 				}
 				while(res != mdmOK);
 
@@ -266,7 +269,7 @@ extern 	unsigned char *mBuffer;
 				printf("\n\nstatus is %s\n\n",lBuff);
 
 				if(!strcmp(lBuff, "IP INITIAL"))
-					state = FORCED;
+					state = INIT;
 				else
 				if(!strcmp(lBuff,"PDP DEACT"))
 					state = PDPDEACT;
@@ -282,7 +285,7 @@ extern 	unsigned char *mBuffer;
 				}
 				else
 				if(!strcmp(lBuff, "IP START"))
-					state = INIT;
+					state = NWATT;
 				else
 				if(!strcmp(lBuff, "IP STATUS"))
 				{
@@ -402,7 +405,7 @@ extern 	unsigned char *mBuffer;
 	mdmStatus mdmNWControl(mdmIface *mdm,uint8_t attach)
 	{
 		// This is used for APN address update
-		char CMD[26 + 10]="AT+CSTT=";
+		char CMD[28 + 10]="AT+CSTT=";
 
 		res = mdmOK;
 
@@ -416,7 +419,7 @@ extern 	unsigned char *mBuffer;
 
 			if(res != mdmOK)
 				return mdmAttFail;
-
+			mdmState(mdm);
 		if (state == INIT || state == FORCED)
 		{
 			//Setting APN adddress for GSM
@@ -439,20 +442,21 @@ extern 	unsigned char *mBuffer;
 	*/
 	mdmStatus mdmIPup(mdmIface *mdm)
 	{
+		uint8_t var;
 		res = mdmOK;
 		if(state == NWATT)
 		{
 			res = sendwait(mdm, "AT+CIICR\r","OK", 1000);
-			count = 3;
+			var = 3;
 			do
 			{
-				res = mdmState(mdm);
-				count --;
+				mdmState(mdm);
+				var --;
 
 			}
-			while(state != IPGPRSACT && count > 0);
+			while(state != IPGPRSACT && var > 0);
 
-			if(!(count > 0))
+			if(!(var > 0))
 				return mdmIPFail;
 
 
@@ -516,27 +520,31 @@ extern 	unsigned char *mBuffer;
 	mdmStatus mdmUDPConnect(mdmIface *mdm, server *obj)
 	{
 		char cmd[50];
-
-		count =3;
+		char var;
+		res = mdmFail;
+		var =3;
 		do
 		{
-		printf("IN udp connect\n");
+			printf("IN udp connect\n\r");
 			state = CONNECTING;
 			mdmState(mdm);
-			count --;
-			if(state == IP|| state == CLOSE)
+			var --;
+			if(state == IP|| state == CLOSE || state == IPGPRSACT )
 			{
 				state = CONNECTING;
 				sprintf(cmd, "AT+CIPSTART=\"UDP\",\"%s\",%s\r",obj->addr, obj->port);
 				res = sendwait(mdm, cmd, "NNECT OK",1000);
 
 				if(res == mdmTimeOut)
-					printf("Timeout\n");
+					printf("Timeout\n\r");
+			}
+			else{
+				res = mdmFail;
 			}
 		}
-		while(res != mdmOK && count > 0);
+		while(res != mdmOK && var > 0);
 
-		if(count > 0)
+		if(var > 0)
 		state = CONNECT;
 
 		return res;
@@ -586,7 +594,7 @@ extern 	unsigned char *mBuffer;
 			for(i = 0; i< len; i++)
 			{
 				serial_send(buffer[i]);
-				//printf("%c",buffer[i]);
+				printf(" %x",buffer[i]);
 			}
 
 			count--;
@@ -608,8 +616,12 @@ extern 	unsigned char *mBuffer;
 			printf("\nwrite success\n");
 			return mdmOK;
 		}
-		else
-		return mdmSendFail;
+		else{
+			printf("write failed\r\n");
+			i = 0x1a;
+			serial_send(i);									// Sending Ctrl+Z
+			return mdmSendFail;
+		}
 	 }
 	 return mdmSendFail;
 
@@ -628,7 +640,7 @@ extern 	unsigned char *mBuffer;
 
 
 
-		//printf("IN read\n");
+		printf("IN read\n");
 		if(toggle == 1){
 			count = 3;
 			toggle = 0;

@@ -154,6 +154,6 @@ void Periodic(void)
 	//TIME *tm;
 	Cur_Time(tm);
 
-	printf("Time is: %d:%d:%d - %d,%d,%d\r",tm->hh,tm->mm, tm->ss, tm->DD,tm ->MM, tm->YYYY);
+	//printf("Time is: %d:%d:%d - %d,%d,%d\r",tm->hh,tm->mm, tm->ss, tm->DD,tm ->MM, tm->YYYY);
 
 }

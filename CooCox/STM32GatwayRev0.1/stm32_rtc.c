@@ -69,11 +69,13 @@ uint8_t gmtime( uint32_t time, TIME *tm, uint8_t ntp)
 	uint32_t dayclock;
     uint16_t dayno;
     uint16_t zone = 15 * 60;
+
     // If time is from NTP else continue with current year
     if(ntp){
     	tm->YYYY = EPOCH_YR;
     	time += zone * TimeZone;
     }
+
 	dayclock = time % SECS_DAY;
 	dayno = time / SECS_DAY;
 	tm->DD = dayno+1;
@@ -93,11 +95,17 @@ uint8_t gmtime( uint32_t time, TIME *tm, uint8_t ntp)
 		tm->MM++;
 	}
 	tm->MM++;
+	tm->DD = dayno+1;
 
 	if(ntp)
 	{
+		printf("in gmtimeDD=%d,mm=%d,ntp=%d\n\r",tm->DD,tm->MM,ntp);
+		STM_RTC_Start();
 		STM_RTC_Write (tm);				// Writing time to RTC
+		STM_RTC_Stop();
+		printf("Updated\n\r");
 	}
+
 	return(COX_SUCCESS);
 }
 
@@ -196,13 +204,11 @@ void RTC_IRQHandler(void)
 		/* Clear the RTC Second interrupt */
 		/* Clear the coressponding RTC pending bit */
 		RTC->CRL &= (us16)~RTC_IT_SEC;
-
 		/* Wait until last write operation on RTC registers has finished */
 		/* Loop until RTOFF flag is set */
 		while ((RTC->CRL & RTC_FLAG_RTOFF) == (us16)RESET)
 		{
 		}
-
 		/* Reset RTC Counter when Time is 31:Dec:23:59:59 */
 		if(LEAPYEAR(tm->YYYY))
 			yr_end = SECS_YR + SECS_DAY;
@@ -213,6 +219,7 @@ void RTC_IRQHandler(void)
 		{
 			// Happy New Year
 			tm->YYYY++;
+
 			/* Set the CNF flag to enter in the Configuration Mode */
 			RTC->CRL |= CRL_CNF_Set;
 
@@ -368,6 +375,16 @@ void STM_RTC_Start (void)
 	{
 	}
 
+	/* necessary to do below two steps
+	 * this allows access to the backup as well as RTC registers
+	 */
+
+	/* Enable PWR and BKP clocks */
+	RCC->APB1ENR |= (RCC_APB1Periph_PWR | RCC_APB1Periph_BKP);
+
+	/* Allow access to BKP Domain */
+	*(vu32 *) CR_DBP_BB = (ul32)ENABLE;
+
 	/* Set the CNF flag to enter in the Configuration Mode */
 	RTC->CRL |= CRL_CNF_Set;
 
@@ -393,7 +410,8 @@ void STM_RTC_Stop (void)
 
 	/* Reset the CNF flag to exit from the Configuration Mode */
 	RTC->CRL &= CRL_CNF_Reset;
-
+	if((RTC->CRL & 0x8) == 0)
+	    	RTC->CRL |= 0x10;
 	/* Wait until last write operation on RTC registers has finished */
 	/* Loop until RTOFF flag is set */
 	while ((RTC->CRL & RTC_FLAG_RTOFF) == (u16)RESET)
@@ -441,19 +459,20 @@ COX_Status STM_RTC_Write (TIME *tm)
 	us16 Day = 0;
 
 	/* Check tm struct member is correct or not*/
-	if( tm->ss>59 && tm->ss<0)
+	if( tm->ss>59 || tm->ss<0)
 		return COX_ERROR;
-	if( tm->mm>59 && tm->mm<0)
+	if( tm->mm>59 || tm->mm<0)
 		return COX_ERROR;
-	if( tm->hh>23 && tm->hh<0)
+	if( tm->hh>23 || tm->hh<0)
 		return COX_ERROR;
-	if( tm->DD>31 && tm->DD<0)
+	if( tm->DD>31 || tm->DD<0)
 		return COX_ERROR;
-	if( tm->MM>12 && tm->MM<0)
+	if( tm->MM>12 || tm->MM<0)
 		return COX_ERROR;
-	if( tm->YYYY >2099 && tm-> YYYY < 2011 )				// Years between 2011 and 2099
+	if( tm->YYYY >2099 || tm-> YYYY < 2011 )				// Years between 2011 and 2099
 		return COX_ERROR;
 
+	tm->MM --;
 	while(tm->MM){
 		tm->MM --;											// Dont consider the present month; will add current  month day later
 		Day += monthlen(LEAPYEAR(tm->YYYY),tm->MM);
@@ -461,7 +480,7 @@ COX_Status STM_RTC_Write (TIME *tm)
 
 	Day += tm->DD;
 	/*Set Time to RTC Counter Register*/
-	value_t = (Day * tm->hh * 3600 + tm->mm * 60 + tm->ss);
+	value_t = ((Day-1) * 24 * 3600 + tm->hh * 3600 + tm->mm * 60 + tm->ss);
 
 	/* Set RTC COUNTER MSB word */
 	RTC->CNTH = (value_t & RTC_MSB_Mask)>>16;
@@ -470,6 +489,7 @@ COX_Status STM_RTC_Write (TIME *tm)
 	RTC->CNTL = (value_t & RTC_LSB_Mask);
 
 	*(vu16 *) (BKP_BASE + ((us16)0x0004)) = 0xA5A5;
+
 
 	return COX_SUCCESS;
 }

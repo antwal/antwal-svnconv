@@ -18,7 +18,7 @@
  
 
 /*----------Stack Configuration-----------------------------------------------*/  
-#define STACK_SIZE       0x00000350      /*!< Stack size (in Words)           */
+#define STACK_SIZE       0x00000100      /*!< Stack size (in Words)           */
 __attribute__ ((section(".co_stack")))
 unsigned long pulStack[STACK_SIZE];      
 
@@ -103,6 +103,7 @@ static void Default_Handler(void);  /*!< Default exception handler            */
   *       must be placed on this to ensure that it ends up at physical address
   *       0x00000000.  
   */
+
 __attribute__ ((section(".isr_vector")))
 void (* const g_pfnVectors[])(void) =
 {       
@@ -208,7 +209,7 @@ void Default_Reset_Handler(void)
   
   /* Setup the microcontroller system. */
   SystemInit();
-    
+
   /* Call the application's entry point.*/
   main();
 }
@@ -277,6 +278,7 @@ void Default_Reset_Handler(void)
   * @param  None
   * @retval None  
   */
+
 static void Default_Handler(void) 
 {
   /* Go into an infinite loop. */

@@ -5,7 +5,9 @@
 
 #include "ntp.h"
 #include "modem.h"
+#include "stm32_rtc.h"
 
+extern TIME *tm;
 /* This packet need to be send to through UDP to ntp server
  * The Output will be embedded into the tx_timestamp_i this
  * data should be sent to gmtime() to get the time.
@@ -42,6 +44,8 @@ void NtpDCall(ntpMsg *msg)
         time += msg->tx_timestamp_i[2];
         time = time << 8;
         time += msg->tx_timestamp_i[3];
+
+        gmtime(time,tm,1);
 }
 
 mdmStatus ntp_time(mdmIface *mdm)
@@ -49,32 +53,40 @@ mdmStatus ntp_time(mdmIface *mdm)
 	char ntp[48],res;
 	char port[4];
 	char addr[20];
-	server *udp;
+	server udp;
 
 	strcpy(port, "123");
 	strcpy(addr, "1.in.pool.ntp.org" );
 	//port = "123";
 	//addr = "1.in.pool.ntp.org";
 
-	//udp->port = port;
-	//udp->addr = addr;
+	udp.port = port;
+	udp.addr = addr;
 
 	res = mdmFSM(mdm);
 
 	if(res == mdmOK){
 	printf("Modem initialised successfully\n");
-	res = mdmUDPConnect(mdm, udp);
+	res = mdmUDPConnect(mdm, &udp);
 
+	printf("Connected\n");
 	sendNTPRequest((ntpMsg*)ntp); 		// Initialise the ntp structure
 
-	if(!mdmSend(mdm))
-	res = mdmWrite(mdm,(char *) ntp, 48,1);
+	do{
+		mdmSend(mdm);
+		res = mdmWrite(mdm,(char *) ntp, 48,1);
+		}
+		while(res !=mdmOK);
+
 
 	res = mdmRead(mdm,(char *) ntp, 48);
 
 	if(res != mdmReadFail)
 		NtpDCall(ntp);
 
+	Cur_Time(tm);
+
+	printf("Time is: %d:%d:%d - %d,%d,%d\r",tm->hh,tm->mm, tm->ss, tm->DD,tm ->MM, tm->YYYY);
 	res = mdmClose(mdm);
 	}
 }
