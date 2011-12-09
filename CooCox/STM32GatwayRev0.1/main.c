@@ -3,7 +3,7 @@
 #include <stm32_pio.h>
 #include "stm32f10x.h"
 #include "buffer.h"
-#include <stdio.h>
+#include "stdio.h"
 #include <CoOS.h>			              /*!< CoOS header file	         */
 
 
@@ -30,7 +30,7 @@ uint8_t BaseStnId = 11;
 /*---------------------------- Variable Define -------------------------------*/
 	//OS_STK     task1_stk[STACK_SIZE_DEFAULT];	  /*!< Define "taskA" task stack */
 	OS_STK     task2_stk[300];	  /*!< Define "taskB" task stack */
-	//OS_STK     task3_stk[400];	  /*!< Define "led" task stack   */
+	OS_STK     task3_stk[400];	  /*!< Define "led" task stack   */
 	//OS_STK     task4_stk[STACK_SIZE_DEFAULT];	  /*!< Define "led" task stack   */
 
 
@@ -302,7 +302,7 @@ int main(void)
     /*!< Create three tasks	*/
    // task_1 = CoCreateTask (task1,0,0,&task1_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
     task_2 = CoCreateTask (task2,0,2,&task2_stk[200-1],200);
-   //task_3 = CoCreateTask (task3,0,1,&task3_stk[STACK_SIZE_DEFAULT+1280-1],STACK_SIZE_DEFAULT+128);
+    task_3 = CoCreateTask (task3,0,1,&task3_stk[STACK_SIZE_DEFAULT+128-1],STACK_SIZE_DEFAULT+128);
    // task_4 = CoCreateTask (task4,0,2,&task4_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
 
     // Create a message queue for storing the received characters

@@ -23,7 +23,8 @@
 
 
 	unsigned char err;									// Stores the error number
-	const char APaddr[] = "\"gprssouth.cellone.in\"\r\n";
+	//const char APaddr[] = "\"gprssouth.cellone.in\"\r\n";
+	const char APaddr[] = "\"aircelwap\"\r\n";
 
 	unsigned char signal[2];							// Stores signal strength
 	char ipAddr[20] = {'\0'};								// used to store ip address
@@ -405,7 +406,8 @@ extern 	unsigned char *mBuffer;
 	mdmStatus mdmNWControl(mdmIface *mdm,uint8_t attach)
 	{
 		// This is used for APN address update
-		char CMD[28 + 10]="AT+CSTT=";
+		//char CMD[28 + 10]="AT+CSTT=";
+		char CMD[17 + 10]="AT+CSTT=";
 
 		res = mdmOK;
 
