@@ -130,7 +130,7 @@ enum {
 #define TOSH_MSG_LENGTH  TOSH_DATA_LENGTH + TOS_HEADER_LEN + TOS_FOOTER_LEN
 #define UAGRI_DATA_LEN  (TOSH_DATA_LENGTH - ROUTE_HEADER_LEN)
 
-#define DATA_LEN  2 + sizeof(struct SensedData) + sizeof(TIME) + 2				// 2+8+7+2=19bytes
+#define DATA_LEN  sizeof(struct SensedData) + sizeof(TIME)				// 2+8+7+2=19bytes
 
 #define SENSOR_DATA_LEN  22	// not used
 #define MAX_DATAPKT_SIZE 40	// not used

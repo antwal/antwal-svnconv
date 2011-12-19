@@ -577,7 +577,7 @@ COX_Status MSD_GetResponse(const MSD_Dev *sd, uint8_t Response)
 
   if (Count == 0) {
     /* After time out */
-	  printf("NO\t");
+	  //printf("NO\t");
     return COX_ERROR;
   } else {
     /* Right response got */

@@ -9,10 +9,24 @@
 #include "string.h"
 #include <stdio.h>
 #include "stm32_rtc.h"
+#include "ff.h"
+#include "di_msd.h"
 
 #define MAX_BUFF_SIZE 64
+#define packet 					"\n\t<WSN_DATA_PKT>\n\t"\
+                                        "\t<COUNT>%04x</COUNT>\n\t"\
+                                        "\t<BSID>%02x</BSID>\n\t"\
+                                        "\t<CROPID>%02x%02x</CROPID>\n\t"\
+                                        "\t<PLOTID>%04x</PLOTID>\n\t"\
+                                        "\t<MOTEID>%04x</MOTEID>\n\t"\
+                                        "\t<PARAID>%02x</PARAID>\n\t"\
+                                        "\t<PARAVAL>%04x</PARAVAL>\n\t"\
+                                        "\t<TIME>%04x%02x%02x%02x%02x%02x</TIME>\n\t"\
+                                "</WSN_DATA_PKT>\n"
+#define ENDTAG "</DATA>"
+#define STARTTAG "<DATA>"
 
-
+char destdata[250];
 typedef struct Message {
 	unsigned char  DataBuffer[MAX_BUFF_SIZE];
 }MSG;
@@ -24,6 +38,9 @@ extern OS_EventID sd_queue_id;
 MSG DataMsg[8];
 
 extern uint8_t BaseStnId;
+
+extern MSD_Dev *sd;
+
 /*
  * The function is called by the WSN Decoder Engine to parse
  * the raw Data packet received from the MIB(Mote Interafce Board)510/600.
@@ -65,14 +82,14 @@ void Read_Data(unsigned char ch){
 		if (ch == STOP_BYTE) {
 			cur = DataMsg[buf].DataBuffer[2];
 			if(!(cur == last+1)){
-				printf("MISSED: 0x%x\n",DataMsg[buf].DataBuffer[2]);
+				printf("MISSED: %d\n",DataMsg[buf].DataBuffer[2]);
 			}
 			last = DataMsg[buf].DataBuffer[2];
 			printf("RCVD=%d\n\r",DataMsg[buf].DataBuffer[2]);
-		//	printf("\nData is: ");
+			//printf("\nData is: ");
 
 			//for (j=0; j < i; j++){
-				//printf("\t%x ",DataMsg[buf].DataBuffer[j]);
+			//	printf("\t%x ",DataMsg[buf].DataBuffer[j]);
 			//}
 			//printf(" \n");
 			//result = CoPostQueueMail (raw_queue_id, (void *) &DataMsg[buf]);
@@ -82,7 +99,7 @@ void Read_Data(unsigned char ch){
 				 if (result == E_INVALID_ID){
 					 printf("Invalid Queue ID ! \n");
 				 }
-				 else if (result == E_MBOX_FULL){
+				 else if (result == E_SEV_REQ_FULL){
                      printf("The Queue is full !\n");
 				 }
 			}
@@ -117,6 +134,13 @@ char * wsnPacketDecoding(void ){
 	Tos_Msg *ToSMessage;		// Tos_Msg received //
 	uint8_t j;
 	TIME cur_time;
+	static int32_t count = 0;
+	SensedData *Data;
+	FRESULT rc;				/* Result code */
+	FATFS fatfs;			/* File system object */
+	FIL fil2;				/* File object */
+//	FILINFO fno;			/* File information object */
+	UINT bw,res;
 
 	 /* Wait for a mail, time-out:0 */
 	msg = CoPendQueueMail (raw_queue_id, 0, &result);
@@ -135,44 +159,69 @@ char * wsnPacketDecoding(void ){
 
 			/********* Get Tos_Msg from the Raw Packet ******/
 			ToSMessage = (Tos_Msg *)&DataMsg.DataBuffer[RAWPKT_HEADER_LEN];
-
+			count = DataMsg.DataBuffer[2];
 			/*
 			 * Here we'll add 0xA5A5 to the beginning of teh packet such that we can discriminate
 			 * between number of packets
 			 */
-
-
-			DataMsg.DataBuffer[0] = 0xA5;
-			DataMsg.DataBuffer[1] = 0xA5;
-			memmove(&DataMsg.DataBuffer[2], &ToSMessage->data[0 + ROUTE_HEADER_LEN], sizeof(struct SensedData));
+			memmove(&DataMsg.DataBuffer[0], &ToSMessage->data[0 + ROUTE_HEADER_LEN], sizeof(struct SensedData));
 //DONE		Time stamp + BaseStnIdneeds to be added over here
-
-			DataMsg.DataBuffer[sizeof(struct SensedData) + 2] = BaseStnId;
 
 			Cur_Time( &cur_time);							// Get the current time
 
-
+			Data = (SensedData *)&DataMsg.DataBuffer[0];
+			sprintf(&destdata[0], packet, count, BaseStnId, Data->crop_id[0],Data->crop_id[1], Data->plot_id, Data->node_id, Data->sensor_id, Data->value,cur_time.YYYY,cur_time.MM,cur_time.DD,cur_time.hh,cur_time.mm,cur_time.ss);
 			// Appneding the timestamp to the data packet
 			memcpy(&DataMsg.DataBuffer[sizeof(struct SensedData) + 3], &cur_time, sizeof(TIME));
 
-			/*
-			 *  Here Add 0xA5A5 to the end to make the complete Packet
-			 */
-			DataMsg.DataBuffer[DATA_LEN-2] = 0xA5;
-			DataMsg.DataBuffer[DATA_LEN-1] = 0xA5;
 
-			/* Now data looks like 0xA5A5 + data + basestnid + Timestamp + 0xA5A5
-			 * Data PAcket Formation is done
-			 * Now its time to store the data in the SDcard
-			 */
 			// Printf What we've got
 
-			printf("Data= %d",DataMsg.DataBuffer[6]);
-			/*for (j=0; j < DATA_LEN; j++){
-				printf("\t%x ",DataMsg.DataBuffer[j]);
-			}*/
-			printf("\n\r");
+			//printf("count= %d",count);
+			//for (j=0; j < 250; j++){
+			//	printf(" %c",destdata[j]);
+			//}
+			//printf("\n\r");
 
+			/*
+			 * Writing to the File System
+			 */
+			f_mount(0, &fatfs);		/* Register volume work area (never fails) */
+
+			printf("\r\nWrite to file (test.txt).\r\n");
+			rc = f_open(&fil2, "./root/TEST.txt", FA_WRITE|FA_READ);//| FA_CREATE_ALWAYS);
+			if (rc) die(rc);
+			if(rc != 0)
+			{
+				if(rc == 3)
+				{
+
+				}
+			}
+			printf("OSize=%d\n\r",(uint16_t)f_size(&fil2));
+
+			// IF something is there in destn file
+			if(!(f_size(&fil2) == 0))
+			{
+			// Overwriting the Endtag
+				res = f_lseek(&fil2, f_size(&fil2)- strlen(ENDTAG)-1);
+			}
+			//If nothing is present in the file
+			else{
+				rc = f_write(&fil2, STARTTAG, strlen(STARTTAG), &bw);
+				if (rc) die(rc);
+			}
+
+			rc = f_write(&fil2, destdata, strlen(destdata),&bw);
+			if (rc) die(rc);
+
+			rc = f_write(&fil2, ENDTAG, strlen(ENDTAG),&bw);
+			if (rc) die(rc);
+
+			rc = f_close(&fil2);
+			if (rc) die(rc);
+
+			f_mount(0, NULL);		/* UnRegister volume work area (never fails) */
 		//	SDInterface(&DataMsg.DataBuffer[0]);
 		}
 		else{

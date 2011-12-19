@@ -29,8 +29,8 @@ uint8_t BaseStnId = 11;
 
 /*---------------------------- Variable Define -------------------------------*/
 	//OS_STK     task1_stk[STACK_SIZE_DEFAULT];	  /*!< Define "taskA" task stack */
-	OS_STK     task2_stk[300];	  /*!< Define "taskB" task stack */
-	OS_STK     task3_stk[400];	  /*!< Define "led" task stack   */
+	OS_STK     task2_stk[200];	  /*!< Define "taskB" task stack */
+	OS_STK     task3_stk[STACK_SIZE_DEFAULT+400];	  /*!< Define "led" task stack   */
 	//OS_STK     task4_stk[STACK_SIZE_DEFAULT];	  /*!< Define "led" task stack   */
 
 
@@ -123,6 +123,7 @@ void USART1_IRQHandler(void)
 	{
 		//count ++;
 		ch = (USART1->DR & (us16)0x01FF);
+		//printf("%x\t",ch);
 		Read_Data(ch);
 
 	}
@@ -154,12 +155,12 @@ void initSerial(void){
 	myUSART2->Init(115200);
 
 	//Usart for communication with the Modem
-	myUSART3->Init(9600);
+	//myUSART3->Init(9600);
 
-	myUSART3->Cfg( COX_SERIAL_INT_CONF, RXNE_ENABLE,0);
+	//myUSART3->Cfg( COX_SERIAL_INT_CONF, RXNE_ENABLE,0);
 
 	//enable the interrupts for usart3
-	NVIC_Configuration_uart(&myUSART3);
+	//NVIC_Configuration_uart(&myUSART3);
 }
 
 
@@ -212,7 +213,7 @@ void TmrCallBack(void)
 		ntp_time(&modm);
 		for (;;)
 		  {
-			  if(TIME_TICK == 200){
+			  if(TIME_TICK > 200){
 			   pi_pio.Out(LED1, 1);      /* Output hign level to turn on LED0 */
 			  //CoTickDelay (100);
 			  TIME_SET(0);
@@ -243,7 +244,7 @@ void TmrCallBack(void)
 		sdConfig();
 		  for (;;)
 		  {
-			  SDInterface(wsnPacketDecoding());
+			  wsnPacketDecoding();
 
 		  }
 	}
@@ -302,7 +303,7 @@ int main(void)
     /*!< Create three tasks	*/
    // task_1 = CoCreateTask (task1,0,0,&task1_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
     task_2 = CoCreateTask (task2,0,2,&task2_stk[200-1],200);
-    task_3 = CoCreateTask (task3,0,1,&task3_stk[STACK_SIZE_DEFAULT+128-1],STACK_SIZE_DEFAULT+128);
+    task_3 = CoCreateTask (task3,0,1,&task3_stk[STACK_SIZE_DEFAULT+400-1],STACK_SIZE_DEFAULT+400);
    // task_4 = CoCreateTask (task4,0,2,&task4_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
 
     // Create a message queue for storing the received characters
