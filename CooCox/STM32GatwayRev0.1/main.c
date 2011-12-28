@@ -18,7 +18,7 @@
 #include "ff.h"
 #include "diskio.h"
 #include "modem.h"
-#include "http.h"
+//#include "http.h"
 #include "WSNPacket.h"
 // Basestaion ID
 uint8_t BaseStnId = 11;
@@ -31,8 +31,8 @@ uint8_t BaseStnId = 11;
 
 /*---------------------------- Variable Define -------------------------------*/
 	//OS_STK     task1_stk[STACK_SIZE_DEFAULT];	  /*!< Define "taskA" task stack */
-	OS_STK     task2_stk[300];	  /*!< Define "taskB" task stack */
-	OS_STK     task3_stk[STACK_SIZE_DEFAULT+400];	  /*!< Define "led" task stack   */
+	OS_STK     task2_stk[500];	  /*!< Define "taskB" task stack */
+	//OS_STK     task3_stk[STACK_SIZE_DEFAULT+400];	  /*!< Define "led" task stack   */
 	//OS_STK     task4_stk[STACK_SIZE_DEFAULT];	  /*!< Define "led" task stack   */
 
 
@@ -209,16 +209,16 @@ void TmrCallBack(void)
 		                                  TmrCallBack);
 		CoStartTmr (sftmr);
 		TIME_SET(0);
-		uint8_t lclbuff[100];
-		FATFS fatfs;			/* File system object */
-		FRESULT rc;				/* Result code */
-		FIL fil1, fil2;				/* File object */
+		//uint8_t lclbuff[100];
+		//FATFS fatfs;			/* File system object */
+		//FRESULT rc;				/* Result code */
+		//FIL fil1, fil2;				/* File object */
 		uint8_t res;
-		uint16_t br, bw;
+		//uint16_t br, bw;
 
 		uint8_t tcpport[4]= "80";
 		//uint8_t tcpaddr[20] = "14.99.68.74";
-		uint8_t tcpaddr[20] = "14.96.195.248";
+		uint8_t tcpaddr[20] = "14.96.91.129";
 
 		server tcp;
 
@@ -227,105 +227,7 @@ void TmrCallBack(void)
 
 		sdConfig();
 		ntp_time(&modm);
-
-
-		/*
-		 *  If send.xml file exists that means last uploading was unsuccessful.
-		 *  so  first upload the send.xml data of previous failed
-		 *  upload trial.
-		 * 	If file is not present that means last upload is successful
-		 * 	so rename the store.xml to send.xml and try to upload.
-		 *  once send.xml is uploaded, append the send.xml to alldata.xml.
-		 *  Then delete the send.xml file.
-		 */
-		f_mount(0, &fatfs);		/* Register volume work area (never fails) */
-
-		rc = f_open(&fil1, "./root/send.xml", FA_READ);
-		f_close(&fil1);
-		if(rc == FR_NO_FILE)		// If send.xml file does not exists
-		{
-			CoEnterMutexSection(file_mutex);
-			rc = f_rename("./root/store.xml", "./root/send.xml");
-			printf("rename=%d\n\r",rc);
-			CoLeaveMutexSection(file_mutex);
-			f_mount(0, NULL);		/* UnRegister volume work area (never fails) */
-
-		}
-		else
-		{
-			printf("file present=%d\n\r",rc);
-			f_mount(0, NULL);		/* UnRegister volume work area (never fails) */
-			rc = uploadFile(&modm, "./root/send.xml", &tcp);
-		}
-
-		// If file is uploaded successfully
-		if(rc == SUCCESS)
-		{
-			f_mount(0, &fatfs);		/* Register volume work area (never fails) */
-			printf("Open a send.xml to read\r\n");
-			rc = f_open(&fil1, "./root/send.xml", FA_READ );
-			if (rc) die(rc);
-
-			printf("\r\nWrite to file alldata.xml\r\n");
-			rc = f_open(&fil2, "./root/alldata.xml", FA_WRITE|FA_READ);//| FA_CREATE_ALWAYS);
-			if (rc) die(rc);
-			if( rc == 4)
-			{
-				printf("Creating alldata.xml\n\r");
-				rc = f_open(&fil2, "./root/alldata.xml", FA_WRITE|FA_READ| FA_CREATE_ALWAYS);
-				if (rc) die(rc);
-			}
-
-			// If the alldata.xml has already some data present
-			if(!(f_size(&fil2) == 0))
-			{
-				printf("appending data to alldata.xml\n\r");
-				// Overwriting the Endtag
-				res = f_lseek(&fil2, f_size(&fil2)- strlen(ENDTAG)-1);
-				// Read after the head tag
-				rc = f_read(&fil1, lclbuff, strlen(STARTTAG), &br);
-				if (rc || !br) die(rc);
-				for(res = 0; res < br;res++)
-					printf(" %c",lclbuff[res]);
-
-				rc = f_write(&fil2, "\t", 1,&bw);
-				if (rc) die(rc);
-			}
-			//If nothing is present in the file
-			else{
-				printf("alldata.xml is empty\n\r");
-				rc = f_write(&fil2, STARTTAG, strlen(STARTTAG), &bw);
-				if (rc) die(rc);
-			}
-
-			// Start copying content from send.xml to alldata.xml
-			do {
-				printf("copying content\n\r");
-				printf("File size=%d\n\r",f_size(&fil1));
-				rc = f_read(&fil1, lclbuff, sizeof(lclbuff), &br);	/* Read a chunk of file */
-				printf("rc=%d,br=%d\n\r",rc,br);
-				if (rc || !br) break;								/* Error or end of file */
-				for(res = 0;res < br ;res++)
-					printf(" %c",lclbuff[res]);
-				//res = f_lseek(&fil2, f_size(&fil2));
-
-				rc = f_write(&fil2, lclbuff, br, &bw);
-				if (rc) die(rc);
-			}
-			while(f_eof(&fil1)!= 1);
-
-			rc = f_close(&fil1);
-			if (rc) die(rc);
-
-			rc = f_close(&fil2);
-			if (rc) die(rc);
-
-			printf("Deleting send.xml\n\r");
-			f_unlink("./root/send.xml");		// Delete the file
-			if (rc) die(rc);
-			f_mount(0, NULL);		/* UnRegister volume work area (never fails) */
-		}
-
+		uploadFile(&modm,"./root/alldata.xml",&tcp);
 		for (;;)
 		  {
 			  if(TIME_TICK > 200){
@@ -418,7 +320,7 @@ int main(void)
     /*!< Create three tasks	*/
    // task_1 = CoCreateTask (task1,0,0,&task1_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
     task_2 = CoCreateTask (task2,0,0,&task2_stk[500-1],500);
-    task_3 = CoCreateTask (task3,0,1,&task3_stk[STACK_SIZE_DEFAULT+400-1],STACK_SIZE_DEFAULT+400);
+    //task_3 = CoCreateTask (task3,0,1,&task3_stk[STACK_SIZE_DEFAULT+400-1],STACK_SIZE_DEFAULT+400);
    // task_4 = CoCreateTask (task4,0,2,&task4_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
 
     /* Create a mutex: used by the file handling ReadInterface Function */

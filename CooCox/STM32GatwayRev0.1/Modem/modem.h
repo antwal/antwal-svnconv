@@ -45,3 +45,4 @@ typedef struct{
 	mdmStatus mdmRead(mdmIface *mdm, char *buffer, uint32_t len);
 	mdmStatus mdmWrite(mdmIface *mdm, char *buffer, uint32_t len,uint8_t send);
 	mdmStatus mdmSentData(mdmIface *mdm);
+	mdmStatus mdmSwitch(mdmIface *mdm, uint8_t mode);

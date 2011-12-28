@@ -404,6 +404,7 @@
 			//res = sendwait(mdm,"AT&FS11=55\r", "OK", 300);
 			res = sendwait(mdm,"AT+IFC=2,2\r","OK",300); //for configuring h/w flow control
 			res = sendwait(mdm, "ATE0\r", "OK",100);
+			res = sendwait(mdm, "AT+CIPMODE=1\r","OK",300);
 
 		}
 		state = INIT;
@@ -567,6 +568,7 @@
 
 				if(res == mdmTimeOut){
 					printf("Timeout\n");
+					mdmSwitch(mdm,COMMAND);
 					mdmShut(mdm);
 					mdmFSM(mdm);
 					res = mdmTimeOut;
