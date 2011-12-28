@@ -25,7 +25,7 @@ void PrintChar(char c)
 }
 
 /** Maximum string size allowed (in bytes). */
-#define MAX_STRING_SIZE         250
+#define MAX_STRING_SIZE         100
 
 
 /** Required for proper compilation. */
@@ -411,7 +411,8 @@ signed int vfprintf(FILE *pStream, const char *pFormat, va_list ap)
     if (vsprintf(pStr, pFormat, ap) >= MAX_STRING_SIZE) {
 
         fputs(pError, stderr);
-        while (1); /* Increase MAX_STRING_SIZE */
+       // while (1); /* Increase MAX_STRING_SIZE */
+        return 0;
     }
 
     /* Display string */

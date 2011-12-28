@@ -5,7 +5,6 @@
 #include <CoOS.h>
 #include "WSNPacket.h"
 #include "TypeDefs.h"
-#include "stdint.h"
 #include "string.h"
 #include <stdio.h>
 #include "stm32_rtc.h"
@@ -13,18 +12,6 @@
 #include "di_msd.h"
 
 #define MAX_BUFF_SIZE 64
-#define packet 					"\n\t<WSN_DATA_PKT>\n\t"\
-                                        "\t<COUNT>%04x</COUNT>\n\t"\
-                                        "\t<BSID>%02x</BSID>\n\t"\
-                                        "\t<CROPID>%02x%02x</CROPID>\n\t"\
-                                        "\t<PLOTID>%04x</PLOTID>\n\t"\
-                                        "\t<MOTEID>%04x</MOTEID>\n\t"\
-                                        "\t<PARAID>%02x</PARAID>\n\t"\
-                                        "\t<PARAVAL>%04x</PARAVAL>\n\t"\
-                                        "\t<TIME>%04x%02x%02x%02x%02x%02x</TIME>\n\t"\
-                                "</WSN_DATA_PKT>\n"
-#define ENDTAG "</DATA>"
-#define STARTTAG "<DATA>"
 
 char destdata[250];
 typedef struct Message {
@@ -38,7 +25,7 @@ extern OS_EventID sd_queue_id;
 MSG DataMsg[8];
 
 extern uint8_t BaseStnId;
-
+extern OS_MutexID file_mutex;
 extern MSD_Dev *sd;
 
 /*
@@ -174,28 +161,21 @@ char * wsnPacketDecoding(void ){
 			// Appneding the timestamp to the data packet
 			memcpy(&DataMsg.DataBuffer[sizeof(struct SensedData) + 3], &cur_time, sizeof(TIME));
 
-
-			// Printf What we've got
-
-			//printf("count= %d",count);
-			//for (j=0; j < 250; j++){
-			//	printf(" %c",destdata[j]);
-			//}
-			//printf("\n\r");
-
+			/* Lock the Mutex*/
+			CoEnterMutexSection(file_mutex);
 			/*
 			 * Writing to the File System
 			 */
 			f_mount(0, &fatfs);		/* Register volume work area (never fails) */
 
 			printf("\r\nWrite to file (test.txt).\r\n");
-			rc = f_open(&fil2, "./root/TEST.txt", FA_WRITE|FA_READ);//| FA_CREATE_ALWAYS);
+			rc = f_open(&fil2, "./root/store.xml", FA_WRITE|FA_READ);//| FA_CREATE_ALWAYS);
 			if (rc) die(rc);
 			if(rc != 0)
 			{
-				if(rc == 3)
+				if(rc == 4)				// If file is not found
 				{
-
+					rc = f_open(&fil2, "./root/store.xml", FA_WRITE|FA_READ|FA_CREATE_ALWAYS);
 				}
 			}
 			printf("OSize=%d\n\r",(uint16_t)f_size(&fil2));
@@ -223,6 +203,9 @@ char * wsnPacketDecoding(void ){
 
 			f_mount(0, NULL);		/* UnRegister volume work area (never fails) */
 		//	SDInterface(&DataMsg.DataBuffer[0]);
+
+			/* Release the lock */
+			CoLeaveMutexSection(file_mutex);
 		}
 		else{
 			printf("Discarded\n");

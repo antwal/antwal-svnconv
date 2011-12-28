@@ -23,8 +23,8 @@
 
 
 	unsigned char err;									// Stores the error number
-	//const char APaddr[] = "\"gprssouth.cellone.in\"\r\n";
-	const char APaddr[] = "\"aircelwap\"\r\n";
+	const char APaddr[] = "\"gprssouth.cellone.in\"\r\n";
+	//const char APaddr[] = "\"aircelwap\"\r\n";
 
 	unsigned char signal[2];							// Stores signal strength
 	char ipAddr[20] = {'\0'};								// used to store ip address
@@ -47,15 +47,14 @@
 	CONNECT,
 	CLOSE,
 	FORCED,
-	SIGLVL
+	SIGLVL,
+	CLOSING
 	};
 
 	unsigned char state = SHUT;
 	unsigned char addr1, addr2, addr3, addr4;      		// Assigned IP address
-extern	cBuffer modem_buffer;								// Receive Buffer for modem
-extern 	unsigned char *mBuffer;
-
-
+	extern	cBuffer modem_buffer;								// Receive Buffer for modem
+	extern 	unsigned char *mBuffer;
 
 
 	// Takes the return values
@@ -67,8 +66,6 @@ extern 	unsigned char *mBuffer;
 	*/
 	uint8_t toggle = 0;
 	char  count;
-
-
 
 	void USART3_IRQHandler(void)
 	{
@@ -135,7 +132,7 @@ extern 	unsigned char *mBuffer;
 		* @timeout Time to wait for response
 		* @return If matched SUCCESS else FAIL
 		*/
-		mdmStatus serialMatch(mdmIface *mdm, const char *resp, unsigned timeout)
+		mdmStatus serialMatch(mdmIface *mdm, const char *resp, unsigned int timeout)
 		{
 			addr2 = addr4 = 0;
 
@@ -234,9 +231,12 @@ extern 	unsigned char *mBuffer;
 									//printf("0x%x\n",res);
 								}
 							}
-							while(TIME_TICK < 100 && res != '\r');
-
+							while(TIME_TICK < 1000 && res != '\r');
+							mdm->minfo->ip_addr[addr2]= '\0';
+							printf("iplen=%d\n",addr2);
 							printf("IP:%s\n",mdm->minfo->ip_addr);
+							if(addr2 < 6)
+								state = IPGPRSACT;						// IPaddress cannot be retrieved
 							res = mdmOK;
 							//}
 							//else	res = mdmFail;
@@ -257,6 +257,7 @@ extern 	unsigned char *mBuffer;
 		mdmStatus mdmState(mdmIface *mdm)
 		{
 			char lBuff[20];
+			static unsigned char var = 0;
 			printf("in mdmState\n");
 			do{
 				do{
@@ -285,6 +286,11 @@ extern 	unsigned char *mBuffer;
 					state = CLOSE;
 				}
 				else
+				if(!strcmp(lBuff,"CLOSED"))
+				{
+					state = CLOSE;
+				}
+				else
 				if(!strcmp(lBuff, "IP START"))
 					state = NWATT;
 				else
@@ -301,6 +307,16 @@ extern 	unsigned char *mBuffer;
 				else
 				if(!strcmp(lBuff, "CONNECT OK"))
 					state = CONNECT;
+				else
+				if(!strcmp(lBuff, "TCP CONNECTING")){
+					var++;
+					count = 1;
+					if(var > 5){
+						state = CLOSING;
+						var = 0;
+						count = 0;
+					}
+				}
 				else
 					count = 1;
 			}
@@ -382,11 +398,11 @@ extern 	unsigned char *mBuffer;
 		res = mdmOK;
 		if(state == SHUT || state == CLOSE || state == FORCED)
 		{
-			res = sendwait(mdm,"\rATH\r", "OK", 200);
+			res = sendwait(mdm,"\r|+++|\r", "OK", 200);
 			res = sendwait(mdm,"ATZ\r", "OK",200);
 			res = sendwait(mdm,"\rAT S7=45 S0=0 L1 V1 X4 &c1 E0 Q0\r", "OK", 100);
 			//res = sendwait(mdm,"AT&FS11=55\r", "OK", 300);
-			//res = sendwait(mdm,"AT+IFC=0,0\r","OK",300); //for configuring no flow control
+			res = sendwait(mdm,"AT+IFC=2,2\r","OK",300); //for configuring h/w flow control
 			res = sendwait(mdm, "ATE0\r", "OK",100);
 
 		}
@@ -406,22 +422,23 @@ extern 	unsigned char *mBuffer;
 	mdmStatus mdmNWControl(mdmIface *mdm,uint8_t attach)
 	{
 		// This is used for APN address update
-		//char CMD[28 + 10]="AT+CSTT=";
-		char CMD[17 + 10]="AT+CSTT=";
+		char CMD[28 + 10]="AT+CSTT=";
+		//char CMD[17 + 10]="AT+CSTT=";
 
 		res = mdmOK;
 
-			if(attach == 1)
-			res = sendwait(mdm, "AT+CGATT=1\r", "OK", 300);
-			else{
-			res = sendwait(mdm, "AT+CGATT=0\r", "OK", 300);
-			state = CLOSE;
-			return res;
-			}
+		//res = sendwait(mdm, "AT+CIPMODE=1\r","OK",300);						// For Transparent mode
+		if(attach == 1)
+		res = sendwait(mdm, "AT+CGATT=1\r", "OK", 500);
+		else{
+		res = sendwait(mdm, "AT+CGATT=0\r", "OK", 300);
+		state = CLOSE;
+		return res;
+		}
 
-			if(res != mdmOK)
-				return mdmAttFail;
-			mdmState(mdm);
+		if(res != mdmOK)
+		return mdmAttFail;
+		mdmState(mdm);
 		if (state == INIT || state == FORCED)
 		{
 			//Setting APN adddress for GSM
@@ -491,20 +508,31 @@ extern 	unsigned char *mBuffer;
 	{
 		char cmd[50];
 
-		count = 3;
+		char count = 3;
 		do{
 		printf("IN tcp connect\n");
 			state = CONNECTING;
 			mdmState(mdm);
 			count --;
-			if(state == IP || state == CLOSE)
+			if(state == IP || state == IPGPRSACT || state == CLOSE)
 			{
 				state = CONNECTING;
+				printf("Connecting\n");
 				sprintf(cmd, "AT+CIPSTART=\"TCP\",\"%s\",%s\r",obj->addr, obj->port);
-				res = sendwait(mdm, cmd, "NNECT OK", 1000);
+				res = sendwait(mdm, cmd, "CONNECT\r\n", 1000);
 
-				if(res == mdmTimeOut)
+				if(res == mdmTimeOut){
 					printf("Timeout\n");
+					mdmShut(mdm);
+					mdmFSM(mdm);
+					res = mdmTimeOut;
+				}
+
+			}
+			else if(state == CLOSING)
+			{
+				res = mdmClose(mdm);
+				count ++;
 			}
 		}
 		while(res != mdmOK && count > 0);
@@ -535,10 +563,14 @@ extern 	unsigned char *mBuffer;
 			{
 				state = CONNECTING;
 				sprintf(cmd, "AT+CIPSTART=\"UDP\",\"%s\",%s\r",obj->addr, obj->port);
-				res = sendwait(mdm, cmd, "NNECT OK",1000);
+				res = sendwait(mdm, cmd, "CONNECT\r\n",1000);
 
-				if(res == mdmTimeOut)
-					printf("Timeout\n\r");
+				if(res == mdmTimeOut){
+					printf("Timeout\n");
+					mdmShut(mdm);
+					mdmFSM(mdm);
+					res = mdmTimeOut;
+				}
 			}
 			else{
 				res = mdmFail;
@@ -552,6 +584,9 @@ extern 	unsigned char *mBuffer;
 		return res;
 	}
 
+	/*
+	 *  W
+	 */
 	mdmStatus mdmSend(mdmIface *mdm)
 	{
 
@@ -578,6 +613,7 @@ extern 	unsigned char *mBuffer;
 
 		return res;
 	}
+
 	/*
 	*	This function should be used after connect
 	*	It writes the data to the open socket whether it is UDP or TCP
@@ -588,23 +624,29 @@ extern 	unsigned char *mBuffer;
 	mdmStatus mdmWrite(mdmIface *mdm, char *buffer, uint32_t len, uint8_t send)
 	{
 		uint16_t i;									// Number of retries to send the PAcket
+		char var =0;
 
-		printf("\nIN write\n");
+		printf("\n\rIN write\n\r");
 	  if(state == CONNECT){
 		count = 3;
 		do{
 			for(i = 0; i< len; i++)
 			{
 				serial_send(buffer[i]);
-				printf(" %x",buffer[i]);
+				printf(" %c",buffer[i]);
 			}
 
 			count--;
 			if(send == 1)
 			{
-				i = 0x1a;
-				serial_send(i);									// Sending Ctrl+Z
-				res = serialMatch(mdm, "SEND OK", 500);
+				var = 3;
+				do{
+					var --;
+					i = 0x1a;
+					serial_send(i);									// Sending Ctrl+Z
+					res = serialMatch(mdm, "SEND OK", 2000);
+				}
+				while(res!= mdmOK && var > 0);
 
 			}
 			else
@@ -622,12 +664,71 @@ extern 	unsigned char *mBuffer;
 			printf("write failed\r\n");
 			i = 0x1a;
 			serial_send(i);									// Sending Ctrl+Z
+			serial_send(i);									// Sending Ctrl+Z
+			serial_send(i);									// Sending Ctrl+Z
 			return mdmSendFail;
 		}
 	 }
 	 return mdmSendFail;
 
 	}
+
+	/*
+	 * This function is used to write data to the
+	 * open TCP or UDP socket.
+	 * This should be used with transparent mode.
+	 * parameters:
+	 * @mdm: MOdem Interface
+	 * @buffer: Data to be sent
+	 * @len: length of bytes to be written
+	 * @returns success or fail
+	 */
+	mdmStatus mdmTransSend(mdmIface *mdm, char *buffer, uint32_t len)
+	{
+			uint32_t i;
+			printf("\n\rIN Trans write\n\r");
+		  if(state == CONNECT){
+
+				for(i = 0; i< len; i++)
+				{
+					serial_send(buffer[i]);
+					printf(" %c",buffer[i]);
+				}
+				toggle = 1;
+
+			return mdmOK;
+		}
+	}
+
+	/*
+	 * This function is used to read data in transparent mode
+	 * from the open UDP or TCP socket
+	 * Paramters
+	 * @mdm: Modem Interface
+	 * @buffer: Data will be read into this
+	 * @len: length of data to read
+	 * @returns: Success or Fail
+	 */
+	mdmStatus mdmTransRead(mdmIface *mdm, char *buffer, uint32_t len)
+		{
+
+			uint32_t i = 0;
+			TIME_SET(0);
+
+			do{
+				if(serial_rx_ready())
+				{
+					serial_get(buffer[i]);
+					printf("%c\t", buffer[i]);
+					i++;
+					TIME_SET(0);
+				}
+
+			}
+			while((len != i) && (TIME_TICK < 1000));
+			printf("\nlen=%d\n",i);
+			return mdmOK;
+		}
 
 	/*
 	*	This function is used to read data from the open socket
@@ -639,8 +740,6 @@ extern 	unsigned char *mBuffer;
 		char data = 0, i= 0;
 		static uint32_t paylen = 0;
 		static uint32_t dataRead = 0;
-
-
 
 		printf("IN read\n");
 		if(toggle == 1){
@@ -717,14 +816,42 @@ extern 	unsigned char *mBuffer;
 	}
 
 	/*
+	 * This function brings modem from data mode to command mode and vice-vesa
+	 * based on the @arg mode
+	 * For mode = COMMAND- to command mode from data
+	 * mode = DATA - to data mode from command mode
+	 */
+	mdmStatus mdmSwitch(mdmIface *mdm, uint8_t mode)
+	{
+			printf("\n\r Switching\n\r");
+			if(mode == COMMAND)
+				res = sendwait(mdm, "|+++|", "OK", 500);				// For command mode
+			else if(mode == DATA)
+				res = sendwait(mdm, "ATO", "OK", 500);					// For data mode
+
+				if(res != mdmOK)
+					return mdmFail;
+
+				return res;
+	}
+
+
+	/*
+	 * To know the amount of data sent and remaining in the buffer
+	 */
+	mdmStatus mdmSentData(mdmIface *mdm)
+	{
+		res = sendwait(mdm, "AT+CIPACK\r", "OK", 1000);
+	}
+
+	/*
 	*	To close the TCP or UDP connection
 	*	After this if reconnection is required than all the  init
 	*	process should be followed again
 	*/
 	mdmStatus mdmClose(mdmIface *mdm)
 	{
-
-
+		char count;
 		res = mdmState(mdm);
 		if(state == CONNECT)
 		{// TCP connection closing takes more time than the UDP
@@ -734,7 +861,7 @@ extern 	unsigned char *mBuffer;
 				count --;
 				if(state == CONNECT)
 				{
-					res = sendwait(mdm, "AT+CIPCLOSE\r", "LOSE OK", 1000);
+					res = sendwait(mdm, "AT+CIPCLOSE=1\r", "LOSE OK", 1000);
 				}
 				else if(state == CLOSE)
 					{

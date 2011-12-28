@@ -13,6 +13,20 @@
 #include "TypeDefs.h"
 
 
+#define packet 					"\n\t<WSN_DATA_PKT>\n\t"\
+                                        "\t<COUNT>%04x</COUNT>\n\t"\
+                                        "\t<BSID>%02x</BSID>\n\t"\
+                                        "\t<CROPID>%02x%02x</CROPID>\n\t"\
+                                        "\t<PLOTID>%04x</PLOTID>\n\t"\
+                                        "\t<MOTEID>%04x</MOTEID>\n\t"\
+                                        "\t<PARAID>%02x</PARAID>\n\t"\
+                                        "\t<PARAVAL>%04x</PARAVAL>\n\t"\
+                                        "\t<TIME>%04x%02x%02x%02x%02x%02x</TIME>\n\t"\
+                                "</WSN_DATA_PKT>\n"
+#define ENDTAG "</DATA>"
+#define STARTTAG "<DATA>"
+
+
 /**
  * BaseStation ID
  */

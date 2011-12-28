@@ -696,11 +696,11 @@ COX_Status MSD_GoIdleState(const MSD_Dev *sd)
   while (MSD_GetResponse(sd, MSD_RESPONSE_NO_ERROR) && counter > 0);
   if(!(counter > 0)){
 	  ACMD1 = 0;
-	  //printf("ACMD1 Failed\n\r");
+	  printf("ACMD1 Failed\n\r");
   }
   else{
 	  CardType = CT_SD2;
-	  //printf("SDCARD ver2\n\r");
+	  printf("SDCARD ver2\n\r");
   }
 
   // If above command Fails then only this should be executed
@@ -712,7 +712,7 @@ COX_Status MSD_GoIdleState(const MSD_Dev *sd)
 	  }
 	  while(MSD_GetResponse(sd, MSD_IN_IDLE_STATE) && counter > 0);
 	  if(counter > 0){
-		  //printf("CMD55 success\n\r");
+		  printf("CMD55 success\n\r");
 	  }
 
 	  // Sending Command CMD1
@@ -727,7 +727,7 @@ COX_Status MSD_GoIdleState(const MSD_Dev *sd)
 		  ACMD1 = 1;
 	  }
 	  else{
-		  //printf("SD Ver1\n\r");
+		  printf("SD Ver1\n\r");
 		  CardType = CT_SD1;
 	  }
   }
@@ -754,7 +754,7 @@ COX_Status MSD_GoIdleState(const MSD_Dev *sd)
     }
   	while(MSD_GetResponse(sd, MSD_RESPONSE_NO_ERROR) && counter > 0);
   	if(counter > 0){
-  		//printf("Block set\n\r");
+  		printf("Block set\n\r");
   	}
   	else{
   		SS_HIGH(sd);

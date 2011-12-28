@@ -408,6 +408,7 @@ static COX_Status STM_UART_Init (USART_TypeDef *USARTx, uint32_t baudrate)
 	  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
 	  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
 	  STM_GPIO_Init(GPIOA, &GPIO_InitStructure);
+	  USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
 	}
 	else if(USARTx == USART2)
 	{
@@ -424,6 +425,7 @@ static COX_Status STM_UART_Init (USART_TypeDef *USARTx, uint32_t baudrate)
 	  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
 	  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
 	  STM_GPIO_Init(GPIOA, &GPIO_InitStructure);
+	  USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
 	}
 	else if(USARTx == USART3)
 	{
@@ -440,11 +442,13 @@ static COX_Status STM_UART_Init (USART_TypeDef *USARTx, uint32_t baudrate)
 	  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
 	  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
 	  STM_GPIO_Init(GPIOB, &GPIO_InitStructure);
+	  /* Hardware Flow control enabled*/
+	  USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_RTS_CTS;
 	}
 
 	/** USARTx configuration */
 	USART_InitStructure.USART_BaudRate = baudrate;
-	USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+
 	USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
 	USART_InitStructure.USART_Clock = USART_Clock_Disable;
 	USART_InitStructure.USART_CPOL = USART_CPOL_Low;

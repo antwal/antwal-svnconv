@@ -151,9 +151,11 @@ uint16_t BKP_ReadBackupRegister(uint16_t BKP_DR)
 
 void Periodic(void)
 {
-	//TIME *tm;
+	static uint8_t count = 0;
 	Cur_Time(tm);
-
-	//printf("Time is: %d:%d:%d - %d,%d,%d\r",tm->hh,tm->mm, tm->ss, tm->DD,tm ->MM, tm->YYYY);
-
+	count ++;
+	if(count > 9){
+		printf("Time is: %d:%d:%d - %d,%d,%d\r",tm->hh,tm->mm, tm->ss, tm->DD,tm ->MM, tm->YYYY);
+		count = 0;
+	}
 }
