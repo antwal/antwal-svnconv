@@ -8,6 +8,7 @@
 #include "stm32_rtc.h"
 
 extern TIME *tm;
+char ntp[48];
 /* This packet need to be send to through UDP to ntp server
  * The Output will be embedded into the tx_timestamp_i this
  * data should be sent to gmtime() to get the time.
@@ -50,8 +51,7 @@ void NtpDCall(ntpMsg *msg)
 
 mdmStatus ntp_time(mdmIface *mdm)
 {
-	char ntp[48],res;
-	char port[4];
+	char port[4],res;
 	char addr[20];
 	server udp;
 

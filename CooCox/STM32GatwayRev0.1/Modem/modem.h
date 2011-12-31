@@ -14,7 +14,7 @@ typedef enum {
 	}mdmStatus;
 
 typedef struct{
-		char 			*ip_addr;		// Point to the ip address(192:168:51:28)
+		//char 			*ip_addr;		// Point to the ip address(192:168:51:28)
 		//char 			*provider;		// Points to the signal provider name
 		//uint8_t 		signal;			// Holds the signal strngth
 		//char 			*msgCentreNo;	// Message center number
@@ -23,7 +23,8 @@ typedef struct{
 	typedef struct {
 		//uint16_t dtr_pin;				// Pin used for dtr signaling
 		//COX_SERIAL_PI *uart;			// Uart used to communcate with Modem
-		mdmInfo *minfo;					// Modem informations
+		//mdmInfo *minfo;					// Modem informations
+		char *ip_addr;
 	}mdmIface ;
 
 	typedef struct sockaddr_in {

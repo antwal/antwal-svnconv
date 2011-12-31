@@ -26,7 +26,9 @@ void PrintChar(char c)
 
 /** Maximum string size allowed (in bytes). */
 #define MAX_STRING_SIZE         100
-
+// used in the vfprintf Function
+char pStr[MAX_STRING_SIZE];
+char pError[] = "Inc Size\n\r";
 
 /** Required for proper compilation. */
 struct _reent r = {0, (FILE *) 0, (FILE *) 1, (FILE *) 0};
@@ -404,8 +406,7 @@ signed int vsprintf(char *pString, const char *pFormat, va_list ap)
  */
 signed int vfprintf(FILE *pStream, const char *pFormat, va_list ap)
 {
-    char pStr[MAX_STRING_SIZE];
-    char pError[] = "stdio.c: increase MAX_STRING_SIZE\n\r";
+
 
     /* Write formatted string in buffer */
     if (vsprintf(pStr, pFormat, ap) >= MAX_STRING_SIZE) {

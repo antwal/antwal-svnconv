@@ -226,15 +226,16 @@
 							do{
 								if(serial_rx_ready())
 								{
-									mdm->minfo->ip_addr[addr2++]= res;
+									if( (res >= 0x30 && res <= 0x39) || res == '.')
+									mdm->ip_addr[addr2++]= res;
 									serial_get(res);
 									//printf("0x%x\n",res);
 								}
 							}
 							while(TIME_TICK < 1000 && res != '\r');
-							mdm->minfo->ip_addr[addr2]= '\0';
+							mdm->ip_addr[addr2]= '\0';
 							printf("iplen=%d\n",addr2);
-							printf("IP:%s\n",mdm->minfo->ip_addr);
+							printf("IP:%s\n\r",mdm->ip_addr);
 							if(addr2 < 6)
 								state = IPGPRSACT;						// IPaddress cannot be retrieved
 							res = mdmOK;
@@ -358,12 +359,12 @@
 				case IPGPRSACT:
 				case IPCONFIG:
 					state = IP;
-					res = sendwait(mdm, "AT+CIPHEAD=1\r", "OK", 200);
+					//res = sendwait(mdm, "AT+CIPHEAD=1\r", "OK", 200);
 					res = sendwait(mdm, "AT+CIFSR\r", "", 500);
 					break;
 
 				case IP:
-					res = sendwait(mdm, "AT+CIPHEAD=1\r", "OK", 200);
+					//res = sendwait(mdm, "AT+CIPHEAD=1\r", "OK", 200);
 					res = sendwait(mdm, "AT+CIFSR\r", "", 500);
 
 					break;

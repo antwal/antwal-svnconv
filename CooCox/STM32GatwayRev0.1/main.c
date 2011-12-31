@@ -31,8 +31,8 @@ uint8_t BaseStnId = 11;
 
 /*---------------------------- Variable Define -------------------------------*/
 	//OS_STK     task1_stk[STACK_SIZE_DEFAULT];	  /*!< Define "taskA" task stack */
-	OS_STK     task2_stk[500];	  /*!< Define "taskB" task stack */
-	//OS_STK     task3_stk[STACK_SIZE_DEFAULT+400];	  /*!< Define "led" task stack   */
+	OS_STK     task2_stk[200];	  					/*!< Define "taskB" task stack */
+	OS_STK     task3_stk[STACK_SIZE_DEFAULT];	  /*!< Define "led" task stack   */
 	//OS_STK     task4_stk[STACK_SIZE_DEFAULT];	  /*!< Define "led" task stack   */
 
 
@@ -162,7 +162,7 @@ void initSerial(void){
 	myUSART3->Cfg( COX_SERIAL_INT_CONF, RXNE_ENABLE,0);
 
 	//enable the interrupts for usart3
-	NVIC_Configuration_uart(myUSART3);
+	//NVIC_Configuration_uart(myUSART3);
 }
 
 
@@ -182,11 +182,11 @@ void TmrCallBack(void)
 	 *
 	 *******************************************************************************
 */
-	void task1 (void* pdata)
+	/*void task1 (void* pdata)
 	{
 
 	}//end task 1
-
+*/
 
 	/**
 	 *******************************************************************************
@@ -201,29 +201,25 @@ void TmrCallBack(void)
 	 */
 	void task2 (void* pdata)
 	{
-		OS_TCID sftmr;
 		mdmIface modm;
-		sftmr = CoCreateTmr(TMR_TYPE_PERIODIC,
-		                                  1,
-		                                  1,
-		                                  TmrCallBack);
-		CoStartTmr (sftmr);
-		TIME_SET(0);
+		char buff[16]= "0.0.0.0";
+		modm.ip_addr = buff;
+
+		//TIME_SET(0);
 		//uint8_t lclbuff[100];
 		//FATFS fatfs;			/* File system object */
 		//FRESULT rc;				/* Result code */
 		//FIL fil1, fil2;				/* File object */
-		uint8_t res;
+		//uint8_t res;
 		//uint16_t br, bw;
 
-		uint8_t tcpport[4]= "80";
-		//uint8_t tcpaddr[20] = "14.99.68.74";
-		uint8_t tcpaddr[20] = "14.96.91.129";
+		//uint8_t tcpport[4]= "80";
+		//uint8_t tcpaddr[20] = "14.96.91.129";
 
 		server tcp;
 
-		tcp.port = tcpport;
-		tcp.addr = tcpaddr;
+		tcp.port ="80";
+		tcp.addr = "14.99.125.8";
 
 		sdConfig();
 		ntp_time(&modm);
@@ -239,7 +235,7 @@ void TmrCallBack(void)
 			  if(TIME_TICK == 100)
 			  pi_pio.Out(LED1, 0);      /* Output low level to turn off LED0 */
 
-			  CoTickDelay (100);
+	//		  CoTickDelay (100);
 		  }
 
 	}
@@ -275,7 +271,7 @@ void TmrCallBack(void)
 	 * @details    task example to increment a variable
 	 *******************************************************************************
 	 */
-	void task4 (void* pdata)
+	/*void task4 (void* pdata)
 	{
 		//StatusType result;
 		//void *msg;
@@ -287,7 +283,7 @@ void TmrCallBack(void)
 
 	  	  }
 	}
-
+*/
 
 
 
@@ -297,7 +293,7 @@ void TmrCallBack(void)
 int main(void)
 {
 	OS_TID task_2,task_3;
-
+	OS_TCID sftmr;
 
 	//Initilize serial configuration
 	initSerial();
@@ -319,8 +315,8 @@ int main(void)
 
     /*!< Create three tasks	*/
    // task_1 = CoCreateTask (task1,0,0,&task1_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
-    task_2 = CoCreateTask (task2,0,0,&task2_stk[500-1],500);
-    //task_3 = CoCreateTask (task3,0,1,&task3_stk[STACK_SIZE_DEFAULT+400-1],STACK_SIZE_DEFAULT+400);
+    task_2 = CoCreateTask (task2,0,0,&task2_stk[200-1],200);
+    task_3 = CoCreateTask (task3,0,1,&task3_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
    // task_4 = CoCreateTask (task4,0,2,&task4_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
 
     /* Create a mutex: used by the file handling ReadInterface Function */
@@ -342,6 +338,8 @@ int main(void)
           			printf("QID%d\n", sd_queue_id);
           		}
 
+    sftmr = CoCreateTmr(TMR_TYPE_PERIODIC, 1,1, TmrCallBack);
+    CoStartTmr (sftmr);
     CoStartOS ();			    /*!< Start multitask	           */
 
 

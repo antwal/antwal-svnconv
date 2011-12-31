@@ -18,7 +18,7 @@ name=uagri&pass=uagri123&form_id=user_login&op=Log%20in"
 /*"POST /uagri/?q=node/75 HTTP/1.1\r\n*/
 #define POST_H \
 "POST /upload_file.php HTTP/1.1\r\n\
-Host: 14.96.91.129\r\n\
+Host: 14.99.125.8\r\n\
 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n\
 Accept-Language: en-us,en;q=0.5\r\n\
 Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7\r\n\
@@ -50,7 +50,6 @@ Submit\r\n\
  * External function definition
  */
 
-extern void rc(FRESULT);
 extern void die(FRESULT);
 
 /*
@@ -62,6 +61,13 @@ static char get[100]={'\0'};
 
 uint32_t size;				/* size of file */
 static mdmStatus res;
+
+/*
+ *  File System related variables
+ */
+	FRESULT rc;				/* Result code */
+	FATFS fatfs;			/* File system object */
+	FIL fil;				/* File object */
 
 /*
  * Decleration of the Public functions
@@ -193,10 +199,6 @@ mdmStatus sendData(mdmIface *mdm ,const char *file){
         uint32_t datalen  = 0;
         mdmStatus res = mdmOK ;
         UINT rbytes;			/* Read bytes */
-        FRESULT fres;				/* Result code */
-        FATFS fatfs;			/* File system object */
-        FIL fil;				/* File object */
-
 
         printf("\nSENDING DATA------>");
 
@@ -210,20 +212,14 @@ mdmStatus sendData(mdmIface *mdm ,const char *file){
         f_mount(0, &fatfs);
 
     	//open file
-    	fres = f_open(&fil, file, FA_OPEN_EXISTING |FA_READ);
-    	if(fres ) die(fres);
+    	rc = f_open(&fil, file, FA_OPEN_EXISTING |FA_READ);
+    	if(rc ) die(rc);
 
 
-       /* fp=fopen(filename,"rb");
-        if(fp==NULL) {
-           printf("file not found!\n");
-        }
-		*/
-
-        //read the file  and send it through modem
+       //read the file  and send it through modem
         while (size > 0 ){
-        	fres = f_read(&fil, buffer, sizeof(buffer), &rbytes);    /* Read a chunk of src file */
-        	if (fres) die(fres);
+        	rc = f_read(&fil, buffer, sizeof(buffer), &rbytes);    /* Read a chunk of src file */
+        	if (rc) die(rc);
             printf("File Data = %d\n\r",size);
 
             //if((res = mdmSend(mdm)) == mdmOK){
@@ -260,11 +256,6 @@ mdmStatus sendData(mdmIface *mdm ,const char *file){
  */
 
 uint32_t getFileSize(const char *file){
-	FRESULT rc;				/* Result code */
-	FATFS fatfs;			/* File system object */
-	FIL fil;				/* File object */
-
-
 
 	//Register volume work area (never fails)
 	f_mount(0, &fatfs);
