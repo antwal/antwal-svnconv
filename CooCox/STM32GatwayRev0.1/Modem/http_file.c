@@ -3,47 +3,8 @@
 #include "stm32f10x.h"
 #include <stdint.h>	// for including uint_8 etc
 #include <stdio.h>  //for including NULL
+#include "main.h"
 
-
-#define GET_COOKIE \
-"POST /uagri/?q=user/login HTTP/1.1\r\n\
-Host: ubicomp.in\r\n\
-Accept: */*\r\n\
-Range: bytes=0-1\r\n\
-Content-Type: application/x-www-form-urlencoded\r\n\
-Content-Length: 55\r\n\
-\r\n\
-name=uagri&pass=uagri123&form_id=user_login&op=Log%20in"
-
-/*"POST /uagri/?q=node/75 HTTP/1.1\r\n*/
-#define POST_H \
-"POST /upload_file.php HTTP/1.1\r\n\
-Host: 14.99.125.8\r\n\
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n\
-Accept-Language: en-us,en;q=0.5\r\n\
-Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7\r\n\
-Keep-Alive: 115\r\n\
-Content-Type: multipart/form-data; boundary=--80346\r\n\
-Content-Length:"
-
-
-#define COOKIE "Cookie: "
-#define CLRF "\r\n"
-#define DCLRF "\r\n\r\n"
-
-#define BEFORE_DATA \
-"----80346\r\n\
-Content-Disposition: form-data; name=\"file\"; filename=\"mydata\"\r\n\
-Content-Type: application/octet-stream\r\n\r\n"
-
-
-#define AFTER_DATA \
-"\r\n----80346\r\n\
-Content-Disposition: form-data; name=\"submit\"\r\n\r\n\
-Submit\r\n\
-----80346--"
-
-#define MAX_BUFF_SIZE 1000
 #define CLR_BUFFER(buff) memset(buff,'\0',MAX_BUFF_SIZE)
 
 /*
@@ -56,18 +17,11 @@ extern void die(FRESULT);
  * Declaration of static global variables
  */
 
-static char buffer[1000]={'\0'};
+static char buffer[MAX_BUFF_SIZE]={'\0'};
 static char get[100]={'\0'};
 
 uint32_t size;				/* size of file */
 static mdmStatus res;
-
-/*
- *  File System related variables
- */
-	FRESULT rc;				/* Result code */
-	FATFS fatfs;			/* File system object */
-	FIL fil;				/* File object */
 
 /*
  * Decleration of the Public functions
@@ -82,10 +36,6 @@ mdmStatus sendHeader(mdmIface *mdm, uint32_t file_size, char *cookie );
 mdmStatus sendData(mdmIface *mdm ,const char *file);
 uint32_t getFileSize(const char *file);
 
-
-/*
- * Public function
- */
 
 /*
  * This function will upload the file to the remote server
@@ -208,17 +158,14 @@ mdmStatus sendData(mdmIface *mdm ,const char *file){
                 if(res != mdmOK) return res;
        // }
 
-        //Register volume work area (never fails) */
-        f_mount(0, &fatfs);
-
-    	//open file
-    	rc = f_open(&fil, file, FA_OPEN_EXISTING |FA_READ);
+      	//open file
+    	rc = f_open(&send, file, FA_OPEN_EXISTING |FA_READ);
     	if(rc ) die(rc);
 
 
        //read the file  and send it through modem
         while (size > 0 ){
-        	rc = f_read(&fil, buffer, sizeof(buffer), &rbytes);    /* Read a chunk of src file */
+        	rc = f_read(&send, buffer, sizeof(buffer), &rbytes);    /* Read a chunk of src file */
         	if (rc) die(rc);
             printf("File Data = %d\n\r",size);
 
@@ -230,17 +177,15 @@ mdmStatus sendData(mdmIface *mdm ,const char *file){
                     if (res != mdmOK){
                     	printf("send Fail\n\r");
                     	//close file
-                    	f_close(&fil);
-                       	//Unregister work area prior to discard it */
-                       	f_mount(0, NULL);
+                    	f_close(&send);
+
                        	return res;
                     }
                     size = size - rbytes;
             //}
         }
-        f_close(&fil);
-        //Unregister work area prior to discard it */
-    	f_mount(0, NULL);
+        f_close(&send);
+
         //sending AFTER_DATA(needed for sending the file in multipart)
         //if((res = mdmSend(mdm)) == mdmOK){
                 res = mdmTransSend(mdm, AFTER_DATA , strlen(AFTER_DATA),1);
@@ -257,22 +202,16 @@ mdmStatus sendData(mdmIface *mdm ,const char *file){
 
 uint32_t getFileSize(const char *file){
 
-	//Register volume work area (never fails)
-	f_mount(0, &fatfs);
-
 	//open an existing file
-	rc =f_open(&fil, file, FA_READ);
+	rc =f_open(&send, file, FA_READ);
 	if(rc ) die(rc);
 
 	//Get the file size
-	size = f_size(&fil);
+	size = f_size(&send);
 
 	//close the file
-	rc = f_close(&fil);
+	rc = f_close(&send);
 	if (rc) die(rc);
-
-	//Unregister work area prior to discard it */
-	f_mount(0, NULL);
 
 
 	printf("NSize=%d\n\r",size);

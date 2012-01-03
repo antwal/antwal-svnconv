@@ -10,7 +10,7 @@
 
 #include <stm_spi_master.h>
 #include "di_msd.h"
-
+#include "main.h"
 /*----------------------------------------------------------------------*/
 	/* FatFs sample project for generic microcontrollers (C)ChaN, 2010      */
 	/*----------------------------------------------------------------------*/
@@ -50,6 +50,7 @@ MSD_Dev *sd= &sd_var;							// MSD instance
 cBuffer modem_buffer;								// Receive Buffer for modem
 unsigned char mBuffer[MaxRx];
 
+uint8_t lclbuff[100];
 
 
 //Decleration of   serial Ports
@@ -149,8 +150,8 @@ void initSerial(void){
 	bufferInit(&modem_buffer, mBuffer, MaxRx);
 
 	// For mote
-	//myUSART1->Init(57600);
-	//myUSART1->Cfg( COX_SERIAL_INT_CONF, RXNE_ENABLE,0);
+	myUSART1->Init(57600);
+	myUSART1->Cfg( COX_SERIAL_INT_CONF, RXNE_ENABLE,0);
 
 
 	//Usart for printf-debugging purpose
@@ -170,23 +171,6 @@ void TmrCallBack(void)
 {
 	TIME_TICK ++;
 }
-/**
- *
-	 *******************************************************************************
-	 * @brief       "taskA" task code
-	 * @param[in]   None
-	 * @param[out]  None
-	 * @retval      None
-	 * @par Description
-	 * @details    Just a task example of a clock
-	 *
-	 *******************************************************************************
-*/
-	/*void task1 (void* pdata)
-	{
-
-	}//end task 1
-*/
 
 	/**
 	 *******************************************************************************
@@ -204,26 +188,121 @@ void TmrCallBack(void)
 		mdmIface modm;
 		char buff[16]= "0.0.0.0";
 		modm.ip_addr = buff;
-
-		//TIME_SET(0);
-		//uint8_t lclbuff[100];
-		//FATFS fatfs;			/* File system object */
-		//FRESULT rc;				/* Result code */
-		//FIL fil1, fil2;				/* File object */
-		//uint8_t res;
-		//uint16_t br, bw;
-
-		//uint8_t tcpport[4]= "80";
-		//uint8_t tcpaddr[20] = "14.96.91.129";
-
+		uint8_t res;
+		uint16_t br, bw;
 		server tcp;
 
+		TIME_SET(0);
 		tcp.port ="80";
-		tcp.addr = "14.99.125.8";
+		tcp.addr = "115.117.252.17";
 
 		sdConfig();
 		ntp_time(&modm);
-		uploadFile(&modm,"./root/alldata.xml",&tcp);
+		mount(fatfs);
+		//uploadFile(&modm,"./root/send.xml.xml",&tcp);
+
+		/*
+				 *  If send.xml file exists that means last uploading was unsuccessful.
+				 *  so  first upload the send.xml data of previous failed
+				 *  upload trial.
+				 * 	If file is not present that means last upload is successful
+				 * 	so rename the store.xml to send.xml and try to upload.
+				 *  once send.xml is uploaded, append the send.xml to alldata.xml.
+				 *  Then delete the send.xml file.
+				 */
+
+
+				rc = f_open(&send, "./root/send.xml", FA_READ);
+				f_close(&send);
+				if(rc == FR_NO_FILE)		// If send.xml file does not exists
+				{
+					CoEnterMutexSection(file_mutex);
+					rc = f_rename("./root/store.xml", "./root/send.xml");			// Copy store.xml to send.xml
+					CoLeaveMutexSection(file_mutex);
+					printf("rename=%d\n\r",rc);
+					rc = uploadFile(&modm, "./root/send.xml", &tcp);
+				}
+				else
+				{
+					printf("file present=%d\n\r",rc);
+					rc = uploadFile(&modm, "./root/send.xml", &tcp);
+				}
+
+				// If file is uploaded successfully
+				if(rc == SUCCESS)
+				{
+					// Appending send.xml data to alldata.xml
+					printf("Open a send.xml to read\r\n");
+					rc = f_open(&send, "./root/send.xml", FA_READ );
+					if (rc) die(rc);
+					f_sync(&send);
+
+					printf("\r\nWrite to file alldata.xml\r\n");
+					rc = f_open(&alldata, "./root/alldata.xml", FA_WRITE|FA_READ);//| FA_CREATE_ALWAYS);
+					if (rc) die(rc);
+					f_sync(&alldata);
+
+					if( rc == FR_NO_FILE)
+					{
+						printf("Creating alldata.xml\n\r");
+						rc = f_open(&alldata, "./root/alldata.xml", FA_WRITE|FA_READ| FA_CREATE_ALWAYS);
+						if (rc) die(rc);
+						f_sync(&alldata);
+					}
+
+					// If the alldata.xml has already some data present
+					if(!(f_size(&alldata) == 0))
+					{
+						printf("appending data to alldata.xml\n\r");
+						// Overwriting the Endtag
+						res = f_lseek(&alldata, f_size(&alldata)- strlen(ENDTAG)-1);
+						// Read after the head tag
+						rc = f_read(&send, lclbuff, strlen(STARTTAG)+2, &br);
+						if (rc || !br) die(rc);
+						for(res = 0; res < br;res++)
+							printf(" %c",lclbuff[res]);
+
+						rc = f_write(&alldata, "\t", 1,&bw);
+						if (rc) die(rc);
+						f_sync(&alldata);
+					}
+					//If nothing is present in the file
+					else{
+						printf("alldata.xml is empty\n\r");
+						rc = f_write(&alldata, STARTTAG, strlen(STARTTAG), &bw);
+						if (rc) die(rc);
+						f_sync(&alldata);
+					}
+
+					printf("\n\rcopying content\n\r");
+					// Start copying content from send.xml to alldata.xml
+					do {
+
+						//printf("File size=%d\n\r",f_size(&send));
+						rc = f_read(&send, lclbuff, sizeof(lclbuff), &br);	/* Read a chunk of file */
+						printf("rc=%d,br=%d\n\r",rc,br);
+						if (rc || !br) break;								/* Error or end of file */
+						for(res = 0;res < br ;res++)
+							printf(" %c",lclbuff[res]);
+						//res = f_lseek(&fil2, f_size(&fil2));
+
+						rc = f_write(&alldata, lclbuff, br, &bw);
+						if (rc) die(rc);
+						f_sync(&alldata);
+					}
+					while(f_eof(&send)!= 1);
+
+					rc = f_close(&send);
+					if (rc) die(rc);
+
+					rc = f_close(&alldata);
+					if (rc) die(rc);
+
+					printf("Deleting send.xml\n\r");
+					f_unlink("./root/send.xml");		// Delete the file
+
+				}
+				umount(fatfs);
 		for (;;)
 		  {
 			  if(TIME_TICK > 200){
@@ -261,32 +340,6 @@ void TmrCallBack(void)
 
 		  }
 	}
-	/**
-	 *******************************************************************************
-	 * @brief       "task4" task code
-	 * @param[in]   None
-	 * @param[out]  None
-	 * @retval      None
-	 * @par Description
-	 * @details    task example to increment a variable
-	 *******************************************************************************
-	 */
-	/*void task4 (void* pdata)
-	{
-		//StatusType result;
-		//void *msg;
-
-	  for (;;)
-	  	  {
-
-		 // wsnPacketDecoding();
-
-	  	  }
-	}
-*/
-
-
-
 
 
 
@@ -315,8 +368,8 @@ int main(void)
 
     /*!< Create three tasks	*/
    // task_1 = CoCreateTask (task1,0,0,&task1_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
-    task_2 = CoCreateTask (task2,0,0,&task2_stk[200-1],200);
-    task_3 = CoCreateTask (task3,0,1,&task3_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
+    task_2 = CoCreateTask (task2,0,2,&task2_stk[200-1],200);
+    //task_3 = CoCreateTask (task3,0,1,&task3_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
    // task_4 = CoCreateTask (task4,0,2,&task4_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
 
     /* Create a mutex: used by the file handling ReadInterface Function */

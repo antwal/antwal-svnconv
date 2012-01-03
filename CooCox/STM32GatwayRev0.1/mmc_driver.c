@@ -716,7 +716,7 @@ COX_Status MSD_GoIdleState(const MSD_Dev *sd)
 	  }
 
 	  // Sending Command CMD1
-	  counter = 0x10;
+	  counter = 0xF0;
 	  do{
   		  MSD_SendCmd(sd, MSD_SEND_OP_COND, 0, 0xFF);
   		  counter --;

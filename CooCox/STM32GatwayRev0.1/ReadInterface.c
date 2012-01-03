@@ -10,6 +10,7 @@
 #include "stm32_rtc.h"
 #include "ff.h"
 #include "di_msd.h"
+#include "main.h"
 
 #define MAX_BUFF_SIZE 64
 
@@ -21,8 +22,9 @@ typedef struct Message {
 extern OS_EventID raw_queue_id;
 extern OS_EventID sd_queue_id;
 
-// Message to be added on to queue , taken two buffer packet //
+// Message to be added on to queue , taken 8 buffer packet //
 MSG DataMsg[8];
+
 
 extern uint8_t BaseStnId;
 extern OS_MutexID file_mutex;
@@ -104,7 +106,7 @@ void Read_Data(unsigned char ch){
 			if (ch == START_BYTE) {
 				PktStartRecd = 1;
 				DataMsg[buf].DataBuffer[i++] = START_BYTE;
-			} //else {printf(" %c", ch); }
+			} else {printf(" %c", ch); }
 		}
 
 	//}
@@ -118,15 +120,11 @@ char * wsnPacketDecoding(void ){
 	MSG DataMsg;
 	StatusType result;
 	void *msg;
-	Tos_Msg *ToSMessage;		// Tos_Msg received //
 	uint8_t j;
+	Tos_Msg *ToSMessage;		// Tos_Msg received //
+	SensedData *Data;
 	TIME cur_time;
 	static int32_t count = 0;
-	SensedData *Data;
-	FRESULT rc;				/* Result code */
-	FATFS fatfs;			/* File system object */
-	FIL fil2;				/* File object */
-//	FILINFO fno;			/* File information object */
 	UINT bw,res;
 
 	 /* Wait for a mail, time-out:0 */
@@ -159,50 +157,49 @@ char * wsnPacketDecoding(void ){
 			Data = (SensedData *)&DataMsg.DataBuffer[0];
 			sprintf(&destdata[0], packet, count, BaseStnId, Data->crop_id[0],Data->crop_id[1], Data->plot_id, Data->node_id, Data->sensor_id, Data->value,cur_time.YYYY,cur_time.MM,cur_time.DD,cur_time.hh,cur_time.mm,cur_time.ss);
 			// Appneding the timestamp to the data packet
-			memcpy(&DataMsg.DataBuffer[sizeof(struct SensedData) + 3], &cur_time, sizeof(TIME));
+			//memcpy(&DataMsg.DataBuffer[sizeof(struct SensedData) + 3], &cur_time, sizeof(TIME));
 
 			/* Lock the Mutex*/
 			CoEnterMutexSection(file_mutex);
-			/*
-			 * Writing to the File System
-			 */
-			f_mount(0, &fatfs);		/* Register volume work area (never fails) */
+
 
 			printf("\r\nWrite to file (test.txt).\r\n");
-			rc = f_open(&fil2, "./root/store.xml", FA_WRITE|FA_READ);//| FA_CREATE_ALWAYS);
+			rc = f_open(&store, "./root/store.xml", FA_WRITE|FA_READ);//| FA_CREATE_ALWAYS);
+			f_sync(&store);
 			if (rc) die(rc);
 			if(rc != 0)
 			{
 				if(rc == 4)				// If file is not found
 				{
-					rc = f_open(&fil2, "./root/store.xml", FA_WRITE|FA_READ|FA_CREATE_ALWAYS);
+					rc = f_open(&store, "./root/store.xml", FA_WRITE|FA_READ|FA_CREATE_ALWAYS);
+					f_sync(&store);
 				}
 			}
-			printf("OSize=%d\n\r",(uint16_t)f_size(&fil2));
+			printf("OSize=%d\n\r",(uint16_t)f_size(&store));
 
 			// IF something is there in destn file
-			if(!(f_size(&fil2) == 0))
+			if(!(f_size(&store) == 0))
 			{
 			// Overwriting the Endtag
-				res = f_lseek(&fil2, f_size(&fil2)- strlen(ENDTAG)-1);
+				res = f_lseek(&store, f_size(&store)- strlen(ENDTAG)-1);
 			}
 			//If nothing is present in the file
 			else{
-				rc = f_write(&fil2, STARTTAG, strlen(STARTTAG), &bw);
+				rc = f_write(&store, STARTTAG, strlen(STARTTAG), &bw);
+				f_sync(&store);
 				if (rc) die(rc);
 			}
 
-			rc = f_write(&fil2, destdata, strlen(destdata),&bw);
+			rc = f_write(&store, destdata, strlen(destdata),&bw);
+			f_sync(&store);
 			if (rc) die(rc);
 
-			rc = f_write(&fil2, ENDTAG, strlen(ENDTAG),&bw);
+			rc = f_write(&store, ENDTAG, strlen(ENDTAG),&bw);
+			f_sync(&store);
 			if (rc) die(rc);
 
-			rc = f_close(&fil2);
+			rc = f_close(&store);
 			if (rc) die(rc);
-
-			f_mount(0, NULL);		/* UnRegister volume work area (never fails) */
-		//	SDInterface(&DataMsg.DataBuffer[0]);
 
 			/* Release the lock */
 			CoLeaveMutexSection(file_mutex);
