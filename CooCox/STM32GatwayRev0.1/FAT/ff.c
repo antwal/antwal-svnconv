@@ -2453,9 +2453,11 @@ FRESULT f_read (
 		rcnt = SS(fp->fs) - (fp->fptr % SS(fp->fs));	/* Get partial sector data from sector buffer */
 		if (rcnt > btr) rcnt = btr;
 #if _FS_TINY
+		CoSchedLock ( );						// Because here FS is using shared global Buffer when TINY is enabled
 		if (move_window(fp->fs, fp->dsect))		/* Move sector window */
 			ABORT(fp->fs, FR_DISK_ERR);
 		mem_cpy(rbuff, &fp->fs->win[fp->fptr % SS(fp->fs)], rcnt);	/* Pick partial sector */
+		CoSchedUnlock ( );                               // Exit Critical Section
 #else
 		mem_cpy(rbuff, &fp->buf[fp->fptr % SS(fp->fs)], rcnt);	/* Pick partial sector */
 #endif
@@ -2519,8 +2521,10 @@ FRESULT f_write (
 				fp->clust = clst;			/* Update current cluster */
 			}
 #if _FS_TINY
+			CoSchedLock ( );                               // Exit Critical Section
 			if (fp->fs->winsect == fp->dsect && move_window(fp->fs, 0))	/* Write-back sector cache */
 				ABORT(fp->fs, FR_DISK_ERR);
+			CoSchedUnlock ( );                               // Exit Critical Section
 #else
 			if (fp->flag & FA__DIRTY) {		/* Write-back sector cache */
 				if (disk_write(fp->fs->drv, fp->buf, fp->dsect, 1) != RES_OK)
@@ -2538,10 +2542,12 @@ FRESULT f_write (
 				if (disk_write(fp->fs->drv, wbuff, sect, (BYTE)cc) != RES_OK)
 					ABORT(fp->fs, FR_DISK_ERR);
 #if _FS_TINY
+				CoSchedLock ( );
 				if (fp->fs->winsect - sect < cc) {	/* Refill sector cache if it gets invalidated by the direct write */
 					mem_cpy(fp->fs->win, wbuff + ((fp->fs->winsect - sect) * SS(fp->fs)), SS(fp->fs));
 					fp->fs->wflag = 0;
 				}
+				CoSchedUnlock ( );
 #else
 				if (fp->dsect - sect < cc) { /* Refill sector cache if it gets invalidated by the direct write */
 					mem_cpy(fp->buf, wbuff + ((fp->dsect - sect) * SS(fp->fs)), SS(fp->fs));
@@ -2552,10 +2558,12 @@ FRESULT f_write (
 				continue;
 			}
 #if _FS_TINY
+			CoSchedLock ( );                               // Exit Critical Section
 			if (fp->fptr >= fp->fsize) {	/* Avoid silly cache filling at growing edge */
 				if (move_window(fp->fs, 0)) ABORT(fp->fs, FR_DISK_ERR);
 				fp->fs->winsect = sect;
 			}
+			CoSchedUnlock ( );                               // Exit Critical Section
 #else
 			if (fp->dsect != sect) {		/* Fill sector cache with file data */
 				if (fp->fptr < fp->fsize &&
@@ -2568,10 +2576,12 @@ FRESULT f_write (
 		wcnt = SS(fp->fs) - (fp->fptr % SS(fp->fs));/* Put partial sector into file I/O buffer */
 		if (wcnt > btw) wcnt = btw;
 #if _FS_TINY
+		CoSchedLock ( );                               // Exit Critical Section
 		if (move_window(fp->fs, fp->dsect))	/* Move sector window */
 			ABORT(fp->fs, FR_DISK_ERR);
 		mem_cpy(&fp->fs->win[fp->fptr % SS(fp->fs)], wbuff, wcnt);	/* Fit partial sector */
 		fp->fs->wflag = 1;
+		CoSchedUnlock ( );                               // Exit Critical Section
 #else
 		mem_cpy(&fp->buf[fp->fptr % SS(fp->fs)], wbuff, wcnt);	/* Fit partial sector */
 		fp->flag |= FA__DIRTY;

@@ -87,6 +87,18 @@
 				printf("Buffer Full %c\n",ch);
 			}
 		}
+		else if((USART3->SR & 0x08) != (u16)RESET)			// Handling overrun error
+		{
+			printf("Overrun3\n\r");
+			ch = (USART3->DR & (us16)0x01FF);
+			if(bufferIsNotFull(&modem_buffer)){
+				bufferAddToEnd(&modem_buffer, ch);					// Keeping data into the buffer
+				//printf("-%c",ch);
+			}
+			else{
+				printf("Buffer Full %c\n",ch);
+			}
+		}
 		CoExitISR ( );
 	}
 	/*
@@ -99,30 +111,32 @@
 		mdmStatus serialCopy(char* lbuff, char start, char end)
 		{
 			char i=0;
-
+			TIME_SET(0);
 			do{
 				if(serial_rx_ready())
 				{
-				serial_get(addr4);                  					// get character
-				if(addr4 == start)
-				{
-				// Copy till it matches the end character
-					do{
-						if(serial_rx_ready()){
-						serial_get(addr4);
-						//printf("0x%x\t",addr4);
-						lbuff[i++] = addr4;
+					serial_get(addr4);                  					// get character
+					if(addr4 == start)
+					{
+				// Copy till it matches the end character or timeout occurs
+						TIME_SET(0);
+						do{
+							if(serial_rx_ready()){
+								TIME_SET(0);
+								serial_get(addr4);
+								lbuff[i++] = addr4;
 						}
 
 					}
-					while(addr4 != end);
+					while(addr4 != end && TIME_TICK < 2000);
 					lbuff[i-1] = '\0';									// Overwriting the end character with the null character
 
 					return mdmOK;
+					}
 				}
-				}
+
 			}
-			while(1);
+			while(TIME_TICK < 3000);
 			return mdmFail;
 		}
 
@@ -149,10 +163,11 @@
 		//#endif
 						if (resp[addr2] == addr4)
 						{
-							addr2++;  					// does char match response string
+							TIME_SET(0);
+							addr2++;  											// does char match response string
 							if (!resp[addr2]){										// All char are matched
 							printf(" \n ");
-							return mdmOK;  }    							// finished if string matches
+							return mdmOK;  }    									// finished if string matches
 						}
 						else addr2 = 0;													// otherwise reset match pointer
 						TIME_SET(0);
@@ -241,10 +256,6 @@
 							res = mdmOK;
 							//}
 							//else	res = mdmFail;
-
-							break;
-					case ERROR:
-							res = serialMatch(mdm, "STATE: ", timeout);
 							break;
 
 					default:
@@ -260,11 +271,17 @@
 			char lBuff[20];
 			static unsigned char var = 0;
 			printf("in mdmState\n");
+
 			do{
+				count = 5;
 				do{
-				res = sendwait(mdm, "AT+CIPSTATUS\r", "STATE:",100);
+					if(state == CONNECT || state == CLOSE)
+						sendwait(mdm, "|+++|","OK",100);
+
+					res = sendwait(mdm, "AT+CIPSTATUS\r", "STATE:",100);
+					count-- ;
 				}
-				while(res != mdmOK);
+				while(res != mdmOK && count > 0);
 
 				count = 0;
 				/* CIPSTATUS output is like- STATE: IP INITIAL*/
@@ -322,6 +339,12 @@
 					count = 1;
 			}
 			while(count ==1);
+
+			// This means Modem is not responding; some problem with modem; reset the modem
+			if(count >=10)
+			{
+				// Reset the modem
+			}
 
 			return res;
 		}
@@ -396,15 +419,26 @@
 	*/
 	mdmStatus mdmInit(mdmIface *mdm)
 	{
+		uint8_t count = 0;
 		res = mdmOK;
 		if(state == SHUT || state == CLOSE || state == FORCED)
 		{
-			res = sendwait(mdm,"\r|+++|\r", "OK", 200);
-			res = sendwait(mdm,"ATZ\r", "OK",200);
-			res = sendwait(mdm,"\rAT S7=45 S0=0 L1 V1 X4 &c1 E0 Q0\r", "OK", 100);
+			do{
+				count ++;
+				res = sendwait(mdm,"\r|+++|\r", "OK", 200);
+				res = sendwait(mdm, "AT\r", "OK", 300);
+			}
+			while(res != mdmOK && count < 3);
+			res	= sendwait(mdm,"ATZ\r", "OK",200);
+			res = sendwait(mdm,"\rAT S7=45 S0=0 L1 V1 X4 &c1 E0 Q0\r", "OK", 1000);
+
+			if(res != mdmOK)
+			{
+				// reset the modem; It's not responding
+			}
 			//res = sendwait(mdm,"AT&FS11=55\r", "OK", 300);
 			res = sendwait(mdm,"AT+IFC=2,2\r","OK",300); //for configuring h/w flow control
-			res = sendwait(mdm, "ATE0\r", "OK",100);
+			res = sendwait(mdm, "ATE0\r", "OK",500);
 			res = sendwait(mdm, "AT+CIPMODE=1\r","OK",300);
 
 		}
@@ -513,20 +547,20 @@
 		char count = 3;
 		do{
 		printf("IN tcp connect\n");
-			state = CONNECTING;
 			mdmState(mdm);
 			count --;
 			if(state == IP || state == IPGPRSACT || state == CLOSE)
 			{
 				state = CONNECTING;
-				printf("Connecting\n");
 				sprintf(cmd, "AT+CIPSTART=\"TCP\",\"%s\",%s\r",obj->addr, obj->port);
-				res = sendwait(mdm, cmd, "CONNECT\r\n", 1000);
+				res = sendwait(mdm, cmd, "CONNECT\r\n", 5000);
 
 				if(res == mdmTimeOut){
 					printf("Timeout\n");
-					mdmShut(mdm);
-					mdmFSM(mdm);
+					mdmSwitch(mdm,COMMAND);
+					mdmClose(mdm);
+					//mdmShut(mdm);
+					//mdmFSM(mdm);
 					res = mdmTimeOut;
 				}
 
@@ -535,6 +569,10 @@
 			{
 				res = mdmClose(mdm);
 				count ++;
+			}
+			else{
+				res = mdmConnectFail;
+				return res;
 			}
 		}
 		while(res != mdmOK && count > 0);
@@ -558,20 +596,20 @@
 		do
 		{
 			printf("IN udp connect\n\r");
-			state = CONNECTING;
 			mdmState(mdm);
 			var --;
 			if(state == IP|| state == CLOSE || state == IPGPRSACT )
 			{
 				state = CONNECTING;
 				sprintf(cmd, "AT+CIPSTART=\"UDP\",\"%s\",%s\r",obj->addr, obj->port);
-				res = sendwait(mdm, cmd, "CONNECT\r\n",1000);
+				res = sendwait(mdm, cmd, "CONNECT\r\n",2000);
 
 				if(res == mdmTimeOut){
 					printf("Timeout\n");
 					mdmSwitch(mdm,COMMAND);
-					mdmShut(mdm);
-					mdmFSM(mdm);
+					mdmClose(mdm);
+					//mdmShut(mdm);
+					//mdmFSM(mdm);
 					res = mdmTimeOut;
 				}
 			}
@@ -696,11 +734,26 @@
 				{
 					serial_send(buffer[i]);
 					printf(" %c",buffer[i]);
+					// If while sending modem returns error transsend should exit
+					if(serial_rx_ready())
+					{
+						res = serialMatch(mdm, "ERROR,", 100);
+						if(res == mdmOK)
+						{
+							mdmSwitch(mdm,COMMAND);
+							return mdmSendFail;
+						}
+					}
 				}
 				toggle = 1;
 
 			return mdmOK;
 		}
+		  else if( state == CONNECTING)
+		  {
+			  mdmSwitch(mdm,COMMAND);
+			  return mdmSendFail;
+		  }
 	}
 
 	/*
@@ -714,7 +767,6 @@
 	 */
 	mdmStatus mdmTransRead(mdmIface *mdm, char *buffer, uint32_t len)
 		{
-
 			uint32_t i = 0;
 			TIME_SET(0);
 
@@ -729,6 +781,7 @@
 
 			}
 			while((len != i) && (TIME_TICK < 1000));
+			mdmSwitch(mdm,COMMAND);		// Come out of the command mode
 			printf("\nlen=%d\n",i);
 			return mdmOK;
 		}
@@ -750,7 +803,7 @@
 			toggle = 0;
 			do{
 				count --;
-				res = serialMatch(mdm, "+IPD,", 2000);
+				res = serialMatch(mdm, "+IPD,", 1000);
 			}
 			while(res != mdmOK && count > 0);
 
@@ -809,6 +862,8 @@
 
 		if(i == 0)
 			count ++;
+
+		mdmSwitch(mdm,COMMAND);		// Come out of the command mode
 		// This means data is not there in the buffer; time to tell
 		if(count > 2)
 			return mdmReadFail;
@@ -830,7 +885,7 @@
 			if(mode == COMMAND)
 				res = sendwait(mdm, "|+++|", "OK", 500);				// For command mode
 			else if(mode == DATA)
-				res = sendwait(mdm, "ATO", "OK", 500);					// For data mode
+				res = sendwait(mdm, "ATO\r", "OK", 500);					// For data mode
 
 				if(res != mdmOK)
 					return mdmFail;

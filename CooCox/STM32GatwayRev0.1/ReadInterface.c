@@ -24,7 +24,7 @@ extern OS_EventID sd_queue_id;
 
 // Message to be added on to queue , taken 8 buffer packet //
 MSG DataMsg[8];
-
+MSG Data;
 
 extern uint8_t BaseStnId;
 extern OS_MutexID file_mutex;
@@ -71,10 +71,10 @@ void Read_Data(unsigned char ch){
 		if (ch == STOP_BYTE) {
 			cur = DataMsg[buf].DataBuffer[2];
 			if(!(cur == last+1)){
-				printf("MISSED: %d\n",DataMsg[buf].DataBuffer[2]);
+				//printf("MISSED: %d\n",DataMsg[buf].DataBuffer[2]);
 			}
 			last = DataMsg[buf].DataBuffer[2];
-			printf("RCVD=%d\n\r",DataMsg[buf].DataBuffer[2]);
+			//printf("RCVD=%d\n\r",DataMsg[buf].DataBuffer[2]);
 			//printf("\nData is: ");
 
 			//for (j=0; j < i; j++){
@@ -92,7 +92,7 @@ void Read_Data(unsigned char ch){
                      printf("The Queue is full !\n");
 				 }
 			}
-			printf("len=%d\n\r",i);
+			printf("len=%d,queue=%d\n\r",i,buf);
 			PktStartRecd = 0;
 			i = 0;
 			buf += 1 ;  				//change the buffer to be used
@@ -102,12 +102,12 @@ void Read_Data(unsigned char ch){
 
 		}
 	}
-		else {
-			if (ch == START_BYTE) {
-				PktStartRecd = 1;
-				DataMsg[buf].DataBuffer[i++] = START_BYTE;
-			} else {printf(" %c", ch); }
-		}
+	else {
+		if (ch == START_BYTE) {
+			PktStartRecd = 1;
+			DataMsg[buf].DataBuffer[i++] = START_BYTE;
+		} //else {printf(" %c", ch); }
+	}
 
 	//}
 }
@@ -117,12 +117,12 @@ void Read_Data(unsigned char ch){
 /*	  This is called by task 2 to eat the MsgQ of created by read interface   */
 /*----------------------------------------------------------------------------*/
 char * wsnPacketDecoding(void ){
-	MSG DataMsg;
+
 	StatusType result;
 	void *msg;
 	uint8_t j;
 	Tos_Msg *ToSMessage;		// Tos_Msg received //
-	SensedData *Data;
+	SensedData *DataVal;
 	TIME cur_time;
 	static int32_t count = 0;
 	UINT bw,res;
@@ -131,31 +131,32 @@ char * wsnPacketDecoding(void ){
 	msg = CoPendQueueMail (raw_queue_id, 0, &result);
 	if (result != E_OK){
         if (result == E_INVALID_ID){
-            printf("Invalid Queue ID !\n");
+            printf("Invalid Queue!\n\r");
         }
     }
     else{
-    	memcpy(&DataMsg.DataBuffer[0], (uint8_t *)msg, MAX_BUFF_SIZE);
+    	printf("Data Packet\n\r");
+    	memcpy(&Data.DataBuffer[0], (uint8_t *)msg, MAX_BUFF_SIZE);
 		/******** Check type of the Raw Packet *******/
-		if (DataMsg.DataBuffer[1] == P_PACKET_NO_ACK ) {
+		if (Data.DataBuffer[1] == P_PACKET_NO_ACK ) {
 
 			/***** Parsing the Raw Packet ****/
-			ParsePkt((INT8U *)&DataMsg.DataBuffer[0]);
+			ParsePkt((INT8U *)&Data.DataBuffer[0]);
 
 			/********* Get Tos_Msg from the Raw Packet ******/
-			ToSMessage = (Tos_Msg *)&DataMsg.DataBuffer[RAWPKT_HEADER_LEN];
-			count = DataMsg.DataBuffer[2];
+			ToSMessage = (Tos_Msg *)&Data.DataBuffer[RAWPKT_HEADER_LEN];
+			count = Data.DataBuffer[2];
 			/*
 			 * Here we'll add 0xA5A5 to the beginning of teh packet such that we can discriminate
 			 * between number of packets
 			 */
-			memmove(&DataMsg.DataBuffer[0], &ToSMessage->data[0 + ROUTE_HEADER_LEN], sizeof(struct SensedData));
+			memmove(&Data.DataBuffer[0], &ToSMessage->data[0 + ROUTE_HEADER_LEN], sizeof(struct SensedData));
 //DONE		Time stamp + BaseStnIdneeds to be added over here
 
 			Cur_Time( &cur_time);							// Get the current time
 
-			Data = (SensedData *)&DataMsg.DataBuffer[0];
-			sprintf(&destdata[0], packet, count, BaseStnId, Data->crop_id[0],Data->crop_id[1], Data->plot_id, Data->node_id, Data->sensor_id, Data->value,cur_time.YYYY,cur_time.MM,cur_time.DD,cur_time.hh,cur_time.mm,cur_time.ss);
+			DataVal= (SensedData *)&Data.DataBuffer[0];
+			sprintf(&destdata[0], packet, count, BaseStnId, DataVal->crop_id[0],DataVal->crop_id[1], DataVal->plot_id, DataVal->node_id, DataVal->sensor_id, DataVal->value,cur_time.YYYY,cur_time.MM,cur_time.DD,cur_time.hh,cur_time.mm,cur_time.ss);
 			// Appneding the timestamp to the data packet
 			//memcpy(&DataMsg.DataBuffer[sizeof(struct SensedData) + 3], &cur_time, sizeof(TIME));
 
@@ -165,14 +166,16 @@ char * wsnPacketDecoding(void ){
 
 			printf("\r\nWrite to file (test.txt).\r\n");
 			rc = f_open(&store, "./root/store.xml", FA_WRITE|FA_READ);//| FA_CREATE_ALWAYS);
-			f_sync(&store);
+			//f_sync(&store);
 			if (rc) die(rc);
 			if(rc != 0)
 			{
 				if(rc == 4)				// If file is not found
 				{
+					printf("\n\rstore.xml not found\n\r");
 					rc = f_open(&store, "./root/store.xml", FA_WRITE|FA_READ|FA_CREATE_ALWAYS);
-					f_sync(&store);
+					//f_sync(&store);
+					if (rc) die(rc);
 				}
 			}
 			printf("OSize=%d\n\r",(uint16_t)f_size(&store));
@@ -209,12 +212,9 @@ char * wsnPacketDecoding(void ){
 		}
 
 		// return the Data Buffer
-		return &DataMsg.DataBuffer[0];
+		return 0;
 
     }
-
-
-
 
 }
 

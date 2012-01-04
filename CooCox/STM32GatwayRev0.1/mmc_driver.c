@@ -71,7 +71,7 @@ uint8_t MSD_Init(const MSD_Dev *sd)
 COX_Status MSD_WriteBlock(const MSD_Dev *sd, uint32_t adr, const uint8_t* wbuf, uint32_t wlen)
 {
   COX_Status rvalue = COX_ERROR;
-  uint8_t counter;
+  uint8_t counter= 0x10;
 
   /* MSD chip select low */
   SS_LOW(sd);
@@ -83,10 +83,10 @@ COX_Status MSD_WriteBlock(const MSD_Dev *sd, uint32_t adr, const uint8_t* wbuf, 
   /* Check if the MSD acknowledged the write block command: R1 response (0x00: no errors) */
      while(MSD_GetResponse(sd, MSD_RESPONSE_NO_ERROR ) && counter > 0);
 
-  	  if(counter > 0){
+    if(counter > 0){
   	   //printf("Write SUCC=%ld\n\r",wlen);
     /* Send a MSD_DUMMY byte */
-   sd->spi->ReadWrite(MSD_DUMMY);
+    sd->spi->ReadWrite(MSD_DUMMY);
     /* Send the data token to signify the start of the data */
     sd->spi->ReadWrite(0xFE);
     /* Write the block data to MSD : write count data by block */

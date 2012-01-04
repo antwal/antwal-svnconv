@@ -1,6 +1,7 @@
 
 #include "diskio.h"
 #include "di_msd.h"
+#include "coocox.h"
 
 
 
@@ -48,7 +49,7 @@ DSTATUS disk_status ( BYTE drv)
 DSTATUS disk_initialize (BYTE Drv)   /* Physical drive nmuber (0) */
 {
 	DSTATUS s;
-
+	CoSchedLock ( );                                   // Enter Critical Section
 	s = disk_status(Drv);		/* Check if card is in the socket */
 	if (s & STA_NODISK) return s;
 
@@ -59,6 +60,7 @@ DSTATUS disk_initialize (BYTE Drv)   /* Physical drive nmuber (0) */
 		s |= STA_NOINIT;
 
 		Stat = s;
+	CoSchedUnlock ( );                                   // Enter Critical Section
 		return s;
 }
 
@@ -71,10 +73,12 @@ DRESULT disk_read (
 	)
 {
 	DSTATUS s;
+	CoSchedLock ( );                                   // Enter Critical Section
 	s = disk_status(drv);
-	if (s & STA_NOINIT) return RES_NOTRDY;
-	if (!count) return RES_PARERR;
+	if (s & STA_NOINIT){CoSchedUnlock ( ); return RES_NOTRDY;}
+	if (!count){ CoSchedUnlock ( ); return RES_PARERR;}
 	if (!(CardType & CT_BLOCK)) sector *= 512;	/* Convert LBA to byte address if needed */
+
 
 	if (count == 1) {	/* Single block read */
 		if(!MSD_ReadBlock(sd, sector, buff, 512))
@@ -82,11 +86,17 @@ DRESULT disk_read (
 	}
 	else{		/* Multiple block read */
 		if(!MSD_ReadBuffer( sd, sector, buff, count))
-			return RES_ERROR;
-		else
+			{
+				CoSchedUnlock ( );                               // Exit Critical Section
+				return RES_ERROR;
+			}
+		else{
+			CoSchedUnlock ( );                               // Exit Critical Section
 			return RES_OK;
+		}
 	}
 
+	CoSchedUnlock ( );                               // Exit Critical Section
 	return count? RES_ERROR: RES_OK;
 }
 
@@ -101,11 +111,11 @@ DRESULT disk_write (
 {
 	DSTATUS s;
 
-
+		CoSchedLock ( );
 		s = disk_status(drv);
-		if (s & STA_NOINIT) return RES_NOTRDY;
-		if (s & STA_PROTECT) return RES_WRPRT;
-		if (!count) return RES_PARERR;
+		if (s & STA_NOINIT){ CoSchedUnlock ( ); return RES_NOTRDY;}
+		if (s & STA_PROTECT){CoSchedUnlock ( ); return RES_WRPRT;}
+		if (!count){CoSchedUnlock ( ); return RES_PARERR;}
 		if (!(CardType & CT_BLOCK)) sector *= 512;	/* Convert LBA to byte address if needed */
 
 		if (count == 1) {	/* Single block write */
@@ -117,7 +127,7 @@ DRESULT disk_write (
 			 if(!MSD_WriteBuffer(sd, sector, buff, count))
 				count = 0;
 		}
-
+		CoSchedUnlock ( );
 		return count ? RES_ERROR:RES_OK;
 }
 #endif

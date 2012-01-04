@@ -25,7 +25,7 @@ void PrintChar(char c)
 }
 
 /** Maximum string size allowed (in bytes). */
-#define MAX_STRING_SIZE         100
+#define MAX_STRING_SIZE         250
 // used in the vfprintf Function
 char pStr[MAX_STRING_SIZE];
 char pError[] = "Inc Size\n\r";

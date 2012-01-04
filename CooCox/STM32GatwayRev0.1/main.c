@@ -25,7 +25,7 @@ uint8_t BaseStnId = 11;
 
 
 /*---------------------------- Symbol Define -------------------------------*/
-#define STACK_SIZE_DEFAULT 100             /*!< Define a Default task size */
+#define STACK_SIZE_DEFAULT 200             /*!< Define a Default task size */
 //#define STACK_SIZE_DEFAULT1 400             /*!< Define a Default task size */
 
 
@@ -122,13 +122,17 @@ void USART1_IRQHandler(void)
 
 	//RXNE interrupt occured
 	//printf("uart%x\n\r",USART1->SR);
-	if((USART1->SR & 0x20) != (u16)RESET )
+	if(( USART1->SR & 0x20) != (u16)RESET )
 	{
 		//count ++;
 		ch = (USART1->DR & (us16)0x01FF);
-		//printf("%x\t",ch);
+		//printf("0x%x  ",ch);
 		Read_Data(ch);
 
+	}
+	else if(( USART1->SR & 0x08) != (u16)RESET )		// Handling overrun error
+	{
+		ch = (USART1->DR & (us16)0x01FF);
 	}
 	CoExitISR ( );
 }
@@ -150,7 +154,7 @@ void initSerial(void){
 	bufferInit(&modem_buffer, mBuffer, MaxRx);
 
 	// For mote
-	myUSART1->Init(57600);
+	myUSART1->Init(9600);
 	myUSART1->Cfg( COX_SERIAL_INT_CONF, RXNE_ENABLE,0);
 
 
@@ -159,7 +163,6 @@ void initSerial(void){
 
 	//Usart for communication with the Modem
 	myUSART3->Init(9600);
-
 	myUSART3->Cfg( COX_SERIAL_INT_CONF, RXNE_ENABLE,0);
 
 	//enable the interrupts for usart3
@@ -194,12 +197,13 @@ void TmrCallBack(void)
 
 		TIME_SET(0);
 		tcp.port ="80";
-		tcp.addr = "115.117.252.17";
+		tcp.addr = "59.161.187.175";
 
 		sdConfig();
+
 		ntp_time(&modm);
-		mount(fatfs);
-		//uploadFile(&modm,"./root/send.xml.xml",&tcp);
+		for(;;)
+		{
 
 		/*
 				 *  If send.xml file exists that means last uploading was unsuccessful.
@@ -214,18 +218,35 @@ void TmrCallBack(void)
 
 				rc = f_open(&send, "./root/send.xml", FA_READ);
 				f_close(&send);
-				if(rc == FR_NO_FILE)		// If send.xml file does not exists
+				// If send.xml file does not exists
+				if(rc == FR_NO_FILE)
 				{
 					CoEnterMutexSection(file_mutex);
 					rc = f_rename("./root/store.xml", "./root/send.xml");			// Copy store.xml to send.xml
 					CoLeaveMutexSection(file_mutex);
 					printf("rename=%d\n\r",rc);
-					rc = uploadFile(&modm, "./root/send.xml", &tcp);
+					if(rc == 0)
+						rc = uploadFile(&modm, "./root/send.xml", &tcp);
+					else if (rc == 4){
+						// Store.xml is not present
+						printf("store.xml not present\n\r");
+					}
+					else
+					{
+						// Some problem with SDcard
+						printf("Problem With SD card\n\r");
+					}
 				}
-				else
+				else if(rc == FR_OK)
 				{
 					printf("file present=%d\n\r",rc);
 					rc = uploadFile(&modm, "./root/send.xml", &tcp);
+				}
+				else if(rc == 3){
+					printf("SD card not present\n\r");
+				}
+				else{
+					printf("Some problem With SDCard\n\r");
 				}
 
 				// If file is uploaded successfully
@@ -302,20 +323,8 @@ void TmrCallBack(void)
 					f_unlink("./root/send.xml");		// Delete the file
 
 				}
-				umount(fatfs);
-		for (;;)
-		  {
-			  if(TIME_TICK > 200){
-			   pi_pio.Out(LED1, 1);      /* Output hign level to turn on LED0 */
-			  //CoTickDelay (100);
-			  TIME_SET(0);
-			  }
-
-			  if(TIME_TICK == 100)
-			  pi_pio.Out(LED1, 0);      /* Output low level to turn off LED0 */
-
-	//		  CoTickDelay (100);
-		  }
+			  CoTickDelay (6000);		// For 1 MInute
+		 }
 
 	}
 
@@ -362,34 +371,30 @@ int main(void)
 
 	// Initialising RTC clk
 	RTC_Timer();
+
+	// Mount Filesystem
+	mount(fatfs);
+
 	/*!< Initial CooCox CoOS          */
 	CoInitOS();
 
 
     /*!< Create three tasks	*/
-   // task_1 = CoCreateTask (task1,0,0,&task1_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
+
     task_2 = CoCreateTask (task2,0,2,&task2_stk[200-1],200);
-    //task_3 = CoCreateTask (task3,0,1,&task3_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
+    task_3 = CoCreateTask (task3,0,1,&task3_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
    // task_4 = CoCreateTask (task4,0,2,&task4_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
 
     /* Create a mutex: used by the file handling ReadInterface Function */
     file_mutex = CoCreateMutex( );
     // Create a message queue for storing the received characters
-    	      raw_queue_id = CoCreateQueue(MailQueue,MAIL_QUEUE_SIZE,EVENT_SORT_TYPE_FIFO);
-          	  if (raw_queue_id == E_CREATE_FAIL){
-                    printf("Cqfail !\n");
-          	  }
-              else{
-                    printf("QID%d\n", raw_queue_id);
-              }
-          	// Message queue for forwarding data packet from wsn decoding to SDcard writer task
-          	sd_queue_id = CoCreateQueue(SDQueue,MAIL_QUEUE_SIZE,EVENT_SORT_TYPE_FIFO);
-          	if (raw_queue_id == E_CREATE_FAIL){
-          			printf("Cqfail\n");
-          		}
-          	else{
-          			printf("QID%d\n", sd_queue_id);
-          		}
+    raw_queue_id = CoCreateQueue(MailQueue,MAIL_QUEUE_SIZE,EVENT_SORT_TYPE_FIFO);
+    if (raw_queue_id == E_CREATE_FAIL){
+    	printf("Cqfail !\n");
+    }
+    else{
+    	printf("QID%d\n", raw_queue_id);
+    }
 
     sftmr = CoCreateTmr(TMR_TYPE_PERIODIC, 1,1, TmrCallBack);
     CoStartTmr (sftmr);

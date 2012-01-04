@@ -69,7 +69,9 @@ uint8_t gmtime( uint32_t time, TIME *tm, uint8_t ntp)
 	uint32_t dayclock;
     uint16_t dayno;
     uint16_t zone = 15 * 60;
+    uint16_t cur_yr;
 
+    cur_yr = tm->YYYY;
     // If time is from NTP else continue with current year
     if(ntp){
     	tm->YYYY = EPOCH_YR;
@@ -97,14 +99,16 @@ uint8_t gmtime( uint32_t time, TIME *tm, uint8_t ntp)
 	tm->MM++;
 	tm->DD = dayno+1;
 
-	if(ntp)
+	if(ntp && cur_yr == tm->YYYY)
 	{
-		printf("in gmtimeDD=%d,mm=%d,ntp=%d\n\r",tm->DD,tm->MM,ntp);
+		//printf("in gmtimeDD=%d,mm=%d,ntp=%d\n\r",tm->DD,tm->MM,ntp);
 		STM_RTC_Start();
 		STM_RTC_Write (tm);				// Writing time to RTC
 		STM_RTC_Stop();
-		printf("Updated\n\r");
+		//printf("Updated\n\r");
 	}
+	else
+		tm->YYYY = cur_yr;
 
 	return(COX_SUCCESS);
 }

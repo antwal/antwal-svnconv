@@ -70,17 +70,19 @@ mdmStatus ntp_time(mdmIface *mdm)
 
 	res = mdmUDPConnect(mdm, &udp);
 
-	printf("Connected\n");
-	sendNTPRequest((ntpMsg*)ntp); 		// Initialise the ntp structure
+	// Send data only when connection is established
+	if(res == mdmOK)
+	{
+		printf("Connected\n");
+		sendNTPRequest((ntpMsg*)ntp); 		// Initialise the ntp structure
 
-	do{
-		//mdmSend(mdm);
-		res = mdmTransSend(mdm,(char *) ntp, 48,1);
+		do{
+			res = mdmTransSend(mdm,(char *) ntp, 48,1);
 		}
 		while(res !=mdmOK);
 
-
-	res = mdmTransRead(mdm,(char *) ntp, 48);
+		res = mdmTransRead(mdm,(char *) ntp, 48);
+	}
 	res = mdmSwitch(mdm, COMMAND);
 	if(res != mdmReadFail)
 		NtpDCall(ntp);
