@@ -17,7 +17,7 @@ void Periodic(void);
 uint16_t BKP_ReadBackupRegister(uint16_t BKP_DR);
 // Default time
 TIME def= {
-		2011,			// Year 2011
+		2012,			// Year 2011
 		1,				// January
 		1,				// 1st day
 		00,				// Midnight

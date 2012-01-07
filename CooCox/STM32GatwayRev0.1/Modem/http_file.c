@@ -27,7 +27,7 @@ static mdmStatus res;
  * Decleration of the Public functions
  */
 uint8_t uploadFile(mdmIface *mdm, const char *file, server *tcp);
-
+httpStatus mdmHttpRes(mdmIface *mdm, uint32_t* ContLen);
 /*
  * Decleration of the Private functions
  */
@@ -48,25 +48,44 @@ uint8_t uploadFile(mdmIface *mdm, const char *file, server *tcp){
 		res = mdmTCPConnect(mdm, tcp);
 		//login and get the cookie
 
+		if(res == mdmOK){
 		//if( (login(mdm)) == mdmOK ){
 			//send the file size and the cookie stored in buffer
 			if( (sendHeader(mdm, getFileSize(file), &get[0] )) == mdmOK ){
 				//send the data
 				if( (sendData(mdm ,file)) == mdmOK){
-				    while(res != mdmReadFail){
-					     res = mdmRead(mdm, get, 20);
-                    }
-					return SUCCESS;
-				}else
+					// Read the response if sending is successful
+					res = mdmHttpRes(mdm, &size);
+					if(res == httpOK || res == httpLenUnkwn )
+					{
+						// Match the string in the body of the response
+						res = mdmReadMatch(mdm,"Upload");
+						if(res == mdmOK)
+						{
+							printf("File uploaded\n\r");
+							mdmClose(mdm);
+							return res;
+						}
+						else
+						{
+							printf("File not uploaded\n\r");
+						}
+					}
+					else{
+						printf("Http Response not recvd\n\r");
+					}
+				}
+				else
 					printf("\nSending File Failed");
 			}else
 				printf("\nHeader post failed");
 		//}else
 		//	printf("\nLogin Failed");
-
+		}
 		//close the TCP connection to the server
-		res = mdmClose(mdm);
-		return ERROR;
+		mdmSwitch(mdm, COMMAND);
+		mdmClose(mdm);
+		return mdmSendFail;
 
 }
 
@@ -127,9 +146,11 @@ mdmStatus sendHeader(mdmIface *mdm, uint32_t file_size, char *cookie ){
         printf("\nSENDING THE Headers------>");
         //Sending  Header
         res = mdmTransSend(mdm,POST_H, strlen(POST_H));
+        if(res != mdmOK) return res;
        // printf(POST_H);
         //send the content length
         res = mdmTransSend( mdm, buffer, strlen(buffer));
+        if(res != mdmOK) return res;
         //printf("%s",buffer);
        // res = mdmWrite(mdm, CLRF ,strlen(CLRF), 0);//uncomment if cookie is present
 
@@ -139,6 +160,7 @@ mdmStatus sendHeader(mdmIface *mdm, uint32_t file_size, char *cookie ){
         //res = mdmWrite(mdm, cookie , strlen(cookie),0);
         //printf("\n My Cookie: %s",cookie);
         res = mdmTransSend(mdm, DCLRF ,strlen(DCLRF));//send the header from the modem
+        if(res != mdmOK) return res;
        // printf(DCLRF);
         printf("\nEND Headers------>");
         //}
@@ -153,44 +175,45 @@ mdmStatus sendData(mdmIface *mdm ,const char *file){
         printf("\nSENDING DATA------>");
 
         //sending BEFORE_DATA(needed for sending the file in multipart)
-        //if((res = mdmSend(mdm)) == mdmOK){
-                res = mdmTransSend(mdm, BEFORE_DATA , strlen(BEFORE_DATA),1);
-                if(res != mdmOK) return res;
-       // }
+        res = mdmTransSend(mdm, BEFORE_DATA , strlen(BEFORE_DATA),1);
+        if(res != mdmOK) return res;
 
       	//open file
-    	rc = f_open(&send, file, FA_OPEN_EXISTING |FA_READ);
-    	if(rc ) die(rc);
-
+    	rc = f_open(&send, file, FA_READ);
+    	if (rc) die(rc);
+    	if(rc != FR_OK)
+    	{
+    		// Since file is having some problem
+    		return rc;
+    	}
 
        //read the file  and send it through modem
         while (size > 0 ){
         	rc = f_read(&send, buffer, sizeof(buffer), &rbytes);    /* Read a chunk of src file */
         	if (rc) die(rc);
+        	if(rc != FR_OK)
+        	{
+        		// If there is any prblem with file while reading
+        		// return
+        		f_close(&send);
+        		return rc;
+        	}
             printf("File Data = %d\n\r",size);
 
-            //if((res = mdmSend(mdm)) == mdmOK){
-
-                    res = mdmTransSend(mdm, buffer ,(uint32_t)rbytes , 1);
-                    // mdmSentData(mdm);
-
-                    if (res != mdmOK){
-                    	printf("send Fail\n\r");
-                    	//close file
-                    	f_close(&send);
-
-                       	return res;
-                    }
-                    size = size - rbytes;
-            //}
+           res = mdmTransSend(mdm, buffer ,(uint32_t)rbytes , 1);
+           if (res != mdmOK){
+        	   printf("send Fail\n\r");
+        	   f_close(&send);
+        	   return res;
+               }
+               size = size - rbytes;
         }
         f_close(&send);
 
         //sending AFTER_DATA(needed for sending the file in multipart)
-        //if((res = mdmSend(mdm)) == mdmOK){
-                res = mdmTransSend(mdm, AFTER_DATA , strlen(AFTER_DATA),1);
-                if (res != mdmOK) return res;
-        //}
+        res = mdmTransSend(mdm, AFTER_DATA , strlen(AFTER_DATA),1);
+        if (res != mdmOK) return res;
+
 
         printf("\nEND SENDING DATA------>");
         return res;
@@ -218,3 +241,96 @@ uint32_t getFileSize(const char *file){
 	return size;
 }
 
+
+/*
+	 * This function reads the http response
+	 * Based on the return http code it returns success or failure
+	 * Also, it stores the content length into length field if content length
+	 * is there in response
+	 * Parameters:
+	 * @mdm: modem interface
+	 * @ContLen: Body length
+	 * @return: mdmOK if response code is desired one
+	 * 			mdmTimeOut if response code is not found
+	 * 			mdmErr if Error is returned by Modem
+	 *
+	 */
+	httpStatus mdmHttpRes(mdmIface *mdm, uint32_t* ContLen)
+	{
+		uint16_t code, i= 0;
+		CLR_BUFFER(buffer);
+		res = serialMatch(mdm, "HTTP/1.1", 60000);
+		if(res == mdmOK )
+		{
+			res = serialCopy(&buffer[0], ' ','\r');
+			printf("response= %s\n",&buffer[0]);
+			while(i < 3){
+				if(i!= 0)
+					code *=10;
+				code += (buffer[i] - 48);
+				i++;
+			}
+			i = 0;
+			printf("Conv=%d\n\r",code);
+			switch(code)
+			{
+			case 100:
+			case 101:
+			case 200:
+			case 201:
+			case 202:
+			case 203:
+			case 204:
+			case 205:
+			case 206:
+			case 302:
+				res = httpOK;
+				break;
+			default:
+				res = httpErr;
+				break;
+			}
+
+			// If response code is OK; Lets find the Content length
+			if(res == httpOK)
+			{
+				i = 0;
+				res = serialMatch(mdm, "Content-Length:", 100);
+				if(res != mdmTimeOut && res != mdmErr )
+				{
+					res = serialCopy(&buffer[0], ' ','\r');
+					//printf("Length= %s\n\r",&buffer[0]);
+					while(buffer[i]){
+						if(i!= 0)
+							*ContLen *=10;
+
+						*ContLen += buffer[i] - 48;
+						i++;
+					}
+					printf("Length= %d\n",*ContLen);
+				}
+				else
+				{
+					// Length field not found
+					return httpLenUnkwn;
+				}
+			}
+		}
+		else{
+			if(res == mdmTimeOut)res = httpTimeOut;
+			if(res == mdmErr || mdm == mdmFail)res = httpErr;
+		}
+
+		return res;
+	}
+
+	/**
+	 * Function which collects the Body of the HTTP response and stores it
+	 * into the file
+	 * Parameters:
+	 * @mdm: modem interface
+	 * @file: where to save
+	 * @len: Length of the body to read
+	 */
+	httpStatus mdmHttpBody()
+	{}

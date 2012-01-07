@@ -12,7 +12,7 @@
 #include "di_msd.h"
 #include "main.h"
 
-#define MAX_BUFF_SIZE 64
+#define MAX_BUFF_SIZE 32
 
 char destdata[250];
 typedef struct Message {
@@ -23,7 +23,7 @@ extern OS_EventID raw_queue_id;
 extern OS_EventID sd_queue_id;
 
 // Message to be added on to queue , taken 8 buffer packet //
-MSG DataMsg[8];
+MSG DataMsg[16];
 MSG Data;
 
 extern uint8_t BaseStnId;

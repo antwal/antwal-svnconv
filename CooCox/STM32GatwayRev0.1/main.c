@@ -79,7 +79,7 @@ OS_MutexID modem_mutex;
 OS_MutexID printf_mutex;
 
 //Queue for Processing the data recieved
-#define MAIL_QUEUE_SIZE 8
+#define MAIL_QUEUE_SIZE 16
 OS_EventID raw_queue_id;				// Queue for raw packet forwading between task 1 and 2
 OS_EventID sd_queue_id;					// Queue for data packet forwarding between task 2 and 3
 void *MailQueue[MAIL_QUEUE_SIZE];
@@ -197,7 +197,7 @@ void TmrCallBack(void)
 
 		TIME_SET(0);
 		tcp.port ="80";
-		tcp.addr = "59.161.187.175";
+		tcp.addr = "14.96.16.92";
 
 		sdConfig();
 
@@ -238,19 +238,19 @@ void TmrCallBack(void)
 					}
 				}
 				else if(rc == FR_OK)
-				{
-					printf("file present=%d\n\r",rc);
-					rc = uploadFile(&modm, "./root/send.xml", &tcp);
-				}
-				else if(rc == 3){
-					printf("SD card not present\n\r");
-				}
-				else{
-					printf("Some problem With SDCard\n\r");
-				}
+					{
+						printf("send.xml present=%d\n\r",rc);
+						rc = uploadFile(&modm, "./root/send.xml", &tcp);
+					}
+					else if(rc == 3){
+							printf("SD card not present\n\r");
+					}
+						else{
+							printf("Some problem With SDCard\n\r");
+						}
 
 				// If file is uploaded successfully
-				if(rc == SUCCESS)
+				if(rc == mdmOK)
 				{
 					// Appending send.xml data to alldata.xml
 					printf("Open a send.xml to read\r\n");
@@ -308,7 +308,7 @@ void TmrCallBack(void)
 						//res = f_lseek(&fil2, f_size(&fil2));
 
 						rc = f_write(&alldata, lclbuff, br, &bw);
-						if (rc) die(rc);
+						if (rc) break;
 						f_sync(&alldata);
 					}
 					while(f_eof(&send)!= 1);

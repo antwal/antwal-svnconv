@@ -22,7 +22,7 @@ DSTATUS disk_status ( BYTE drv)
 {
 	DSTATUS s = Stat;
 	BYTE ocr[4];
-
+	CoSchedLock ( );                                   // Enter Critical Section
 	if (drv || !(INS)){
 		s = STA_NODISK | STA_NOINIT;
 	} else {
@@ -42,6 +42,7 @@ DSTATUS disk_status ( BYTE drv)
 
 		}
 	}
+	CoSchedLock ( );                                   // Enter Critical Section
 	Stat = s;
 	return s;
 }
@@ -51,7 +52,11 @@ DSTATUS disk_initialize (BYTE Drv)   /* Physical drive nmuber (0) */
 	DSTATUS s;
 	CoSchedLock ( );                                   // Enter Critical Section
 	s = disk_status(Drv);		/* Check if card is in the socket */
-	if (s & STA_NODISK) return s;
+	if (s & STA_NODISK)
+	{
+		CoSchedUnlock ( );                                   // Enter Critical Section
+				return s;
+	}
 
 	s = MSD_Init(sd);
 	if(s == COX_SUCCESS)		/* Initialization succeded */
@@ -146,9 +151,12 @@ DRESULT disk_ioctl (
 	BYTE n, csd[16];
 	WORD cs;
 
-
+	CoSchedLock ( );                                   // Enter Critical Section
 	if (disk_status(drv) & STA_NOINIT)					/* Check if card is in the socket */
-		return RES_NOTRDY;
+		{
+			CoSchedUnlock ( );                                   // Enter Critical Section
+			return RES_NOTRDY;
+		}
 
 	res = RES_ERROR;
 	switch (ctrl) {
@@ -196,7 +204,7 @@ DRESULT disk_ioctl (
 	}
 
 	deselect();
-
+	CoSchedUnlock ( );                                   // Enter Critical Section
 	return res;
 }
 void	disk_timerproc (void);

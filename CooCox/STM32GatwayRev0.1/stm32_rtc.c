@@ -99,13 +99,13 @@ uint8_t gmtime( uint32_t time, TIME *tm, uint8_t ntp)
 	tm->MM++;
 	tm->DD = dayno+1;
 
-	if(ntp && cur_yr == tm->YYYY)
+	if(ntp && tm->YYYY >= 2012)
 	{
-		//printf("in gmtimeDD=%d,mm=%d,ntp=%d\n\r",tm->DD,tm->MM,ntp);
+		printf("in gmtimeDD=%d,mm=%d,ntp=%d\n\r",tm->DD,tm->MM,ntp);
 		STM_RTC_Start();
 		STM_RTC_Write (tm);				// Writing time to RTC
 		STM_RTC_Stop();
-		//printf("Updated\n\r");
+		printf("Updated\n\r");
 	}
 	else
 		tm->YYYY = cur_yr;

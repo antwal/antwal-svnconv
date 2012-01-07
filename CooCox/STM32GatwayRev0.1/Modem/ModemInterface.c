@@ -149,27 +149,37 @@
 		mdmStatus serialMatch(mdmIface *mdm, const char *resp, unsigned int timeout)
 		{
 			addr2 = addr4 = 0;
+			char err[10]="ERROR\r\n";
+			char errVar = 0;
 
-			for (TIME_SET(0); TIME_TICK<timeout; )           						// loop until time runs out
+            for (TIME_SET(0); TIME_TICK<timeout; )           						// loop until time runs out
 			{
 					if (serial_rx_ready())
 					{
 						serial_get(addr4);                  					// get character
-		//#ifdef PC
+
 						if(addr4 != '\r')
 						printf("%c ",addr4);
-						//else
-						//fprintf(stdout,"\n");
-		//#endif
+
 						if (resp[addr2] == addr4)
 						{
-							TIME_SET(0);
 							addr2++;  											// does char match response string
 							if (!resp[addr2]){										// All char are matched
 							printf(" \n ");
 							return mdmOK;  }    									// finished if string matches
 						}
-						else addr2 = 0;													// otherwise reset match pointer
+						else addr2 = 0;
+
+						// To match error Condition
+						if(err[errVar] == addr4)
+						{
+							errVar++;  											// does char match response string
+							if (!err[errVar]){										// All char are matched
+								printf(" \n ");
+								return mdmErr;
+							}
+						}
+						else errVar = 0;													// otherwise reset match pointer
 						TIME_SET(0);
 
 						if (!resp[addr2]){										// All char are matched
@@ -182,8 +192,6 @@
 
 			return mdmFail;
 		}
-
-
 
 
 		mdmStatus sendwait(mdmIface *mdm,const char *send, const char * resp, unsigned int timeout) {
@@ -273,7 +281,7 @@
 			printf("in mdmState\n");
 
 			do{
-				count = 5;
+				count = 3;
 				do{
 					if(state == CONNECT || state == CLOSE)
 						sendwait(mdm, "|+++|","OK",100);
@@ -329,7 +337,7 @@
 				if(!strcmp(lBuff, "TCP CONNECTING")){
 					var++;
 					count = 1;
-					if(var > 5){
+					if(var > 2){
 						state = CLOSING;
 						var = 0;
 						count = 0;
@@ -549,12 +557,14 @@
 		printf("IN tcp connect\n");
 			mdmState(mdm);
 			count --;
+			// If state is one among the these start connecting
 			if(state == IP || state == IPGPRSACT || state == CLOSE)
 			{
 				state = CONNECTING;
 				sprintf(cmd, "AT+CIPSTART=\"TCP\",\"%s\",%s\r",obj->addr, obj->port);
-				res = sendwait(mdm, cmd, "CONNECT\r\n", 5000);
+				res = sendwait(mdm, cmd, "CONNECT\r\n", 3000);
 
+				// If timeout occured and connection does not succeded
 				if(res == mdmTimeOut){
 					printf("Timeout\n");
 					mdmSwitch(mdm,COMMAND);
@@ -570,16 +580,17 @@
 				res = mdmClose(mdm);
 				count ++;
 			}
+			// If state is not among the above considered start from begining and get IP
 			else{
-				res = mdmConnectFail;
-				return res;
+				mdmFSM(mdm);
 			}
 		}
 		while(res != mdmOK && count > 0);
 
 		if(count > 0)
 			state = CONNECT;
-
+		else
+			state = CONNECTING;
 		return res;
 	}
 
@@ -613,6 +624,11 @@
 					res = mdmTimeOut;
 				}
 			}
+			else if(state == CLOSING)
+			{
+				res = mdmClose(mdm);
+				count ++;
+			}
 			else{
 				res = mdmFail;
 			}
@@ -621,6 +637,8 @@
 
 		if(var > 0)
 		state = CONNECT;
+		else
+		state = CONNECTING;
 
 		return res;
 	}
@@ -726,8 +744,8 @@
 	 */
 	mdmStatus mdmTransSend(mdmIface *mdm, char *buffer, uint32_t len)
 	{
-			uint32_t i;
-			printf("\n\rIN Trans write\n\r");
+		uint32_t i;
+		printf("\n\rIN Trans write\n\r");
 		  if(state == CONNECT){
 
 				for(i = 0; i< len; i++)
@@ -737,9 +755,10 @@
 					// If while sending modem returns error transsend should exit
 					if(serial_rx_ready())
 					{
-						res = serialMatch(mdm, "ERROR,", 100);
-						if(res == mdmOK)
+						res = serialMatch(mdm, "CLOSED", 100);
+						if(res == mdmOK || res == mdmErr)
 						{
+							printf("Connection Closed or Error Returned\n\r");
 							mdmSwitch(mdm,COMMAND);
 							return mdmSendFail;
 						}
@@ -755,36 +774,6 @@
 			  return mdmSendFail;
 		  }
 	}
-
-	/*
-	 * This function is used to read data in transparent mode
-	 * from the open UDP or TCP socket
-	 * Paramters
-	 * @mdm: Modem Interface
-	 * @buffer: Data will be read into this
-	 * @len: length of data to read
-	 * @returns: Success or Fail
-	 */
-	mdmStatus mdmTransRead(mdmIface *mdm, char *buffer, uint32_t len)
-		{
-			uint32_t i = 0;
-			TIME_SET(0);
-
-			do{
-				if(serial_rx_ready())
-				{
-					serial_get(buffer[i]);
-					printf("%c\t", buffer[i]);
-					i++;
-					TIME_SET(0);
-				}
-
-			}
-			while((len != i) && (TIME_TICK < 1000));
-			mdmSwitch(mdm,COMMAND);		// Come out of the command mode
-			printf("\nlen=%d\n",i);
-			return mdmOK;
-		}
 
 	/*
 	*	This function is used to read data from the open socket
@@ -874,6 +863,80 @@
 	}
 
 	/*
+		 * This function is used to read data in transparent mode
+		 * from the open UDP or TCP socket
+		 * Paramters
+		 * @mdm: Modem Interface
+		 * @buffer: Data will be read into this
+		 * @len: address of length of data to read
+		 * @returns: Success or Fail
+		 */
+		mdmStatus mdmTransRead(mdmIface *mdm, char *buffer, uint32_t *len)
+		{
+			uint32_t i = 0;
+			char err[8]="ERROR\r", errVar= 0;
+			TIME_SET(0);
+
+			do{
+				if(serial_rx_ready())
+				{
+					serial_get(buffer[i]);
+					printf("%c\t", buffer[i]);
+
+					// To match error Condition
+					if(err[errVar] == buffer[i])
+					{
+						errVar++;  											// does char match response string
+						if (!err[errVar]){										// All char are matched
+							printf(" \n ");
+							mdmSwitch(mdm,COMMAND);
+							//mdmClose(mdm);
+							return mdmErr;
+						}
+					}
+					else errVar = 0;
+					i++;
+					TIME_SET(0);
+				}
+			}
+			while((*len != i) && (TIME_TICK < 1000));
+
+			if(TIME_TICK > 1000)
+			{
+				*len = i;					// returning the amount of data read
+				mdmSwitch(mdm,COMMAND);		// Come out of the command mode
+				//mdmClose(mdm);
+				return mdmTimeOut;
+			}
+
+
+		mdmSwitch(mdm,COMMAND);		// Come out of the command mode
+		//mdmClose(mdm);
+		return mdmOK;
+	}
+
+	/*
+	 * This function matches a string provided by match parameter
+	 *
+	 */
+	mdmStatus mdmReadMatch(mdmIface *mdm, char* match)
+	{
+		res = serialMatch(mdm, match, 100);
+		if(res == mdmTimeOut)  // No response or String not found
+		{
+			printf("Match Not Found\n\r");
+			mdmSwitch(mdm,COMMAND);		// Come out of the command mode
+			return res;
+		}else if (res == mdmErr) // Response: ERROR
+		{
+			printf("Error Occured\n\r");
+			mdmSwitch(mdm,COMMAND);		// Come out of the command mode
+			return mdmReadFail;
+		}
+		return mdmOK;
+	}
+
+	/*
 	 * This function brings modem from data mode to command mode and vice-vesa
 	 * based on the @arg mode
 	 * For mode = COMMAND- to command mode from data
@@ -911,11 +974,10 @@
 	{
 		char count;
 		res = mdmState(mdm);
-		if(state == CONNECT)
+		if(state == CONNECT || state == CLOSING || state == CONNECTING)
 		{// TCP connection closing takes more time than the UDP
 			count = 2;
 			do{
-				mdmState(mdm);
 				count --;
 				if(state == CONNECT)
 				{
@@ -926,6 +988,9 @@
 						res = mdmOK;
 						break;
 					}
+				else{
+					res = sendwait(mdm, "AT+CIPCLOSE=1\r", "LOSE OK", 1000);
+				}
 				//printf("In close=%d\n",count);
 			}
 			while(res != mdmOK && count > 0);
@@ -955,5 +1020,4 @@
 		state = SHUT;
 		return res;
 	}
-
 

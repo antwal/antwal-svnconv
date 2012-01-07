@@ -10,7 +10,8 @@ typedef enum {
 		mdmConnectFail,					// Socket conncetion failed
 		mdmTimeOut,						// Response timedout
 		mdmSendFail,					// If sending fails
-		mdmReadFail
+		mdmReadFail,					// If reading fails
+		mdmErr							// If Error is returned in response
 	}mdmStatus;
 
 typedef struct{
