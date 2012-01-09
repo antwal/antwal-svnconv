@@ -13,6 +13,7 @@
     <Component id="bfa102a1-96ed-11df-80ae-001d7d723e56" name="RCC"/>
     <Component id="bfd66a81-96ed-11df-80ae-001d7d723e56" name="BKP"/>
     <Component id="bfe42621-96ed-11df-80ae-001d7d723e56" name="GPIO"/>
+    <Component id="c01fcf91-96ed-11df-80ae-001d7d723e56" name="WWDG"/>
     <Component id="994b0730-4bc0-11e0-8e4a-001d7dcd0baf" name="CMSIS Boot"/>
     <Component id="64d2c4e0-4e11-11e0-8ec0-001d7dcd0baf" name="MISC"/>
   </Components>

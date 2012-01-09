@@ -10,6 +10,7 @@
 
 #include <stm_spi_master.h>
 #include "di_msd.h"
+#include "watchdog.h"
 #include "main.h"
 /*----------------------------------------------------------------------*/
 	/* FatFs sample project for generic microcontrollers (C)ChaN, 2010      */
@@ -26,11 +27,12 @@ uint8_t BaseStnId = 11;
 
 /*---------------------------- Symbol Define -------------------------------*/
 #define STACK_SIZE_DEFAULT 200             /*!< Define a Default task size */
+#define STACK_SIZE_WATCHDOG 100             /*!< Define a Default task size */
 //#define STACK_SIZE_DEFAULT1 400             /*!< Define a Default task size */
 
 
 /*---------------------------- Variable Define -------------------------------*/
-	//OS_STK     task1_stk[STACK_SIZE_DEFAULT];	  /*!< Define "taskA" task stack */
+	OS_STK     watchdog_stk[STACK_SIZE_WATCHDOG];	  /*!< Define "taskA" task stack */
 	OS_STK     task2_stk[STACK_SIZE_DEFAULT];	  					/*!< Define "taskB" task stack */
 	OS_STK     task3_stk[STACK_SIZE_DEFAULT];	  /*!< Define "led" task stack   */
 	//OS_STK     task4_stk[STACK_SIZE_DEFAULT];	  /*!< Define "led" task stack   */
@@ -189,6 +191,7 @@ void TmrCallBack(void)
 	 */
 	void task2 (void* pdata)
 	{
+		dogDebug *dptr = (dogDebug *) pdata;
 		mdmIface modm;
 		char buff[16]= "0.0.0.0";
 		modm.ip_addr = buff;
@@ -216,7 +219,7 @@ void TmrCallBack(void)
 				 *  Then delete the send.xml file.
 				 */
 
-
+				WWDG_setDebugState(dptr , ALIVE);
 				rc = f_open(&send, "./root/send.xml", FA_READ);
 				f_close(&send);
 				// If send.xml file does not exists
@@ -226,20 +229,22 @@ void TmrCallBack(void)
 					rc = f_rename("./root/store.xml", "./root/send.xml");			// Copy store.xml to send.xml
 					CoLeaveMutexSection(file_mutex);
 					printf("rename=%d\n\r",rc);
-					if(rc == 0)
+					if(rc == 0){
+						WWDG_setDebugState(dptr , UPLOADING);
 						rc = uploadFile(&modm, "./root/send.xml", &tcp);
+					}
 					else if (rc == 4){
 						// Store.xml is not present
 						printf("store.xml not present\n\r");
 					}
-					else
-					{
+					else{
 						// Some problem with SDcard
 						printf("Problem With SD card\n\r");
 					}
 				}
 				else if(rc == FR_OK)
 					{
+						WWDG_setDebugState(dptr , UPLOADING);
 						printf("send.xml present=%d\n\r",rc);
 						rc = uploadFile(&modm, "./root/send.xml", &tcp);
 					}
@@ -253,6 +258,7 @@ void TmrCallBack(void)
 				// If file is uploaded successfully
 				if(rc == mdmOK)
 				{
+					WWDG_setDebugState(dptr , APPENDING);
 					// Appending send.xml data to alldata.xml
 					printf("Open a send.xml to read\r\n");
 					rc = f_open(&send, "./root/send.xml", FA_READ );
@@ -343,14 +349,39 @@ void TmrCallBack(void)
 
 	void task3 (void* pdata)
 	{
+		dogDebug *dptr = (dogDebug *) pdata;
 		sdConfig();
 		  for (;;)
 		  {
+			  WWDG_setDebugState(dptr , ALIVE);
 			  wsnPacketDecoding();
 
 		  }
 	}
 
+	/**
+	 *******************************************************************************
+	 * @brief       "WatchDog" task code
+	 * @param[in]   None
+	 * @param[out]  None
+	 * @retval      None
+	 * @par Description
+	 * @details    This function use to monitor  "task2" and "task3".
+	 *******************************************************************************
+	 */
+
+	void taskWatchDog (void* pdata){
+
+	  /* configure and start the watch dog timer */
+	  WWDG_dogStart();
+	  CoTickDelay (10);
+	  for (;;) {
+
+		  /* perform the sanity check  */
+		  WWDG_dogCheck();
+		  CoTickDelay (10); //delay of 100 milli seconds
+	  }
+	}
 
 
 int main(void)
@@ -379,12 +410,14 @@ int main(void)
 	/*!< Initial CooCox CoOS          */
 	CoInitOS();
 
+	// initilize the debug structure for the two task
+	WWDG_initDebug(&myDogDebug[0] , 2 , 60000 , 1);//debug structure for task 2, periodicity max 60 seconds
+	WWDG_initDebug(&myDogDebug[1] , 3 , 900000 , 1);//debug structure for task 3, periodicity 15 minutes
 
     /*!< Create three tasks	*/
-
-    task_2 = CoCreateTask (task2,0,2,&task2_stk[200-1],200);
-    task_3 = CoCreateTask (task3,0,1,&task3_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
-   // task_4 = CoCreateTask (task4,0,2,&task4_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
+	CoCreateTask (taskWatchDog,0,0,&watchdog_stk[STACK_SIZE_WATCHDOG-1],STACK_SIZE_WATCHDOG);
+    task_2 = CoCreateTask (task2,&myDogDebug[0],2,&task2_stk[200-1],200);
+    task_3 = CoCreateTask (task3,&myDogDebug[1],1,&task3_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
 
     /* Create a mutex: used by the file handling ReadInterface Function */
     file_mutex = CoCreateMutex( );

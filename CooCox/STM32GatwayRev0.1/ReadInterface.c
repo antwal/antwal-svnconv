@@ -127,12 +127,13 @@ char * wsnPacketDecoding(void ){
 	static int32_t count = 0;
 	UINT bw,res;
 
-	 /* Wait for a mail, time-out:0 */
-	msg = CoPendQueueMail (raw_queue_id, 0, &result);
+	 /* Wait for a mail, time-out:30seconds */
+	msg = CoPendQueueMail (raw_queue_id, 3000, &result);
 	if (result != E_OK){
         if (result == E_INVALID_ID){
             printf("Invalid Queue!\n\r");
         }
+
     }
     else{
     	printf("Data Packet\n\r");
