@@ -54,6 +54,7 @@ mdmStatus ntp_time(mdmIface *mdm)
 	char port[4],res;
 	char addr[20];
 	server udp;
+	uint32_t ntpbytes = 48;
 
 	strcpy(port, "123");
 	strcpy(addr, "1.in.pool.ntp.org" );
@@ -76,20 +77,18 @@ mdmStatus ntp_time(mdmIface *mdm)
 		printf("Connected\n");
 		sendNTPRequest((ntpMsg*)ntp); 		// Initialise the ntp structure
 
-		do{
-			res = mdmTransSend(mdm,(char *) ntp, 48,1);
-		}
-		while(res !=mdmOK);
-
-		res = mdmTransRead(mdm,(char *) ntp, 48);
+		// Try Once only
+		res = mdmTransSend(mdm,(char *) ntp, ntpbytes);
+		if(res == mdmOK)
+		res = mdmTransRead(mdm,(char *) ntp, &ntpbytes);
 	}
-	res = mdmSwitch(mdm, COMMAND);
 	if(res != mdmReadFail)
 		NtpDCall(ntp);
 
 	Cur_Time(tm);
 
 	printf("Time is: %d:%d:%d - %d,%d,%d\r",tm->hh,tm->mm, tm->ss, tm->DD,tm ->MM, tm->YYYY);
+	res = mdmSwitch(mdm, COMMAND);
 	res = mdmClose(mdm);
 	}
 }

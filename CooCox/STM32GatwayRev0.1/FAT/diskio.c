@@ -42,7 +42,7 @@ DSTATUS disk_status ( BYTE drv)
 
 		}
 	}
-	CoSchedLock ( );                                   // Enter Critical Section
+	CoSchedUnlock ( );                                   // Exit Critical Section
 	Stat = s;
 	return s;
 }

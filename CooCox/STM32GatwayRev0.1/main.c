@@ -31,7 +31,7 @@ uint8_t BaseStnId = 11;
 
 /*---------------------------- Variable Define -------------------------------*/
 	//OS_STK     task1_stk[STACK_SIZE_DEFAULT];	  /*!< Define "taskA" task stack */
-	OS_STK     task2_stk[200];	  					/*!< Define "taskB" task stack */
+	OS_STK     task2_stk[STACK_SIZE_DEFAULT];	  					/*!< Define "taskB" task stack */
 	OS_STK     task3_stk[STACK_SIZE_DEFAULT];	  /*!< Define "led" task stack   */
 	//OS_STK     task4_stk[STACK_SIZE_DEFAULT];	  /*!< Define "led" task stack   */
 
@@ -58,7 +58,7 @@ COX_SERIAL_PI *myUSART1 = &pi_serial1;
 COX_SERIAL_PI *myUSART2 = &pi_serial2;
 extern COX_SERIAL_PI *myUSART3;
 
-uint32_t TIME_TICK;									// 10 millseconds counter
+volatile uint32_t TIME_TICK;									// 10 millseconds counter
 void TIME_SET(uint16_t a){ TIME_TICK=a;}                      	// Set 10 millisecond counter to value 'a'
 
 
@@ -78,12 +78,13 @@ OS_MutexID modem_mutex;
 //Used to get the mutual access to the Uart2 used for printf
 OS_MutexID printf_mutex;
 
+
 //Queue for Processing the data recieved
 #define MAIL_QUEUE_SIZE 16
+
 OS_EventID raw_queue_id;				// Queue for raw packet forwading between task 1 and 2
 OS_EventID sd_queue_id;					// Queue for data packet forwarding between task 2 and 3
 void *MailQueue[MAIL_QUEUE_SIZE];
-void *SDQueue[MAIL_QUEUE_SIZE];
 
 extern void Read_Data(unsigned char );
 extern char* wsnPacketDecoding(void );
@@ -197,7 +198,7 @@ void TmrCallBack(void)
 
 		TIME_SET(0);
 		tcp.port ="80";
-		tcp.addr = "14.96.16.92";
+		tcp.addr = "14.99.56.93";
 
 		sdConfig();
 

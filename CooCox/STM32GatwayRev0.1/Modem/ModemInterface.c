@@ -201,7 +201,7 @@
 			do{
 				if (serial_tx_ready() ) {  													// if char to send and Tx ready
 					if(send[addr3] != '\r')
-						printf(" %c ", send[addr3]);
+						printf("%c ", send[addr3]);
 					else
 						printf(" \n ");
 					if (send[addr3]=='|') { 												// if pause character
@@ -391,12 +391,12 @@
 				case IPCONFIG:
 					state = IP;
 					//res = sendwait(mdm, "AT+CIPHEAD=1\r", "OK", 200);
-					res = sendwait(mdm, "AT+CIFSR\r", "", 500);
+					res = sendwait(mdm, "|AT+CIFSR\r", "", 500);
 					break;
 
 				case IP:
 					//res = sendwait(mdm, "AT+CIPHEAD=1\r", "OK", 200);
-					res = sendwait(mdm, "AT+CIFSR\r", "", 500);
+					res = sendwait(mdm, "|AT+CIFSR\r", "", 500);
 
 					break;
 
@@ -438,16 +438,16 @@
 			}
 			while(res != mdmOK && count < 3);
 			res	= sendwait(mdm,"ATZ\r", "OK",200);
-			res = sendwait(mdm,"\rAT S7=45 S0=0 L1 V1 X4 &c1 E0 Q0\r", "OK", 1000);
+			res = sendwait(mdm,"|AT S7=45 S0=0 L1 V1 X4 &c1 E0 Q0\r", "OK", 1000);
 
 			if(res != mdmOK)
 			{
 				// reset the modem; It's not responding
 			}
 			//res = sendwait(mdm,"AT&FS11=55\r", "OK", 300);
-			res = sendwait(mdm,"AT+IFC=2,2\r","OK",300); //for configuring h/w flow control
-			res = sendwait(mdm, "ATE0\r", "OK",500);
-			res = sendwait(mdm, "AT+CIPMODE=1\r","OK",300);
+			res = sendwait(mdm,"|AT+IFC=2,2\r","OK",300); //for configuring h/w flow control
+			res = sendwait(mdm, "|ATE0\r", "OK",500);
+			res = sendwait(mdm, "|AT+CIPMODE=1\r","OK",300);
 
 		}
 		state = INIT;
@@ -534,7 +534,7 @@
 
 		// If till this point things are successful that means we reach IP state
 			state = IP;
-			res = sendwait(mdm, "AT+CIFSR\r", "", 500);
+			res = sendwait(mdm, "|AT+CIFSR\r", "", 500);
 
 			if(res != mdmOK)
 				return mdmIPFail;
@@ -569,8 +569,8 @@
 					printf("Timeout\n");
 					mdmSwitch(mdm,COMMAND);
 					mdmClose(mdm);
-					//mdmShut(mdm);
-					//mdmFSM(mdm);
+					mdmShut(mdm);
+					mdmFSM(mdm);
 					res = mdmTimeOut;
 				}
 
@@ -579,10 +579,12 @@
 			{
 				res = mdmClose(mdm);
 				count ++;
+				res = mdmFail;
 			}
 			// If state is not among the above considered start from begining and get IP
 			else{
 				mdmFSM(mdm);
+				res = mdmFail;
 			}
 		}
 		while(res != mdmOK && count > 0);
@@ -619,8 +621,8 @@
 					printf("Timeout\n");
 					mdmSwitch(mdm,COMMAND);
 					mdmClose(mdm);
-					//mdmShut(mdm);
-					//mdmFSM(mdm);
+					mdmShut(mdm);
+					mdmFSM(mdm);
 					res = mdmTimeOut;
 				}
 			}
@@ -628,6 +630,7 @@
 			{
 				res = mdmClose(mdm);
 				count ++;
+				res = mdmFail;
 			}
 			else{
 				res = mdmFail;
@@ -901,12 +904,13 @@
 			}
 			while((*len != i) && (TIME_TICK < 1000));
 
-			if(TIME_TICK > 1000)
+
+			if(TIME_TICK >= 1000)
 			{
 				*len = i;					// returning the amount of data read
 				mdmSwitch(mdm,COMMAND);		// Come out of the command mode
 				//mdmClose(mdm);
-				return mdmTimeOut;
+				return mdmReadFail;
 			}
 
 
