@@ -6,20 +6,11 @@
 #include <stdio.h>
 #include <CoOS.h>			              /*!< CoOS header file	         */
 
+#include "modem.h"
+#include "ntp.h"
 
 
-	#include "modem.h"
-	#include "buffer.h"
-	#include "ntp.h"
-	//#include "http.h"
 	COX_SERIAL_PI *myUSART3 = &pi_serial3;
-
-	#define serial_tx_ready()       1               							// Transmitter empty
-	#define serial_send(a)          myUSART3->Write(&a, 1)      				// Transmit char a
-	#define serial_rx_ready()       bufferDataAvail(&modem_buffer) 				// Receiver full
-	#define serial_get(buff)        buff = bufferGetFromFront(&modem_buffer)   	// Receive char from modem
-	#define serial_error()          0                               			// USART error
-	#define serial_fix()            1               							// Clear error
 
 
 	unsigned char err;									// Stores the error number
@@ -754,7 +745,7 @@
 				for(i = 0; i< len; i++)
 				{
 					serial_send(buffer[i]);
-					printf(" %c",buffer[i]);
+					//printf(" %c",buffer[i]);
 					// If while sending modem returns error transsend should exit
 					if(serial_rx_ready())
 					{
@@ -930,8 +921,14 @@
 		{
 			printf("Match Not Found\n\r");
 			mdmSwitch(mdm,COMMAND);		// Come out of the command mode
-			return res;
+			return mdmTimeOut;
 		}else if (res == mdmErr) // Response: ERROR
+		{
+			printf("Error Occured\n\r");
+			mdmSwitch(mdm,COMMAND);		// Come out of the command mode
+			return mdmReadFail;
+		}
+		else if (res == mdmFail) // Response: ERROR
 		{
 			printf("Error Occured\n\r");
 			mdmSwitch(mdm,COMMAND);		// Come out of the command mode

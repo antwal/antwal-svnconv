@@ -97,7 +97,7 @@ void Read_Data(unsigned char ch){
 			i = 0;
 			buf += 1 ;  				//change the buffer to be used
 
-			if( !(buf%8) )			// If buffer is 8
+			if( !(buf%16) )			// If buffer is 8
 				buf = 0;
 
 		}

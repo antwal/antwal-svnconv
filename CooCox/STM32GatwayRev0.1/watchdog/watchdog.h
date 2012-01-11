@@ -25,10 +25,26 @@ typedef struct dogDebug{
  * WatchDog configuration needed for task
  */
 
+#ifndef DEBUG_TASK_NO
 #define DEBUG_TASK_NO  2
-dogDebug myDogDebug[DEBUG_TASK_NO];
+#endif
 
+#ifndef DOG_FEED
+#define DOG_FEED 0xAAAA5555
+#endif
+
+#ifndef DOG_KILL
+#define DOG_KILL 0x5555AAAA
+#endif
+
+dogDebug myDogDebug[DEBUG_TASK_NO];
 dogFlag myFlag[DEBUG_TASK_NO];
+
+
+
+/* global variable that tells that dog has to be fed . */
+
+uint32_t feedDog ;
 
 
 /*

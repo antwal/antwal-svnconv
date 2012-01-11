@@ -24,7 +24,7 @@
 // Basestaion ID
 uint8_t BaseStnId = 11;
 
-
+uint8_t Dog = 0;
 /*---------------------------- Symbol Define -------------------------------*/
 #define STACK_SIZE_DEFAULT 200             /*!< Define a Default task size */
 #define STACK_SIZE_WATCHDOG 100             /*!< Define a Default task size */
@@ -201,9 +201,15 @@ void TmrCallBack(void)
 
 		TIME_SET(0);
 		tcp.port ="80";
-		tcp.addr = "14.99.56.93";
+		tcp.addr = "14.96.145.172";
 
 		sdConfig();
+		if(Dog == 1)
+			{
+				smsSend(&modm,"919848969645","Dog Died :(");
+				smsSend(&modm,"918978517460","Dog Died :(");
+				Dog=0;
+			}
 
 		ntp_time(&modm);
 		for(;;)
@@ -258,7 +264,7 @@ void TmrCallBack(void)
 				// If file is uploaded successfully
 				if(rc == mdmOK)
 				{
-					WWDG_setDebugState(dptr , APPENDING);
+
 					// Appending send.xml data to alldata.xml
 					printf("Open a send.xml to read\r\n");
 					rc = f_open(&send, "./root/send.xml", FA_READ );
@@ -305,13 +311,13 @@ void TmrCallBack(void)
 					printf("\n\rcopying content\n\r");
 					// Start copying content from send.xml to alldata.xml
 					do {
-
+						WWDG_setDebugState(dptr , APPENDING);
 						//printf("File size=%d\n\r",f_size(&send));
 						rc = f_read(&send, lclbuff, sizeof(lclbuff), &br);	/* Read a chunk of file */
 						printf("rc=%d,br=%d\n\r",rc,br);
 						if (rc || !br) break;								/* Error or end of file */
-						for(res = 0;res < br ;res++)
-							printf(" %c",lclbuff[res]);
+						//for(res = 0;res < br ;res++)
+							//printf(" %c",lclbuff[res]);
 						//res = f_lseek(&fil2, f_size(&fil2));
 
 						rc = f_write(&alldata, lclbuff, br, &bw);
@@ -371,7 +377,9 @@ void TmrCallBack(void)
 	 */
 
 	void taskWatchDog (void* pdata){
+	  CoTickDelay (10000);
 
+	  feedDog = DOG_FEED;
 	  /* configure and start the watch dog timer */
 	  WWDG_dogStart();
 	  CoTickDelay (10);
@@ -411,8 +419,8 @@ int main(void)
 	CoInitOS();
 
 	// initilize the debug structure for the two task
-	WWDG_initDebug(&myDogDebug[0] , 2 , 60000 , 1);//debug structure for task 2, periodicity max 60 seconds
-	WWDG_initDebug(&myDogDebug[1] , 3 , 900000 , 1);//debug structure for task 3, periodicity 15 minutes
+	WWDG_initDebug(&myDogDebug[0] , 2 , 1800000  , 1);//debug structure for task 2, periodicity 15 minutes
+	WWDG_initDebug(&myDogDebug[1] , 3 , 60000 , 1);//debug structure for task 3, periodicity 1 minutes
 
     /*!< Create three tasks	*/
 	CoCreateTask (taskWatchDog,0,0,&watchdog_stk[STACK_SIZE_WATCHDOG-1],STACK_SIZE_WATCHDOG);

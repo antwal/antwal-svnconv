@@ -9,9 +9,10 @@
 #include "stm32_rtc.h"
 #include "stm32f10x.h"
 //#include "stm32f10x.h"
-
-#define RCC_FLAG_PINRST                  ((uint8_t)0x7A)
-#define RCC_FLAG_PORRST                  ((uint8_t)0x7B)
+#include "stm32f10x_rcc.h"
+//#define RCC_FLAG_PINRST                  ((uint8_t)0x7A)
+//#define RCC_FLAG_PORRST                  ((uint8_t)0x7B)
+extern uint8_t Dog;
 
 void Periodic(void);
 uint16_t BKP_ReadBackupRegister(uint16_t BKP_DR);
@@ -70,10 +71,28 @@ void RTC_Timer(void)
             printf("\r\n\n Power On Reset occurred....");
         }
         /* Check if the Pin Reset flag is set */
-        else if (RCC_GetFlagStatus(RCC_FLAG_PINRST) != RESET)
+        if (RCC_GetFlagStatus(RCC_FLAG_PINRST) != RESET)
         {
             printf("\r\n\n External Reset occurred....");
         }
+        if (RCC_GetFlagStatus(RCC_FLAG_IWDGRST) != RESET)
+        { /* WWDGRST flag set */
+            printf("\r\n\n IWDGRST Reset occurred....");
+        }
+        if (RCC_GetFlagStatus(RCC_FLAG_WWDGRST) != RESET)
+        { /* WWDGRST flag set */
+        	printf("\r\n\n WWDGRST Reset occurred....");
+        	Dog = 1;
+        }
+        if (RCC_GetFlagStatus(RCC_FLAG_SFTRST) != RESET)
+        { /* SFTRST flag set */
+        	printf("\r\n\n SFTRST Reset occurred....");
+        }
+        if (RCC_GetFlagStatus(RCC_FLAG_LPWRRST) != RESET)
+        { /* LPWRST flag set */
+        	printf("\r\n\n LPWRRST Reset occurred....");
+        }
+
 
         printf("\r\n No need to configure RTC....");
 
@@ -97,11 +116,11 @@ void NVIC_Configuration_rtc(void)
 	NVIC_InitTypeDef NVIC_InitStructure1;
 
 	/* Configure one bit for preemption priority */
-	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);
 
 	/* Enable the RTC Interrupt */
 	NVIC_InitStructure1.NVIC_IRQChannel = RTC_IRQn;
-	NVIC_InitStructure1.NVIC_IRQChannelPreemptionPriority = 1;
+	NVIC_InitStructure1.NVIC_IRQChannelPreemptionPriority = 2;
 	NVIC_InitStructure1.NVIC_IRQChannelSubPriority = 0;
 	NVIC_InitStructure1.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure1);

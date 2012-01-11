@@ -1,6 +1,6 @@
 #include "modem.h"
 #include "ff.h"
-#include "stm32f10x.h"
+//#include "stm32f10x.h"
 #include <stdint.h>	// for including uint_8 etc
 #include <stdio.h>  //for including NULL
 #include "main.h"

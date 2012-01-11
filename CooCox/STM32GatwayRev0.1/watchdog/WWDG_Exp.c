@@ -2,6 +2,7 @@
 #include "stm32f10x_rcc.h"
 #include "stm32f10x_wwdg.h"
 #include "misc.h"
+#include "watchdog.h"
 
 /***************************************************************************//**
  * Declare function prototypes
@@ -9,11 +10,10 @@
 void RCC_Configuration(void);
 void NVIC_Configuration(void);
 void GPIO_Configuration(void);
-
 void WWDG_IRQHandler(void);
 
 
-
+extern uint32_t feedDog;
 
 
 /***************************************************************************//**
@@ -34,23 +34,24 @@ void WWDG_IRQHandler(void);
 void WWDG_Exp(void)
 {
     /* GPIO configuration */
-    //GPIO_Configuration();
+    GPIO_Configuration();
 
+#ifdef jh
     /* Check if the system has resumed from WWDG reset */
     if (RCC_GetFlagStatus(RCC_FLAG_WWDGRST) != RESET)
     { /* WWDGRST flag set */
-        /* Turn on led connected to PC8 */
-        //GPIO_WriteBit(GPIOC, GPIO_Pin_8, Bit_SET);
+        /* Turn on led connected to PC9 */
+        GPIO_WriteBit(GPIOC, GPIO_Pin_9, Bit_SET);
 
         /* Clear reset flags */
         RCC_ClearFlag();
     }
     else
     { /* WWDGRST flag is not set */
-        /* Turn off led connected to PB8 */
-        //GPIO_WriteBit(GPIOC, GPIO_Pin_8, Bit_RESET);
+        /* Turn off led connected to PC9 */
+        GPIO_WriteBit(GPIOC, GPIO_Pin_9, Bit_RESET);
     }
-
+#endif
     /* Configure EXTI Line9 to generate an interrupt on falling edge -----------*/
     //EXTI_Configuration();
 
@@ -173,14 +174,14 @@ void NVIC_Configuration(void)
     NVIC_InitTypeDef NVIC_InitStructure;
 
     /* 2 bits for Preemption Priority and  2 bits for Sub Priority */
-    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);
     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
 
     /* Set up the priority of watch dog interrupt  */
     NVIC_InitStructure.NVIC_IRQChannel = WWDG_IRQn;
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
     NVIC_Init(&NVIC_InitStructure);
 
 }
@@ -193,8 +194,9 @@ void NVIC_Configuration(void)
 *******************************************************************************/
 void WWDG_IRQHandler(void)
 {
-		/* Feed the Dog */
- 	 	WWDG_SetCounter(0x7F);
+		if(feedDog == DOG_FEED){
+			WWDG_SetCounter(0x7F);
+		}
 
 	    /* Clear EWI flag */
 	    WWDG_ClearFlag();

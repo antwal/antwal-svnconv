@@ -37,7 +37,7 @@ name=uagri&pass=uagri123&form_id=user_login&op=Log%20in"
 /*"POST /uagri/?q=node/75 HTTP/1.1\r\n*/
 #define POST_H \
 "POST /upload_file.php HTTP/1.1\r\n\
-Host: 14.99.56.93\r\n\
+Host: 14.96.145.172\r\n\
 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n\
 Accept-Language: en-us,en;q=0.5\r\n\
 Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7\r\n\

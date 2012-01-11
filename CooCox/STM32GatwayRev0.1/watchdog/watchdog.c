@@ -84,10 +84,11 @@ void WWDG_dogCheck( void ){
             dptr->state = UNKNOWN;
         }
     }
-    if(flag != UNKNOWN){
-            //feed the dog
-            WWDG_SetCounter(0x7F);
+    if(flag == UNKNOWN){
+    		//clear the flag
+            feedDog = DOG_KILL;
     }
+
 
 }
 

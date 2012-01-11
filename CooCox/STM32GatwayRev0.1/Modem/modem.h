@@ -1,4 +1,6 @@
 #include "TypeDefs.h"
+#include "buffer.h"
+#include "cox_serial.h"
 
 typedef enum {
 		mdmOK	=0,						// Everything is OK
@@ -13,6 +15,16 @@ typedef enum {
 		mdmReadFail,					// If reading fails
 		mdmErr							// If Error is returned in response
 	}mdmStatus;
+
+	COX_SERIAL_PI *myUSART3;
+
+#define serial_tx_ready()       1               							// Transmitter empty
+#define serial_send(a)          myUSART3->Write(&a, 1)      				// Transmit char a
+#define serial_rx_ready()       bufferDataAvail(&modem_buffer) 				// Receiver full
+#define serial_get(buff)        buff = bufferGetFromFront(&modem_buffer)   	// Receive char from modem
+#define serial_error()          0                               			// USART error
+#define serial_fix()            1               							// Clear error
+
 
 typedef struct{
 		//char 			*ip_addr;		// Point to the ip address(192:168:51:28)
