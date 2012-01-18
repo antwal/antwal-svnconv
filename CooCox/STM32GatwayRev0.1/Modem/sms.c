@@ -1,10 +1,10 @@
 #include "modem.h"
+#include "stddef.h"
 
-char phBuffer[28]={'0'};
-
-mdmIface smsSend(mdmIface *mdm, const char* phNo, const char * Msg)
+mdmIface smsSend(mdmIface *mdm, const char* phNo, char * Msg)
 {
 	uint8_t i = 0;
+	mdmWakeUp(mdm);
 	mdmSwitch(mdm, COMMAND);
 
 	// SMS system to test mode
@@ -12,8 +12,9 @@ mdmIface smsSend(mdmIface *mdm, const char* phNo, const char * Msg)
 	// GSM 7 bit mode character set
 	sendwait(mdm, "|AT+CSCS=\"GSM\"\r","OK",300);
 	// Send sms
-	sprintf(&phBuffer[0],"|AT+CMGS=\"+%s\"\r",phNo);
-	sendwait(mdm, &phBuffer[0],"|>",300);
+	sendwait(mdm,"|AT+CMGS=\"+",NULL,0);		// Send Command
+	sendwait(mdm,phNo,NULL,0);					// Send Ph No.
+	sendwait(mdm, "\"\r",">",3000);				// Send \r with closing quotes
 
 	while(Msg[i] != '\0')
 	{

@@ -42,6 +42,9 @@ typedef unsigned short uint16_t;
 typedef unsigned long  uint32_t;
 typedef unsigned char uint8_t;
 
+typedef unsigned short us16;
+typedef unsigned long  ul32;
+typedef unsigned char  ui8;
 
 #endif
 

@@ -4,17 +4,24 @@
  * File : watchdog.h
  */
 
-typedef enum dogFlag{
-    UNKNOWN=0,
-    ALIVE,
-    ASLEEP,
-    UPLOADING,
-    APPENDING
+/* task states */
+typedef enum dogFlag
+{
+	UNKNOWN	= 0,			// State is made unknown by WatchDog
+	WAIT,					// Waiting for WSN data or Upload time to come
+	SAVE_DATA,				// Save WSN data in store.xml
+	SAVE_DONE,				// Saving of WSN data done
+	NTP_TIME,				// NTP time update going on
+	UPLOADING,				// Uploading data to server
+	MODEM_FREE,				// Modem is free now, uploading process is done
+	APPEND,					// Append data to the alldata.xml
+
 }dogFlag;
 
+/* Error states of the task */
 
 typedef struct dogDebug{
-    uint32_t taskID;        //ID of the task
+    uint8_t taskID;        //ID of the task
     uint32_t periodicity;   //periodicity of task in milli seconds , 0 if aperiodic
     uint32_t exectime;      //worst case execution time of the task to complete one loop
     dogFlag state;         //dogState of the task

@@ -74,18 +74,22 @@ mdmStatus ntp_time(mdmIface *mdm)
 	// Send data only when connection is established
 	if(res == mdmOK)
 	{
-		printf("Connected\n");
 		sendNTPRequest((ntpMsg*)ntp); 		// Initialise the ntp structure
 
 		// Try Once only
 		res = mdmTransSend(mdm,(char *) ntp, ntpbytes);
 		if(res == mdmOK)
 		res = mdmTransRead(mdm,(char *) ntp, &ntpbytes);
-	}
-	if(res != mdmReadFail)
-		NtpDCall(ntp);
 
-	Cur_Time(tm);
+		if(res != mdmReadFail)
+			NtpDCall(ntp);
+		else
+			return res;
+
+		Cur_Time(tm);
+	}
+	else
+		return res;
 
 	printf("Time is: %d:%d:%d - %d,%d,%d\r",tm->hh,tm->mm, tm->ss, tm->DD,tm ->MM, tm->YYYY);
 	res = mdmSwitch(mdm, COMMAND);

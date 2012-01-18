@@ -1,6 +1,7 @@
 #include "TypeDefs.h"
 #include "buffer.h"
 #include "cox_serial.h"
+#include <stm32_pio.h>
 
 typedef enum {
 		mdmOK	=0,						// Everything is OK
@@ -16,10 +17,12 @@ typedef enum {
 		mdmErr							// If Error is returned in response
 	}mdmStatus;
 
-	COX_SERIAL_PI *myUSART3;
+COX_SERIAL_PI *myUSART1;
+#define APaddr "\"gprssouth.cellone.in\""
+//const char APaddr[] = "\"aircelwap\"\r\n";
 
 #define serial_tx_ready()       1               							// Transmitter empty
-#define serial_send(a)          myUSART3->Write(&a, 1)      				// Transmit char a
+#define serial_send(a)          myUSART1->Write(&a, 1)      				// Transmit char a
 #define serial_rx_ready()       bufferDataAvail(&modem_buffer) 				// Receiver full
 #define serial_get(buff)        buff = bufferGetFromFront(&modem_buffer)   	// Receive char from modem
 #define serial_error()          0                               			// USART error
@@ -34,11 +37,15 @@ typedef struct{
 	} mdmInfo;
 
 	typedef struct {
-		//uint16_t dtr_pin;				// Pin used for dtr signaling
-		//COX_SERIAL_PI *uart;			// Uart used to communcate with Modem
-		//mdmInfo *minfo;					// Modem informations
+		uint16_t     dtr_pin;          /* Pin of the dtr  */
+		COX_PIO_PI   *pio;             /* The PIO Interface to use */
+		//mdmInfo *minfo;			   // Modem informations
 		char *ip_addr;
 	}mdmIface ;
+
+// Modem Interface
+mdmIface modm;
+
 
 	typedef struct sockaddr_in {
 		char 	*port;					// Contains the port string
@@ -49,6 +56,8 @@ typedef struct{
 	#define COMMAND		2
 
 	/* Function Declarations*/
+	void mdmSleep(mdmIface *mdm);
+	void mdmWakeUp(mdmIface *mdm);
 	mdmStatus mdmInit(mdmIface *mdm);
 	mdmStatus mdmNWControl(mdmIface *mdm,uint8_t attach);
 	mdmStatus mdmIPup(mdmIface *mdm);
@@ -60,3 +69,4 @@ typedef struct{
 	mdmStatus mdmWrite(mdmIface *mdm, char *buffer, uint32_t len,uint8_t send);
 	mdmStatus mdmSentData(mdmIface *mdm);
 	mdmStatus mdmSwitch(mdmIface *mdm, uint8_t mode);
+	mdmIface smsSend(mdmIface *mdm, const char* phNo, char * Msg);

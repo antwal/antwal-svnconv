@@ -11,23 +11,22 @@
 #include "ff.h"
 #include "di_msd.h"
 #include "main.h"
+#include "watchdog.h"
 
-#define MAX_BUFF_SIZE 32
+// Length of each queue used to hold the WSN data
+#define QUEUE_LENGTH 32
 
+// Buffer that keeps the XML formatted WSN data
 char destdata[250];
+
 typedef struct Message {
-	unsigned char  DataBuffer[MAX_BUFF_SIZE];
+	unsigned char  DataBuffer[QUEUE_LENGTH];
 }MSG;
 
-extern OS_EventID raw_queue_id;
-extern OS_EventID sd_queue_id;
-
-// Message to be added on to queue , taken 8 buffer packet //
-MSG DataMsg[16];
+// Message to be added on to queue , taken 16 buffer packet //
+MSG DataMsg[MAIL_QUEUE_SIZE];
 MSG Data;
 
-extern uint8_t BaseStnId;
-extern OS_MutexID file_mutex;
 extern MSD_Dev *sd;
 
 /*
@@ -69,19 +68,13 @@ void Read_Data(unsigned char ch){
 		DataMsg[buf].DataBuffer[i++] = ch;
 
 		if (ch == STOP_BYTE) {
-			cur = DataMsg[buf].DataBuffer[2];
-			if(!(cur == last+1)){
-				//printf("MISSED: %d\n",DataMsg[buf].DataBuffer[2]);
-			}
-			last = DataMsg[buf].DataBuffer[2];
-			//printf("RCVD=%d\n\r",DataMsg[buf].DataBuffer[2]);
+
 			//printf("\nData is: ");
 
 			//for (j=0; j < i; j++){
 			//	printf("\t%x ",DataMsg[buf].DataBuffer[j]);
 			//}
 			//printf(" \n");
-			//result = CoPostQueueMail (raw_queue_id, (void *) &DataMsg[buf]);
 			/* Calling from Interrupt context*/
 			result = isr_PostQueueMail (raw_queue_id, (void *) &DataMsg[buf]);
 			if (result != E_OK){
@@ -97,7 +90,7 @@ void Read_Data(unsigned char ch){
 			i = 0;
 			buf += 1 ;  				//change the buffer to be used
 
-			if( !(buf%16) )			// If buffer is 8
+			if( !(buf % MAIL_QUEUE_SIZE) )
 				buf = 0;
 
 		}
@@ -116,11 +109,12 @@ void Read_Data(unsigned char ch){
 /*----------------------------------------------------------------------------*/
 /*	  This is called by task 2 to eat the MsgQ of created by read interface   */
 /*----------------------------------------------------------------------------*/
-char * wsnPacketDecoding(void ){
+char * wsnPacketDecoding(dogDebug *dptr){
 
 	StatusType result;
 	void *msg;
 	uint8_t j;
+	uint8_t BaseStnNo = BaseStnId;
 	Tos_Msg *ToSMessage;		// Tos_Msg received //
 	SensedData *DataVal;
 	TIME cur_time;
@@ -128,12 +122,12 @@ char * wsnPacketDecoding(void ){
 	UINT bw,res;
 
 	 /* Wait for a mail, time-out:30seconds */
+	setTaskState(dptr , WAIT);
 	msg = CoPendQueueMail (raw_queue_id, 3000, &result);
 	if (result != E_OK){
         if (result == E_INVALID_ID){
             printf("Invalid Queue!\n\r");
         }
-
     }
     else{
     	printf("Data Packet\n\r");
@@ -141,6 +135,7 @@ char * wsnPacketDecoding(void ){
 		/******** Check type of the Raw Packet *******/
 		if (Data.DataBuffer[1] == P_PACKET_NO_ACK ) {
 
+			setTaskState(dptr , SAVE_DATA);
 			/***** Parsing the Raw Packet ****/
 			ParsePkt((INT8U *)&Data.DataBuffer[0]);
 
@@ -157,17 +152,15 @@ char * wsnPacketDecoding(void ){
 			Cur_Time( &cur_time);							// Get the current time
 
 			DataVal= (SensedData *)&Data.DataBuffer[0];
-			sprintf(&destdata[0], packet, count, BaseStnId, DataVal->crop_id[0],DataVal->crop_id[1], DataVal->plot_id, DataVal->node_id, DataVal->sensor_id, DataVal->value,cur_time.YYYY,cur_time.MM,cur_time.DD,cur_time.hh,cur_time.mm,cur_time.ss);
-			// Appneding the timestamp to the data packet
-			//memcpy(&DataMsg.DataBuffer[sizeof(struct SensedData) + 3], &cur_time, sizeof(TIME));
+			sprintf(&destdata[0], packet, count, BaseStnNo, DataVal->crop_id[0],DataVal->crop_id[1], DataVal->plot_id, DataVal->node_id, DataVal->sensor_id, DataVal->value,cur_time.YYYY,cur_time.MM,cur_time.DD,cur_time.hh,cur_time.mm,cur_time.ss);
 
 			/* Lock the Mutex*/
 			CoEnterMutexSection(file_mutex);
 
 
 			printf("\r\nWrite to file (test.txt).\r\n");
-			rc = f_open(&store, "./root/store.xml", FA_WRITE|FA_READ);//| FA_CREATE_ALWAYS);
-			//f_sync(&store);
+			rc = f_open(&store, "./root/store.xml", FA_WRITE|FA_READ);
+			f_sync(&store);
 			if (rc) die(rc);
 			if(rc != 0)
 			{
@@ -175,11 +168,11 @@ char * wsnPacketDecoding(void ){
 				{
 					printf("\n\rstore.xml not found\n\r");
 					rc = f_open(&store, "./root/store.xml", FA_WRITE|FA_READ|FA_CREATE_ALWAYS);
-					//f_sync(&store);
+					f_sync(&store);
 					if (rc) die(rc);
 				}
 			}
-			printf("OSize=%d\n\r",(uint16_t)f_size(&store));
+			printf("OSize=%d\n\r",(uint32_t)f_size(&store));
 
 			// IF something is there in destn file
 			if(!(f_size(&store) == 0))
@@ -207,12 +200,13 @@ char * wsnPacketDecoding(void ){
 
 			/* Release the lock */
 			CoLeaveMutexSection(file_mutex);
+			setTaskState(dptr , SAVE_DONE);
 		}
 		else{
 			printf("Discarded\n");
 		}
 
-		// return the Data Buffer
+		// return
 		return 0;
 
     }

@@ -192,6 +192,7 @@ void NVIC_Configuration(void)
 * @brief : WWDG_IRQHandler
 *          This function handles WWDG interrupt request.
 *******************************************************************************/
+// Currently it's not used; Feeding of the watch dog is done in tmrCallback function of systick
 void WWDG_IRQHandler(void)
 {
 		if(feedDog == DOG_FEED){

@@ -1,6 +1,5 @@
 #include "modem.h"
 #include "ff.h"
-//#include "stm32f10x.h"
 #include <stdint.h>	// for including uint_8 etc
 #include <stdio.h>  //for including NULL
 #include "main.h"
@@ -44,12 +43,14 @@ uint8_t uploadFile(mdmIface *mdm, const char *file, server *tcp){
 		res = mdmOK;
 		//start the fsm for modem
 		res = mdmFSM(mdm);
-		//create a TCP connection to the server
-		res = mdmTCPConnect(mdm, tcp);
-		//login and get the cookie
-
+		// If IP is received
 		if(res == mdmOK){
-		//if( (login(mdm)) == mdmOK ){
+			//create a TCP connection to the server
+			res = mdmTCPConnect(mdm, tcp);
+			//login and get the cookie
+
+			if(res == mdmOK){
+			//if( (login(mdm)) == mdmOK ){
 			//send the file size and the cookie stored in buffer
 			if( (sendHeader(mdm, getFileSize(file), &get[0] )) == mdmOK ){
 				//send the data
@@ -81,6 +82,7 @@ uint8_t uploadFile(mdmIface *mdm, const char *file, server *tcp){
 				printf("\nHeader post failed");
 		//}else
 		//	printf("\nLogin Failed");
+			}
 		}
 		//close the TCP connection to the server
 		mdmSwitch(mdm, COMMAND);

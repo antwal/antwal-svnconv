@@ -16,7 +16,9 @@
 
 /*---------------------------- Inlcude --------------------------------------*/
 #include <coocox.h>
-
+#include "main.h"
+#include "watchdog.h"
+#include "modem.h"
 /**
  *******************************************************************************
  * @brief      IDLE task of OS	 
@@ -30,10 +32,11 @@
  */
 void CoIdleTask(void* pdata)
 {
+
     /* Add your codes here */
     for(; ;) 
     {
-        /* Add your codes here */
+
     }
 }
 

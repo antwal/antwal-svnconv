@@ -67,3 +67,60 @@ Submit\r\n\
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////
+#include "stm32_rtc.h"
+/*
+ *  Global status structure which keeps the system status
+ */
+struct {
+	uint8_t WSNTask;
+	uint8_t UPLOADTask;
+	uint32_t storeSize;
+	uint32_t sendSize;
+	uint32_t alldataSize;
+	uint16_t batt1Volt;
+	uint16_t batt2Volt;
+	uint16_t solarVolt;
+	TIME* lastMoteTime;
+	uint8_t lastMote;
+
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////
+#include "coocox.h"
+/*---------------------------- Symbol Define -------------------------------*/
+#define STACK_SIZE_UPLOAD 	200             /*!< Define a Default task size */
+#define STACK_SIZE_WSN 		200
+#define STACK_SIZE_WATCHDOG 100             /*!< Define a Default task size */
+
+
+/*---------------------------- Variable Define -------------------------------*/
+OS_STK     watchdog_stk[STACK_SIZE_WATCHDOG];	  /*!< Define "taskA" task stack */
+OS_STK     upload_stk[STACK_SIZE_UPLOAD];	  					/*!< Define "taskB" task stack */
+OS_STK     wsn_stk[STACK_SIZE_WSN];	  /*!< Define "led" task stack   */
+
+////////////////////////////////////////////////////////////////////////////////////////////
+//Queue for Processing the data recieved
+#define MAIL_QUEUE_SIZE 16
+// Task ids
+OS_TID WSN, UPLOAD, WATCH;
+//Usart event flag
+OS_FlagID flag;
+
+//The mutex is used to get mutual access to the data file  storing the WSN data
+OS_MutexID file_mutex;
+
+//Used to get the mutual access to GSM Gprs Modem
+OS_MutexID modem_mutex;
+
+//Used to get the mutual access to the Uart2 used for printf
+OS_MutexID printf_mutex;
+
+OS_EventID raw_queue_id;				// Queue for raw packet forwading between task 1 and 2
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+volatile uint32_t TIME_TICK;									// 10 millseconds counter
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+

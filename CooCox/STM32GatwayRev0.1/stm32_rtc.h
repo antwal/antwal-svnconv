@@ -10,10 +10,7 @@
 
 #include "cox_rtc.h"
 #include "stdint.h"
-
-typedef unsigned long  ul32;
-typedef unsigned short us16;
-typedef unsigned char  ui8;
+#include "TypeDefs.h"
 
 /** RCC registers bit address in the alias region  */
 #define RCC_OFFSET                (RCC_BASE - PERIPH_BASE)

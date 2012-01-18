@@ -12,6 +12,8 @@
 #define WSNPKT_H
 #include "TypeDefs.h"
 
+// Basestaion ID
+#define BaseStnId  11;
 
 #define packet 					"\n\t<WSN_DATA_PKT>\n\t"\
                                         "\t<COUNT>%04x</COUNT>\n\t"\

@@ -8,17 +8,15 @@
 #include "misc.h"
 #include "stm32_rtc.h"
 #include "stm32f10x.h"
-//#include "stm32f10x.h"
 #include "stm32f10x_rcc.h"
-//#define RCC_FLAG_PINRST                  ((uint8_t)0x7A)
-//#define RCC_FLAG_PORRST                  ((uint8_t)0x7B)
+
 extern uint8_t Dog;
 
 void Periodic(void);
 uint16_t BKP_ReadBackupRegister(uint16_t BKP_DR);
 // Default time
 TIME def= {
-		2012,			// Year 2011
+		2012,			// Year 2012
 		1,				// January
 		1,				// 1st day
 		00,				// Midnight
@@ -126,47 +124,6 @@ void NVIC_Configuration_rtc(void)
 	NVIC_Init(&NVIC_InitStructure1);
 }
 
-
-/**
-  * @brief  Writes user data to the specified Data Backup Register.
-  * @param  BKP_DR: specifies the Data Backup Register.
-  *   This parameter can be BKP_DRx where x:[1, 42]
-  * @param  Data: data to write
-  * @retval None
-  */
-#if 0
-void BKP_WriteBackupRegister(uint16_t BKP_DR, uint16_t Data)
-{
-  __IO uint32_t tmp = 0;
-
-  /* Check the parameters */
-  assert_param(IS_BKP_DR(BKP_DR));
-
-  tmp = (uint32_t)BKP_BASE;
-  tmp += BKP_DR;
-
-  *(__IO uint32_t *) tmp = Data;
-}
-
-/**
-  * @brief  Reads data from the specified Data Backup Register.
-  * @param  BKP_DR: specifies the Data Backup Register.
-  *   This parameter can be BKP_DRx where x:[1, 42]
-  * @retval The content of the specified Data Backup Register
-  */
-uint16_t BKP_ReadBackupRegister(uint16_t BKP_DR)
-{
-  __IO uint32_t tmp = 0;
-
-  /* Check the parameters */
-  assert_param(IS_BKP_DR(BKP_DR));
-
-  tmp = (uint32_t)BKP_BASE;
-  tmp += BKP_DR;
-
-  return (*(__IO uint16_t *) tmp);
-}
-#endif
 
 void Periodic(void)
 {

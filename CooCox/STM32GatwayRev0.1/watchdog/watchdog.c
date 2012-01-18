@@ -1,6 +1,13 @@
 #include "watchdog.h"
 #include "stdint.h"
+#include "stm32f10x.h"
+#include "stm32_rtc.h"
+#include "modem.h"
+#include "stm32f10x_bkp.h"
 
+// used in intiamte state
+char buff[28];
+extern uint8_t Dog;
 /*
  * For this library to work create a watch dog task that is called periodically
  * @100 milli seconds time out of the watchdog should be greater than 100m seconds
@@ -24,7 +31,7 @@ void WWDG_initDebug(dogDebug *dptr , uint32_t taskID, uint32_t periodicity, uint
     dptr->taskID =taskID;
     dptr->periodicity = periodicity;
     dptr->exectime = exectime;
-    dptr->state = ALIVE;
+    dptr->state = WAIT;
     dptr->counter = ((periodicity + exectime) / 100) + 1;
 
 }
@@ -35,8 +42,34 @@ void WWDG_initDebug(dogDebug *dptr , uint32_t taskID, uint32_t periodicity, uint
  * this function should be called in critical section
  */
 
-void WWDG_setDebugState(dogDebug *dptr , dogFlag state){
+void setTaskState(dogDebug *dptr , dogFlag state){
+    uint16_t bkpup;
     dptr->state = state;
+	/* Enable PWR and BKP clocks */
+	RCC->APB1ENR |= (RCC_APB1Periph_PWR | RCC_APB1Periph_BKP);
+
+	/* Allow access to BKP Domain */
+	*(vu32 *) CR_DBP_BB = (ul32)ENABLE;
+
+	bkpup = BKP_ReadBackupRegister(BKP_DR2);
+
+	// Task 2 UPLOAD;backup register no. 2 LSB 8 bits
+	if(dptr->taskID == 2)
+	{
+		bkpup &= 0xFF00;
+		bkpup |= (uint8_t)state;
+		BKP_WriteBackupRegister(BKP_DR2, bkpup);
+	}
+	// Task 3 WSN;backup register no. 2 MSB 8 bits
+	else if(dptr->taskID == 3)
+	{
+		bkpup &= 0x00FF;
+		bkpup |= (state << 8);
+		BKP_WriteBackupRegister(BKP_DR2, bkpup);
+	}
+	/* Disallow access to BKP Domain */
+	*(vu32 *) CR_DBP_BB = (ul32)DISABLE;
+
 }
 
 /*
@@ -59,7 +92,8 @@ dogFlag WWDG_getDebugState(dogDebug *dptr){
 void WWDG_dogCheck( void ){
     uint8_t count = 0 ;
     dogDebug *dptr;
-    dogFlag flag = ALIVE;
+    dogFlag flag = WAIT;
+    uint16_t bkpup;
 
     for(count=0 ;count < DEBUG_TASK_NO;count++){
         //point to the first structure
@@ -77,6 +111,7 @@ void WWDG_dogCheck( void ){
 
             //Extract  the flag
             flag &= dptr->state;
+
             //reload the counter
            	dptr->counter = ((dptr->periodicity + dptr->exectime) / 100 )+ 1 ;
 
@@ -85,10 +120,68 @@ void WWDG_dogCheck( void ){
         }
     }
     if(flag == UNKNOWN){
-    		//clear the flag
-            feedDog = DOG_KILL;
+
+            /* set the last bit of the backup register
+             * of each 8 bit depending on
+             * which task has caused the restart
+             */
+
+        	/* Enable PWR and BKP clocks */
+        	RCC->APB1ENR |= (RCC_APB1Periph_PWR | RCC_APB1Periph_BKP);
+
+        	/* Allow access to BKP Domain */
+        	*(vu32 *) CR_DBP_BB = (ul32)ENABLE;
+
+        	bkpup = BKP_ReadBackupRegister(BKP_DR2);
+
+        	// Task 2 UPLOAD;backup register no. 2 LSB 8 bits
+        	if(dptr->taskID == 2)
+        	{
+        		bkpup |= (uint8_t)(0x80);						// Set the 7 bit
+        		BKP_WriteBackupRegister(BKP_DR2, bkpup);
+        	}
+        	// Task 3 WSN;backup register no. 2 MSB 8 bits
+        	else if(dptr->taskID == 3)
+        	{
+        		bkpup |= 0x8000;
+        		BKP_WriteBackupRegister(BKP_DR2, bkpup);
+        	}
+        	/* Disallow access to BKP Domain */
+        	*(vu32 *) CR_DBP_BB = (ul32)DISABLE;
+
+        	//clear the flag
+        	feedDog = DOG_KILL;
     }
 
+
+}
+
+
+/**
+ * Function that sends sms if the reset was due to watchdog
+ */
+uint8_t intimateState(mdmIface *mdm)
+{
+	uint16_t flag = 0;
+	//char phno1[] = ;
+	//char phno2[] = ;
+	if(Dog == 1)
+	{
+		/* Enable PWR and BKP clocks */
+		RCC->APB1ENR |= (RCC_APB1Periph_PWR | RCC_APB1Periph_BKP);
+
+		/* Allow access to BKP Domain */
+		*(vu32 *) CR_DBP_BB = (ul32)ENABLE;
+
+		flag = BKP_ReadBackupRegister(BKP_DR2);
+		sprintf(&buff[0], "Restart:WSN=%d;UP=%d:(",(flag >> 8),(flag & 0x00ff));
+		smsSend(mdm, "919848969645",&buff[0]);
+		smsSend(mdm, "918978517460" ,&buff[0]);
+		Dog=0;
+	}
+	// Reset the value
+	BKP_WriteBackupRegister(BKP_DR2, 0x00);
+	return 0;
 
 }
 

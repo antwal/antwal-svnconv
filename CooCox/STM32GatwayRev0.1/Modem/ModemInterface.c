@@ -5,24 +5,17 @@
 #include "buffer.h"
 #include <stdio.h>
 #include <CoOS.h>			              /*!< CoOS header file	         */
-
+#include "main.h"
 #include "modem.h"
 #include "ntp.h"
 
 
-	COX_SERIAL_PI *myUSART3 = &pi_serial3;
+	COX_SERIAL_PI *myUSART1 = &pi_serial1;
 
 
-	unsigned char err;									// Stores the error number
-	const char APaddr[] = "\"gprssouth.cellone.in\"\r\n";
-	//const char APaddr[] = "\"aircelwap\"\r\n";
 
 	unsigned char signal[2];							// Stores signal strength
-	char ipAddr[20] = {'\0'};								// used to store ip address
-	//unsigned char retry=0;
-	extern char *data_packet;
-	extern uint32_t TIME_TICK;
-
+	char ipAddr[20] = {'\0'};							// used to store ip address
 
 	enum {
 	SHUT = 0,
@@ -43,13 +36,29 @@
 	};
 
 	unsigned char state = SHUT;
-	unsigned char addr1, addr2, addr3, addr4;      		// Assigned IP address
+	unsigned char addr1, addr2, addr3, addr4;      				// Assigned IP address
 	extern	cBuffer modem_buffer;								// Receive Buffer for modem
 	extern 	unsigned char *mBuffer;
 
 
 	// Takes the return values
 	mdmStatus res;
+
+	/*
+	 * putting modem in sleep by pulling DTR pin low
+	 */
+	void mdmSleep(mdmIface *mdm)
+	{
+		mdm->pio->Out(mdm->dtr_pin, 1);			// Setting low on dtr pin
+	}
+
+	/*
+	 * Waking up modem by pulling DTR pin high
+	 */
+	void mdmWakeUp(mdmIface *mdm)
+	{
+		mdm->pio->Out(mdm->dtr_pin, 0);			// Setting high on dtr pin
+	}
 
 	/* used to indicate if any write operation is done or not
 		toggle = 0; // write not done or same payload is requested to be read in small chunk
@@ -58,7 +67,7 @@
 	uint8_t toggle = 0;
 	char  count;
 
-	void USART3_IRQHandler(void)
+	void USART1_IRQHandler(void)
 	{
 		char ch;
 		CoEnterISR ();
@@ -66,10 +75,10 @@
 		//RXNE interrupt occured
 		//printf("uart%x\n\r",USART1->SR);
 
-		if((USART3->SR & 0x20) != (u16)RESET )
+		if((USART1->SR & 0x20) != (u16)RESET )
 		{
 			//count ++;
-			ch = (USART3->DR & (us16)0x01FF);
+			ch = (USART1->DR & (us16)0x01FF);
 			if(bufferIsNotFull(&modem_buffer)){
 				bufferAddToEnd(&modem_buffer, ch);					// Keeping data into the buffer
 				//printf("-%c",ch);
@@ -78,10 +87,10 @@
 				printf("Buffer Full %c\n",ch);
 			}
 		}
-		else if((USART3->SR & 0x08) != (u16)RESET)			// Handling overrun error
+		else if((USART1->SR & 0x08) != (u16)RESET)			// Handling overrun error
 		{
 			printf("Overrun3\n\r");
-			ch = (USART3->DR & (us16)0x01FF);
+			ch = (USART1->DR & (us16)0x01FF);
 			if(bufferIsNotFull(&modem_buffer)){
 				bufferAddToEnd(&modem_buffer, ch);					// Keeping data into the buffer
 				//printf("-%c",ch);
@@ -223,9 +232,7 @@
 							break;
 
 					case IP:
-							//res = serialMatch(mdm, "ERROR", timeout);
-							//if(res != mdmOK){										// that means error has not occured
-							//strncpy(mdm->minfo->ip_addr,mBuffer,15);
+
 							TIME_SET(0);
 							do{
 								if(serial_rx_ready())
@@ -243,7 +250,6 @@
 									if( (res >= 0x30 && res <= 0x39) || res == '.')
 									mdm->ip_addr[addr2++]= res;
 									serial_get(res);
-									//printf("0x%x\n",res);
 								}
 							}
 							while(TIME_TICK < 1000 && res != '\r');
@@ -253,12 +259,14 @@
 							if(addr2 < 6)
 								state = IPGPRSACT;						// IPaddress cannot be retrieved
 							res = mdmOK;
-							//}
-							//else	res = mdmFail;
+
 							break;
 
 					default:
+							if(resp != NULL)
 							res = serialMatch(mdm, resp,timeout);
+							else
+							res = mdmOK;
 							break;
 				}
 
@@ -456,17 +464,12 @@
 	*/
 	mdmStatus mdmNWControl(mdmIface *mdm,uint8_t attach)
 	{
-		// This is used for APN address update
-		char CMD[28 + 10]="AT+CSTT=";
-		//char CMD[17 + 10]="AT+CSTT=";
-
 		res = mdmOK;
 
-		//res = sendwait(mdm, "AT+CIPMODE=1\r","OK",300);						// For Transparent mode
 		if(attach == 1)
-		res = sendwait(mdm, "AT+CGATT=1\r", "OK", 500);
+		res = sendwait(mdm, "|AT+CGATT=1\r", "OK", 500);
 		else{
-		res = sendwait(mdm, "AT+CGATT=0\r", "OK", 300);
+		res = sendwait(mdm, "|AT+CGATT=0\r", "OK", 300);
 		state = CLOSE;
 		return res;
 		}
@@ -477,8 +480,9 @@
 		if (state == INIT || state == FORCED)
 		{
 			//Setting APN adddress for GSM
-			strcat(CMD,APaddr);
-			res = sendwait(mdm, CMD,"OK", 200);
+			sendwait(mdm,"AT+CSTT=",NULL,0);			// Sending the command
+			sendwait(mdm, APaddr, NULL, 0);				// Send AP addr
+			res = sendwait(mdm,"\r","OK", 200);
 
 			if(res != mdmOK)
 				return mdmApnFail;
@@ -500,7 +504,7 @@
 		res = mdmOK;
 		if(state == NWATT)
 		{
-			res = sendwait(mdm, "AT+CIICR\r","OK", 1000);
+			res = sendwait(mdm, "|AT+CIICR\r","OK", 1000);
 			var = 3;
 			do
 			{
@@ -541,7 +545,6 @@
 	*/
 	mdmStatus mdmTCPConnect(mdmIface *mdm, server *obj)
 	{
-		char cmd[50];
 
 		char count = 3;
 		do{
@@ -552,8 +555,13 @@
 			if(state == IP || state == IPGPRSACT || state == CLOSE)
 			{
 				state = CONNECTING;
-				sprintf(cmd, "AT+CIPSTART=\"TCP\",\"%s\",%s\r",obj->addr, obj->port);
-				res = sendwait(mdm, cmd, "CONNECT\r\n", 3000);
+
+				sendwait(mdm, "AT+CIPSTART=\"TCP\",\"",NULL,0);
+				sendwait(mdm, obj->addr,NULL,0);
+				sendwait(mdm,"\",",NULL, 0);
+				sendwait(mdm, obj->port, NULL, 0);
+				res = sendwait(mdm, "\r","CONNECT\r\n",3000);
+
 
 				// If timeout occured and connection does not succeded
 				if(res == mdmTimeOut){
@@ -593,7 +601,7 @@
 	*/
 	mdmStatus mdmUDPConnect(mdmIface *mdm, server *obj)
 	{
-		char cmd[50];
+
 		char var;
 		res = mdmFail;
 		var =3;
@@ -605,8 +613,12 @@
 			if(state == IP|| state == CLOSE || state == IPGPRSACT )
 			{
 				state = CONNECTING;
-				sprintf(cmd, "AT+CIPSTART=\"UDP\",\"%s\",%s\r",obj->addr, obj->port);
-				res = sendwait(mdm, cmd, "CONNECT\r\n",2000);
+
+				sendwait(mdm, "AT+CIPSTART=\"UDP\",\"",NULL,0);
+				sendwait(mdm, obj->addr,NULL,0);
+				sendwait(mdm,"\",",NULL, 0);
+				sendwait(mdm, obj->port, NULL, 0);
+				res = sendwait(mdm, "\r","CONNECT\r\n",2000);
 
 				if(res == mdmTimeOut){
 					printf("Timeout\n");
@@ -745,7 +757,7 @@
 				for(i = 0; i< len; i++)
 				{
 					serial_send(buffer[i]);
-					//printf(" %c",buffer[i]);
+					printf(" %c",buffer[i]);
 					// If while sending modem returns error transsend should exit
 					if(serial_rx_ready())
 					{
@@ -878,17 +890,16 @@
 					printf("%c\t", buffer[i]);
 
 					// To match error Condition
-					if(err[errVar] == buffer[i])
+					if(serial_rx_ready())
 					{
-						errVar++;  											// does char match response string
-						if (!err[errVar]){										// All char are matched
-							printf(" \n ");
+						res = serialMatch(mdm, "CLOSED", 100);
+						if(res == mdmOK || res == mdmErr)
+						{
+							printf("Connection Closed or Error Returned\n\r");
 							mdmSwitch(mdm,COMMAND);
-							//mdmClose(mdm);
-							return mdmErr;
+							return mdmSendFail;
 						}
 					}
-					else errVar = 0;
 					i++;
 					TIME_SET(0);
 				}

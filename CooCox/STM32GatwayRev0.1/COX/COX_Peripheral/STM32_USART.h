@@ -7,13 +7,11 @@
 *******************************************************************************/
 
 #include "cox_serial.h"
-
+#include "TypeDefs.h"
 
 #ifndef STM32_SERIAL_H
 
-typedef unsigned short us16;
-typedef unsigned long  ul32;
-typedef unsigned char uint8_t;
+
 
 /**  GPIO_pins_define  */
 #define GPIO_Pin_2                 ((uint16_t)0x0004)  /*!< Pin 2 selected */

@@ -2251,9 +2251,9 @@ FRESULT f_open (
 	DIR dj;
 	BYTE *dir;
 	DEF_NAMEBUF;
-	pi_pio.Out(LED0, 0);      /* Output hign level to turn on LED0 */
+	pi_pio.Out(LED0, 0);      	/* Output hign level to turn on LED0 */
 
-	fp->fs = 0;			/* Clear file object */
+	fp->fs = 0;					/* Clear file object */
 
 #if !_FS_READONLY
 	mode &= FA_READ | FA_WRITE | FA_CREATE_ALWAYS | FA_OPEN_ALWAYS | FA_CREATE_NEW;

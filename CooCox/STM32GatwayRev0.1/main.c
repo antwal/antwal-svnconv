@@ -15,52 +15,31 @@
 /*----------------------------------------------------------------------*/
 	/* FatFs sample project for generic microcontrollers (C)ChaN, 2010      */
 	/*----------------------------------------------------------------------*/
-//#include "Type.h"
 #include "ff.h"
 #include "diskio.h"
 #include "modem.h"
-//#include "http.h"
 #include "WSNPacket.h"
-// Basestaion ID
-uint8_t BaseStnId = 11;
 
+// This flag is set in RTime.c; if restart is due to Watchdog
 uint8_t Dog = 0;
-/*---------------------------- Symbol Define -------------------------------*/
-#define STACK_SIZE_DEFAULT 200             /*!< Define a Default task size */
-#define STACK_SIZE_WATCHDOG 100             /*!< Define a Default task size */
-//#define STACK_SIZE_DEFAULT1 400             /*!< Define a Default task size */
-
-
-/*---------------------------- Variable Define -------------------------------*/
-	OS_STK     watchdog_stk[STACK_SIZE_WATCHDOG];	  /*!< Define "taskA" task stack */
-	OS_STK     task2_stk[STACK_SIZE_DEFAULT];	  					/*!< Define "taskB" task stack */
-	OS_STK     task3_stk[STACK_SIZE_DEFAULT];	  /*!< Define "led" task stack   */
-	//OS_STK     task4_stk[STACK_SIZE_DEFAULT];	  /*!< Define "led" task stack   */
-
-
 
 /*-----------------------------SD card Variable-----------------------------*/
 MSD_Dev sd_var;
 MSD_Dev *sd= &sd_var;							// MSD instance
 
 #define MaxRx   100     			// Maximum size of receive buffer
-#define MaxTx   100      			// Maximum size of transmit buffer
 
+// USed for appending data from send.xml to alldata.xml
+uint8_t lclbuff[100];
 
-//cBuffer recvBuffer;
-//unsigned char buffer[50];
 cBuffer modem_buffer;								// Receive Buffer for modem
 unsigned char mBuffer[MaxRx];
 
-uint8_t lclbuff[100];
-
-
 //Decleration of   serial Ports
-COX_SERIAL_PI *myUSART1 = &pi_serial1;
+COX_SERIAL_PI *myUSART3 = &pi_serial3;
 COX_SERIAL_PI *myUSART2 = &pi_serial2;
-extern COX_SERIAL_PI *myUSART3;
 
-volatile uint32_t TIME_TICK;									// 10 millseconds counter
+
 void TIME_SET(uint16_t a){ TIME_TICK=a;}                      	// Set 10 millisecond counter to value 'a'
 
 
@@ -68,28 +47,11 @@ void TIME_SET(uint16_t a){ TIME_TICK=a;}                      	// Set 10 millise
 COX_PIO_Dev LED0 = COX_PIN(2,8);
 COX_PIO_Dev LED1 = COX_PIN(2,9);
 
-//Usart event flag
-OS_FlagID flag;
 
-//The mutex is used to get mutual access to the data file  storing the WSN data
-OS_MutexID file_mutex;
-
-//Used to get the mutual access to GSM Gprs Modem
-OS_MutexID modem_mutex;
-
-//Used to get the mutual access to the Uart2 used for printf
-OS_MutexID printf_mutex;
-
-
-//Queue for Processing the data recieved
-#define MAIL_QUEUE_SIZE 16
-
-OS_EventID raw_queue_id;				// Queue for raw packet forwading between task 1 and 2
-OS_EventID sd_queue_id;					// Queue for data packet forwarding between task 2 and 3
 void *MailQueue[MAIL_QUEUE_SIZE];
 
 extern void Read_Data(unsigned char );
-extern char* wsnPacketDecoding(void );
+extern char* wsnPacketDecoding(dogDebug *dptr );
 extern FRESULT SDInterface(char *);
 
 uint8_t sdConfig(void)
@@ -115,8 +77,20 @@ uint8_t sdConfig(void)
 	return ret;
 }
 
+void modemConfig(void)
+{
+	COX_PIO_Dev DTR = COX_PIN(2,6);			// PORTC6
+	COX_PIO_PI *PI = &pi_pio;
 
-void USART1_IRQHandler(void)
+	modm.dtr_pin = DTR;
+	modm.pio = PI;
+
+	modm.pio->Init(modm.dtr_pin);
+	modm.pio->Dir(modm.dtr_pin,1);
+}
+
+/*Mote data receive handler*/
+void USART2_IRQHandler(void)
 {
 	char ch;
 	static char count = 0;
@@ -124,18 +98,18 @@ void USART1_IRQHandler(void)
 	CoEnterISR ();
 
 	//RXNE interrupt occured
-	//printf("uart%x\n\r",USART1->SR);
-	if(( USART1->SR & 0x20) != (u16)RESET )
+	//printf("uart%x\n\r",USART2->SR);
+	if(( USART2->SR & 0x20) != (u16)RESET )
 	{
 		//count ++;
-		ch = (USART1->DR & (us16)0x01FF);
+		ch = (USART2->DR & (us16)0x01FF);
 		//printf("0x%x  ",ch);
 		Read_Data(ch);
 
 	}
-	else if(( USART1->SR & 0x08) != (u16)RESET )		// Handling overrun error
+	else if(( USART2->SR & 0x08) != (u16)RESET )		// Handling overrun error
 	{
-		ch = (USART1->DR & (us16)0x01FF);
+		ch = (USART2->DR & (us16)0x01FF);
 	}
 	CoExitISR ( );
 }
@@ -145,37 +119,40 @@ void USART1_IRQHandler(void)
 /* Used For printf function*/
 void pchar(unsigned char c)
 {
-	USART2->DR =  (c & (us16)0x01FF);
-	while (!(USART2->SR & 0x0080));
+	USART3->DR =  (c & (us16)0x01FF);
+	while (!(USART3->SR & 0x0080));
 }
 
 
 void initSerial(void){
-	//bufferInit(&recvBuffer, buffer, 50);
 
 	//Initilize the buffer for Modem
 	bufferInit(&modem_buffer, mBuffer, MaxRx);
 
 	// For mote
-	myUSART1->Init(9600);
-	myUSART1->Cfg( COX_SERIAL_INT_CONF, RXNE_ENABLE,0);
+	myUSART2->Init(9600);
+	myUSART2->Cfg( COX_SERIAL_INT_CONF, RXNE_ENABLE,0);
 
 
 	//Usart for printf-debugging purpose
-	myUSART2->Init(115200);
+	myUSART3->Init(115200);
 
 	//Usart for communication with the Modem
-	myUSART3->Init(9600);
-	myUSART3->Cfg( COX_SERIAL_INT_CONF, RXNE_ENABLE,0);
+	myUSART1->Init(9600);
+	myUSART1->Cfg( COX_SERIAL_INT_CONF, RXNE_ENABLE,0);
 
-	//enable the interrupts for usart3
-	//NVIC_Configuration_uart(myUSART3);
 }
 
 
 void TmrCallBack(void)
 {
+	// Feed the dog
+	if(feedDog == DOG_FEED){
+		WWDG_SetCounter(0x7F);
+	}
+
 	TIME_TICK ++;
+
 }
 
 	/**
@@ -192,10 +169,9 @@ void TmrCallBack(void)
 	void task2 (void* pdata)
 	{
 		dogDebug *dptr = (dogDebug *) pdata;
-		mdmIface modm;
 		char buff[16]= "0.0.0.0";
 		modm.ip_addr = buff;
-		uint8_t res;
+		uint8_t res, ntp_update =0;
 		uint16_t br, bw;
 		server tcp;
 
@@ -204,17 +180,19 @@ void TmrCallBack(void)
 		tcp.addr = "14.96.145.172";
 
 		sdConfig();
-		if(Dog == 1)
-			{
-				smsSend(&modm,"919848969645","Dog Died :(");
-				smsSend(&modm,"918978517460","Dog Died :(");
-				Dog=0;
-			}
 
-		ntp_time(&modm);
+		CoTickDelay (2000);
+		mdmWakeUp(&modm);
+		res = ntp_time(&modm);
 		for(;;)
 		{
-
+			mdmWakeUp(&modm);
+			ntp_update ++;
+			if(ntp_update > 10){ 			// Update time after each 10 uploads
+				ntp_update = 0;
+				setTaskState(dptr , NTP_TIME);
+				res = ntp_time(&modm);
+			}
 		/*
 				 *  If send.xml file exists that means last uploading was unsuccessful.
 				 *  so  first upload the send.xml data of previous failed
@@ -224,47 +202,48 @@ void TmrCallBack(void)
 				 *  once send.xml is uploaded, append the send.xml to alldata.xml.
 				 *  Then delete the send.xml file.
 				 */
+			rc = f_open(&send, "./root/send.xml", FA_READ);
+			f_close(&send);
 
-				WWDG_setDebugState(dptr , ALIVE);
-				rc = f_open(&send, "./root/send.xml", FA_READ);
-				f_close(&send);
-				// If send.xml file does not exists
-				if(rc == FR_NO_FILE)
-				{
-					CoEnterMutexSection(file_mutex);
-					rc = f_rename("./root/store.xml", "./root/send.xml");			// Copy store.xml to send.xml
-					CoLeaveMutexSection(file_mutex);
-					printf("rename=%d\n\r",rc);
-					if(rc == 0){
-						WWDG_setDebugState(dptr , UPLOADING);
-						rc = uploadFile(&modm, "./root/send.xml", &tcp);
-					}
-					else if (rc == 4){
-						// Store.xml is not present
-						printf("store.xml not present\n\r");
-					}
-					else{
-						// Some problem with SDcard
-						printf("Problem With SD card\n\r");
-					}
+			// If send.xml file does not exists
+			if(rc == FR_NO_FILE)
+			{
+				CoEnterMutexSection(file_mutex);
+				// Copy store.xml to send.xml
+				rc = f_rename("./root/store.xml", "./root/send.xml");
+				CoLeaveMutexSection(file_mutex);
+				printf("rename=%d\n\r",rc);
+
+				if(rc == 0){
+					setTaskState(dptr , UPLOADING);
+					rc = uploadFile(&modm, "./root/send.xml", &tcp);
 				}
-				else if(rc == FR_OK)
-					{
-						WWDG_setDebugState(dptr , UPLOADING);
-						printf("send.xml present=%d\n\r",rc);
-						rc = uploadFile(&modm, "./root/send.xml", &tcp);
-					}
-					else if(rc == 3){
-							printf("SD card not present\n\r");
-					}
-						else{
-							printf("Some problem With SDCard\n\r");
-						}
+				else if (rc == 4){
+					// Store.xml is not present
+					printf("store.xml not present\n\r");
+				}
+				else{
+					// Some problem with SDcard
+					printf("Problem With SD card\n\r");
+				}
+			}
+			else if(rc == FR_OK)
+				{
+					setTaskState(dptr , UPLOADING);
+					printf("send.xml present=%d\n\r",rc);
+					rc = uploadFile(&modm, "./root/send.xml", &tcp);
+				}
+				else if(rc == 3){
+					printf("SD card not present\n\r");
+				}
+				else{
+					printf("Some problem With SDCard\n\r");
+				}
 
+				setTaskState(dptr , MODEM_FREE);
 				// If file is uploaded successfully
 				if(rc == mdmOK)
 				{
-
 					// Appending send.xml data to alldata.xml
 					printf("Open a send.xml to read\r\n");
 					rc = f_open(&send, "./root/send.xml", FA_READ );
@@ -311,7 +290,7 @@ void TmrCallBack(void)
 					printf("\n\rcopying content\n\r");
 					// Start copying content from send.xml to alldata.xml
 					do {
-						WWDG_setDebugState(dptr , APPENDING);
+						setTaskState(dptr , APPEND);
 						//printf("File size=%d\n\r",f_size(&send));
 						rc = f_read(&send, lclbuff, sizeof(lclbuff), &br);	/* Read a chunk of file */
 						printf("rc=%d,br=%d\n\r",rc,br);
@@ -336,6 +315,7 @@ void TmrCallBack(void)
 					f_unlink("./root/send.xml");		// Delete the file
 
 				}
+			  setTaskState(dptr , WAIT);
 			  CoTickDelay (6000);		// For 1 MInute
 		 }
 
@@ -357,12 +337,10 @@ void TmrCallBack(void)
 	{
 		dogDebug *dptr = (dogDebug *) pdata;
 		sdConfig();
-		  for (;;)
-		  {
-			  WWDG_setDebugState(dptr , ALIVE);
-			  wsnPacketDecoding();
-
-		  }
+		 for (;;)
+		 {
+			 wsnPacketDecoding(dptr);
+		 }
 	}
 
 	/**
@@ -377,7 +355,10 @@ void TmrCallBack(void)
 	 */
 
 	void taskWatchDog (void* pdata){
-	  CoTickDelay (10000);
+	dogDebug *dptr;
+
+	intimateState(&modm);
+	CoTickDelay (10000);
 
 	  feedDog = DOG_FEED;
 	  /* configure and start the watch dog timer */
@@ -387,6 +368,21 @@ void TmrCallBack(void)
 
 		  /* perform the sanity check  */
 		  WWDG_dogCheck();
+	    	 dptr = (dogDebug *)&myDogDebug[UPLOAD - 2];
+	    	 /*
+	    	  * state of upload task when it does not use modem
+	    	  * at this time we can put in the sleep state
+	    	  * Waking is left to the upload task when it wants to
+	    	  * wpload it will wake up the modem
+	    	  */
+	    	 if(dptr->state == WAIT || dptr->state == MODEM_FREE || dptr->state == APPEND)
+	    	 {
+	    		 mdmSleep(&modm);
+	    	 }
+	    	 else
+	    	 {
+	    		 mdmWakeUp(&modm);
+	    	 }
 		  CoTickDelay (10); //delay of 100 milli seconds
 	  }
 	}
@@ -394,7 +390,6 @@ void TmrCallBack(void)
 
 int main(void)
 {
-	OS_TID task_2,task_3;
 	OS_TCID sftmr;
 
 	//Initilize serial configuration
@@ -411,7 +406,7 @@ int main(void)
 
 	// Initialising RTC clk
 	RTC_Timer();
-
+	modemConfig();
 	// Mount Filesystem
 	mount(fatfs);
 
@@ -423,9 +418,9 @@ int main(void)
 	WWDG_initDebug(&myDogDebug[1] , 3 , 60000 , 1);//debug structure for task 3, periodicity 1 minutes
 
     /*!< Create three tasks	*/
-	CoCreateTask (taskWatchDog,0,0,&watchdog_stk[STACK_SIZE_WATCHDOG-1],STACK_SIZE_WATCHDOG);
-    task_2 = CoCreateTask (task2,&myDogDebug[0],2,&task2_stk[200-1],200);
-    task_3 = CoCreateTask (task3,&myDogDebug[1],1,&task3_stk[STACK_SIZE_DEFAULT-1],STACK_SIZE_DEFAULT);
+	WATCH = CoCreateTask (taskWatchDog,0,0,&watchdog_stk[STACK_SIZE_WATCHDOG-1],STACK_SIZE_WATCHDOG);
+    UPLOAD = CoCreateTask (task2,&myDogDebug[0],2,&upload_stk[STACK_SIZE_UPLOAD-1],STACK_SIZE_UPLOAD);
+    WSN = CoCreateTask (task3,&myDogDebug[1],1,&wsn_stk[STACK_SIZE_WSN-1],STACK_SIZE_WSN);
 
     /* Create a mutex: used by the file handling ReadInterface Function */
     file_mutex = CoCreateMutex( );
