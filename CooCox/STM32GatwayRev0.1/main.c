@@ -148,7 +148,7 @@ void TmrCallBack(void)
 {
 	// Feed the dog
 	if(feedDog == DOG_FEED){
-		WWDG_SetCounter(0x7F);
+		//IWDG_ReloadCounter();
 	}
 
 	TIME_TICK ++;
@@ -356,18 +356,17 @@ void TmrCallBack(void)
 
 	void taskWatchDog (void* pdata){
 	dogDebug *dptr;
-
 	intimateState(&modm);
 	CoTickDelay (10000);
 
 	  feedDog = DOG_FEED;
 	  /* configure and start the watch dog timer */
-	  WWDG_dogStart();
+	  IWDG_dogStart();
 	  CoTickDelay (10);
 	  for (;;) {
 
 		  /* perform the sanity check  */
-		  WWDG_dogCheck();
+		  WDG_dogCheck();
 	    	 dptr = (dogDebug *)&myDogDebug[UPLOAD - 2];
 	    	 /*
 	    	  * state of upload task when it does not use modem
@@ -414,8 +413,8 @@ int main(void)
 	CoInitOS();
 
 	// initilize the debug structure for the two task
-	WWDG_initDebug(&myDogDebug[0] , 2 , 1800000  , 1);//debug structure for task 2, periodicity 15 minutes
-	WWDG_initDebug(&myDogDebug[1] , 3 , 60000 , 1);//debug structure for task 3, periodicity 1 minutes
+	WDG_initDebug(&myDogDebug[0] , 2 , 1800000  , 1);//debug structure for task 2, periodicity 15 minutes
+	WDG_initDebug(&myDogDebug[1] , 3 , 60000 , 1);//debug structure for task 3, periodicity 1 minutes
 
     /*!< Create three tasks	*/
 	WATCH = CoCreateTask (taskWatchDog,0,0,&watchdog_stk[STACK_SIZE_WATCHDOG-1],STACK_SIZE_WATCHDOG);

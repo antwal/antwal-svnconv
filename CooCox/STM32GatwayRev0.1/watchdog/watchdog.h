@@ -58,9 +58,9 @@ uint32_t feedDog ;
  * Public Functions decleration
  */
 
-void WWDG_initDebug(dogDebug *dptr , uint32_t taskID, uint32_t periodicity, uint32_t exectime);
-void WWDG_setDebugState(dogDebug *dptr , dogFlag state);
-dogFlag WWDG_getDebugState(dogDebug *dptr);
-void WWDG_dogCheck( void );
+void WDG_initDebug(dogDebug *dptr , uint32_t taskID, uint32_t periodicity, uint32_t exectime);
+void WDG_setDebugState(dogDebug *dptr , dogFlag state);
+dogFlag WDG_getDebugState(dogDebug *dptr);
+void WDG_dogCheck( void );
 void WWGD_dogStart(void);
-
+void IWGD_dogStart(void);

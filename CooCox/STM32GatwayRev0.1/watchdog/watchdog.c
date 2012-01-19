@@ -26,7 +26,7 @@ extern uint8_t Dog;
  *          ececution time of the task in milliseconds
  */
 
-void WWDG_initDebug(dogDebug *dptr , uint32_t taskID, uint32_t periodicity, uint32_t exectime){
+void WDG_initDebug(dogDebug *dptr , uint32_t taskID, uint32_t periodicity, uint32_t exectime){
 
     dptr->taskID =taskID;
     dptr->periodicity = periodicity;
@@ -77,7 +77,7 @@ void setTaskState(dogDebug *dptr , dogFlag state){
  * param : can be either {UNKNOWN , ALIVE , ASLEEP}
  * this function should be called in critical section
  */
-dogFlag WWDG_getDebugState(dogDebug *dptr){
+dogFlag WDG_getDebugState(dogDebug *dptr){
     return dptr->state;
 }
 
@@ -89,7 +89,7 @@ dogFlag WWDG_getDebugState(dogDebug *dptr){
  */
 
 
-void WWDG_dogCheck( void ){
+void WDG_dogCheck( void ){
     uint8_t count = 0 ;
     dogDebug *dptr;
     dogFlag flag = WAIT;
@@ -152,6 +152,10 @@ void WWDG_dogCheck( void ){
         	//clear the flag
         	feedDog = DOG_KILL;
     }
+    else {
+    	/*feed the dog **/
+    	IWDG_ReloadCounter();
+    }
 
 
 }
@@ -195,5 +199,13 @@ uint8_t intimateState(mdmIface *mdm)
  */
 void WWDG_dogStart(void){
 	WWDG_Exp();
-
 }
+
+
+void IWDG_dogStart(void){
+	IWDG_Exp();
+}
+
+
+
+

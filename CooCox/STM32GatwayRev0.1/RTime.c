@@ -76,11 +76,12 @@ void RTC_Timer(void)
         if (RCC_GetFlagStatus(RCC_FLAG_IWDGRST) != RESET)
         { /* WWDGRST flag set */
             printf("\r\n\n IWDGRST Reset occurred....");
+            Dog = 1;
         }
         if (RCC_GetFlagStatus(RCC_FLAG_WWDGRST) != RESET)
         { /* WWDGRST flag set */
         	printf("\r\n\n WWDGRST Reset occurred....");
-        	Dog = 1;
+
         }
         if (RCC_GetFlagStatus(RCC_FLAG_SFTRST) != RESET)
         { /* SFTRST flag set */
