@@ -3,6 +3,7 @@
 #include <stdint.h>	// for including uint_8 etc
 #include <stdio.h>  //for including NULL
 #include "main.h"
+#include "watchdog.h" // for debugging using watchdog
 
 #define CLR_BUFFER(buff) memset(buff,'\0',MAX_BUFF_SIZE)
 
@@ -202,6 +203,8 @@ mdmStatus sendData(mdmIface *mdm ,const char *file){
         	}
             printf("File Data = %d\n\r",size);
 
+           //uncomment the below mentioned line if  using watchdog
+           setTaskState(&myDogDebug[0], UPLOADING);
            res = mdmTransSend(mdm, buffer ,(uint32_t)rbytes , 1);
            if (res != mdmOK){
         	   printf("send Fail\n\r");

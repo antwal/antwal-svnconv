@@ -80,8 +80,8 @@ DRESULT disk_read (
 	DSTATUS s;
 	CoSchedLock ( );                                   // Enter Critical Section
 	s = disk_status(drv);
-	if (s & STA_NOINIT){CoSchedUnlock ( ); return RES_NOTRDY;}
-	if (!count){ CoSchedUnlock ( ); return RES_PARERR;}
+	if (s & STA_NOINIT){CoSchedUnlock (); return RES_NOTRDY;}
+	if (!count){ CoSchedUnlock (); return RES_PARERR;}
 	if (!(CardType & CT_BLOCK)) sector *= 512;	/* Convert LBA to byte address if needed */
 
 
@@ -204,7 +204,7 @@ DRESULT disk_ioctl (
 	}
 
 	deselect();
-	CoSchedUnlock ( );                                   // Enter Critical Section
+	CoSchedUnlock ( );                                   // Exit Critical Section
 	return res;
 }
 void	disk_timerproc (void);

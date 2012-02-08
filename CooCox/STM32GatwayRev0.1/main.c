@@ -182,8 +182,10 @@ void TmrCallBack(void)
 		sdConfig();
 
 		CoTickDelay (2000);
+		setTaskState(dptr , NTP_TIME);
 		mdmWakeUp(&modm);
 		res = ntp_time(&modm);
+
 		for(;;)
 		{
 			mdmWakeUp(&modm);
@@ -356,8 +358,8 @@ void TmrCallBack(void)
 
 	void taskWatchDog (void* pdata){
 	dogDebug *dptr;
-	intimateState(&modm);
-	CoTickDelay (10000);
+	intimateState(&modm);// place some where else
+	CoTickDelay (1000);
 
 	  feedDog = DOG_FEED;
 	  /* configure and start the watch dog timer */
@@ -414,12 +416,12 @@ int main(void)
 
 	// initilize the debug structure for the two task
 	WDG_initDebug(&myDogDebug[0] , 2 , 1800000  , 1);//debug structure for task 2, periodicity 15 minutes
-	WDG_initDebug(&myDogDebug[1] , 3 , 60000 , 1);//debug structure for task 3, periodicity 1 minutes
+	WDG_initDebug(&myDogDebug[1] , 3 , 120000 , 1);//debug structure for task 3, periodicity 1 minutes
 
     /*!< Create three tasks	*/
-	WATCH = CoCreateTask (taskWatchDog,0,0,&watchdog_stk[STACK_SIZE_WATCHDOG-1],STACK_SIZE_WATCHDOG);
-    UPLOAD = CoCreateTask (task2,&myDogDebug[0],2,&upload_stk[STACK_SIZE_UPLOAD-1],STACK_SIZE_UPLOAD);
-    WSN = CoCreateTask (task3,&myDogDebug[1],1,&wsn_stk[STACK_SIZE_WSN-1],STACK_SIZE_WSN);
+	WATCH = CoCreateTask (taskWatchDog,0,1,&watchdog_stk[STACK_SIZE_WATCHDOG-1],STACK_SIZE_WATCHDOG);
+    UPLOAD = CoCreateTask (task2,&myDogDebug[0],3,&upload_stk[STACK_SIZE_UPLOAD-1],STACK_SIZE_UPLOAD);
+    WSN = CoCreateTask (task3,&myDogDebug[1],2,&wsn_stk[STACK_SIZE_WSN-1],STACK_SIZE_WSN);
 
     /* Create a mutex: used by the file handling ReadInterface Function */
     file_mutex = CoCreateMutex( );

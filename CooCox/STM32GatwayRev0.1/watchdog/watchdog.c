@@ -106,12 +106,15 @@ void WDG_dogCheck( void ){
         if( dptr->counter > 0 ){
         	dptr->counter = dptr->counter - 1;
         }
+       // printf("flag =%d,task=%d\n\r",dptr->state,dptr->taskID);
         //if counter is zero perform sanity check
         if( dptr->counter == 0 ){
 
+        	printf("flag =%d\t",dptr->state);
             //Extract  the flag
-            flag &= dptr->state;
+            flag = flag && dptr->state;
 
+            printf("flag =%d\n\r",flag);
             //reload the counter
            	dptr->counter = ((dptr->periodicity + dptr->exectime) / 100 )+ 1 ;
 
@@ -154,6 +157,7 @@ void WDG_dogCheck( void ){
     }
     else {
     	/*feed the dog **/
+    	if(feedDog != DOG_KILL)
     	IWDG_ReloadCounter();
     }
 
