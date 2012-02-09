@@ -64,11 +64,13 @@ void IWDG_Exp(void)
     /* Enable write access to IWDG_PR and IWDG_RLR registers */
     IWDG_WriteAccessCmd(IWDG_WriteAccess_Enable);
 
-    /* IWDG counter clock: 32KHz(LSI) / 32 = 1KHz */
-    IWDG_SetPrescaler(IWDG_Prescaler_32);
+    /* IWDG counter clock: 32KHz(LSI) / 256 = 125Hz *///therefore time out is 32seconds
+    IWDG_SetPrescaler(IWDG_Prescaler_256);
 
-    /* Set counter reload value to 10000 ie 10 seconds  */
-    IWDG_SetReload(10000);
+    //reload value must be between 0 <= 0xFFF(4095)
+
+    /* Set counter reload value to 0xFFF ie 32 seconds  */
+    IWDG_SetReload(0xFFF);
 
     /* Reload IWDG counter */
     IWDG_ReloadCounter();

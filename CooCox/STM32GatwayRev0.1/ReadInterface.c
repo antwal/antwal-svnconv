@@ -122,7 +122,7 @@ char * wsnPacketDecoding(dogDebug *dptr){
 	UINT bw,res;
 
 	 /* Wait for a mail, time-out:30seconds */
-	setTaskState(dptr , WAIT);
+	WDG_setTaskState(dptr , WAIT);
 	msg = CoPendQueueMail (raw_queue_id, 3000, &result);
 	if (result != E_OK){
         if (result == E_INVALID_ID){
@@ -135,7 +135,7 @@ char * wsnPacketDecoding(dogDebug *dptr){
 		/******** Check type of the Raw Packet *******/
 		if (Data.DataBuffer[1] == P_PACKET_NO_ACK ) {
 
-			setTaskState(dptr , SAVE_DATA);
+			WDG_setTaskState(dptr , SAVE_DATA);
 			/***** Parsing the Raw Packet ****/
 			ParsePkt((INT8U *)&Data.DataBuffer[0]);
 
@@ -200,7 +200,7 @@ char * wsnPacketDecoding(dogDebug *dptr){
 
 			/* Release the lock */
 			CoLeaveMutexSection(file_mutex);
-			setTaskState(dptr , SAVE_DONE);
+			WDG_setTaskState(dptr , SAVE_DONE);
 		}
 		else{
 			printf("Discarded\n");

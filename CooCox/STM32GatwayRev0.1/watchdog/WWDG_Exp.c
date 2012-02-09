@@ -195,10 +195,8 @@ void NVIC_Configuration(void)
 // Currently it's not used; Feeding of the watch dog is done in tmrCallback function of systick
 void WWDG_IRQHandler(void)
 {
-		if(feedDog == DOG_FEED){
-			WWDG_SetCounter(0x7F);
-		}
 
+		WWDG_SetCounter(0x7F);
 	    /* Clear EWI flag */
 	    WWDG_ClearFlag();
 

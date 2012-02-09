@@ -8,10 +8,12 @@
 #define CLR_BUFFER(buff) memset(buff,'\0',MAX_BUFF_SIZE)
 
 /*
- * External function definition
+ * External function and variables definition
  */
 
 extern void die(FRESULT);
+extern dogDebug myDogDebug[];
+
 
 /*
  * Declaration of static global variables
@@ -204,7 +206,7 @@ mdmStatus sendData(mdmIface *mdm ,const char *file){
             printf("File Data = %d\n\r",size);
 
            //uncomment the below mentioned line if  using watchdog
-           setTaskState(&myDogDebug[0], UPLOADING);
+           WDG_setTaskState(&myDogDebug[0], UPLOADING);
            res = mdmTransSend(mdm, buffer ,(uint32_t)rbytes , 1);
            if (res != mdmOK){
         	   printf("send Fail\n\r");

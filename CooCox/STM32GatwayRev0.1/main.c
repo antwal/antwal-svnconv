@@ -6,15 +6,10 @@
 #include "stdio.h"
 #include <CoOS.h>			              /*!< CoOS header file	         */
 
-
-
 #include <stm_spi_master.h>
 #include "di_msd.h"
 #include "watchdog.h"
 #include "main.h"
-/*----------------------------------------------------------------------*/
-	/* FatFs sample project for generic microcontrollers (C)ChaN, 2010      */
-	/*----------------------------------------------------------------------*/
 #include "ff.h"
 #include "diskio.h"
 #include "modem.h"
@@ -22,6 +17,10 @@
 
 // This flag is set in RTime.c; if restart is due to Watchdog
 uint8_t Dog = 0;
+
+// Debug structure for tasks
+extern dogDebug myDogDebug[];
+extern uint32_t dogStatus;
 
 /*-----------------------------SD card Variable-----------------------------*/
 MSD_Dev sd_var;
@@ -115,7 +114,6 @@ void USART2_IRQHandler(void)
 }
 
 
-
 /* Used For printf function*/
 void pchar(unsigned char c)
 {
@@ -146,13 +144,7 @@ void initSerial(void){
 
 void TmrCallBack(void)
 {
-	// Feed the dog
-	if(feedDog == DOG_FEED){
-		//IWDG_ReloadCounter();
-	}
-
 	TIME_TICK ++;
-
 }
 
 	/**
@@ -182,17 +174,20 @@ void TmrCallBack(void)
 		sdConfig();
 
 		CoTickDelay (2000);
-		setTaskState(dptr , NTP_TIME);
+		WDG_setTaskState(dptr , NTP_TIME);
 		mdmWakeUp(&modm);
 		res = ntp_time(&modm);
 
+		//initilize the watch dog debugging structure
+		//debug structure for task 2, periodicity 30 minutes
+		WDG_initDebug(dptr , 2 , 1800000  , 1);
 		for(;;)
 		{
 			mdmWakeUp(&modm);
 			ntp_update ++;
 			if(ntp_update > 10){ 			// Update time after each 10 uploads
 				ntp_update = 0;
-				setTaskState(dptr , NTP_TIME);
+				WDG_setTaskState(dptr , NTP_TIME);
 				res = ntp_time(&modm);
 			}
 		/*
@@ -217,7 +212,7 @@ void TmrCallBack(void)
 				printf("rename=%d\n\r",rc);
 
 				if(rc == 0){
-					setTaskState(dptr , UPLOADING);
+					WDG_setTaskState(dptr , UPLOADING);
 					rc = uploadFile(&modm, "./root/send.xml", &tcp);
 				}
 				else if (rc == 4){
@@ -231,7 +226,7 @@ void TmrCallBack(void)
 			}
 			else if(rc == FR_OK)
 				{
-					setTaskState(dptr , UPLOADING);
+					WDG_setTaskState(dptr , UPLOADING);
 					printf("send.xml present=%d\n\r",rc);
 					rc = uploadFile(&modm, "./root/send.xml", &tcp);
 				}
@@ -242,7 +237,7 @@ void TmrCallBack(void)
 					printf("Some problem With SDCard\n\r");
 				}
 
-				setTaskState(dptr , MODEM_FREE);
+				WDG_setTaskState(dptr , MODEM_FREE);
 				// If file is uploaded successfully
 				if(rc == mdmOK)
 				{
@@ -292,7 +287,7 @@ void TmrCallBack(void)
 					printf("\n\rcopying content\n\r");
 					// Start copying content from send.xml to alldata.xml
 					do {
-						setTaskState(dptr , APPEND);
+						WDG_setTaskState(dptr , APPEND);
 						//printf("File size=%d\n\r",f_size(&send));
 						rc = f_read(&send, lclbuff, sizeof(lclbuff), &br);	/* Read a chunk of file */
 						printf("rc=%d,br=%d\n\r",rc,br);
@@ -317,7 +312,7 @@ void TmrCallBack(void)
 					f_unlink("./root/send.xml");		// Delete the file
 
 				}
-			  setTaskState(dptr , WAIT);
+			  WDG_setTaskState(dptr , WAIT);
 			  CoTickDelay (6000);		// For 1 MInute
 		 }
 
@@ -339,6 +334,8 @@ void TmrCallBack(void)
 	{
 		dogDebug *dptr = (dogDebug *) pdata;
 		sdConfig();
+		//debug structure for task 3, periodicity 2 minutes
+		WDG_initDebug(dptr , 3 , 120000 , 1);
 		 for (;;)
 		 {
 			 wsnPacketDecoding(dptr);
@@ -358,18 +355,23 @@ void TmrCallBack(void)
 
 	void taskWatchDog (void* pdata){
 	dogDebug *dptr;
+
+
 	intimateState(&modm);// place some where else
-	CoTickDelay (1000);
+	/* configure and start the watch dog timer */
+	IWDG_dogStart();
 
-	  feedDog = DOG_FEED;
-	  /* configure and start the watch dog timer */
-	  IWDG_dogStart();
-	  CoTickDelay (10);
-	  for (;;) {
+	for (;;) {
+	  /* perform the sanity check  */
+		  if(dogStatus == 1){
+			  WDG_dogCheck();
+		  }
+		  else{
+		    //feed the dog
+		    IWDG_ReloadCounter();
+		  }
 
-		  /* perform the sanity check  */
-		  WDG_dogCheck();
-	    	 dptr = (dogDebug *)&myDogDebug[UPLOAD - 2];
+		  dptr = (dogDebug *)&myDogDebug[UPLOAD - 2];
 	    	 /*
 	    	  * state of upload task when it does not use modem
 	    	  * at this time we can put in the sleep state
@@ -384,9 +386,9 @@ void TmrCallBack(void)
 	    	 {
 	    		 mdmWakeUp(&modm);
 	    	 }
-		  CoTickDelay (10); //delay of 100 milli seconds
-	  }
+		  CoTickDelay (100); //delay of 1000 milli seconds
 	}
+}
 
 
 int main(void)
@@ -413,10 +415,6 @@ int main(void)
 
 	/*!< Initial CooCox CoOS          */
 	CoInitOS();
-
-	// initilize the debug structure for the two task
-	WDG_initDebug(&myDogDebug[0] , 2 , 1800000  , 1);//debug structure for task 2, periodicity 15 minutes
-	WDG_initDebug(&myDogDebug[1] , 3 , 120000 , 1);//debug structure for task 3, periodicity 1 minutes
 
     /*!< Create three tasks	*/
 	WATCH = CoCreateTask (taskWatchDog,0,1,&watchdog_stk[STACK_SIZE_WATCHDOG-1],STACK_SIZE_WATCHDOG);
