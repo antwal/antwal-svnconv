@@ -53,5 +53,24 @@ SECTIONS
     } > ram
        
     . = ALIGN(4); 
+    /* flash page size is 0x800 */
+    /* default configuration section put at the second last flash page */
+    _sdefconf = 0x08000000 + 0x00080000 - 0x800 - 0x800;
+    .co_defconf _sdefconf : 
+    {
+      	_sdefconf = . ;
+       KEEP(*(.co_defconf .co_defconf.*))
+        _edefconf = . ; 
+    } > rom     
+    
+    /* configuration section put at the end 1kb of flash ie last page */
+    _sconf = 0x08000000 + 0x00080000 - 0x800 ;
+    .co_conf _sconf : 
+    {
+      	_sconf = . ;
+       KEEP(*(.co_conf .co_conf.*))
+        _econf = . ; 
+    } > rom   
+     
     _end = . ; 
 } 

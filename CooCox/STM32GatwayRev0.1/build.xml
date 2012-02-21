@@ -33,16 +33,17 @@
       <fileset dir=".">
         <include name="**/*.c"/>
         <include name="**/*.s"/>
+        <exclude name="cmsis_boot\startup\startup_stm32f10x_md_vl.c"/>
       </fileset>
       <project outfile="${project.name}.elf" overwrite="true" type="xcode"/>
       
       <!-- defines -->
       <defineset>
-        <define name="STM32F10X_MD_VL"/>
         <define name="USE_STDPERIPH_DRIVER"/>
         <define name="__ASSEMBLY__"/>
+        <define name="STM32F10X_HD_VL"/>
+        <define name="STM32F100RE"/>
         <define name="TINYOS2"/>
-        <define name="STM32F100RB"/>
       </defineset>
       
       <!-- include compile path -->
@@ -59,6 +60,10 @@
       <includepath path="FAT"/>
       <includepath path="Modem"/>
       <includepath path="watchdog"/>
+      <includepath path="buffer"/>
+      <includepath path="cmdline"/>
+      <includepath path="commands"/>
+      <includepath path="vt100"/>
       
       <!-- arm-none-eabi-gcc compiler arguments -->
       <compilerarg value="-mcpu=cortex-m3"/>
