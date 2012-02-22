@@ -14,6 +14,23 @@
 #include "diskio.h"
 #include "modem.h"
 #include "WSNPacket.h"
+#include "cmdline.h"
+#include "vt100.h"
+#include "command.h"
+#include "config.h"
+
+//------------------------Debug task variables for cmdline--------------------------
+
+/* Variable used for command line   */
+uint8_t Run;
+uint8_t debug_buffer[15];
+cBuffer cmdBuffer;
+
+//structure containing system configurations
+extern struct config sysconf;
+extern struct config sysconfdup ;
+
+
 
 // This flag is set in RTime.c; if restart is due to Watchdog
 uint8_t Dog = 0;
@@ -113,6 +130,31 @@ void USART2_IRQHandler(void)
 	CoExitISR ( );
 }
 
+/**
+  * @brief  This function handles USARTx global interrupt request.
+  * @param  None
+  * @retval None
+  */
+
+void USART3_IRQHandler(void)
+{
+	char data;
+	CoEnterISR ();
+    //if ((USART3->SR & USART_FLAG_RXNE) != (u16)RESET)
+	if ((USART3->SR & 0x20) != (u16)RESET)
+	{
+			//do something with the recieved data
+    		data = USART3->DR ;
+    		if(bufferIsNotFull(&cmdBuffer)){
+    			bufferAddToEnd(&cmdBuffer, (char)data);
+    		}
+    		else if(( USART3->SR & 0x08) != (u16)RESET ){		// Handling overrun error
+    			data = (USART3->DR & (us16)0x01FF);
+    		}
+
+	}
+    CoExitISR ( );
+}
 
 /* Used For printf function*/
 void pchar(unsigned char c)
@@ -127,17 +169,19 @@ void initSerial(void){
 	//Initilize the buffer for Modem
 	bufferInit(&modem_buffer, mBuffer, MaxRx);
 
+	//Usart for communication with the Modem
+	myUSART1->Init(9600);
+	myUSART1->Cfg( COX_SERIAL_INT_CONF, RXNE_ENABLE,0);
+
 	// For mote
 	myUSART2->Init(9600);
 	myUSART2->Cfg( COX_SERIAL_INT_CONF, RXNE_ENABLE,0);
 
-
 	//Usart for printf-debugging purpose
 	myUSART3->Init(115200);
+	myUSART3->Cfg( COX_SERIAL_INT_CONF, RXNE_ENABLE,0);
 
-	//Usart for communication with the Modem
-	myUSART1->Init(9600);
-	myUSART1->Cfg( COX_SERIAL_INT_CONF, RXNE_ENABLE,0);
+
 
 }
 
@@ -389,11 +433,59 @@ void TmrCallBack(void)
 		  CoTickDelay (100); //delay of 1000 milli seconds
 	}
 }
+/**
+*******************************************************************************
+* @brief       "DebugTask" task code
+* @param[in]   None
+* @param[out]  None
+* @retval      None
+* @par Description
+* @details    This function use to monitor  "task2" and "task3".
+*******************************************************************************
+*/
+void taskDebug (void* pdata){
 
+	//initialize the buffer that will be used for command
+	bufferInit( &cmdBuffer, &debug_buffer[0], sizeof(debug_buffer) );
+
+	// initialize vt100 terminal
+	vt100Init();
+	vt100ClearScreen();
+	vt100SetCursorPos(1,0);
+
+	printf("\r\nWelcome to the Command Line Test Suite!\r\n");
+	// initialize cmdline system
+	cmdlineInit();
+	// direct cmdline output to uart (serial port function)
+	cmdlineSetOutputFunc(pchar);
+	// add commands to the command database
+	addAllcommand();
+
+	// send a CR to cmdline input to stimulate a prompt
+	cmdlineInputFunc('\r');
+	// set state to run
+	Run = 1;
+	for (;;) {
+		while(Run){
+		  // pass characters received on the uart (serial port)
+		  // into the cmdline processor
+			while(bufferDataAvail(&cmdBuffer)){
+				cmdlineInputFunc(bufferGetFromFront(&cmdBuffer));
+				// run the cmdline execution functions
+				cmdlineMainLoop();
+			}
+		}
+		//printf("Exited From the app...\r");
+		CoTickDelay (500);
+	}
+}
 
 int main(void)
 {
 	OS_TCID sftmr;
+
+	//copy the system configurations to the duplicate structure
+	sysconfdup = sysconf;
 
 	//Initilize serial configuration
 	initSerial();
@@ -408,18 +500,19 @@ int main(void)
 	pi_pio.Dir(LED1,1);
 
 	// Initialising RTC clk
-	RTC_Timer();
-	modemConfig();
+//	RTC_Timer();
+//	modemConfig();
 	// Mount Filesystem
-	mount(fatfs);
+//	mount(fatfs);
 
 	/*!< Initial CooCox CoOS          */
 	CoInitOS();
 
     /*!< Create three tasks	*/
-	WATCH = CoCreateTask (taskWatchDog,0,1,&watchdog_stk[STACK_SIZE_WATCHDOG-1],STACK_SIZE_WATCHDOG);
-    UPLOAD = CoCreateTask (task2,&myDogDebug[0],3,&upload_stk[STACK_SIZE_UPLOAD-1],STACK_SIZE_UPLOAD);
-    WSN = CoCreateTask (task3,&myDogDebug[1],2,&wsn_stk[STACK_SIZE_WSN-1],STACK_SIZE_WSN);
+//	WATCH = CoCreateTask (taskWatchDog,0,1,&watchdog_stk[STACK_SIZE_WATCHDOG-1],STACK_SIZE_WATCHDOG);
+//  UPLOAD = CoCreateTask (task2,&myDogDebug[0],3,&upload_stk[STACK_SIZE_UPLOAD-1],STACK_SIZE_UPLOAD);
+//  WSN = CoCreateTask (task3,&myDogDebug[1],2,&wsn_stk[STACK_SIZE_WSN-1],STACK_SIZE_WSN);
+    DEBUG = CoCreateTask (taskDebug,0,4,&debug_stk[STACK_SIZE_DEBUG-1],STACK_SIZE_DEBUG);
 
     /* Create a mutex: used by the file handling ReadInterface Function */
     file_mutex = CoCreateMutex( );

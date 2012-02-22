@@ -50,8 +50,8 @@
 // Global variables
 
 // strings
-const char  CmdlinePrompt[] = "agri@cmd#";
-const char  CmdlineNotice[] = "cmdline: ";
+const char  CmdlinePrompt[] = "agri@cmd# ";
+const char  CmdlineNotice[] = "cmd: ";
 const char  CmdlineCmdNotFound[] = "command not found";
 
 // command list

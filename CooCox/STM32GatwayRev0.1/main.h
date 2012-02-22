@@ -91,18 +91,20 @@ struct {
 #define STACK_SIZE_UPLOAD 	200             /*!< Define a Default task size */
 #define STACK_SIZE_WSN 		200
 #define STACK_SIZE_WATCHDOG 100             /*!< Define a Default task size */
+#define STACK_SIZE_DEBUG	200
 
 
 /*---------------------------- Variable Define -------------------------------*/
 OS_STK     watchdog_stk[STACK_SIZE_WATCHDOG];	  /*!< Define "taskA" task stack */
 OS_STK     upload_stk[STACK_SIZE_UPLOAD];	  					/*!< Define "taskB" task stack */
 OS_STK     wsn_stk[STACK_SIZE_WSN];	  /*!< Define "led" task stack   */
+OS_STK	   debug_stk[STACK_SIZE_DEBUG];
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 //Queue for Processing the data recieved
 #define MAIL_QUEUE_SIZE 16
 // Task ids
-OS_TID WSN, UPLOAD, WATCH;
+OS_TID WSN, UPLOAD, WATCH,DEBUG;
 //Usart event flag
 OS_FlagID flag;
 

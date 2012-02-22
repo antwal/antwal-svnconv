@@ -65,12 +65,13 @@ struct config defconf ={
 };
 
 /* configuration structure in ram */
-struct config sysconfdup;
+struct config sysconfdup ;
 
 
 
 
 void addAllcommand(void){
+
 	cmdlineAddCommand("help",		helpFunction);
 	cmdlineAddCommand("exit",		exitFunction);
 	cmdlineAddCommand("clear",		clearFunction);
@@ -94,25 +95,29 @@ void addAllcommand(void){
 void exitFunction(void){
 	// to exit, we set Run to FALSE
 	//Run = FALSE;
-	printf("Exiting Cmdline\r\n");
+	printf("Exiting Cmdline\n\r");
 }
 
 void helpFunction(void)
 {
-	printf("Available commands are:\r\n");
-	printf("help    - displays available commands\r\n");
-	printf("exit 	- exits from this command line\r\n");
-	printf("clear	- clear the terminal");
-	printf("setbaud	- set the baud rate of of uarts setbaud <uartno> <baud>");
-	printf("setapn  - sets the apn of the modem");
-	printf("setsite - name of the remote server");
-	printf("setuser - user name for logging");
-	printf("setpass - password");
-	printf("setcookie - resource path for logging in ");
-	printf("setupload - resource path for uploading a file");
-	printf("setstatus - enable/disable watchdog or err reporting sms");
-	printf("regphone - registered  phone numbers");
-	printf("errphone - registered phone for error reporting");
+	printf("Available commands are:\n\r");
+	printf("help    	- displays available commands\n\r");
+	printf("exit 		- exits from this command line\n\r");
+	printf("clear		- clear the terminal\n\r");
+	printf("setbaud		- set the baud rate of of uarts setbaud <uartno> <baud>\n\r");
+	printf("setapn  	- sets the apn of the modem\n\r");
+	printf("setsite 	- name of the remote server\n\r");
+	printf("setuser 	- user name for logging\n\r");
+	printf("setpass 	- password\n\r");
+	printf("setcookie 	- resource path for logging in\n\r");
+	printf("setupload 	- resource path for uploading a file\n\r");
+	printf("setstatus 	- enable/disable watchdog or err reporting sms\n\r");
+	printf("regphone 	- registered  phone numbers\n\r");
+	printf("errphone 	- registered phone for error reporting\n\r");
+	printf("sysconf  	- display the system configurations\n\r");
+	printf("curconf		- display the current systen configurations\n\r");
+	printf("saveconf	- save the current configurations  into system configurations\n\r");
+	printf("setdef 		- reverts back system configurations to the default conf\n\r");
 
 }
 
@@ -125,20 +130,20 @@ void setbaudFunction(void){
 	if(cmdlineGetArgInt(1) > 0 && cmdlineGetArgInt(1) < 4){
 		switch(cmdlineGetArgInt(1)){
 			case 1 : sysconfdup.baud_uart1 = cmdlineGetArgInt(2);
-					 printf("UART1 Baud %d\r\n",sysconfdup.baud_uart1);
+					 printf("UART1 Baud %d\n\r",sysconfdup.baud_uart1);
 					 break;
 			case 2 : sysconfdup.baud_uart2 = cmdlineGetArgInt(2);
-					 printf("UART2 Baud %d\r\n",sysconfdup.baud_uart2);
+					 printf("UART2 Baud %d\n\r",sysconfdup.baud_uart2);
 					 break;
 			case 3 : sysconfdup.baud_uart3 = cmdlineGetArgInt(2);
-					 printf("UART3 Baud %d\r\n",sysconfdup.baud_uart3);
+					 printf("UART3 Baud %d\n\r",sysconfdup.baud_uart3);
 					 break;
 			default: break;
 		}
 	}
 	else{
 		printf("ERROR\n\r");
-		printf("Format: setbaud <uart no> <baud>");
+		printf("Format: setbaud <uart no> <baud>\n\r");
 	}
 }
 
@@ -157,16 +162,17 @@ void setapnFunction(void){
 	len = end - start;
 	if(len == 0 ){
 		printf("No arguments \n\r");
+		printf("Format: setapn <apnsring>\n\r");
 		return;
 	}
-	if(len < fieldlen){
+	if(len <= fieldlen){
 		memset(ptr,'\0',fieldlen);
 		while(start != end && *start != ' ' ){
 			*ptr++ = *start++ ;
 		}
 	}
 	else{
-		printf("Max %d character allowed\n\r",fieldlen);
+		printf("Max %d character allowed in argument\n\r",fieldlen);
 	}
 }
 //set name the remote server
@@ -182,6 +188,7 @@ void setsiteFunction(void){
 	len = end - start;
 	if(len == 0 ){
 		printf("No arguments \n\r");
+		printf("Format: setsite <sitename>\n\r");
 		return;
 	}
 	if(len < sizeof(sysconfdup.site)){
@@ -191,7 +198,7 @@ void setsiteFunction(void){
 		}
 	}
 	else{
-		printf("Max %d character allowed\n\r",sizeof(sysconfdup.site));
+		printf("Max %d character allowed in argument\n\r",sizeof(sysconfdup.site));
 	}
 }
 
@@ -210,16 +217,17 @@ void setuserFunction(void){
 	len = end - start;
 	if(len == 0 ){
 		printf("No arguments \n\r");
+		printf("Format: setuser <username>\n\r");
 		return;
 	}
-	if(len < fieldlen){
+	if(len <= fieldlen){
 		memset(ptr,'\0',fieldlen);
 		while(start != end && *start != ' ' ){
 			*ptr++ = *start++ ;
 		}
 	}
 	else{
-		printf("Max %d character allowed\n\r",fieldlen);
+		printf("Max %d character allowed in argument\n\r",fieldlen);
 	}
 }
 //set password
@@ -237,17 +245,19 @@ void setpassFunction(void){
 	len = end - start;
 	if(len == 0 ){
 		printf("No arguments \n\r");
+		printf("Format: setpass <password>\n\r");
 		return;
 	}
-	if(len < fieldlen){
+	if(len <= fieldlen){
 		memset(ptr,'\0',fieldlen);
 		while(start != end && *start != ' ' ){
 			*ptr++ = *start++ ;
 		}
 	}
 	else{
-		printf("Max %d character allowed\n\r",fieldlen);
+		printf("Max %d character allowedin arg\n\r",fieldlen);
 	}
+
 }
 //set cookie resource path
 void setcookieFunction(void){
@@ -264,9 +274,10 @@ void setcookieFunction(void){
 	len = end - start;
 	if(len == 0 ){
 		printf("No arguments \n\r");
+		printf("Format: setcookie <cookie_resource_path>\n\r");
 		return;
 	}
-	if(len <  fieldlen){
+	if(len <= fieldlen){
 		memset(ptr,'\0',fieldlen);
 		while(start != end && *start != ' ' ){
 			*ptr++ = *start++ ;
@@ -291,9 +302,10 @@ void setuploadFunction(void){
 	len = end - start;
 	if(len == 0 ){
 		printf("No arguments \n\r");
+		printf("Format: setupload <upload_resource_path>\n\r");
 		return;
 	}
-	if(len < fieldlen){
+	if(len <= fieldlen){
 		memset(ptr,'\0',fieldlen);
 		while(start != end && *start != ' ' ){
 			*ptr++ = *start++ ;
@@ -315,9 +327,10 @@ void setstatusFunction(void){
 	len = end - start;
 	if(len == 0 ){
 		printf("No arguments \n\r");
+		printf("Format: setstatus < dog/err > < 0 / 1 >\r");
 		return;
 	}
-	if(strncmp(cmdlineGetArgStr(1),"dog", len) == 0){
+	if(strncmp(cmdlineGetArgStr(1),"dog", 3) == 0){
 		if(cmdlineGetArgInt(2) == 0 || cmdlineGetArgInt(2) == 1){
 			sysconfdup.watchdog_status = (uint8_t) cmdlineGetArgInt(2);
 		}
@@ -325,7 +338,7 @@ void setstatusFunction(void){
 			printf("Val can be 0 or 1");
 		}
 	}
-	else if(strncmp(cmdlineGetArgStr(1),"err", len) == 0){
+	else if(strncmp(cmdlineGetArgStr(1),"err", 3) == 0){
 		if(cmdlineGetArgInt(2) == 0 || cmdlineGetArgInt(2) == 1){
 			sysconfdup.err_report_status= (uint8_t) cmdlineGetArgInt(2);
 		}
@@ -337,19 +350,69 @@ void setstatusFunction(void){
 }
 //register a phone number
 void regphoneFunction(void){
+	char *start;
+	char *end;
+	uint8_t len = 0;
+	uint8_t *ptr ;
 
+
+	start = cmdlineGetArgStr(1);
+	end   = cmdlineGetArgStr(2);
+	len = end - start;
+	if(len == 0 ){
+		printf("No arguments \n\r");
+		printf("Format: regphone <location(0/1)> < 10 digit phoneno>\n\r");
+
+	}
+	else if(cmdlineGetArgInt(1) == 0 || cmdlineGetArgInt(1) == 1){
+		switch(cmdlineGetArgInt(1)){
+			case 0 :if(strlen(cmdlineGetArgStr(2))  == 10 ){
+						ptr = &sysconfdup.reg_phoneno[0];
+						memset(ptr,'\0',10);
+						start = cmdlineGetArgStr(2);
+						for (len = 0 ;len < 10 ;len++ ){
+							*ptr++ = *start++ ;
+						}
+						printf("Registered Phone[0] %s\n\r",cmdlineGetArgStr(2));
+					}
+					else{
+						printf("Error: Please enter 10 digit phone no");
+					}
+					break;
+			case 1 : if(strlen(cmdlineGetArgStr(2)) == 10 ){
+						ptr = &sysconfdup.reg_phoneno[1];
+						memset(ptr,'\0',10);
+						start = cmdlineGetArgStr(2);
+						for (len = 0 ;len < 10 ;len++ ){
+							*ptr++ = *start++ ;
+						}
+						printf("Registered Phone[1] %s\n\r",cmdlineGetArgStr(2));
+					}
+					else{
+						printf("Error: Please enter 10 digit phone no");
+					}
+					break;
+
+			default: break;
+		}
+	}
+	else{
+		printf("ERROR\n\r");
+		printf("Format: regphone <location(0/1)> < 10 digit phoneno>\n\r");
+	}
 }
+
 //register phone number for error repoting
 void errphoneFunction(void){
 
 }
 //prints the system configurations
 void sysconfFunction(void){
-	printf("system configurations\r\n");
+	printf("system configurations\n\r");
 }
 //prints the current configurations of the system
 void curconfFunction(void){
-	printf("system current configurations");
+	printf("system current configurations\n\r");
 
 }
 //save the current configuration to system configurations
@@ -357,6 +420,7 @@ void saveconfFunction(void){
 	/* Only program the flash if sysconfdup differs from sysconf */
 	if( memcmp((uint8_t *)&sysconf,(uint8_t *)&sysconfdup,sizeof(struct config)) != 0 ){
 		flashpage( (uint8_t *)&sysconf, (uint8_t *)&sysconfdup, sizeof(struct config));
+		printf("Done!!\n\r");
 	}
 	else {
 		printf("No change in configurations found \n\r");
@@ -370,6 +434,7 @@ void setdefFunction(void){
 	/* Only program the flash if system configuration  differs from default configurations */
 	if( memcmp((uint8_t *)&_sconf , (uint8_t *)&_sdefconf ,len ) ){
 		flashpage( &_sconf, &_sdefconf, len);
+		printf("Done!!\n\r");
 	}
 	else {
 		printf("No change in configurations found \n\r");
