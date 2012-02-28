@@ -93,8 +93,9 @@ void addAllcommand(void){
 }
 
 void exitFunction(void){
-	// to exit, we set Run to FALSE
-	//Run = FALSE;
+
+	extern volatile uint8_t Run;
+	//Run = 0;
 	printf("Exiting Cmdline\n\r");
 }
 
@@ -327,7 +328,7 @@ void setstatusFunction(void){
 	len = end - start;
 	if(len == 0 ){
 		printf("No arguments \n\r");
-		printf("Format: setstatus < dog/err > < 0 / 1 >\r");
+		printf("Format: setstatus < dog/err > < 0 / 1 >\n\r");
 		return;
 	}
 	if(strncmp(cmdlineGetArgStr(1),"dog", 3) == 0){
@@ -335,7 +336,7 @@ void setstatusFunction(void){
 			sysconfdup.watchdog_status = (uint8_t) cmdlineGetArgInt(2);
 		}
 		else{
-			printf("Val can be 0 or 1");
+			printf("Val can be 0 or 1\n\r");
 		}
 	}
 	else if(strncmp(cmdlineGetArgStr(1),"err", 3) == 0){
@@ -343,7 +344,7 @@ void setstatusFunction(void){
 			sysconfdup.err_report_status= (uint8_t) cmdlineGetArgInt(2);
 		}
 		else{
-			printf("Val can be 0 or 1");
+			printf("Val can be 0 or 1\n\r");
 		}
 	}
 
@@ -373,10 +374,10 @@ void regphoneFunction(void){
 						for (len = 0 ;len < 10 ;len++ ){
 							*ptr++ = *start++ ;
 						}
-						printf("Registered Phone[0] %s\n\r",cmdlineGetArgStr(2));
+						printf("Registered phone[0] %s\n\r",cmdlineGetArgStr(2));
 					}
 					else{
-						printf("Error: Please enter 10 digit phone no");
+						printf("Error: Please enter 10 digit phone no\n\r");
 					}
 					break;
 			case 1 : if(strlen(cmdlineGetArgStr(2)) == 10 ){
@@ -386,10 +387,10 @@ void regphoneFunction(void){
 						for (len = 0 ;len < 10 ;len++ ){
 							*ptr++ = *start++ ;
 						}
-						printf("Registered Phone[1] %s\n\r",cmdlineGetArgStr(2));
+						printf("Registered phone[1] %s\n\r",cmdlineGetArgStr(2));
 					}
 					else{
-						printf("Error: Please enter 10 digit phone no");
+						printf("Error: Please enter 10 digit phone no\n\r");
 					}
 					break;
 
@@ -404,7 +405,56 @@ void regphoneFunction(void){
 
 //register phone number for error repoting
 void errphoneFunction(void){
+	char *start;
+	char *end;
+	uint8_t len = 0;
+	uint8_t *ptr ;
 
+
+	start = cmdlineGetArgStr(1);
+	end   = cmdlineGetArgStr(2);
+	len = end - start;
+	if(len == 0 ){
+		printf("No arguments \n\r");
+		printf("Format: errphone <location(0/1)> < 10 digit phoneno>\n\r");
+
+	}
+	else if(cmdlineGetArgInt(1) == 0 || cmdlineGetArgInt(1) == 1){
+		switch(cmdlineGetArgInt(1)){
+			case 0 :if(strlen(cmdlineGetArgStr(2))  == 10 ){
+						ptr = &sysconfdup.err_phoneno[0];
+						memset(ptr,'\0',10);
+						start = cmdlineGetArgStr(2);
+						for (len = 0 ;len < 10 ;len++ ){
+							*ptr++ = *start++ ;
+						}
+						printf("Registered err phone[0] %s\n\r",cmdlineGetArgStr(2));
+					}
+					else{
+						printf("Error: Please enter 10 digit phone no\n\r");
+					}
+					break;
+			case 1 : if(strlen(cmdlineGetArgStr(2)) == 10 ){
+						ptr = &sysconfdup.err_phoneno[1];
+						memset(ptr,'\0',10);
+						start = cmdlineGetArgStr(2);
+						for (len = 0 ;len < 10 ;len++ ){
+							*ptr++ = *start++ ;
+						}
+						printf("Registered err phone[1] %s\n\r",cmdlineGetArgStr(2));
+					}
+					else{
+						printf("Error: Please enter 10 digit phone no\n\r");
+					}
+					break;
+
+			default: break;
+		}
+	}
+	else{
+		printf("ERROR\n\r");
+		printf("Format: errphone <location(0/1)> < 10 digit phoneno>\n\r");
+	}
 }
 //prints the system configurations
 void sysconfFunction(void){
@@ -419,6 +469,7 @@ void curconfFunction(void){
 void saveconfFunction(void){
 	/* Only program the flash if sysconfdup differs from sysconf */
 	if( memcmp((uint8_t *)&sysconf,(uint8_t *)&sysconfdup,sizeof(struct config)) != 0 ){
+		printf("Saving current configuration as system configuration\n\r");
 		flashpage( (uint8_t *)&sysconf, (uint8_t *)&sysconfdup, sizeof(struct config));
 		printf("Done!!\n\r");
 	}
@@ -433,6 +484,7 @@ void setdefFunction(void){
 
 	/* Only program the flash if system configuration  differs from default configurations */
 	if( memcmp((uint8_t *)&_sconf , (uint8_t *)&_sdefconf ,len ) ){
+		printf("Saving default  configuration as system configuration\n\r");
 		flashpage( &_sconf, &_sdefconf, len);
 		printf("Done!!\n\r");
 	}

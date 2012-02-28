@@ -22,7 +22,7 @@
 //------------------------Debug task variables for cmdline--------------------------
 
 /* Variable used for command line   */
-uint8_t Run;
+volatile uint8_t Run;
 uint8_t debug_buffer[15];
 cBuffer cmdBuffer;
 
@@ -467,8 +467,8 @@ void taskDebug (void* pdata){
 	Run = 1;
 	for (;;) {
 		while(Run){
-		  // pass characters received on the uart (serial port)
-		  // into the cmdline processor
+			// pass characters received on the uart (serial port)
+			// into the cmdline processor
 			while(bufferDataAvail(&cmdBuffer)){
 				cmdlineInputFunc(bufferGetFromFront(&cmdBuffer));
 				// run the cmdline execution functions
@@ -477,6 +477,7 @@ void taskDebug (void* pdata){
 		}
 		//printf("Exited From the app...\r");
 		CoTickDelay (500);
+
 	}
 }
 
