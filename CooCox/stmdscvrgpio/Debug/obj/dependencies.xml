@@ -3,7 +3,7 @@
    <includePath signature="/Icmsis /Icmsis_boot /ICOX\COX_Peripheral /ICOX /I.">
       <source file="..\..\cmsis_boot\system_stm32f10x.h" lastModified="132c90342e1">
       </source>
-      <source file="..\..\main.c" lastModified="132c90bb7b2">
+      <source file="..\..\main.c" lastModified="135af357219">
          <include file="..\..\COX\COX_Peripheral\stm32_pio.h"/>
       </source>
       <source file="..\..\cmsis_boot\stm32f10x.h" lastModified="132c90346b5">
@@ -30,10 +30,6 @@
       </source>
       <source file="..\..\example\GPIO_Example.c" lastModified="132c9036738">
          <include file="..\..\COX\COX_Peripheral\stm32_pio.h"/>
-      </source>
-      <source file="..\..\COX\COX_Peripheral\stm32_pio.c" lastModified="132c9034273">
-         <include file="..\..\COX\COX_Peripheral\stm32_pio.h"/>
-         <include file="..\..\cmsis_boot\stm32f10x.h"/>
       </source>
       <source file="..\..\cmsis\core_cm3.c" lastModified="132c9034769">
       </source>

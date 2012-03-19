@@ -9,12 +9,16 @@ int main(void)
 
 	COX_PIO_Dev LED0 = COX_PIN(2,8);
 	COX_PIO_Dev LED1 = COX_PIN(2,9);
+	COX_PIO_Dev SD = COX_PIN(2,10);
 
 	pi_pio.Init(LED0);
 	pi_pio.Init(LED1);
+	pi_pio.Init(SD);
 
 	pi_pio.Dir(LED0,1);
 	pi_pio.Dir(LED1,1);
+	pi_pio.Dir(SD,0);
+	pi_pio.Cfg(SD,1,0,0);
 
 
 	while(1)

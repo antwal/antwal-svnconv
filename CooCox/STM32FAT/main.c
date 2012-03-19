@@ -8,27 +8,85 @@
 #include "stm32_pio.h"
 #include <stm_spi_master.h>
 #include "di_msd.h"
+#include "Packet.h"
 
+#define packet "\n\t<WSN_DATA_PKT>\n\t"\
+                                        "\t<COUNT>%04x</COUNT>\n\t"\
+                                        "\t<BSID>%02x</BSID>\n\t"\
+                                        "\t<CROPID>%02x%02x</CROPID>\n\t"\
+                                        "\t<PLOTID>%04x</PLOTID>\n\t"\
+                                        "\t<MOTEID>%04x</MOTEID>\n\t"\
+                                        "\t<PARAID>%02x</PARAID>\n\t"\
+                                        "\t<PARAVAL>%04x</PARAVAL>\n\t"\
+                                        "\t<TIME>%04x%02x%02x%02x%02x%02x</TIME>\n\t"\
+                                "</WSN_DATA_PKT>\n"
+
+SensedData Data ={0x65, 1, 12, 0x1111, 0x1000 };
+char destdata[250];
 /*----------------------------------------------------------------------*/
 	/* FatFs sample project for generic microcontrollers (C)ChaN, 2010      */
 	/*----------------------------------------------------------------------*/
 //#include "Type.h"
 #include "ff.h"
 #include "diskio.h"
+#include "exti.h"
+
+uint8_t event = COX_EXTI_EDGE_RISING;
+void exti_handler(void)
+{
+	COX_PIO_Dev led1 = COX_PIN(2,8);
+	COX_PIO_Dev led2 = COX_PIN(2,9);
+	COX_PIO_Dev SD = COX_PIN(2,10);
+
+	pi_pio.Init(led1);
+	pi_pio.Init(led2);
+
+	pi_pio.Dir(led1,1);
+	pi_pio.Dir(led2,1);
+
+	if(event == COX_EXTI_EDGE_RISING )			// when sd card is removed
+	{
+		pi_pio.Out(led1,1);
+		pi_pio.Out(led2,0);
+		event = COX_EXTI_EDGE_FALLING;
+		pi_exti.Event(SD, event);
+	}
+	else if (event == COX_EXTI_EDGE_FALLING)		// when sd card is inserted
+	{
+		pi_pio.Out(led1,0);
+		pi_pio.Out(led2,1);
+		event = COX_EXTI_EDGE_RISING;
+		pi_exti.Event(SD, event);
+	}
+
+}
+
+void EXTIenable(void)
+{
+	COX_PIO_Dev SD = COX_PIN(2,10);
+	pi_exti.Init(SD);
+	pi_exti.Event(SD, event);
+	pi_exti.Handler(exti_handler);
+
+}
 
 
-COX_SERIAL_PI *UART = &pi_serial2;
+COX_SERIAL_PI *UART = &pi_serial3;
 MSD_Dev sd_var;
 //sMSD_CID *cid;
-MSD_Dev *sd= &sd_var;							// MSD instance
+MSD_Dev *sd= &sd_var;
+//attach and initilize the leds on stm32 board
+	COX_PIO_Dev LED0 = COX_PIN(2,8);// MSD instance
 
 
 	void die (		/* Stop with dying message */
 		FRESULT rc	/* FatFs return value */
+
 	)
 	{
 		printf("Failed with rc=%d\r\n",rc);
 		SS_HIGH(sd);
+		pi_pio.Out(LED0, 1);      /* Output hign level to turn on LED0 */
 		for (;;) ;
 	}
 
@@ -55,7 +113,7 @@ MSD_Dev *sd= &sd_var;							// MSD instance
 	}
 
 
-
+	FIL fil1, fil2;				/* File object */
 
 	// Initializing the variables required for MSD
 
@@ -67,11 +125,11 @@ int main(void)
 
 	FRESULT rc;				/* Result code */
 	FATFS fatfs;			/* File system object */
-	FIL fil;				/* File object */
+
 	DIR dir;				/* Directory object */
 	FILINFO fno;			/* File information object */
 	UINT bw, br, i;
-	BYTE buff[12];
+	BYTE buff[16];
 
 	COX_PIO_Dev CS = COX_PIN(2,7);			// PORTC7
 	COX_SPI_PI *SPI = &pi_spi1;
@@ -81,6 +139,14 @@ int main(void)
 	const char start[] = "start\n\r";
 	printf("%s",start);
 
+	//Initilize the LED0 and LED1 structure
+		pi_pio.Init(LED0);
+		//pi_pio.Init(LED1);
+
+		//configure the port as o/p port
+		pi_pio.Dir(LED0,1);
+
+		//pi_pio.Dir(LED1,1);
 	sd-> cs_pin = CS;
 	sd-> pio = PI;
 	sd-> spi = SPI;
@@ -96,82 +162,101 @@ int main(void)
 	ret = sd->spi->Init(COX_SPI_MODE0, 128);
 		if(ret == COX_SUCCESS)
 			printf("Spi INit done\n\r");
-
-	//ret = initialize(sd);				// uses SDCARD.c
+		EXTIenable();
 	ret = MSD_Init(sd);					// mmc_driver.c
-
-
-		//Size = MSD_GetChipSize(sd);
-	//printf("SD Card Size is=%d\n\r",Size);
-
-//	ret = MSD_GetCIDRegister(sd, cid);
-	//if(ret == COX_SUCCESS)
-		//printf("CID Succes\n\r");
-	//else
-	//printf("CID Failed\n\r");
+	Size = MSD_GetChipSize(sd);
+	printf("SD Card Size is=%d\n\r",Size);
 
 		f_mount(0, &fatfs);		/* Register volume work area (never fails) */
 
-		printf("Open a file \r\n");
+		printf("Open a store.xml to read\r\n");
+		//rc = f_open(&fil1, "./root/store.xml", FA_READ );
+		//if (rc) die(rc);
 
-		rc = f_open(&fil, "./root/HELLO.TXT", FA_READ );
+		printf("\r\nWrite to file (alldata.xml).\r\n");
+		rc = f_open(&fil2, "./root/alldata.xml", FA_WRITE|FA_READ);//| FA_CREATE_ALWAYS);
+		//if (rc) die(rc);
+		if(rc == 4)
+			rc = f_open(&fil2, "./root/alldata.xml", FA_WRITE|FA_READ| FA_CREATE_ALWAYS);
+		//rc = f_sync(&fil2);
 		if (rc) die(rc);
 
-		printf("\r\nType the file content.\r\n");
-		do {
-			rc = f_read(&fil, buff, sizeof(buff), &br);	/* Read a chunk of file */
-			if (rc || !br) break;			/* Error or end of file */
+		printf("OSize=%d\n\r",(uint16_t)f_size(&fil2));
 
-			printf("%s\n\r",buff);
-		}
-		while(f_eof(&fil)!= 1);
-			//for (i = 0; i < br; i++)		/* Type the data */
-				//putchar_uart1(buff[i]);
-//		}
-//		if (rc) die(rc);
-		const char buff1[] = "\r\nClose the file.\r\n";
-		printf("%s",buff1);
-		rc = f_close(&fil);
-		if (rc) die(rc);
-
-		printf("\r\nCreate a new file (hello.txt).\r\n");
-		rc = f_open(&fil, "./root/hello.txt", FA_WRITE );//| FA_CREATE_ALWAYS);
-		if (rc) die(rc);
-
-		printf("OSize=%d\n\r",(uint16_t)f_size(&fil));
+		sprintf(destdata, packet, 1, 10, Data.crop_id[0],Data.crop_id[1], Data.plot_id, Data.node_id, Data.sensor_id, Data.value,1,2,3,4,5,6);
+		printf("%s",destdata);
+#define ENDTAG "</DATA>"
+#define STARTTAG "<DATA>"
 		uint8_t res;
-		res = f_lseek(&fil, f_size(&fil));
-
-		printf("\r\nWrite a text data. (Hello world!)\r\n");
-		rc = f_write(&fil, "Hello world!\r\n", 14, &bw);
-		if (rc) die(rc);
-
-		if(res == FR_OK)
+		// IF something is there in destn file
+		if(!(f_size(&fil2) == 0))
 		{
-			printf("NSize=%d\n\r",(uint16_t)f_size(&fil));
+			// Overwriting the Endtag
+			res = f_lseek(&fil2, f_size(&fil2)- strlen(ENDTAG)-1);
+			// Read after the head tag
+	//		rc = f_read(&fil1, buff, strlen(STARTTAG), &br);
+	//		if (rc || !br) die(rc);
+	//		for(res = 0; res < br;res++)
+	//		printf(" %c",buff[res]);
+
+
+			//rc = f_write(&fil2, "\t", br,&bw);
+			//if (rc) die(rc);
 		}
-		//printf("%u bytes written.\r\n", bw);
-	 	//printf("bytes written.\r\n");
-		//printf("\r\nClose the file.\r\n");
-		rc = f_close(&fil);
+		//If nothing is present in the file
+		else{
+			rc = f_write(&fil2, STARTTAG, strlen(STARTTAG), &bw);
+			if (rc) die(rc);
+			rc = f_sync(&fil2);
+			if (rc) die(rc);
+		}
+
+
+		//do {
+			//rc = f_read(&fil1, buff, sizeof(buff), &br);	/* Read a chunk of file */
+			//if (rc || !br) break;							/* Error or end of file */
+			//for(res = 0; res < 16;res++)
+			//printf(" %c",buff[res]);
+			//res = f_lseek(&fil2, f_size(&fil2));
+
+			rc = f_write(&fil2, destdata, strlen(destdata),&bw);
+			if (rc) die(rc);
+			//rc = f_sync(&fil2);
+			//if (rc) die(rc);
+		//}
+		//while(f_eof(&fil1)!= 1);
+
+		// Add the ENDTAG at the end
+		rc = f_write(&fil2, ENDTAG, strlen(ENDTAG),&bw);
+		if (rc) die(rc);
+		//rc = f_sync(&fil2);
 		if (rc) die(rc);
 
-	/*	printf("\r\nOpen dir\r\n");
-		rc = f_opendir(&dir, "./root/");
-		if (rc) die(rc);
-*/
-//		printf("\r\nls:\r\n");
-		//for (;;) {
-//			rc = f_readdir(&dir, &fno);		/* Read a directory item */
-//			if (rc || !fno.fname[0]) break;	/* Error or end of dir */
-//			if (fno.fattrib & AM_DIR)
-//				printf("   <dir>  \r\n");
+//		rc = f_close(&fil1);
+//		if (rc) die(rc);
 
-//			else
-//				printf("   <dir>  \r\n");
-				//rprintf("%u  %s\r\n", fno.fsize, fno.fname);
-//		}
+		rc = f_close(&fil2);
 		if (rc) die(rc);
+
+		printf("\r\nopening(test.txt).\r\n");
+		rc = f_open(&fil2, "./root/alldata.xml",FA_READ);
+		//printf("\r\nNSize=%d\n\r",(uint16_t)f_size(&fil2));
+		res = f_lseek(&fil2, 0);
+
+		do {
+			rc = f_read(&fil2, buff, sizeof(buff), &br);	/* Read a chunk of file */
+			if (rc || !br) break;			/* Error or end of file */
+			for(res = 0; res < br;res++)
+			printf(" %c",buff[res]);
+		}
+		while(f_eof(&fil2)!= 1);
+
+
+		printf("%s", "\r\nClose the file.\r\n");
+
+		rc = f_close(&fil2);
+		if (rc) die(rc);
+
 
 		printf("\r\ncompleted.\r\n");
 		for (;;) ;

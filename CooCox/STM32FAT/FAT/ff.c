@@ -2234,7 +2234,8 @@ FRESULT f_mount (
 	return FR_OK;
 }
 
-
+#include <stm32_pio.h>
+extern COX_PIO_Dev LED0;
 
 
 /*-----------------------------------------------------------------------*/
@@ -2252,7 +2253,7 @@ FRESULT f_open (
 	BYTE *dir;
 	DEF_NAMEBUF;
 
-
+	pi_pio.Out(LED0, 0);      /* Output hign level to turn on LED0 */
 	fp->fs = 0;			/* Clear file object */
 
 #if !_FS_READONLY
@@ -2665,6 +2666,7 @@ FRESULT f_close (
 #endif
 	}
 #endif
+	pi_pio.Out(LED0, 1);      /* Output hign level to turn on LED0 */
 	if (res == FR_OK) fp->fs = 0;	/* Discard file object */
 	return res;
 #endif

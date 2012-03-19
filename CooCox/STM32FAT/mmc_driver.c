@@ -71,7 +71,7 @@ uint8_t MSD_Init(const MSD_Dev *sd)
 COX_Status MSD_WriteBlock(const MSD_Dev *sd, uint32_t adr, const uint8_t* wbuf, uint32_t wlen)
 {
   COX_Status rvalue = COX_ERROR;
-  uint8_t counter;
+  uint8_t counter = 0x10;
 
   /* MSD chip select low */
   SS_LOW(sd);
@@ -84,24 +84,24 @@ COX_Status MSD_WriteBlock(const MSD_Dev *sd, uint32_t adr, const uint8_t* wbuf, 
      while(MSD_GetResponse(sd, MSD_RESPONSE_NO_ERROR ) && counter > 0);
 
   	  if(counter > 0){
-  	   printf("Write SUCC=%d\n\r",wlen);
-    /* Send a MSD_DUMMY byte */
-   sd->spi->ReadWrite(MSD_DUMMY);
-    /* Send the data token to signify the start of the data */
-    sd->spi->ReadWrite(0xFE);
-    /* Write the block data to MSD : write count data by block */
-    sd->spi->Write(wbuf, wlen);
+  		  // printf("Write SUCC=%d\n\r",wlen);
+  		  /* Send a MSD_DUMMY byte */
+  		  sd->spi->ReadWrite(MSD_DUMMY);
+  		  /* Send the data token to signify the start of the data */
+  		  sd->spi->ReadWrite(0xFE);
+  		  /* Write the block data to MSD : write count data by block */
+  		  sd->spi->Write(wbuf, wlen);
 
-    /* Put CRC bytes (not really needed by us, but required by MSD) */
-    sd->spi->ReadWrite(MSD_DUMMY);
-    sd->spi->ReadWrite(MSD_DUMMY);
+  		  /* Put CRC bytes (not really needed by us, but required by MSD) */
+  		  sd->spi->ReadWrite(MSD_DUMMY);
+  		  sd->spi->ReadWrite(MSD_DUMMY);
 
-    /* Read data response */
-    if (MSD_GetDataResponse(sd) == MSD_DATA_OK) {
-    	printf("Write\n\r");
-      rvalue = COX_SUCCESS;
-    }
-  }
+  		  /* Read data response */
+  		  if (MSD_GetDataResponse(sd) == MSD_DATA_OK) {
+  			  //printf("Write\n\r");
+  			  rvalue = COX_SUCCESS;
+  		 }
+  	  }
 
   /* MSD chip select high */
   SS_HIGH(sd);
@@ -137,10 +137,10 @@ COX_Status MSD_ReadBlock(const MSD_Dev *sd, uint32_t adr, uint8_t* rbuf, uint32_
    }
    while(MSD_GetResponse(sd, MSD_RESPONSE_NO_ERROR ) && counter > 0);
    if(counter > 0){
-	   printf("Read SUCC\n\r");
+	   //printf("Read SUCC\n\r");
     /* Now look for the data token to signify the start of the data */
     if (!MSD_GetResponse(sd, MSD_START_DATA_SINGLE_BLOCK_READ))
-    { printf("Read\n\r");
+    { //printf("Read\n\r");
       /* Read the MSD block data : read NumByteToRead data */
       sd->spi->Read(rbuf, rlen);
 
@@ -524,7 +524,7 @@ uint8_t MSD_GetDataResponse(const MSD_Dev *sd)
 	 // delay();
     /* Read resonse */
     response = sd->spi->ReadWrite(MSD_DUMMY);
-    printf("RES=0x%x\t",response);
+    //printf("RES=0x%x\t",response);
     /* Mask unused bits */
     response &= 0x1F;
 
@@ -696,7 +696,7 @@ COX_Status MSD_GoIdleState(const MSD_Dev *sd)
   while (MSD_GetResponse(sd, MSD_RESPONSE_NO_ERROR) && counter > 0);
   if(!(counter > 0)){
 	  ACMD1 = 0;
-	  printf("ACMD1 Failed\n\r");
+	  printf("SDcard version2 not found\n\r");
   }
   else{
 	  CardType = CT_SD2;
@@ -716,7 +716,7 @@ COX_Status MSD_GoIdleState(const MSD_Dev *sd)
 	  }
 
 	  // Sending Command CMD1
-	  counter = 0x10;
+	  counter = 0xF0;
 	  do{
   		  MSD_SendCmd(sd, MSD_SEND_OP_COND, 0, 0xFF);
   		  counter --;

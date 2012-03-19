@@ -34,7 +34,7 @@ int main(void)
 	COX_SERIAL_PI *myUSART2 = &pi_serial2;
 
 	bufferInit(&recvBuffer, buffer, 50);
-	myUSART1->Init(9600);
+	myUSART1->Init(57600);
 	myUSART2->Init(115200);
 
 	myUSART1->Cfg( COX_SERIAL_INT_CONF, RXNE_ENABLE,0);
@@ -48,7 +48,7 @@ int main(void)
     	if(bufferDataAvail(&recvBuffer))
     	{
     		ch = bufferGetFromFront(&recvBuffer);
-    		printf(" %c",ch);
+    		printf(" 0x%x",ch);
     	}
     }
 }

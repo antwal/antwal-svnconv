@@ -13,6 +13,7 @@ void GPIO_example(void)
 	COX_PIO_Dev LED5 = COX_PIN(1,13);
 	COX_PIO_Dev LED6 = COX_PIN(1,14);
 	COX_PIO_Dev LED7 = COX_PIN(1,15);
+	COX_PIO_Dev SD = COX_PIN(2,10);
 
 	pi_pio.Init(LED0);
 	pi_pio.Init(LED1);
@@ -22,6 +23,7 @@ void GPIO_example(void)
 	pi_pio.Init(LED5);
 	pi_pio.Init(LED6);
 	pi_pio.Init(LED7);
+	pi_pio.Init(SD);
 
 	pi_pio.Dir(LED0,1);
 	pi_pio.Dir(LED1,1);
@@ -31,6 +33,9 @@ void GPIO_example(void)
 	pi_pio.Dir(LED5,1);
 	pi_pio.Dir(LED6,1);
 	pi_pio.Dir(LED7,1);
+	pi_pio.Dir(SD,0);
+	pi_pio.Cfg(SD,1,0,0);		// PULLUP
+
 
     while(1)
     {

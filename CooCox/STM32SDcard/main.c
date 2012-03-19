@@ -8,7 +8,7 @@
 #include<stm_spi_master.h>
 #include "di_msd.h"
 
-COX_SERIAL_PI *UART = &pi_serial2;
+COX_SERIAL_PI *UART = &pi_serial3;
 sMSD_CID *cid;
 
 

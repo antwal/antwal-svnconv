@@ -22,11 +22,11 @@
       <target file="system_stm32f10x.o" lastModified="132d4aeb088">
          <source file="..\..\cmsis_boot\system_stm32f10x.c" lastModified="132cf1f98cb"/>
       </target>
-      <target file="stm_spi_master.o" lastModified="132d4aeb4c2">
-         <source file="..\..\COX\COX_Peripheral\stm_spi_master.c" lastModified="132d3b32968"/>
+      <target file="stm_spi_master.o" lastModified="1359504f3bc">
+         <source file="..\..\COX\COX_Peripheral\stm_spi_master.c" lastModified="1359504e9c2"/>
       </target>
-      <target file="main.o" lastModified="132d4aeb3fa">
-         <source file="..\..\main.c" lastModified="132d49c73e8"/>
+      <target file="main.o" lastModified="13591cb8015">
+         <source file="..\..\main.c" lastModified="13591cb6f11"/>
       </target>
       <target file="stm32f10x_rcc.o" lastModified="132d4aeb67b">
          <source file="..\..\stm_lib\src\stm32f10x_rcc.c" lastModified="132cf560622"/>

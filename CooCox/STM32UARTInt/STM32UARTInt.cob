@@ -14,6 +14,6 @@
     <Component id="c00bf971-96ed-11df-80ae-001d7d723e56" name="RTC"/>
     <Component id="994b0730-4bc0-11e0-8e4a-001d7dcd0baf" name="CMSIS Boot"/>
     <Component id="64d2c4e0-4e11-11e0-8ec0-001d7dcd0baf" name="MISC"/>
-    <Component id="f3105e00-4eb8-11e0-a913-001fd0c63d33" name="STM32_USART"/>
   </Components>
+  <ExcludedFiles/>
 </Project>

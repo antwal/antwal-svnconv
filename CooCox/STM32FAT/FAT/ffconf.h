@@ -14,7 +14,7 @@
 / Functions and Buffer Configurations
 /----------------------------------------------------------------------------*/
 
-#define	_FS_TINY		0	/* 0:Normal or 1:Tiny */
+#define	_FS_TINY		1	/* 0:Normal or 1:Tiny */
 /* When _FS_TINY is set to 1, FatFs uses the sector buffer in the file system
 /  object instead of the sector buffer in the individual file object for file
 /  data transfer. This reduces memory consumption 512 bytes each file object. */
@@ -40,11 +40,11 @@
 /* To enable string functions, set _USE_STRFUNC to 1 or 2. */
 
 
-#define	_USE_MKFS		1	/* 0:Disable or 1:Enable */
+#define	_USE_MKFS		0	/* 0:Disable or 1:Enable */
 /* To enable f_mkfs function, set _USE_MKFS to 1 and set _FS_READONLY to 0 */
 
 
-#define	_USE_FORWARD	0	/* 0:Disable or 1:Enable */
+#define	_USE_FORWARD	1	/* 0:Disable or 1:Enable */
 /* To enable f_forward function, set _USE_FORWARD to 1 and set _FS_TINY to 1. */
 
 
@@ -91,7 +91,7 @@
 
 
 #define	_USE_LFN	0		/* 0 to 3 */
-#define	_MAX_LFN	255		/* Maximum LFN length to handle (12 to 255) */
+#define	_MAX_LFN	20		/* Maximum LFN length to handle (12 to 255) */
 /* The _USE_LFN option switches the LFN support.
 /
 /   0: Disable LFN feature. _MAX_LFN and _LFN_UNICODE have no effect.
@@ -125,7 +125,7 @@
 / Physical Drive Configurations
 /----------------------------------------------------------------------------*/
 
-#define _VOLUMES	2
+#define _VOLUMES	1
 /* Number of volumes (logical drives) to be used. */
 
 

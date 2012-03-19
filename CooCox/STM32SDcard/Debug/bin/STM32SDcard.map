@@ -527,8 +527,8 @@ LOAD ..\obj\stm32f10x_rcc.o
 LOAD ..\obj\syscalls.o
 LOAD ..\obj\mmc_driver.o
 START GROUP
-LOAD j:/cocenter/cooide/gcc/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2\libgcc.a
-LOAD j:/cocenter/cooide/gcc/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2\libc.a
+LOAD j:/cocenter/coide/gcc/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2\libgcc.a
+LOAD j:/cocenter/coide/gcc/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2\libc.a
 END GROUP
 OUTPUT(STM32SDcard.elf elf32-littlearm)
 
@@ -560,19 +560,19 @@ OUTPUT(STM32SDcard.elf elf32-littlearm)
  .debug_info    0x00005336      0x440 ..\obj\syscalls.o
  .debug_info    0x00005776      0xb95 ..\obj\mmc_driver.o
 
-.debug_line     0x00000000     0x260e
+.debug_line     0x00000000     0x2563
  .debug_line    0x00000000       0xa9 ..\obj\startup_stm32f10x_md_vl.o
  .debug_line    0x000000a9      0x273 ..\obj\stm32_pio.o
  .debug_line    0x0000031c      0x284 ..\obj\core_cm3.o
  .debug_line    0x000005a0      0x218 ..\obj\system_stm32f10x.o
  .debug_line    0x000007b8      0x4c3 ..\obj\sdcard.o
  .debug_line    0x00000c7b      0x4d1 ..\obj\STM32_USART.o
- .debug_line    0x0000114c      0x1d5 ..\obj\main.o
- .debug_line    0x00001321      0x419 ..\obj\stm_spi_master.o
- .debug_line    0x0000173a      0x433 ..\obj\printf.o
- .debug_line    0x00001b6d      0x491 ..\obj\stm32f10x_rcc.o
- .debug_line    0x00001ffe      0x192 ..\obj\syscalls.o
- .debug_line    0x00002190      0x47e ..\obj\mmc_driver.o
+ .debug_line    0x0000114c      0x189 ..\obj\main.o
+ .debug_line    0x000012d5      0x3ba ..\obj\stm_spi_master.o
+ .debug_line    0x0000168f      0x433 ..\obj\printf.o
+ .debug_line    0x00001ac2      0x491 ..\obj\stm32f10x_rcc.o
+ .debug_line    0x00001f53      0x192 ..\obj\syscalls.o
+ .debug_line    0x000020e5      0x47e ..\obj\mmc_driver.o
 
 .debug_loc      0x00000000     0x2418
  .debug_loc     0x00000000       0x64 ..\obj\startup_stm32f10x_md_vl.o
@@ -655,7 +655,7 @@ OUTPUT(STM32SDcard.elf elf32-littlearm)
  .debug_ranges  0x000004e8       0x50 ..\obj\syscalls.o
  .debug_ranges  0x00000538       0x90 ..\obj\mmc_driver.o
 
-.debug_str      0x00000000     0x2137
+.debug_str      0x00000000     0x2131
  .debug_str     0x00000000       0xc3 ..\obj\startup_stm32f10x_md_vl.o
                                  0xe2 (size before relaxing)
  .debug_str     0x000000c3      0x1c1 ..\obj\stm32_pio.o
@@ -668,20 +668,20 @@ OUTPUT(STM32SDcard.elf elf32-littlearm)
                                 0x312 (size before relaxing)
  .debug_str     0x0000071a      0x924 ..\obj\STM32_USART.o
                                 0xad6 (size before relaxing)
- .debug_str     0x0000103e      0x217 ..\obj\main.o
-                                0x35a (size before relaxing)
- .debug_str     0x00001255      0x268 ..\obj\stm_spi_master.o
-                                0x5d4 (size before relaxing)
- .debug_str     0x000014bd      0x4a5 ..\obj\printf.o
+ .debug_str     0x0000103e      0x224 ..\obj\main.o
+                                0x334 (size before relaxing)
+ .debug_str     0x00001262      0x255 ..\obj\stm_spi_master.o
+                                0x5ae (size before relaxing)
+ .debug_str     0x000014b7      0x4a5 ..\obj\printf.o
                                 0x61a (size before relaxing)
- .debug_str     0x00001962      0x364 ..\obj\stm32f10x_rcc.o
+ .debug_str     0x0000195c      0x364 ..\obj\stm32f10x_rcc.o
                                 0x5ce (size before relaxing)
- .debug_str     0x00001cc6      0x14b ..\obj\syscalls.o
+ .debug_str     0x00001cc0      0x14b ..\obj\syscalls.o
                                 0x253 (size before relaxing)
- .debug_str     0x00001e11      0x326 ..\obj\mmc_driver.o
+ .debug_str     0x00001e0b      0x326 ..\obj\mmc_driver.o
                                 0x527 (size before relaxing)
 
-.comment        0x00000000       0x2a
+.comment        0x00000000       0x3b
  .comment       0x00000000       0x2a ..\obj\startup_stm32f10x_md_vl.o
                                  0x2b (size before relaxing)
  .comment       0x00000000       0x2b ..\obj\stm32_pio.o
@@ -689,8 +689,9 @@ OUTPUT(STM32SDcard.elf elf32-littlearm)
  .comment       0x00000000       0x2b ..\obj\system_stm32f10x.o
  .comment       0x00000000       0x2b ..\obj\sdcard.o
  .comment       0x00000000       0x2b ..\obj\STM32_USART.o
- .comment       0x00000000       0x2b ..\obj\main.o
- .comment       0x00000000       0x2b ..\obj\stm_spi_master.o
+ .comment       0x0000002a       0x11 ..\obj\main.o
+                                 0x12 (size before relaxing)
+ .comment       0x00000000       0x12 ..\obj\stm_spi_master.o
  .comment       0x00000000       0x2b ..\obj\printf.o
  .comment       0x00000000       0x2b ..\obj\stm32f10x_rcc.o
  .comment       0x00000000       0x2b ..\obj\syscalls.o

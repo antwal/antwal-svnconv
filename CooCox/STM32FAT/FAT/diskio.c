@@ -37,7 +37,7 @@ DSTATUS disk_status ( BYTE drv)
 				s |= STA_NOINIT;
 			}
 			sd->spi->Read(ocr,4);
-			SS_HIGH(sd);
+			deselect();
 
 		}
 	}

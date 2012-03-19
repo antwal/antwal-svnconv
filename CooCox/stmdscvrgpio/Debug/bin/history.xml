@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <history>
-   <processor signature="4.5.2 -O0 -nostartfiles -Map=stmdscvrgpio.map -mcpu=cortex-m3 -mthumb -LJ:\CoCenter\CooIDE\workspace\stmdscvrgpio --gc-sections -TJ:\CoCenter\CooIDE\workspace\stmdscvrgpio\link.ld -g">
-      <target file="stmdscvrgpio.elf" lastModified="132c90bc455">
+   <processor signature="4.5.2 -O0 -nostartfiles -Map=stmdscvrgpio.map -mcpu=cortex-m3 -mthumb -LJ:\CooCox\stmdscvrgpio --gc-sections -TJ:\CooCox\stmdscvrgpio\link.ld -g">
+      <target file="stmdscvrgpio.elf" lastModified="135af3befc9">
          <source file="..\obj\startup_stm32f10x_md_vl.o" lastModified="132c90371fa"/>
-         <source file="..\obj\stm32_pio.o" lastModified="132c90372a5"/>
+         <source file="..\obj\stm32_pio.o" lastModified="135af3becda"/>
          <source file="..\obj\core_cm3.o" lastModified="132c9037327"/>
          <source file="..\obj\system_stm32f10x.o" lastModified="132c90373bd"/>
-         <source file="..\obj\main.o" lastModified="132c90bc3c9"/>
+         <source file="..\obj\main.o" lastModified="135af358992"/>
          <source file="..\obj\GPIO_Example.o" lastModified="132c9037471"/>
       </target>
    </processor>

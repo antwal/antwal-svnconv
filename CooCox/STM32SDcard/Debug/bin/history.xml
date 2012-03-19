@@ -1,15 +1,15 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <history>
-   <processor signature="4.5.2 -O0 -nostartfiles -Map=STM32SDcard.map -mcpu=cortex-m3 -mthumb -LJ:\CoCenter\CooIDE\workspace\STM32SDcard --gc-sections -TJ:\CoCenter\CooIDE\workspace\STM32SDcard\link.ld -g">
-      <target file="STM32SDcard.elf" lastModified="132d4aeb94c">
+   <processor signature="4.5.2 -O0 -nostartfiles -Map=STM32SDcard.map -mcpu=cortex-m3 -mthumb -LJ:\CooCox\STM32SDcard --gc-sections -TJ:\CooCox\STM32SDcard\link.ld -g">
+      <target file="STM32SDcard.elf" lastModified="1359504f6a1">
          <source file="..\obj\startup_stm32f10x_md_vl.o" lastModified="132d4aeaf0c"/>
          <source file="..\obj\stm32_pio.o" lastModified="132d4aeaf8e"/>
          <source file="..\obj\core_cm3.o" lastModified="132d4aeb010"/>
          <source file="..\obj\system_stm32f10x.o" lastModified="132d4aeb088"/>
          <source file="..\obj\sdcard.o" lastModified="132d4aeb24b"/>
          <source file="..\obj\STM32_USART.o" lastModified="132d4aeb309"/>
-         <source file="..\obj\main.o" lastModified="132d4aeb3fa"/>
-         <source file="..\obj\stm_spi_master.o" lastModified="132d4aeb4c2"/>
+         <source file="..\obj\main.o" lastModified="13591cb8015"/>
+         <source file="..\obj\stm_spi_master.o" lastModified="1359504f3bc"/>
          <source file="..\obj\printf.o" lastModified="132d4aeb59e"/>
          <source file="..\obj\stm32f10x_rcc.o" lastModified="132d4aeb67b"/>
          <source file="..\obj\syscalls.o" lastModified="132d4aeb6fd"/>

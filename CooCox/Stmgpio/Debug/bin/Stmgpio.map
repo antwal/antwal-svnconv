@@ -191,7 +191,7 @@ Linker script and memory map
 
                 0x20005000                _eram = 0x20005000
 
-.text           0x08000000      0x964
+.text           0x08000000      0xae0
  *(.isr_vector .isr_vector.*)
  .isr_vector    0x08000000      0x10c ..\obj\startup_stm32f10x_md.o
                 0x08000000                g_pfnVectors
@@ -207,89 +207,89 @@ Linker script and memory map
  .text.STM32_PIO_Out
                 0x080004a0       0x74 ..\obj\stm32_pio.o
  .text.STM32_PIO_Cfg
-                0x08000514       0x24 ..\obj\stm32_pio.o
+                0x08000514      0x16c ..\obj\stm32_pio.o
  .text.SystemInit
-                0x08000538       0x68 ..\obj\system_stm32f10x.o
-                0x08000538                SystemInit
+                0x08000680       0x68 ..\obj\system_stm32f10x.o
+                0x08000680                SystemInit
  .text.SetSysClock
-                0x080005a0        0xc ..\obj\system_stm32f10x.o
+                0x080006e8        0xc ..\obj\system_stm32f10x.o
  .text.SetSysClockTo72
-                0x080005ac      0x108 ..\obj\system_stm32f10x.o
+                0x080006f4      0x108 ..\obj\system_stm32f10x.o
  .text.Default_Reset_Handler
-                0x080006b4       0x68 ..\obj\startup_stm32f10x_md.o
-                0x080006b4                Default_Reset_Handler
-                0x080006b4                Reset_Handler
+                0x080007fc       0x68 ..\obj\startup_stm32f10x_md.o
+                0x080007fc                Default_Reset_Handler
+                0x080007fc                Reset_Handler
  .text.Default_Handler
-                0x0800071c        0x8 ..\obj\startup_stm32f10x_md.o
-                0x0800071c                EXTI2_IRQHandler
-                0x0800071c                DebugMon_Handler
-                0x0800071c                TIM1_CC_IRQHandler
-                0x0800071c                HardFault_Handler
-                0x0800071c                SysTick_Handler
-                0x0800071c                PVD_IRQHandler
-                0x0800071c                PendSV_Handler
-                0x0800071c                NMI_Handler
-                0x0800071c                EXTI3_IRQHandler
-                0x0800071c                EXTI0_IRQHandler
-                0x0800071c                I2C2_EV_IRQHandler
-                0x0800071c                UsageFault_Handler
-                0x0800071c                ADC1_2_IRQHandler
-                0x0800071c                SPI1_IRQHandler
-                0x0800071c                TAMPER_IRQHandler
-                0x0800071c                DMA1_Channel4_IRQHandler
-                0x0800071c                USART3_IRQHandler
-                0x0800071c                RTC_IRQHandler
-                0x0800071c                DMA1_Channel7_IRQHandler
-                0x0800071c                CAN1_RX1_IRQHandler
-                0x0800071c                TIM4_IRQHandler
-                0x0800071c                I2C1_EV_IRQHandler
-                0x0800071c                DMA1_Channel6_IRQHandler
-                0x0800071c                TIM3_IRQHandler
-                0x0800071c                RCC_IRQHandler
-                0x0800071c                TIM1_TRG_COM_IRQHandler
-                0x0800071c                DMA1_Channel1_IRQHandler
-                0x0800071c                EXTI15_10_IRQHandler
-                0x0800071c                EXTI9_5_IRQHandler
-                0x0800071c                SPI2_IRQHandler
-                0x0800071c                MemManage_Handler
-                0x0800071c                SVC_Handler
-                0x0800071c                DMA1_Channel5_IRQHandler
-                0x0800071c                EXTI4_IRQHandler
-                0x0800071c                USB_LP_CAN1_RX0_IRQHandler
-                0x0800071c                USB_HP_CAN1_TX_IRQHandler
-                0x0800071c                DMA1_Channel3_IRQHandler
-                0x0800071c                TIM1_UP_IRQHandler
-                0x0800071c                WWDG_IRQHandler
-                0x0800071c                TIM2_IRQHandler
-                0x0800071c                TIM1_BRK_IRQHandler
-                0x0800071c                EXTI1_IRQHandler
-                0x0800071c                RTCAlarm_IRQHandler
-                0x0800071c                USART2_IRQHandler
-                0x0800071c                I2C2_ER_IRQHandler
-                0x0800071c                DMA1_Channel2_IRQHandler
-                0x0800071c                CAN1_SCE_IRQHandler
-                0x0800071c                FLASH_IRQHandler
-                0x0800071c                BusFault_Handler
-                0x0800071c                USART1_IRQHandler
-                0x0800071c                I2C1_ER_IRQHandler
-                0x0800071c                USBWakeUp_IRQHandler
- .text.main     0x08000724        0xc ..\obj\main.o
-                0x08000724                main
+                0x08000864        0x8 ..\obj\startup_stm32f10x_md.o
+                0x08000864                EXTI2_IRQHandler
+                0x08000864                DebugMon_Handler
+                0x08000864                TIM1_CC_IRQHandler
+                0x08000864                HardFault_Handler
+                0x08000864                SysTick_Handler
+                0x08000864                PVD_IRQHandler
+                0x08000864                PendSV_Handler
+                0x08000864                NMI_Handler
+                0x08000864                EXTI3_IRQHandler
+                0x08000864                EXTI0_IRQHandler
+                0x08000864                I2C2_EV_IRQHandler
+                0x08000864                UsageFault_Handler
+                0x08000864                ADC1_2_IRQHandler
+                0x08000864                SPI1_IRQHandler
+                0x08000864                TAMPER_IRQHandler
+                0x08000864                DMA1_Channel4_IRQHandler
+                0x08000864                USART3_IRQHandler
+                0x08000864                RTC_IRQHandler
+                0x08000864                DMA1_Channel7_IRQHandler
+                0x08000864                CAN1_RX1_IRQHandler
+                0x08000864                TIM4_IRQHandler
+                0x08000864                I2C1_EV_IRQHandler
+                0x08000864                DMA1_Channel6_IRQHandler
+                0x08000864                TIM3_IRQHandler
+                0x08000864                RCC_IRQHandler
+                0x08000864                TIM1_TRG_COM_IRQHandler
+                0x08000864                DMA1_Channel1_IRQHandler
+                0x08000864                EXTI15_10_IRQHandler
+                0x08000864                EXTI9_5_IRQHandler
+                0x08000864                SPI2_IRQHandler
+                0x08000864                MemManage_Handler
+                0x08000864                SVC_Handler
+                0x08000864                DMA1_Channel5_IRQHandler
+                0x08000864                EXTI4_IRQHandler
+                0x08000864                USB_LP_CAN1_RX0_IRQHandler
+                0x08000864                USB_HP_CAN1_TX_IRQHandler
+                0x08000864                DMA1_Channel3_IRQHandler
+                0x08000864                TIM1_UP_IRQHandler
+                0x08000864                WWDG_IRQHandler
+                0x08000864                TIM2_IRQHandler
+                0x08000864                TIM1_BRK_IRQHandler
+                0x08000864                EXTI1_IRQHandler
+                0x08000864                RTCAlarm_IRQHandler
+                0x08000864                USART2_IRQHandler
+                0x08000864                I2C2_ER_IRQHandler
+                0x08000864                DMA1_Channel2_IRQHandler
+                0x08000864                CAN1_SCE_IRQHandler
+                0x08000864                FLASH_IRQHandler
+                0x08000864                BusFault_Handler
+                0x08000864                USART1_IRQHandler
+                0x08000864                I2C1_ER_IRQHandler
+                0x08000864                USBWakeUp_IRQHandler
+ .text.main     0x0800086c        0xc ..\obj\main.o
+                0x0800086c                main
  .text.GPIO_example
-                0x08000730      0x220 ..\obj\GPIO_Example.o
-                0x08000730                GPIO_example
+                0x08000878      0x254 ..\obj\GPIO_Example.o
+                0x08000878                GPIO_example
  *(.glue_7t)
  .glue_7t       0x00000000        0x0 linker stubs
  *(.glue_7)
  .glue_7        0x00000000        0x0 linker stubs
  *(.rodata .rodata* .gnu.linkonce.r.*)
- .rodata        0x08000950       0x14 ..\obj\stm32_pio.o
-                0x08000950                pi_pio
+ .rodata        0x08000acc       0x14 ..\obj\stm32_pio.o
+                0x08000acc                pi_pio
 
-.vfp11_veneer   0x08000964        0x0
+.vfp11_veneer   0x08000ae0        0x0
  .vfp11_veneer  0x00000000        0x0 linker stubs
 
-.v4_bx          0x08000964        0x0
+.v4_bx          0x08000ae0        0x0
  .v4_bx         0x00000000        0x0 linker stubs
 
 .ARM.extab
@@ -297,11 +297,11 @@ Linker script and memory map
 
 .ARM.exidx
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-                0x08000964                . = ALIGN (0x4)
-                0x08000964                _etext = .
-                0x08000964                _sidata = .
+                0x08000ae0                . = ALIGN (0x4)
+                0x08000ae0                _etext = .
+                0x08000ae0                _sidata = .
 
-.data           0x20000000        0x0 load address 0x08000964
+.data           0x20000000        0x0 load address 0x08000ae0
                 0x20000000                _sdata = .
  *(.data .data.*)
                 0x20000000                . = ALIGN (0x4)
@@ -331,63 +331,63 @@ LOAD ..\obj\stm32f10x_rcc.o
 LOAD ..\obj\syscalls.o
 LOAD ..\obj\GPIO_Example.o
 START GROUP
-LOAD j:/cocenter/cooide/gcc/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2\libgcc.a
-LOAD j:/cocenter/cooide/gcc/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2\libc.a
+LOAD j:/cocenter/coide/gcc/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2\libgcc.a
+LOAD j:/cocenter/coide/gcc/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2\libc.a
 END GROUP
 OUTPUT(Stmgpio.elf elf32-littlearm)
 
-.debug_abbrev   0x00000000      0x98e
- .debug_abbrev  0x00000000      0x150 ..\obj\stm32_pio.o
- .debug_abbrev  0x00000150       0xd7 ..\obj\core_cm3.o
- .debug_abbrev  0x00000227      0x18f ..\obj\system_stm32f10x.o
- .debug_abbrev  0x000003b6       0xa5 ..\obj\startup_stm32f10x_md.o
- .debug_abbrev  0x0000045b      0x1a6 ..\obj\stm32f10x_gpio.o
- .debug_abbrev  0x00000601       0x38 ..\obj\main.o
- .debug_abbrev  0x00000639      0x193 ..\obj\stm32f10x_rcc.o
- .debug_abbrev  0x000007cc       0xe0 ..\obj\syscalls.o
- .debug_abbrev  0x000008ac       0xe2 ..\obj\GPIO_Example.o
+.debug_abbrev   0x00000000      0x99b
+ .debug_abbrev  0x00000000      0x15d ..\obj\stm32_pio.o
+ .debug_abbrev  0x0000015d       0xd7 ..\obj\core_cm3.o
+ .debug_abbrev  0x00000234      0x18f ..\obj\system_stm32f10x.o
+ .debug_abbrev  0x000003c3       0xa5 ..\obj\startup_stm32f10x_md.o
+ .debug_abbrev  0x00000468      0x1a6 ..\obj\stm32f10x_gpio.o
+ .debug_abbrev  0x0000060e       0x38 ..\obj\main.o
+ .debug_abbrev  0x00000646      0x193 ..\obj\stm32f10x_rcc.o
+ .debug_abbrev  0x000007d9       0xe0 ..\obj\syscalls.o
+ .debug_abbrev  0x000008b9       0xe2 ..\obj\GPIO_Example.o
 
-.debug_info     0x00000000     0x273d
- .debug_info    0x00000000      0x514 ..\obj\stm32_pio.o
- .debug_info    0x00000514      0x54c ..\obj\core_cm3.o
- .debug_info    0x00000a60      0x4a0 ..\obj\system_stm32f10x.o
- .debug_info    0x00000f00      0x135 ..\obj\startup_stm32f10x_md.o
- .debug_info    0x00001035      0x727 ..\obj\stm32f10x_gpio.o
- .debug_info    0x0000175c       0x4a ..\obj\main.o
- .debug_info    0x000017a6      0x905 ..\obj\stm32f10x_rcc.o
- .debug_info    0x000020ab      0x444 ..\obj\syscalls.o
- .debug_info    0x000024ef      0x24e ..\obj\GPIO_Example.o
+.debug_info     0x00000000     0x2780
+ .debug_info    0x00000000      0x54a ..\obj\stm32_pio.o
+ .debug_info    0x0000054a      0x54c ..\obj\core_cm3.o
+ .debug_info    0x00000a96      0x4a0 ..\obj\system_stm32f10x.o
+ .debug_info    0x00000f36      0x135 ..\obj\startup_stm32f10x_md.o
+ .debug_info    0x0000106b      0x727 ..\obj\stm32f10x_gpio.o
+ .debug_info    0x00001792       0x4a ..\obj\main.o
+ .debug_info    0x000017dc      0x905 ..\obj\stm32f10x_rcc.o
+ .debug_info    0x000020e1      0x444 ..\obj\syscalls.o
+ .debug_info    0x00002525      0x25b ..\obj\GPIO_Example.o
 
-.debug_line     0x00000000     0x17cb
- .debug_line    0x00000000      0x2fc ..\obj\stm32_pio.o
- .debug_line    0x000002fc      0x2e0 ..\obj\core_cm3.o
- .debug_line    0x000005dc      0x287 ..\obj\system_stm32f10x.o
- .debug_line    0x00000863       0xa2 ..\obj\startup_stm32f10x_md.o
- .debug_line    0x00000905      0x3f8 ..\obj\stm32f10x_gpio.o
- .debug_line    0x00000cfd       0x5f ..\obj\main.o
- .debug_line    0x00000d5c      0x4fb ..\obj\stm32f10x_rcc.o
- .debug_line    0x00001257      0x385 ..\obj\syscalls.o
- .debug_line    0x000015dc      0x1ef ..\obj\GPIO_Example.o
+.debug_line     0x00000000     0x152a
+ .debug_line    0x00000000      0x2a4 ..\obj\stm32_pio.o
+ .debug_line    0x000002a4      0x2a7 ..\obj\core_cm3.o
+ .debug_line    0x0000054b      0x228 ..\obj\system_stm32f10x.o
+ .debug_line    0x00000773       0x8f ..\obj\startup_stm32f10x_md.o
+ .debug_line    0x00000802      0x386 ..\obj\stm32f10x_gpio.o
+ .debug_line    0x00000b88       0x4c ..\obj\main.o
+ .debug_line    0x00000bd4      0x489 ..\obj\stm32f10x_rcc.o
+ .debug_line    0x0000105d      0x326 ..\obj\syscalls.o
+ .debug_line    0x00001383      0x1a7 ..\obj\GPIO_Example.o
 
-.debug_macinfo  0x00000000    0xe718e
+.debug_macinfo  0x00000000    0xe71aa
  .debug_macinfo
-                0x00000000    0x3474a ..\obj\stm32_pio.o
+                0x00000000    0x34766 ..\obj\stm32_pio.o
  .debug_macinfo
-                0x0003474a     0x2af9 ..\obj\core_cm3.o
+                0x00034766     0x2af9 ..\obj\core_cm3.o
  .debug_macinfo
-                0x00037243    0x345e6 ..\obj\system_stm32f10x.o
+                0x0003725f    0x345e6 ..\obj\system_stm32f10x.o
  .debug_macinfo
-                0x0006b829     0x2239 ..\obj\startup_stm32f10x_md.o
+                0x0006b845     0x2239 ..\obj\startup_stm32f10x_md.o
  .debug_macinfo
-                0x0006da62    0x38655 ..\obj\stm32f10x_gpio.o
+                0x0006da7e    0x38655 ..\obj\stm32f10x_gpio.o
  .debug_macinfo
-                0x000a60b7     0x2203 ..\obj\main.o
+                0x000a60d3     0x2203 ..\obj\main.o
  .debug_macinfo
-                0x000a82ba    0x36da3 ..\obj\stm32f10x_rcc.o
+                0x000a82d6    0x36da3 ..\obj\stm32f10x_rcc.o
  .debug_macinfo
-                0x000df05d     0x54c1 ..\obj\syscalls.o
+                0x000df079     0x54c1 ..\obj\syscalls.o
  .debug_macinfo
-                0x000e451e     0x2c70 ..\obj\GPIO_Example.o
+                0x000e453a     0x2c70 ..\obj\GPIO_Example.o
 
 .debug_loc      0x00000000     0x137c
  .debug_loc     0x00000000      0x150 ..\obj\stm32_pio.o
@@ -469,37 +469,37 @@ OUTPUT(Stmgpio.elf elf32-littlearm)
  .debug_ranges  0x000002e0       0x50 ..\obj\syscalls.o
  .debug_ranges  0x00000330       0x10 ..\obj\GPIO_Example.o
 
-.debug_str      0x00000000      0xebd
- .debug_str     0x00000000      0x1be ..\obj\stm32_pio.o
-                                0x202 (size before relaxing)
- .debug_str     0x000001be      0x16f ..\obj\core_cm3.o
+.debug_str      0x00000000      0xdff
+ .debug_str     0x00000000      0x1ab ..\obj\stm32_pio.o
+                                0x1ef (size before relaxing)
+ .debug_str     0x000001ab      0x15c ..\obj\core_cm3.o
+                                0x216 (size before relaxing)
+ .debug_str     0x00000307      0x11a ..\obj\system_stm32f10x.o
                                 0x229 (size before relaxing)
- .debug_str     0x0000032d      0x12d ..\obj\system_stm32f10x.o
-                                0x23c (size before relaxing)
- .debug_str     0x0000045a       0xb0 ..\obj\startup_stm32f10x_md.o
-                                 0xdb (size before relaxing)
- .debug_str     0x0000050a      0x3a8 ..\obj\stm32f10x_gpio.o
-                                0x476 (size before relaxing)
- .debug_str     0x000008b2       0x31 ..\obj\main.o
-                                 0x3d (size before relaxing)
- .debug_str     0x000008e3      0x3da ..\obj\stm32f10x_rcc.o
-                                0x577 (size before relaxing)
- .debug_str     0x00000cbd      0x18f ..\obj\syscalls.o
-                                0x24b (size before relaxing)
- .debug_str     0x00000e4c       0x71 ..\obj\GPIO_Example.o
-                                0x14d (size before relaxing)
+ .debug_str     0x00000421       0x9d ..\obj\startup_stm32f10x_md.o
+                                 0xc8 (size before relaxing)
+ .debug_str     0x000004be      0x395 ..\obj\stm32f10x_gpio.o
+                                0x463 (size before relaxing)
+ .debug_str     0x00000853       0x1e ..\obj\main.o
+                                 0x2a (size before relaxing)
+ .debug_str     0x00000871      0x3c7 ..\obj\stm32f10x_rcc.o
+                                0x564 (size before relaxing)
+ .debug_str     0x00000c38      0x169 ..\obj\syscalls.o
+                                0x225 (size before relaxing)
+ .debug_str     0x00000da1       0x5e ..\obj\GPIO_Example.o
+                                0x13a (size before relaxing)
 
-.comment        0x00000000       0x2a
- .comment       0x00000000       0x2a ..\obj\stm32_pio.o
-                                 0x2b (size before relaxing)
- .comment       0x00000000       0x2b ..\obj\core_cm3.o
- .comment       0x00000000       0x2b ..\obj\system_stm32f10x.o
- .comment       0x00000000       0x2b ..\obj\startup_stm32f10x_md.o
- .comment       0x00000000       0x2b ..\obj\stm32f10x_gpio.o
- .comment       0x00000000       0x2b ..\obj\main.o
- .comment       0x00000000       0x2b ..\obj\stm32f10x_rcc.o
- .comment       0x00000000       0x2b ..\obj\syscalls.o
- .comment       0x00000000       0x2b ..\obj\GPIO_Example.o
+.comment        0x00000000       0x11
+ .comment       0x00000000       0x11 ..\obj\stm32_pio.o
+                                 0x12 (size before relaxing)
+ .comment       0x00000000       0x12 ..\obj\core_cm3.o
+ .comment       0x00000000       0x12 ..\obj\system_stm32f10x.o
+ .comment       0x00000000       0x12 ..\obj\startup_stm32f10x_md.o
+ .comment       0x00000000       0x12 ..\obj\stm32f10x_gpio.o
+ .comment       0x00000000       0x12 ..\obj\main.o
+ .comment       0x00000000       0x12 ..\obj\stm32f10x_rcc.o
+ .comment       0x00000000       0x12 ..\obj\syscalls.o
+ .comment       0x00000000       0x12 ..\obj\GPIO_Example.o
 
 .ARM.attributes
                 0x00000000       0x31
@@ -522,13 +522,13 @@ OUTPUT(Stmgpio.elf elf32-littlearm)
  .ARM.attributes
                 0x00000188       0x31 ..\obj\GPIO_Example.o
 
-.debug_frame    0x00000000      0xb0c
- .debug_frame   0x00000000       0xc8 ..\obj\stm32_pio.o
- .debug_frame   0x000000c8      0x280 ..\obj\core_cm3.o
- .debug_frame   0x00000348       0x80 ..\obj\system_stm32f10x.o
- .debug_frame   0x000003c8       0x48 ..\obj\startup_stm32f10x_md.o
- .debug_frame   0x00000410      0x210 ..\obj\stm32f10x_gpio.o
- .debug_frame   0x00000620       0x2c ..\obj\main.o
- .debug_frame   0x0000064c      0x388 ..\obj\stm32f10x_rcc.o
- .debug_frame   0x000009d4      0x108 ..\obj\syscalls.o
- .debug_frame   0x00000adc       0x30 ..\obj\GPIO_Example.o
+.debug_frame    0x00000000      0xb10
+ .debug_frame   0x00000000       0xcc ..\obj\stm32_pio.o
+ .debug_frame   0x000000cc      0x280 ..\obj\core_cm3.o
+ .debug_frame   0x0000034c       0x80 ..\obj\system_stm32f10x.o
+ .debug_frame   0x000003cc       0x48 ..\obj\startup_stm32f10x_md.o
+ .debug_frame   0x00000414      0x210 ..\obj\stm32f10x_gpio.o
+ .debug_frame   0x00000624       0x2c ..\obj\main.o
+ .debug_frame   0x00000650      0x388 ..\obj\stm32f10x_rcc.o
+ .debug_frame   0x000009d8      0x108 ..\obj\syscalls.o
+ .debug_frame   0x00000ae0       0x30 ..\obj\GPIO_Example.o

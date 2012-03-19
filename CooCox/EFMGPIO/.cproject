@@ -13,12 +13,14 @@
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
 				<externalSettings containerId="org.coocox.ExternalSettings" factoryId="org.eclipse.cdt.core.extension.container.factory">
 					<externalSetting>
-						<entry flags="" kind="includePath" name="J:\CoCenter\CooIDE\gcc\Sourcery G++ Lite\arm-none-eabi\include"/>
+						<entry flags="" kind="includePath" name="J:\CoCenter\coide\gcc\arm-none-eabi\include"/>
+						<entry flags="" kind="includePath" name="J:\CoCenter\coide\gcc\lib\gcc\arm-none-eabi\4.5.2\include"/>
+						<entry flags="" kind="includePath" name="J:\CoCenter\coide\gcc\lib\gcc\arm-none-eabi\4.5.2\include-fixed"/>
 						<entry flags="" kind="includePath" name="."/>
+						<entry flags="" kind="includePath" name="cmsis"/>
+						<entry flags="" kind="includePath" name="cmsis_boot"/>
 						<entry flags="" kind="includePath" name="efm32lib"/>
 						<entry flags="" kind="includePath" name="efm32lib/inc"/>
-						<entry flags="" kind="includePath" name="cmsis_boot"/>
-						<entry flags="" kind="includePath" name="cmsis"/>
 						<entry flags="" kind="macro" name="__GNUC__" value=""/>
 						<entry flags="" kind="macro" name="EFM32G890F128" value=""/>
 					</externalSetting>
@@ -27,12 +29,14 @@
 			<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 			<storageModule moduleId="org.eclipse.cdt.core.pathentry">
 				<pathentry kind="src" path=""/>
-				<pathentry include="J:/CoCenter/CooIDE/gcc/Sourcery G++ Lite/arm-none-eabi/include" kind="inc" path="" system="true"/>
-				<pathentry include="J:/CoCenter/CooIDE/workspace/EFMGPIO" kind="inc" path="" system="true"/>
-				<pathentry include="J:/CoCenter/CooIDE/workspace/EFMGPIO/efm32lib" kind="inc" path="" system="true"/>
-				<pathentry include="J:/CoCenter/CooIDE/workspace/EFMGPIO/efm32lib/inc" kind="inc" path="" system="true"/>
-				<pathentry include="J:/CoCenter/CooIDE/workspace/EFMGPIO/cmsis_boot" kind="inc" path="" system="true"/>
-				<pathentry include="J:/CoCenter/CooIDE/workspace/EFMGPIO/cmsis" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CoCenter/coide/gcc/arm-none-eabi/include" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CoCenter/coide/gcc/lib/gcc/arm-none-eabi/4.5.2/include" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CoCenter/coide/gcc/lib/gcc/arm-none-eabi/4.5.2/include-fixed" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CooCox/EFMGPIO" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CooCox/EFMGPIO/cmsis" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CooCox/EFMGPIO/cmsis_boot" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CooCox/EFMGPIO/efm32lib" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CooCox/EFMGPIO/efm32lib/inc" kind="inc" path="" system="true"/>
 				<pathentry kind="mac" name="__GNUC__" path="" value=""/>
 				<pathentry kind="mac" name="EFM32G890F128" path="" value=""/>
 				<pathentry kind="out" path=""/>

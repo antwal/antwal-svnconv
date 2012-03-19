@@ -228,11 +228,69 @@ static uint8_t STM32_PIO_Out(COX_PIO_Dev pio, uint8_t level)
  *              -COX_ERROR
  *              -COX_SUCCESS
 *******************************************************************************/
+#define PULL_UP		1
+#define PULL_DOWN	2
+
 static COX_Status STM32_PIO_Cfg (COX_PIO_Dev pio, uint8_t index, uint32_t arg, uint32_t *pre_arg)
 {
-	return COX_ERROR;
-}
+	GPIO_TypeDef* pGPIO = (void *)0;
+	uint8_t port, pin;
+	uint8_t plevel;
 
+	port = (pio >> 8) & 0xFF;
+	pin  = (pio >> 0) & 0xFF;
+
+	pGPIO  = STM32_GetGPIO(port);
+	(pGPIO -> ODR) |= (1<<pin);		// Pulling up
+	switch(index)
+	{
+
+	case PULL_UP:
+		if(pin>7)
+		{
+			/* Configure the eight high port pins */
+			pin = pin-8;
+
+			/* CNF[1:0] =10 */
+			pGPIO -> CRH |= (0x8 << (pin*4));
+			pGPIO -> CRH &= ~(0x4 <<(pin*4));
+		}
+
+		else
+		{
+			/* Configure the eight low port pins */
+			pGPIO -> CRL |= (0x8 << (pin*4));
+			pGPIO -> CRL &= ~(0x4 << (pin*4));
+		}
+
+		break;
+
+	case PULL_DOWN:
+		if(pin>7)
+		{
+			/* Configure the eight high port pins */
+			pin = pin-8;
+
+			/* CNF[1:0] =10 */
+			pGPIO -> CRH |= (0x8 << (pin*4));
+			pGPIO -> CRH &= ~(0x4 <<(pin*4));
+		}
+
+		else
+		{
+			/* Configure the eight low port pins */
+			pGPIO -> CRL |= (0x8 << (pin*4));
+			pGPIO -> CRL &= ~(0x4 << (pin*4));
+		}
+		(pGPIO -> ODR) &= ~(1<<pin);		// Pulling down
+		break;
+
+	default:
+		break;
+	}
+
+	return COX_SUCCESS;
+}
 
 /***************************************************************************//**
  * Define STM32F1xx CoX PIO Peripheral Interface
