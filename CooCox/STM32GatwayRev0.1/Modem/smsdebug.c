@@ -19,11 +19,16 @@ typedef struct recvMsg{
 	char message[163];	//160 bytes of message + <CR><LF> + \0 for string termination
 }recvMsg;
 
+/* external variables */
+extern	cBuffer modem_buffer;
+extern volatile uint32_t TIME_TICK;
+
+
 /* private function declerations */
 void smsDebugSetOutputFunc(void (*output_func)(unsigned char c));
 void smsDebugSetLoopFunc(void (*loop_func)(void));
 void readAllUnreadSms(mdmIface *mdm,cBuffer *queue);
-void readDelSms(mdmIface *mdm, uint8_t index , recvMsg *ptr );
+void readDelSms(mdmIface *mdm, uint8_t index , char *phone ,char *msg );
 uint8_t isPhoneRegistered(char *str);
 
 /* Public function decleration */
@@ -85,6 +90,8 @@ void smsDebugConnect(mdmIface *mdm){
 
 	//configure the modem in text mode
 	sendwait(mdm, "|AT+CMGF=1\r","OK", 300);
+	//show text mode sms parameters, required to know the length of revieved sms
+	sendwait(mdm,"AT+CSDH=1\r","OK",100);
 
 	/*
 	Delete all read messages from preferred message storage,
@@ -105,7 +112,7 @@ void smsDebugLoop(mdmIface *mdm){
 
 	while(bufferDataAvail(&smsIndexQueue)){
 		memset(&msg,'\0',sizeof(msg));
-		readDelSms(mdm, bufferGetFromFront(&smsIndexQueue),&msg);
+		readDelSms(mdm, bufferGetFromFront(&smsIndexQueue),&msg.phone[0],&msg.message[0]);
 		if(isPhoneRegistered(( char * )&msg.phone[0])){
 			ptr = &msg.message[0];
 			while(*ptr != 0 ){
@@ -116,6 +123,167 @@ void smsDebugLoop(mdmIface *mdm){
 	}
 }
 
+
+/*
+*	ascii to integer conversion
+*/
+
+uint8_t atoin(char *ascii)
+{
+	uint8_t integer = 0,i=0;
+
+	do{
+		integer*=10;
+		integer += (ascii[i] - 48);
+	}
+	while(ascii[++i] != 0);
+
+	return integer;
+
+}
+
+/*
+*	Integer to ascii conversion
+*/
+
+void itoam(uint8_t integer, char *lbuff)
+{
+	if((integer / 10) == 0)
+		{
+			lbuff[0] = integer + 48;
+			lbuff[1] = '\0';
+		}
+		else{
+			lbuff[0] = integer/10 + 48;
+			lbuff[1] = (integer % 10) + 48;
+			lbuff[2] = '\0';
+		}
+}
+
+void readAllUnreadSms(mdmIface *mdm,cBuffer *queue){
+
+	mdmStatus res;
+	char lbuff[14], index;
+	//res = sendwait(mdm, "AT+CMGF=1\r", "OK",100);
+
+	res = sendwait(mdm, "AT+CMGL=\"REC UNREAD\", 1\r","",100);
+
+	while(1)
+	{
+		res = serialMatch(mdm, "+CMGL:",100);
+		if(res == mdmTimeOut)
+		break;
+		serialCopy(lbuff,' ', ',');
+		index = atoin(lbuff);
+
+		// Taking out the index number of the messages
+		printf("index number=%d\n",index);
+		memset(lbuff,0,14);
+		res = serialCopy(lbuff,'"',',');
+
+		// Seeing if the messages are READ or UNREAD
+		// If the messages are UNREAD then only go ahead
+		// For read messages comaparison sud be with REC READ
+		// For unread messages comaparison sud be with REC UNREAD
+		if(!strcmp(&lbuff[0], "REC UNREAD\""))
+		{
+
+			printf("unreadSms\n");
+			memset(lbuff,0,14);
+			res = serialCopy(lbuff, '"','"');
+			printf("Ph No.- %s\n",lbuff);
+
+			// Consider those messages only which are registered
+		//	if(isPhoneRegistered(lbuff))
+			{
+				bufferAddToEnd(queue, index);
+			}
+		}
+
+	}
+
+
+}
+
+void readDelSms(mdmIface *mdm, uint8_t index , char *phone ,char *msg ){
+
+	char lbuff[163], count = 9;
+	unsigned char addr4;
+	mdmStatus res=0;
+	uint8_t j;
+	if(index == 0)
+	return 0;
+	itoam(index, lbuff);
+
+
+	// Reading message of particular index number
+	sendwait(mdm, "AT+CMGR=","",0);
+	sendwait(mdm, lbuff, "",0);
+	sendwait(mdm, "\r\n", "",100);
+
+	res = serialMatch(mdm, "+CMGR: ",100);
+	memset(lbuff,0,14);
+	res = serialCopy(lbuff,'"',',');
+
+	//
+	memset(lbuff,0,14);
+	res = serialCopy(lbuff, '"','"');
+	//copy the phone number excluding +91
+	memcpy(phone, lbuff[3], 10);
+
+	printf("Ph No.- %s\n",lbuff);
+
+	TIME_SET(0);
+	do
+	{
+		res = serialMatch(mdm, ",", 100);
+		if (res == mdmOK){
+			TIME_SET(0);
+			count--;
+		}
+	}
+	while(count != 0 && TIME_TICK < 100);
+
+	if(count == 0)
+	{
+		memset(lbuff, 0,14);
+		res = serialCopy(lbuff, ',','\r');
+		res = atoin(lbuff);
+		printf("lengthnum=%d\n",res);
+
+		for(j = 0; j <= res; j++)
+		{
+		TIME_SET(0);
+			do{
+				if(serial_rx_ready())
+       	        		{
+       		 	       		serial_get(addr4);
+					lbuff[j] = addr4;
+					TIME_TICK = 100;
+				}
+			}
+			while(TIME_TICK < 10 );
+		}
+		//add carriage return and line feed at the end
+		lbuff[j++] = '\r';
+		lbuff[j++] = '\n';
+		lbuff[j]='\0';
+		//copy the message to  msg
+		memcpy(msg, &lbuff[0], res+3);
+
+		printf("MSG = %s\n",lbuff);
+	}
+	serialMatch(mdm, "OK", 100);
+
+	//Now delete the msg from the modem
+	itoam(index, lbuff);
+	sendwait(mdm, "AT+CMGD=","",0);
+	sendwait(mdm, lbuff, "",0);
+	sendwait(mdm, "\r", "OK",100);
+
+}
+
+/*
 void readAllUnreadSms(mdmIface *mdm,cBuffer *queue){
 	//TO DO
 	//extract the index number of all the unread sms without changing their status  and enqueue them
@@ -130,11 +298,13 @@ void readDelSms(mdmIface *mdm, uint8_t index , recvMsg *ptr ){
 	//delete the message
 
 }
+*/
 
 uint8_t isPhoneRegistered(char *str){
 	//compare 10 digit phone number with list of registered phone
 	//if matches return 1 else 0
 	extern struct config sysconf;
+
 	if(strncmp(str,(const char *)&sysconf.reg_phoneno[0], 10) == 0){
 		return 1;
 	}
@@ -142,8 +312,6 @@ uint8_t isPhoneRegistered(char *str){
 		return 1;
 	}
 	return 0;
-
-
 }
 
 //#endif /* SMS DEBUG */

@@ -11,7 +11,7 @@
 #define USERNAME		"uagri"
 #define PASSWORD		"uagri123"
 #define COOKIE_RESPATH	"/uagri/?q=user/login"
-#define UPLOAD_RESPATH  "/upload.ini"
+#define UPLOAD_RESPATH  "/upload.php"
 #define WATCHDOG_STATUS	1
 #define ERR_RPT_STATUS  1
 #define RES_PHONE0		"9848969645"
