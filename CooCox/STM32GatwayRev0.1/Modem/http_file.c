@@ -2,8 +2,11 @@
 #include "ff.h"
 #include <stdint.h>	// for including uint_8 etc
 #include <stdio.h>  //for including NULL
+#include <string.h>
 #include "main.h"
 #include "watchdog.h" // for debugging using watchdog
+#include "http.h"
+#include "debug.h"
 
 #define CLR_BUFFER(buff) memset(buff,'\0',MAX_BUFF_SIZE)
 
@@ -24,19 +27,6 @@ static char get[100]={'\0'};
 
 uint32_t size;				/* size of file */
 static mdmStatus res;
-
-/*
- * Decleration of the Public functions
- */
-uint8_t uploadFile(mdmIface *mdm, const char *file, server *tcp);
-httpStatus mdmHttpRes(mdmIface *mdm, uint32_t* ContLen);
-/*
- * Decleration of the Private functions
- */
-mdmStatus login(mdmIface *mdm);
-mdmStatus sendHeader(mdmIface *mdm, uint32_t file_size, char *cookie );
-mdmStatus sendData(mdmIface *mdm ,const char *file);
-uint32_t getFileSize(const char *file);
 
 
 /*
@@ -66,25 +56,25 @@ uint8_t uploadFile(mdmIface *mdm, const char *file, server *tcp){
 						res = mdmReadMatch(mdm,"Upload");
 						if(res == mdmOK)
 						{
-							printf("File uploaded\n\r");
+							debug(LOG,"%s\n\r","File uploaded");
 							mdmClose(mdm);
 							return res;
 						}
 						else
 						{
-							printf("File not uploaded\n\r");
+							debug(LOG,"%s\n\r","File not uploaded");
 						}
 					}
 					else{
-						printf("Http Response not recvd\n\r");
+						debug(LOG,"%s\n\r","Http Response not recvd");
 					}
 				}
 				else
-					printf("\nSending File Failed");
+					debug(LOG,"%s\n\r","Sending File Failed");
 			}else
-				printf("\nHeader post failed");
+				debug(LOG,"%s\n\r","Header post failed");
 		//}else
-		//	printf("\nLogin Failed");
+		debug(LOG,"%s\n\r","Login Failed");
 			}
 		}
 		//close the TCP connection to the server
@@ -107,23 +97,23 @@ mdmStatus login(mdmIface *mdm)
 
 	// Retrieves the cookie for the site
 	//if(!mdmSend(mdm))
-		res = mdmTransSend(mdm, GET_COOKIE, strlen(GET_COOKIE), 1);
+		res = mdmTransSend(mdm, GET_COOKIE, strlen(GET_COOKIE));
 
 	if(res == mdmOK)
 	{
 		res = serialMatch(mdm, "HTTP/1.1", 100);
 	    res = serialCopy(&get[0], ' ','\r');
-	    printf("response= %s\n",&get[0]);
+	    debug(CONSOLE,"response= %s\n\r",&get[0]);
 
 	    res = serialMatch(mdm, "Set-Cookie:", 100);
 	    res = serialCopy(&get[0],' ',';');
-	    printf("Cookie=%s\n",&get[0]);
+	    debug(CONSOLE,"Cookie=%s\n\r",&get[0]);
 
 	    res = serialMatch(mdm, "Set-Cookie:",100);
 	    if(res != mdmTimeOut)
 	    res = serialCopy(&get[0],' ',';');
 
-	    printf("NewCookie=%s\n",&get[0]);
+	    debug(CONSOLE,"NewCookie=%s\n",&get[0]);
 	 }
 	return res;
 
@@ -145,10 +135,10 @@ mdmStatus sendHeader(mdmIface *mdm, uint32_t file_size, char *cookie ){
         CLR_BUFFER(buffer);
         //if((res = mdmSend(mdm)) == mdmOK){
         sprintf(buffer, "%d" ,(file_size + strlen(BEFORE_DATA) + strlen(AFTER_DATA)));
-        printf("\nPOST DATA Size is = %d, %d",file_size,file_size+strlen(BEFORE_DATA)+strlen(AFTER_DATA) );
+        debug(CONSOLE,"POSTDATA Size=%d\n\r",file_size+strlen(BEFORE_DATA)+strlen(AFTER_DATA) );
 
 
-        printf("\nSENDING THE Headers------>");
+        debug(CONSOLE,"%s\n\r","Sending Headers");
         //Sending  Header
         res = mdmTransSend(mdm,POST_H, strlen(POST_H));
         if(res != mdmOK) return res;
@@ -167,20 +157,19 @@ mdmStatus sendHeader(mdmIface *mdm, uint32_t file_size, char *cookie ){
         res = mdmTransSend(mdm, DCLRF ,strlen(DCLRF));//send the header from the modem
         if(res != mdmOK) return res;
        // printf(DCLRF);
-        printf("\nEND Headers------>");
+        debug(CONSOLE,"%s\n\r","End Headers");
         //}
         return res;
 }
 
 mdmStatus sendData(mdmIface *mdm ,const char *file){
-        uint32_t datalen  = 0;
         mdmStatus res = mdmOK ;
         UINT rbytes;			/* Read bytes */
 
-        printf("\nSENDING DATA------>");
+        debug(LOG,"%s\n\r","SENDING DATA");
 
         //sending BEFORE_DATA(needed for sending the file in multipart)
-        res = mdmTransSend(mdm, BEFORE_DATA , strlen(BEFORE_DATA),1);
+        res = mdmTransSend(mdm, BEFORE_DATA , strlen(BEFORE_DATA));
         if(res != mdmOK) return res;
 
       	//open file
@@ -203,13 +192,13 @@ mdmStatus sendData(mdmIface *mdm ,const char *file){
         		f_close(&send);
         		return rc;
         	}
-            printf("File Data = %d\n\r",size);
+            debug(CONSOLE,"File Data = %d\n\r",size);
 
            //uncomment the below mentioned line if  using watchdog
            WDG_setTaskState(&myDogDebug[0], UPLOADING);
-           res = mdmTransSend(mdm, buffer ,(uint32_t)rbytes , 1);
+           res = mdmTransSend(mdm, buffer ,(uint32_t)rbytes );
            if (res != mdmOK){
-        	   printf("send Fail\n\r");
+        	   debug(LOG,"%s\n\r","send Fail");
         	   f_close(&send);
         	   return res;
                }
@@ -218,11 +207,11 @@ mdmStatus sendData(mdmIface *mdm ,const char *file){
         f_close(&send);
 
         //sending AFTER_DATA(needed for sending the file in multipart)
-        res = mdmTransSend(mdm, AFTER_DATA , strlen(AFTER_DATA),1);
+        res = mdmTransSend(mdm, AFTER_DATA , strlen(AFTER_DATA));
         if (res != mdmOK) return res;
 
 
-        printf("\nEND SENDING DATA------>");
+        debug(LOG,"%s\n\r","SENDING DATA DONE");
         return res;
 }
 
@@ -244,7 +233,7 @@ uint32_t getFileSize(const char *file){
 	if (rc) die(rc);
 
 
-	printf("NSize=%d\n\r",size);
+	debug(CONSOLE,"FileSize=%d\n\r",size);
 	return size;
 }
 
@@ -270,7 +259,7 @@ uint32_t getFileSize(const char *file){
 		if(res == mdmOK )
 		{
 			res = serialCopy(&buffer[0], ' ','\r');
-			printf("response= %s\n",&buffer[0]);
+			debug(CONSOLE,"response=%s\n\r",&buffer[0]);
 			while(i < 3){
 				if(i!= 0)
 					code *=10;
@@ -278,7 +267,7 @@ uint32_t getFileSize(const char *file){
 				i++;
 			}
 			i = 0;
-			printf("Conv=%d\n\r",code);
+			debug(CONSOLE,"ResCode=%d\n\r",code);
 			switch(code)
 			{
 			case 100:
@@ -314,7 +303,7 @@ uint32_t getFileSize(const char *file){
 						*ContLen += buffer[i] - 48;
 						i++;
 					}
-					printf("Length= %d\n",*ContLen);
+					debug(CONSOLE,"ResLength=%d\n",*ContLen);
 				}
 				else
 				{
@@ -325,7 +314,7 @@ uint32_t getFileSize(const char *file){
 		}
 		else{
 			if(res == mdmTimeOut)res = httpTimeOut;
-			if(res == mdmErr || mdm == mdmFail)res = httpErr;
+			if(res == mdmErr || res == mdmFail)res = httpErr;
 		}
 
 		return res;

@@ -14,7 +14,8 @@
 #include "stm32f10x.h"
 #include "stm32f10x_flash.h"
 #include <stdio.h>
-
+#include <string.h>
+#include "debug.h"
 
 
 /* Private typedef -----------------------------------------------------------*/
@@ -168,7 +169,7 @@ void flashpage(void* dst ,void* src , uint32_t len)
 
     if( MemoryProgramStatus == FAILED)
     {
-    	printf("Flash Save Failed\n\r");
+    	debug(LOG,"%s\n\r","Flash Save Failed");
         //while(1);
     }
 

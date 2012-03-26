@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "watchdog.h"
 #include "stdint.h"
 #include "stm32f10x.h"
@@ -211,14 +212,12 @@ void WDG_dogCheck( void ){
         	//if counter is zero perform sanity check
         	if( dptr->counter == 0 ){
 
-        		printf("flag =%d\t",dptr->state);
         		if(dptr->state == UNKNOWN){
         			saveStateBackup(dptr);
         		}
         		//Extract  the flag
         		flag = flag && dptr->state;
 
-        		printf("flag =%d\n\r",flag);
         		//reload the counter
         		dptr->counter = ((dptr->periodicity + dptr->exectime) / DOG_PERIODICITY )+ 1 ;
 

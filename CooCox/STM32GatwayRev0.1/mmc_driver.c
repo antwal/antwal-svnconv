@@ -7,6 +7,7 @@
 *******************************************************************************/
 #include "di_msd.h"
 #include <stdio.h>
+#include "debug.h"
 
 uint8_t  MSD_Init(const MSD_Dev *sd);
 uint8_t  MSD_WriteBlock(const MSD_Dev *sd, uint32_t adr, const uint8_t* wbuf, uint32_t wlen);
@@ -696,11 +697,9 @@ COX_Status MSD_GoIdleState(const MSD_Dev *sd)
   while (MSD_GetResponse(sd, MSD_RESPONSE_NO_ERROR) && counter > 0);
   if(!(counter > 0)){
 	  ACMD1 = 0;
-	  printf("ACMD1 Failed\n\r");
   }
   else{
 	  CardType = CT_SD2;
-	  printf("SDCARD ver2\n\r");
   }
 
   // If above command Fails then only this should be executed
@@ -712,7 +711,6 @@ COX_Status MSD_GoIdleState(const MSD_Dev *sd)
 	  }
 	  while(MSD_GetResponse(sd, MSD_IN_IDLE_STATE) && counter > 0);
 	  if(counter > 0){
-		  printf("CMD55 success\n\r");
 	  }
 
 	  // Sending Command CMD1
@@ -727,7 +725,6 @@ COX_Status MSD_GoIdleState(const MSD_Dev *sd)
 		  ACMD1 = 1;
 	  }
 	  else{
-		  printf("SD Ver1\n\r");
 		  CardType = CT_SD1;
 	  }
   }
@@ -754,7 +751,7 @@ COX_Status MSD_GoIdleState(const MSD_Dev *sd)
     }
   	while(MSD_GetResponse(sd, MSD_RESPONSE_NO_ERROR) && counter > 0);
   	if(counter > 0){
-  		printf("Block set\n\r");
+  		debug(CONSOLE,"%s\n\r","SDCARD initialized");
   	}
   	else{
   		SS_HIGH(sd);

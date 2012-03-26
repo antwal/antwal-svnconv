@@ -123,6 +123,9 @@ enum {
 	#define TOS_FOOTER_LEN 	  2
 #endif
 
+#define DYN_ROUTE 1
+#define CTP 1
+
 #ifdef DYN_ROUTE 		// Check whether dynamic routing is enabled
   #ifdef DOZER
 	#define ROUTE_HEADER_LEN  2

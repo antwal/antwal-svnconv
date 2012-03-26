@@ -1,7 +1,7 @@
 /* configurations for the Gateway */
-#define BAUD1	 		9600
-#define BAUD2	 		9600
-#define BAUD3	 		115200
+#define BAUD1	 		115200							// MODEM
+#define BAUD2	 		57600							// MOTE
+#define BAUD3	 		115200							// DEBUG
 
 #define APN_STRING		"gprs.cell.south"
 #define APN_USERNAME 	""

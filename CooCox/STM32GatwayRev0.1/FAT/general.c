@@ -1,6 +1,8 @@
+#include <stdio.h>
 #include "diskio.h"
 #include "di_msd.h"
 #include "ff.h"
+#include "debug.h"
 
 extern MSD_Dev *sd;
 
@@ -8,7 +10,7 @@ void die (		/* Stop with dying message */
 		FRESULT rc	/* FatFs return value */
 	)
 	{
-		printf("Failed with rc=%d\r\n",rc);
+		debug(LOG,"SD =%d\r\n",rc);
 		SS_HIGH(sd);
 		//for (;;) ;
 		return;

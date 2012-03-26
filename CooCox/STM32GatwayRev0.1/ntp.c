@@ -6,6 +6,9 @@
 #include "ntp.h"
 #include "modem.h"
 #include "stm32_rtc.h"
+#include "stdio.h"
+#include "string.h"
+#include "debug.h"
 
 extern TIME *tm;
 char ntp[48];
@@ -37,7 +40,6 @@ void sendNTPRequest(ntpMsg *m) {
 void NtpDCall(ntpMsg *msg)
 {
         uint32_t time;
-		printf("In ntpdcall\n");
         time = msg->tx_timestamp_i[0];
         time = time << 8;
         time += msg->tx_timestamp_i[1];
@@ -67,8 +69,6 @@ mdmStatus ntp_time(mdmIface *mdm)
 	res = mdmFSM(mdm);
 
 	if(res == mdmOK){
-	printf("Modem initialised successfully\n");
-
 	res = mdmUDPConnect(mdm, &udp);
 
 	// Send data only when connection is established
@@ -82,7 +82,7 @@ mdmStatus ntp_time(mdmIface *mdm)
 		res = mdmTransRead(mdm,(char *) ntp, &ntpbytes);
 
 		if(res != mdmReadFail)
-			NtpDCall(ntp);
+			NtpDCall((ntpMsg *)ntp);
 		else
 			return res;
 
@@ -91,7 +91,7 @@ mdmStatus ntp_time(mdmIface *mdm)
 	else
 		return res;
 
-	printf("Time is: %d:%d:%d - %d,%d,%d\r",tm->hh,tm->mm, tm->ss, tm->DD,tm ->MM, tm->YYYY);
+	debug(LOG,"%s\n\r","Time Updated");
 	res = mdmSwitch(mdm, COMMAND);
 	res = mdmClose(mdm);
 	}

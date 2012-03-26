@@ -17,13 +17,24 @@ void deselect(void)
 	SS_HIGH(sd);				// Deselecting Card
 }
 
+DSTATUS sd_present(void)
+{
+	// SD card is present
+	if(sd->pio->Read(sd->sd_detect) == 0)
+	{
+		return 1;
+	}
+	else{
+		return 0;
+	}
+}
 
 DSTATUS disk_status ( BYTE drv)
 {
 	DSTATUS s = Stat;
 	BYTE ocr[4];
 	CoSchedLock ( );                                   // Enter Critical Section
-	if (drv || !(INS)){
+	if (drv || !(sd_present())){
 		s = STA_NODISK | STA_NOINIT;
 	} else {
 		s &= ~STA_NODISK;

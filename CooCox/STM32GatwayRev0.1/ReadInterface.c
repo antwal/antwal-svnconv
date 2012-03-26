@@ -12,6 +12,7 @@
 #include "di_msd.h"
 #include "main.h"
 #include "watchdog.h"
+#include "debug.h"
 
 // Length of each queue used to hold the WSN data
 #define QUEUE_LENGTH 32
@@ -58,7 +59,7 @@ void Read_Data(unsigned char ch){
     static int i = 0, j, res; //, Status;
     StatusType result;
 
-    static uint8_t cur,last;
+//    static uint8_t cur,last;
 
 	if (PktStartRecd) {
 		if ((i == 1) && (ch == START_BYTE)) {
@@ -79,13 +80,12 @@ void Read_Data(unsigned char ch){
 			result = isr_PostQueueMail (raw_queue_id, (void *) &DataMsg[buf]);
 			if (result != E_OK){
 				 if (result == E_INVALID_ID){
-					 printf("Invalid Queue ID ! \n");
+					 debug(LOG,"%s\n\r","WSN:Queue ID invalid");
 				 }
 				 else if (result == E_SEV_REQ_FULL){
-                     printf("The Queue is full !\n");
+                     debug(LOG,"%s\n\r","WSN:Queue Full");
 				 }
 			}
-			printf("len=%d,queue=%d\n\r",i,buf);
 			PktStartRecd = 0;
 			i = 0;
 			buf += 1 ;  				//change the buffer to be used
@@ -113,7 +113,7 @@ char * wsnPacketDecoding(dogDebug *dptr){
 
 	StatusType result;
 	void *msg;
-	uint8_t j;
+	uint8_t j,i;
 	uint8_t BaseStnNo = BaseStnId;
 	Tos_Msg *ToSMessage;		// Tos_Msg received //
 	SensedData *DataVal;
@@ -126,12 +126,12 @@ char * wsnPacketDecoding(dogDebug *dptr){
 	msg = CoPendQueueMail (raw_queue_id, 3000, &result);
 	if (result != E_OK){
         if (result == E_INVALID_ID){
-            printf("Invalid Queue!\n\r");
+        	debug(LOG,"%s\n\r","WSN:QueueID invalid");
         }
     }
     else{
-    	printf("Data Packet\n\r");
-    	memcpy(&Data.DataBuffer[0], (uint8_t *)msg, MAX_BUFF_SIZE);
+    	debug(CONSOLE,"%s\n\r","WSN:Packet Recvd");
+    	memcpy(&Data.DataBuffer[0], (uint8_t *)msg, 30);
 		/******** Check type of the Raw Packet *******/
 		if (Data.DataBuffer[1] == P_PACKET_NO_ACK ) {
 
@@ -157,8 +157,6 @@ char * wsnPacketDecoding(dogDebug *dptr){
 			/* Lock the Mutex*/
 			CoEnterMutexSection(file_mutex);
 
-
-			printf("\r\nWrite to file (test.txt).\r\n");
 			rc = f_open(&store, "./root/store.xml", FA_WRITE|FA_READ);
 			f_sync(&store);
 			if (rc) die(rc);
@@ -166,13 +164,12 @@ char * wsnPacketDecoding(dogDebug *dptr){
 			{
 				if(rc == 4)				// If file is not found
 				{
-					printf("\n\rstore.xml not found\n\r");
+					debug(LOG,"%s\n\r","WSN:store.xml not Found");
 					rc = f_open(&store, "./root/store.xml", FA_WRITE|FA_READ|FA_CREATE_ALWAYS);
 					f_sync(&store);
 					if (rc) die(rc);
 				}
 			}
-			printf("OSize=%d\n\r",(uint32_t)f_size(&store));
 
 			// IF something is there in destn file
 			if(!(f_size(&store) == 0))
@@ -203,14 +200,14 @@ char * wsnPacketDecoding(dogDebug *dptr){
 			WDG_setTaskState(dptr , SAVE_DONE);
 		}
 		else{
-			printf("Discarded\n");
+			debug(LOG,"%s\n\r","WSN:Msg Discarded");
+			for(i =0; i < (RAWPKT_HEADER_LEN + ROUTE_HEADER_LEN + 8 + 11); i++)
+			{
+				dbg_printf("0x%x\t",Data.DataBuffer[i]);
+			}
 		}
-
-		// return
 		return 0;
-
     }
-
 }
 
 

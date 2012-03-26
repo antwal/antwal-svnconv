@@ -17,7 +17,7 @@ extern uint32_t _sdefconf;    /*!< Start address for the initialization
                                       values of the .co_defconf section.      */
 extern uint32_t _edefconf;     /*!< End address for the .co_defconf section   */
 
-/* configuration structure resifding in rom */
+/* configuration structure residing in rom */
 
 __attribute__ ((section(".co_conf")))
 struct config sysconf ={
@@ -41,7 +41,7 @@ struct config sysconf ={
 };
 
 /* default configuration structure that always resides in rom*/
-/* configuration structure resifding in rom */
+/* configuration structure residing in rom */
 
 __attribute__ ((section(".co_defconf")))
 struct config defconf ={

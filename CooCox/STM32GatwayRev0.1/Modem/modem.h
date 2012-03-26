@@ -37,10 +37,12 @@ typedef struct{
 	} mdmInfo;
 
 	typedef struct {
-		uint16_t     dtr_pin;          /* Pin of the dtr  */
-		COX_PIO_PI   *pio;             /* The PIO Interface to use */
-		//mdmInfo *minfo;			   // Modem informations
+		uint16_t     dtr_pin;          // Pin of the dtr
+		COX_PIO_PI   *pio;             // The PIO Interface to use
 		char *ip_addr;
+		// This tells if the modem is locked by any task
+		// It will be used for putting modem in sleep or waking it up
+		uint8_t lock;
 	}mdmIface ;
 
 // Modem Interface
@@ -58,6 +60,9 @@ mdmIface modm;
 	/* Function Declarations*/
 	void mdmSleep(mdmIface *mdm);
 	void mdmWakeUp(mdmIface *mdm);
+	mdmStatus mdmCreateLock(mdmIface * mdm);
+	mdmStatus mdmLock(mdmIface *mdm);
+	mdmStatus mdmUnLock(mdmIface *mdm);
 	mdmStatus mdmInit(mdmIface *mdm);
 	mdmStatus mdmNWControl(mdmIface *mdm,uint8_t attach);
 	mdmStatus mdmIPup(mdmIface *mdm);
@@ -67,6 +72,9 @@ mdmIface modm;
 	mdmStatus mdmUDPConnect(mdmIface *mdm, server *obj);
 	mdmStatus mdmRead(mdmIface *mdm, char *buffer, uint32_t len);
 	mdmStatus mdmWrite(mdmIface *mdm, char *buffer, uint32_t len,uint8_t send);
+	mdmStatus mdmTransRead(mdmIface *mdm, char *buffer, uint32_t *len);
+	mdmStatus mdmTransSend(mdmIface *mdm, char *buffer, uint32_t len);
 	mdmStatus mdmSentData(mdmIface *mdm);
 	mdmStatus mdmSwitch(mdmIface *mdm, uint8_t mode);
+
 	mdmIface smsSend(mdmIface *mdm, const char* phNo, char * Msg);

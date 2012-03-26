@@ -19,5 +19,6 @@ typedef struct{
 } ntpMsg ;
 
 
+
 void sendNTPRequest(ntpMsg *);
 //mdmStatus ntp_time(mdmIface *);

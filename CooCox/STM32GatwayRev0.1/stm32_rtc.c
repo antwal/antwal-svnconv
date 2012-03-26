@@ -6,9 +6,11 @@
  * @author    : CooCox
 *******************************************************************************/
 
+#include <stdio.h>
 #include "stm32f10x.h"
 #include "stm32_rtc.h"
 #include <stdint.h>
+#include "debug.h"
 
 /**RTC Set Alarm Event*/
 RTC_Event_Handler Rtc_Alarm_Event = COX_NULL;
@@ -32,6 +34,8 @@ RTC_Event_Handler Rtc_Overflow_event = COX_NULL;
 #define ONE_SHOT			4
 
 extern TIME *tm;
+void STM_RTC_Start (void);
+void STM_RTC_Stop (void);
 
 COX_Status STM_RTC_Write (TIME *tm);
 
@@ -101,11 +105,10 @@ uint8_t gmtime( uint32_t time, TIME *tm, uint8_t ntp)
 
 	if(ntp && tm->YYYY >= 2012)
 	{
-		printf("in gmtimeDD=%d,mm=%d,ntp=%d\n\r",tm->DD,tm->MM,ntp);
 		STM_RTC_Start();
 		STM_RTC_Write (tm);				// Writing time to RTC
 		STM_RTC_Stop();
-		printf("Updated\n\r");
+		debug(LOG,"%s\n\r","TimeUpdated\n\r");
 	}
 	else
 		tm->YYYY = cur_yr;

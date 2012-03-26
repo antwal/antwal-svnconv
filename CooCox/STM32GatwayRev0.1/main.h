@@ -3,14 +3,18 @@
  * File system related variables
  */
 #include "ff.h"
+#include <coocox.h>
 FATFS fatfs;				/* File system object */
 FRESULT rc;					/* Result code */
 FIL store,					/* File object for store.xml */
 	send,					/* File object for send.xml */
-	alldata	;				/* File object for alldata.xml */
+	alldata,				/* File object for alldata.xml */
+	logger;					/* File object for log.txt */
 
 #define mount(fs)		f_mount(0,&fs)
 #define umount(fs)		f_mount(0,NULL)
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 /*
@@ -71,7 +75,7 @@ Submit\r\n\
 /*
  *  Global status structure which keeps the system status
  */
-struct {
+struct status{
 	uint8_t WSNTask;
 	uint8_t UPLOADTask;
 	uint32_t storeSize;
@@ -90,7 +94,7 @@ struct {
 /*---------------------------- Symbol Define -------------------------------*/
 #define STACK_SIZE_UPLOAD 	200             /*!< Define a Default task size */
 #define STACK_SIZE_WSN 		200
-#define STACK_SIZE_WATCHDOG 100             /*!< Define a Default task size */
+#define STACK_SIZE_WATCHDOG 200             /*!< Define a Default task size */
 #define STACK_SIZE_DEBUG	200
 
 
@@ -110,6 +114,9 @@ OS_FlagID flag;
 
 //The mutex is used to get mutual access to the data file  storing the WSN data
 OS_MutexID file_mutex;
+
+// This mutex will be used to make sure the mutual exclusion of modem
+OS_MutexID modem_mutex;
 
 //Used to get the mutual access to GSM Gprs Modem
 OS_MutexID modem_mutex;

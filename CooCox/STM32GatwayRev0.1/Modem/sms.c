@@ -1,5 +1,7 @@
+#include <stdio.h>
 #include "modem.h"
 #include "stddef.h"
+#include "debug.h"
 
 mdmIface smsSend(mdmIface *mdm, const char* phNo, char * Msg)
 {
@@ -19,7 +21,7 @@ mdmIface smsSend(mdmIface *mdm, const char* phNo, char * Msg)
 	while(Msg[i] != '\0')
 	{
 		serial_send(Msg[i]);
-		printf(" %c",Msg[i]);
+		dbg_printf("%c ",Msg[i]);
 		i++;
 	}
 

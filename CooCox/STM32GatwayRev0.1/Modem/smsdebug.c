@@ -1,11 +1,11 @@
 //#ifdef SMS_DEBUG
-
+#include <stdio.h>
 #include "string.h"
 #include "modem.h"
 #include "buffer.h"
 #include "cmdline.h"
 #include "config.h"
-
+#include "debug.h"
 
 
 #ifndef NULL
@@ -32,7 +32,7 @@ void readDelSms(mdmIface *mdm, uint8_t index , char *phone ,char *msg );
 uint8_t isPhoneRegistered(char *str);
 
 /* Public function decleration */
-void smsDebugInit(mdmIface *mdm);
+mdmStatus smsDebugInit(mdmIface *mdm);
 void smsDebugConnect(mdmIface *mdm);
 void smsDebugLoop(mdmIface *mdm);
 
@@ -64,33 +64,35 @@ void smsDebugSetLoopFunc(void (*loop_func)(void)){
 	smsCmdLoopFunc = loop_func;
 }
 
-void smsDebugInit(mdmIface *mdm){
+mdmStatus smsDebugInit(mdmIface *mdm){
 
+	uint8_t res;
 	//initllize the msg queue for keeping the index of sms msg
 	bufferInit(&smsIndexQueue, &list[0], sizeof(list));
 	//Make connection to the cmdline library
 	smsDebugSetOutputFunc(cmdlineInputFunc);
 	smsDebugSetLoopFunc(cmdlineMainLoop);
-	mdmWakeUp(mdm);
-	mdmSwitch(mdm, COMMAND);
 
+	mdmSwitch(mdm, COMMAND);
+	mdmInit(mdm);
 	//configure the modem in text mode
 	sendwait(mdm, "|AT+CMGF=1\r","OK", 300);
 	//configure the CNMI option
 	sendwait(mdm, "AT+CNMI=0,0,0,0,0\r","OK", 300);
-	//Delete all the  sms
-	//4 : Delete all messages from preferred message storage including unread messages
-	sendwait(mdm, "AT+CMGD=1,4\r","OK", 300);
+	//show text mode sms parameters, required to know the length of received sms
+	res = sendwait(mdm,"AT+CSDH=1\r","OK",100);
+	//Delete all the  sms except unread sms
+	//3 : Delete all messages from preferred message storage excluding unread messages
+	sendwait(mdm, "AT+CMGD=1,3\r","OK", 300);
+
+	return res;
 
 }
 
 void smsDebugConnect(mdmIface *mdm){
-	mdmWakeUp(mdm);
-	mdmSwitch(mdm, COMMAND);
-
 	//configure the modem in text mode
 	sendwait(mdm, "|AT+CMGF=1\r","OK", 300);
-	//show text mode sms parameters, required to know the length of revieved sms
+	//show text mode sms parameters, required to know the length of received sms
 	sendwait(mdm,"AT+CSDH=1\r","OK",100);
 
 	/*
@@ -98,7 +100,7 @@ void smsDebugConnect(mdmIface *mdm){
 	sent and unsent mobile originated messages leaving unread
 	messages untouched
 	*/
-	sendwait(mdm, "AT+CMGD=1,3\r","OK", 300);
+	//sendwait(mdm, "AT+CMGD=1,3\r","OK", 300);
 
 }
 
@@ -115,9 +117,18 @@ void smsDebugLoop(mdmIface *mdm){
 		readDelSms(mdm, bufferGetFromFront(&smsIndexQueue),&msg.phone[0],&msg.message[0]);
 		if(isPhoneRegistered(( char * )&msg.phone[0])){
 			ptr = &msg.message[0];
+			debug(CONSOLE,"%s\n\r","PH MATCHED");
 			while(*ptr != 0 ){
+				// Function separator; Currently two functions are separated by \n
+				if(*ptr == '\n')
+				{
+					smsCmdOutputFunc('\r');
+					*ptr++;
+				}
+				else{
 				smsCmdOutputFunc(*ptr++);
 				smsCmdLoopFunc();
+				}
 			}
 		}
 	}
@@ -177,7 +188,6 @@ void readAllUnreadSms(mdmIface *mdm,cBuffer *queue){
 		index = atoin(lbuff);
 
 		// Taking out the index number of the messages
-		printf("index number=%d\n",index);
 		memset(lbuff,0,14);
 		res = serialCopy(lbuff,'"',',');
 
@@ -187,11 +197,8 @@ void readAllUnreadSms(mdmIface *mdm,cBuffer *queue){
 		// For unread messages comaparison sud be with REC UNREAD
 		if(!strcmp(&lbuff[0], "REC UNREAD\""))
 		{
-
-			printf("unreadSms\n");
 			memset(lbuff,0,14);
 			res = serialCopy(lbuff, '"','"');
-			printf("Ph No.- %s\n",lbuff);
 
 			// Consider those messages only which are registered
 		//	if(isPhoneRegistered(lbuff))
@@ -212,7 +219,7 @@ void readDelSms(mdmIface *mdm, uint8_t index , char *phone ,char *msg ){
 	mdmStatus res=0;
 	uint8_t j;
 	if(index == 0)
-	return 0;
+	return;
 	itoam(index, lbuff);
 
 
@@ -225,13 +232,13 @@ void readDelSms(mdmIface *mdm, uint8_t index , char *phone ,char *msg ){
 	memset(lbuff,0,14);
 	res = serialCopy(lbuff,'"',',');
 
-	//
 	memset(lbuff,0,14);
-	res = serialCopy(lbuff, '"','"');
-	//copy the phone number excluding +91
-	memcpy(phone, lbuff[3], 10);
+	res = serialCopy(&lbuff[0], '"','"');
 
-	printf("Ph No.- %s\n",lbuff);
+	//copy the phone number excluding +91
+	memcpy(phone, &lbuff[3], 10);
+
+	debug(CONSOLE,"Ph No=%s\r\n",phone);
 
 	TIME_SET(0);
 	do
@@ -249,7 +256,7 @@ void readDelSms(mdmIface *mdm, uint8_t index , char *phone ,char *msg ){
 		memset(lbuff, 0,14);
 		res = serialCopy(lbuff, ',','\r');
 		res = atoin(lbuff);
-		printf("lengthnum=%d\n",res);
+		debug(CONSOLE,"lengthSMS=%d\n\r",res);
 
 		for(j = 0; j <= res; j++)
 		{
@@ -271,7 +278,7 @@ void readDelSms(mdmIface *mdm, uint8_t index , char *phone ,char *msg ){
 		//copy the message to  msg
 		memcpy(msg, &lbuff[0], res+3);
 
-		printf("MSG = %s\n",lbuff);
+		debug(LOG,"MSG=%s",lbuff);
 	}
 	serialMatch(mdm, "OK", 100);
 

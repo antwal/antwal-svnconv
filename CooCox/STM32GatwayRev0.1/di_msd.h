@@ -161,8 +161,10 @@ typedef struct _MSD_CID      /*Card Identification Data*/
 typedef struct
 {
   uint16_t     cs_pin;          /* Pin of te CS  */
+  uint16_t     sd_detect;		/* Sd card is present or not */
   COX_PIO_PI  *pio;             /* The PIO Interface to use */
   COX_SPI_PI  *spi;             /* The SPI Interface to use */
+
 } MSD_Dev;
 
 extern uint8_t MSD_Init(const MSD_Dev *sd);

@@ -25,8 +25,8 @@ typedef enum dogFlag
  */
 typedef enum taskStatus{
 	UNREGISTERED = 0,
-	REGISTERED = 1
-};
+	REGISTERED,
+}taskStatus;
 
 
 /*  structure associated with each task  used by the watchdog core to
