@@ -421,14 +421,15 @@
 
 	mdmStatus mdmFSM(mdmIface *mdm)
 	{
-		uint8_t var;
+		int8_t var;
 		res = mdmInit(mdm);
 		state = CLOSE;
 
 		res = mdmState(mdm);
-		var = 20;
+		var = 10;
 		if(res == mdmOK){
 		do{
+			debug(CONSOLE,"retry=%d\n\r",var);
 			switch(state)
 			{
 				case SHUT:

@@ -70,6 +70,9 @@
       <target file="http_file.o" lastModified="1364e3a2f5d">
          <source file="..\..\Modem\http_file.c" lastModified="1364e39ad7d"/>
       </target>
+      <target file="startup_stm32f10x_md_vl.o" lastModified="13652ddb0f7">
+         <source file="..\..\cmsis_boot\startup\startup_stm32f10x_md_vl.c" lastModified="1364e59755e"/>
+      </target>
       <target file="stm32f10x_flash.o" lastModified="136352087f1">
          <source file="..\..\stm_lib\src\stm32f10x_flash.c" lastModified="1362ab1f933"/>
       </target>
@@ -88,8 +91,8 @@
       <target file="debug.o" lastModified="1364e386b13">
          <source file="..\..\debug.c" lastModified="1364e383734"/>
       </target>
-      <target file="ModemInterface.o" lastModified="1363ac5f892">
-         <source file="..\..\Modem\ModemInterface.c" lastModified="1363ac15700"/>
+      <target file="ModemInterface.o" lastModified="1365364285f">
+         <source file="..\..\Modem\ModemInterface.c" lastModified="1365363d502"/>
       </target>
       <target file="port.o" lastModified="13635208887">
          <source file="..\..\CoOS\portable\GCC\port.c" lastModified="1362ab1f2a9"/>
@@ -124,14 +127,14 @@
       <target file="printf.o" lastModified="13635207d89">
          <source file="..\..\stdio\printf.c" lastModified="1362ab1e5b9"/>
       </target>
-      <target file="sms.o" lastModified="1364e3b777e">
-         <source file="..\..\Modem\sms.c" lastModified="1364e3ac87a"/>
+      <target file="buffer.o" lastModified="1363520828b">
+         <source file="..\..\buffer\buffer.c" lastModified="1362ab1f45f"/>
       </target>
       <target file="stm32f10x_bkp.o" lastModified="136352099bd">
          <source file="..\..\stm_lib\src\stm32f10x_bkp.c" lastModified="1362ab1f92b"/>
       </target>
-      <target file="buffer.o" lastModified="1363520828b">
-         <source file="..\..\buffer\buffer.c" lastModified="1362ab1f45f"/>
+      <target file="sms.o" lastModified="1364e3b777e">
+         <source file="..\..\Modem\sms.c" lastModified="1364e3ac87a"/>
       </target>
       <target file="smsdebug.o" lastModified="1364e3a34f5">
          <source file="..\..\Modem\smsdebug.c" lastModified="1364e39f301"/>
@@ -139,17 +142,17 @@
       <target file="flag.o" lastModified="13635208aa4">
          <source file="..\..\CoOS\kernel\flag.c" lastModified="1362ab1f063"/>
       </target>
-      <target file="WWDG_Exp.o" lastModified="13635244086">
-         <source file="..\..\watchdog\WWDG_Exp.c" lastModified="1362ab1ec1a"/>
-      </target>
       <target file="ff.o" lastModified="13635276b38">
          <source file="..\..\FAT\ff.c" lastModified="1362ab20061"/>
       </target>
-      <target file="main.o" lastModified="1364e38644e">
-         <source file="..\..\main.c" lastModified="1363ed73aad"/>
+      <target file="WWDG_Exp.o" lastModified="13635244086">
+         <source file="..\..\watchdog\WWDG_Exp.c" lastModified="1362ab1ec1a"/>
       </target>
       <target file="ReadInterface.o" lastModified="1364e3a3712">
          <source file="..\..\ReadInterface.c" lastModified="1364e3a0f85"/>
+      </target>
+      <target file="main.o" lastModified="1364e38644e">
+         <source file="..\..\main.c" lastModified="1363ed73aad"/>
       </target>
       <target file="mbox.o" lastModified="1363520815e">
          <source file="..\..\CoOS\kernel\mbox.c" lastModified="1362ab1f01e"/>
@@ -165,11 +168,6 @@
       </target>
       <target file="time.o" lastModified="136352083ad">
          <source file="..\..\CoOS\kernel\time.c" lastModified="1362ab1efc4"/>
-      </target>
-   </processor>
-   <processor signature="arm-none-eabi-gcc noversion nomachine -mcpu=cortex-m3 -mthumb -Wall -ffunction-sections -O0 -g -c -DUSE_STDPERIPH_DRIVER -D__ASSEMBLY__ -DSTM32F10X_HD_VL -DSTM32F100RE -DTINYOS2 -I. -ICOX -ICOX\COX_Peripheral -Icmsis_boot -Icmsis -Istm_lib -Istm_lib\inc -ICoOS\portable -ICoOS -ICoOS\kernel -IFAT -IModem -Iwatchdog -Ibuffer -Icmdline -Icommands -Ivt100">
-      <target file="startup_stm32f10x_md_vl.o" lastModified="1362ec9f66c">
-         <source file="..\..\cmsis_boot\startup\startup_stm32f10x_md_vl.c" lastModified="1362b317937"/>
       </target>
    </processor>
 </history>
