@@ -117,7 +117,7 @@ void smsDebugLoop(mdmIface *mdm){
 		readDelSms(mdm, bufferGetFromFront(&smsIndexQueue),&msg.phone[0],&msg.message[0]);
 		if(isPhoneRegistered(( char * )&msg.phone[0])){
 			ptr = &msg.message[0];
-			debug(CONSOLE,"%s\n\r","PH MATCHED");
+			debug(CONSOLE,"%s\n\r","SMS:Ph no. Regd");
 			while(*ptr != 0 ){
 				// Function separator; Currently two functions are separated by \n
 				if(*ptr == '\n')
@@ -238,7 +238,7 @@ void readDelSms(mdmIface *mdm, uint8_t index , char *phone ,char *msg ){
 	//copy the phone number excluding +91
 	memcpy(phone, &lbuff[3], 10);
 
-	debug(CONSOLE,"Ph No=%s\r\n",phone);
+	debug(CONSOLE,"SMS:Ph No=%s\r\n",phone);
 
 	TIME_SET(0);
 	do
@@ -256,7 +256,7 @@ void readDelSms(mdmIface *mdm, uint8_t index , char *phone ,char *msg ){
 		memset(lbuff, 0,14);
 		res = serialCopy(lbuff, ',','\r');
 		res = atoin(lbuff);
-		debug(CONSOLE,"lengthSMS=%d\n\r",res);
+		debug(CONSOLE,"SMS:lengthSMS=%d\n\r",res);
 
 		for(j = 0; j <= res; j++)
 		{
@@ -278,7 +278,7 @@ void readDelSms(mdmIface *mdm, uint8_t index , char *phone ,char *msg ){
 		//copy the message to  msg
 		memcpy(msg, &lbuff[0], res+3);
 
-		debug(LOG,"MSG=%s",lbuff);
+		debug(LOG,"SMS:MSG=%s",lbuff);
 	}
 	serialMatch(mdm, "OK", 100);
 

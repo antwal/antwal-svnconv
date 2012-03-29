@@ -10,7 +10,7 @@ void die (		/* Stop with dying message */
 		FRESULT rc	/* FatFs return value */
 	)
 	{
-		debug(LOG,"SD =%d\r\n",rc);
+		debug(LOG,"SDreturn =%d\r\n",rc);
 		SS_HIGH(sd);
 		//for (;;) ;
 		return;

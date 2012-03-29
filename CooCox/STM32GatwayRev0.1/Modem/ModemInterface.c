@@ -319,10 +319,14 @@
 
 					default:
 							if(resp != NULL)
-							res = serialMatch(mdm, resp,timeout);
+							{
+								res = serialMatch(mdm, resp,timeout);
+							}
 							else
-							dbg_printf("%s","\n\r");
-							res = mdmOK;
+							{
+								dbg_printf("%s","\n\r");
+								res = mdmOK;
+							}
 							break;
 				}
 
@@ -429,7 +433,7 @@
 		var = 10;
 		if(res == mdmOK){
 		do{
-			debug(CONSOLE,"retry=%d\n\r",var);
+			debug(CONSOLE,"step=%d\n\r",var);
 			switch(state)
 			{
 				case SHUT:
@@ -480,7 +484,7 @@
 			return mdmOK;
 		}
 		else
-			return res;
+			return mdmFail;
 		}
 		return res;
 	}
@@ -572,7 +576,7 @@
 		res = mdmOK;
 		if(state == NWATT)
 		{
-			res = sendwait(mdm, "|AT+CIICR\r","OK", 1000);
+			res = sendwait(mdm, "|AT+CIICR\r","OK", 3000);
 			var = 3;
 			do
 			{
@@ -614,9 +618,9 @@
 	mdmStatus mdmTCPConnect(mdmIface *mdm, server *obj)
 	{
 
-		char count = 3;
+		char count = 2;
 		do{
-		debug(CONSOLE,"%s\n\r","In TCPconnect");
+		debug(CONSOLE,"%s\n\r","InTCPConnect");
 			mdmState(mdm);
 			count --;
 			// If state is one among the these start connecting
@@ -630,7 +634,7 @@
 				sendwait(mdm, obj->port, NULL, 0);
 				res = sendwait(mdm, "\r","CONNECT\r\n",3000);
 
-
+				dbg_printf("TCPret=%d\n\r",res);
 				// If timeout occured and connection does not succeded
 				if(res == mdmTimeOut){
 					debug(LOG,"%s\n\r","TCPConnectionFailed");
@@ -675,7 +679,7 @@
 		var =3;
 		do
 		{
-			debug(CONSOLE,"%s\n\r","In UDPconnect");
+			debug(CONSOLE,"%s\n\r","InUDPConnect");
 			mdmState(mdm);
 			var --;
 			if(state == IP|| state == CLOSE || state == IPGPRSACT )

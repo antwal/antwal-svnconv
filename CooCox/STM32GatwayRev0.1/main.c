@@ -229,6 +229,7 @@ void TmrCallBack(void)
 
 		sdConfig();
 
+		debug(LOG,"%s\n\r","taskUpload started");
 		WDG_setTaskState(dptr , NTP_TIME);
 		mdmLock(&modm);
 		res = ntp_time(&modm);
@@ -238,7 +239,7 @@ void TmrCallBack(void)
 		 * initilize the watch dog debugging structure
 		 *	debug structure for task 2, periodicity 30 minutes
 		 */
-		WDG_initDebug(dptr , 2 , 1800000  , 1);
+		WDG_initDebug(dptr , TCBRunning->taskID , 1800000  , 1);
 		for(;;)
 		{
 			mdmLock(&modm);					// Get modem lock

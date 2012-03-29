@@ -42,6 +42,7 @@ uint8_t uploadFile(mdmIface *mdm, const char *file, server *tcp){
 			res = mdmTCPConnect(mdm, tcp);
 			//login and get the cookie
 
+
 			if(res == mdmOK){
 			//if( (login(mdm)) == mdmOK ){
 			//send the file size and the cookie stored in buffer

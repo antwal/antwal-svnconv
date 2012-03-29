@@ -18,8 +18,8 @@ typedef enum {
 	}mdmStatus;
 
 COX_SERIAL_PI *myUSART1;
-#define APaddr "\"gprssouth.cellone.in\""
-//const char APaddr[] = "\"aircelwap\"\r\n";
+//#define APaddr "\"gprssouth.cellone.in\""
+#define APaddr "\"aircelwap\"\r\n"
 
 #define serial_tx_ready()       1               							// Transmitter empty
 #define serial_send(a)          myUSART1->Write(&a, 1)      				// Transmit char a

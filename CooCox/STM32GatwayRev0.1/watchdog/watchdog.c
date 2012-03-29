@@ -5,6 +5,7 @@
 #include "stm32_rtc.h"
 #include "modem.h"
 #include "stm32f10x_bkp.h"
+#include "debug.h"
 
 /*
  * private functions definitions
@@ -221,6 +222,7 @@ void WDG_dogCheck( void ){
         		//reload the counter
         		dptr->counter = ((dptr->periodicity + dptr->exectime) / DOG_PERIODICITY )+ 1 ;
 
+        		printf("counter=%d, task=%d, state=%d\n\r",dptr->counter, dptr->taskID, dptr->state);
         		//clear the state to UNKNOWN
         		dptr->state = UNKNOWN;
         	}

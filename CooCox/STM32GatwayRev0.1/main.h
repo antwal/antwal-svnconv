@@ -92,7 +92,7 @@ struct status{
 ////////////////////////////////////////////////////////////////////////////////////////////
 #include "coocox.h"
 /*---------------------------- Symbol Define -------------------------------*/
-#define STACK_SIZE_UPLOAD 	200             /*!< Define a Default task size */
+#define STACK_SIZE_UPLOAD 	250             /*!< Define a Default task size */
 #define STACK_SIZE_WSN 		200
 #define STACK_SIZE_WATCHDOG 200             /*!< Define a Default task size */
 #define STACK_SIZE_DEBUG	200
