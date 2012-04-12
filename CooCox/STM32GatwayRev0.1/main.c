@@ -37,6 +37,8 @@ extern struct config sysconfdup ;
 
 // This flag is set in RTime.c; if restart is due to Watchdog
 uint8_t Dog = 0;
+// used in system check
+__IO uint8_t chk[2];
 
 // Debug structure for tasks
 extern dogDebug myDogDebug[];
@@ -46,7 +48,7 @@ extern uint32_t dogStatus;
 MSD_Dev sd_var;
 MSD_Dev *sd= &sd_var;							// MSD instance
 
-#define MaxRx   100     			// Maximum size of receive buffer
+#define MaxRx   1000     			// Maximum size of receive buffer
 
 // USed for appending data from send.xml to alldata.xml
 uint8_t lclbuff[100];
@@ -106,13 +108,38 @@ uint8_t sdConfig(void)
 void modemConfig(void)
 {
 	COX_PIO_Dev DTR = COX_PIN(2,6);			// PORTC6
+	COX_PIO_Dev RST = COX_PIN(1,5);			// PORTB5
 	COX_PIO_PI *PI = &pi_pio;
 
 	modm.dtr_pin = DTR;
+	modm.reset_pin = RST;
 	modm.pio = PI;
 
 	modm.pio->Init(modm.dtr_pin);
 	modm.pio->Dir(modm.dtr_pin,1);
+
+	modm.pio->Init(modm.reset_pin);
+	modm.pio->Out(modm.reset_pin, 0);		// Pull up reset pin
+	modm.pio->Dir(modm.reset_pin,1);
+	modm.pio->Out(modm.reset_pin, 0);		// Pull up reset pin
+
+}
+
+void debugLedInit(void)
+{
+	//Initilize the LED0 and LED1 structure
+	pi_pio.Init(LED0);
+	pi_pio.Init(LED1);
+
+	//configure the port as o/p port
+	pi_pio.Dir(LED0,1);
+	pi_pio.Dir(LED1,1);
+}
+
+void systemCheck(mdmIface *mdm)
+{
+	chk[0] = SDCheck();
+	chk[1] = mdmCheck(mdm);
 }
 
 /*Mote data receive handler*/
@@ -178,15 +205,15 @@ void initSerial(void){
 	bufferInit(&modem_buffer, mBuffer, MaxRx);
 
 	//Usart for communication with the Modem
-	myUSART1->Init(115200);
+	myUSART1->Init(sysconfdup.baud_uart1);
 	myUSART1->Cfg( COX_SERIAL_INT_CONF, RXNE_ENABLE,0);
 
 	// For mote
-	myUSART2->Init(57600);
+	myUSART2->Init(sysconfdup.baud_uart2);
 	myUSART2->Cfg( COX_SERIAL_INT_CONF, RXNE_ENABLE,0);
 
 	//Usart for printf-debugging purpose
-	myUSART3->Init(115200);
+	myUSART3->Init(sysconfdup.baud_uart3);
 	myUSART3->Cfg( COX_SERIAL_INT_CONF, RXNE_ENABLE,0);
 
 
@@ -225,21 +252,27 @@ void TmrCallBack(void)
 
 		TIME_SET(0);
 		tcp.port ="80";
-		tcp.addr = "14.96.145.172";
+		tcp.addr = &sysconfdup.uploadsite[0];
 
 		sdConfig();
 
 		debug(LOG,"%s\n\r","taskUpload started");
 		WDG_setTaskState(dptr , NTP_TIME);
 		mdmLock(&modm);
-		res = ntp_time(&modm);
+		for(ntp_update =0; ntp_update < 3; ntp_update++){
+			res = ntp_time(&modm);
+			if(res == mdmOK){
+				ntp_update =0;
+				break;
+			}
+		}
 		mdmUnLock(&modm);
 
 		/*
 		 * initilize the watch dog debugging structure
 		 *	debug structure for task 2, periodicity 30 minutes
 		 */
-		WDG_initDebug(dptr , TCBRunning->taskID , 1800000  , 1);
+		WDG_initDebug(dptr , TCBRunning->taskID , 1800000, 1);
 		for(;;)
 		{
 			mdmLock(&modm);					// Get modem lock
@@ -247,7 +280,14 @@ void TmrCallBack(void)
 			if(ntp_update > 10){ 			// Update time after each 10 uploads
 				ntp_update = 0;
 				WDG_setTaskState(dptr , NTP_TIME);
-				res = ntp_time(&modm);
+				debug(CONSOLE,"%s\r\n","Going to Update Time");
+				for(ntp_update =0; ntp_update < 3; ntp_update++){
+						res = ntp_time(&modm);
+						if(res == mdmOK){
+							ntp_update =0;
+							break;
+						}
+				}
 			}
 				/*
 				 *  If send.xml file exists that means last uploading was unsuccessful.
@@ -258,67 +298,76 @@ void TmrCallBack(void)
 				 *  once send.xml is uploaded, append the send.xml to alldata.xml.
 				 *  Then delete the send.xml file.
 				 */
-			rc = f_open(&send, "./root/send.xml", FA_READ);
+			debug(LOG,"%s\n\r","Upload Time");
+			res = f_open(&send, "./root/send.xml", FA_READ);
 			f_close(&send);
 
 			// If send.xml file does not exists
-			if(rc == FR_NO_FILE)
+			if(res == FR_NO_FILE)
 			{
 				CoEnterMutexSection(file_mutex);
 				// Copy store.xml to send.xml
-				rc = f_rename("./root/store.xml", "./root/send.xml");
+				res = f_rename("./root/store.xml", "./root/send.xml");
 				CoLeaveMutexSection(file_mutex);
-				debug(CONSOLE,"rename=%d\n\r",rc);
+				debug(CONSOLE,"rename=%d\n\r",res);
+				chk[0] = 0;						// to indicate SD is working fine
 
-				if(rc == 0){
+				if(res == 0){
 					WDG_setTaskState(dptr , UPLOADING);
-					rc = uploadFile(&modm, "./root/send.xml", &tcp);
+					res = uploadFile(&modm, "./root/send.xml", &tcp);
 				}
-				else if (rc == 4){
+				else if (res == 4){
 					// Store.xml is not present
 					debug(CONSOLE,"%s\n\r","store.xml not present");
 				}
 				else{
 					// Some problem with SDcard
 					debug(LOG,"%s\n\r","Problem With SD card");
+					chk[0] = 1;				// To indiacte SD is having some problem
+					SDCheck();
 				}
 			}
-			else if(rc == FR_OK)
-				{
-					WDG_setTaskState(dptr , UPLOADING);
-					debug(CONSOLE,"%s\n\r","send.xml present");
-					rc = uploadFile(&modm, "./root/send.xml", &tcp);
-				}
-				else if(rc == 3){
-					debug(LOG,"%s\n\r","SD card not present");
-				}
-				else{
-					debug(LOG,"%s\n\r","Some problem With SDCard");
-				}
+			else
+			if(res == FR_OK)
+			{
+				WDG_setTaskState(dptr , UPLOADING);
+				debug(CONSOLE,"%s\n\r","send.xml present");
+				res = uploadFile(&modm, "./root/send.xml", &tcp);
+				chk[0] = 0;						// to indicate SD is working fine
+			}
+			else
+			if(res == 3){
+				debug(LOG,"%s\n\r","SD card not present");
+			}
+			else{
+				debug(LOG,"%s\n\r","Some problem With SDCard");
+				chk[0] = 1;				// To indiacte SD is having some problem
+				SDCheck();
+			}
 
 				// Modem Work is over; Release it
 				mdmUnLock(&modm);
 
 				WDG_setTaskState(dptr , MODEM_FREE);
 				// If file is uploaded successfully
-				if(rc == mdmOK)
+				if(res == mdmOK)
 				{
 					// Appending send.xml data to alldata.xml
 					debug(CONSOLE,"%s\n\r","Open read send.xml");
-					rc = f_open(&send, "./root/send.xml", FA_READ );
-					if (rc) die(rc);
+					res = f_open(&send, "./root/send.xml", FA_READ );
+					if (res) die(res);
 					f_sync(&send);
 
 					debug(CONSOLE,"%s\n\r","Write alldata.xml");
-					rc = f_open(&alldata, "./root/alldata.xml", FA_WRITE|FA_READ);//| FA_CREATE_ALWAYS);
-					if (rc) die(rc);
+					res = f_open(&alldata, "./root/alldata.xml", FA_WRITE|FA_READ);//| FA_CREATE_ALWAYS);
+					if (res) die(res);
 					f_sync(&alldata);
 
-					if( rc == FR_NO_FILE)
+					if( res == FR_NO_FILE)
 					{
 						debug(CONSOLE,"%s\n\r","Creating alldata.xml");
-						rc = f_open(&alldata, "./root/alldata.xml", FA_WRITE|FA_READ| FA_CREATE_ALWAYS);
-						if (rc) die(rc);
+						res = f_open(&alldata, "./root/alldata.xml", FA_WRITE|FA_READ| FA_CREATE_ALWAYS);
+						if (res) die(res);
 						f_sync(&alldata);
 					}
 
@@ -329,19 +378,19 @@ void TmrCallBack(void)
 						// Overwriting the Endtag
 						res = f_lseek(&alldata, f_size(&alldata)- strlen(ENDTAG)-1);
 						// Read after the head tag
-						rc = f_read(&send, lclbuff, strlen(STARTTAG)+2, &br);
-						if (rc || !br) die(rc);
+						res = f_read(&send, lclbuff, strlen(STARTTAG)+2, &br);
+						if (res || !br) die(res);
 						//for(res = 0; res < br;res++)
 							//printf(" %c",lclbuff[res]);
-						rc = f_write(&alldata, "\t", 1,&bw);
-						if (rc) die(rc);
+						res = f_write(&alldata, "\t", 1,&bw);
+						if (res) die(res);
 						f_sync(&alldata);
 					}
 					//If nothing is present in the file
 					else{
 						debug(CONSOLE,"%s\n\r","alldata.xml empty");
-						rc = f_write(&alldata, STARTTAG, strlen(STARTTAG), &bw);
-						if (rc) die(rc);
+						res = f_write(&alldata, STARTTAG, strlen(STARTTAG), &bw);
+						if (res) die(res);
 						f_sync(&alldata);
 					}
 
@@ -349,20 +398,20 @@ void TmrCallBack(void)
 					// Start copying content from send.xml to alldata.xml
 					do {
 						WDG_setTaskState(dptr , APPEND);
-						rc = f_read(&send, lclbuff, sizeof(lclbuff), &br);	/* Read a chunk of file */
+						res = f_read(&send, lclbuff, sizeof(lclbuff), &br);	/* Read a chunk of file */
 
-						if (rc || !br) break;								/* Error or end of file */
-						rc = f_write(&alldata, lclbuff, br, &bw);
-						if (rc) break;
+						if (res || !br) break;								/* Error or end of file */
+						res = f_write(&alldata, lclbuff, br, &bw);
+						if (res) break;
 						f_sync(&alldata);
 					}
 					while(f_eof(&send)!= 1);
 
-					rc = f_close(&send);
-					if (rc) die(rc);
+					res = f_close(&send);
+					if (res) die(res);
 
-					rc = f_close(&alldata);
-					if (rc) die(rc);
+					res = f_close(&alldata);
+					if (res) die(res);
 
 					debug(CONSOLE,"%s\n\r","Deleting send.xml\n\r");
 					f_unlink("./root/send.xml");		// Delete the file
@@ -412,7 +461,8 @@ void TmrCallBack(void)
 
 	void taskWatchDog (void* pdata){
 	//dogDebug *dptr;
-	debugInit();
+	uint8_t tog = 1,count=0;
+	systemCheck(&modm);
 	mdmLock(&modm);
 	intimateState(&modm);// place some where else
 	mdmUnLock(&modm);
@@ -430,6 +480,56 @@ void TmrCallBack(void)
 		    IWDG_ReloadCounter();
 		  }
 
+		  /* Resource status check */
+		  // SD card is having some problem
+		  // Toggle @ 5sec
+		  if((chk[0] != 0) )
+		  {
+			  //debug(CONSOLE,"%s%d\n\r","SD Problem=",chk[0]);
+			  if(tog == 1)
+			  {
+				  count++;
+				  pi_pio.Out(LED1,1);
+				  if(count == 5)
+				  {
+					  tog = ~tog;
+					  count =0;
+				  }
+			  }
+			  else
+			  {
+				  pi_pio.Out(LED1,0);
+				  count ++;
+				  if(count == 2)
+				  {
+					  tog = ~tog;
+					  count =0;
+				  }
+			  }
+		  }
+		 else
+		// Modem is having some problem
+		// Togle @ 1 sec
+		if(chk[1] != 0)
+		{
+			//debug(CONSOLE,"%s\n\r","Modem Problem");
+		  if(tog == 1)
+		  {
+			  pi_pio.Out(LED1,1);
+			  tog = ~tog;
+		  }
+		  else
+		  {
+			  pi_pio.Out(LED1,0);
+			  tog = ~tog;
+		  }
+		 }
+		else
+		{
+			 pi_pio.Out(LED1,1);					// Switch off the LED
+		}
+
+		  /* Power down will be implemented after this */
 		  /*
 		   * If modem is in use or not
 		   * If it is in use wake up the modem
@@ -458,7 +558,8 @@ void TmrCallBack(void)
 */
 void taskDebug (void* pdata){
 
-	uint8_t res;
+	uint8_t res, send[30], balChk=0;
+	uint16_t Bal = 255;
 	//initialize the buffer that will be used for command
 	bufferInit( &cmdBuffer, &debug_buffer[0], sizeof(debug_buffer) );
 
@@ -475,6 +576,7 @@ void taskDebug (void* pdata){
 
 	// send a CR to cmdline input to stimulate a prompt
 	cmdlineInputFunc('\r');
+	debug(LOG, "%s\n\r","taskDebug started");
 	// set state to run
 	Run = 1;
 
@@ -492,9 +594,23 @@ void taskDebug (void* pdata){
 
  */
 		mdmLock(&modm);
+
 		res = smsDebugInit(&modm);
 		if(res == mdmOK)
 			smsDebugLoop(&modm);
+		if(balChk >= 20){
+			mdmBalance(&modm, &Bal);
+			debug(LOG, "Balance Low: Rs.%d :(",Bal);
+			/*if(Bal < 10)
+			{
+				smsSend(&modm, (char*)&sysconfdup.err_phoneno[1],&send[0]);
+			}*/
+			balChk = 0;
+		}
+		else{
+			balChk++;
+		}
+
 		mdmUnLock(&modm);
 
 		// Polling Period
@@ -510,20 +626,18 @@ int main(void)
 	//copy the system configurations to the duplicate structure which is in ram
 	sysconfdup = sysconf;
 
+	debugLedInit();
+
 	//Initilize serial configuration
 	initSerial();
+
 	sdConfig();
+	// SD card plug in detection
+	EXTIenable();
 
-	//Initilize the LED0 and LED1 structure
-	pi_pio.Init(LED0);
-	pi_pio.Init(LED1);
-
-	//configure the port as o/p port
-	pi_pio.Dir(LED0,1);
-	pi_pio.Dir(LED1,1);
-
-	// Initialising RTC clk
+	// Initializing RTC clk
 	RTC_Timer();
+	// Initialise modem configuration
 	modemConfig();
 	// Mount Filesystem
 	mount(fatfs);

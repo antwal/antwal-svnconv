@@ -27,7 +27,7 @@ struct config sysconf ={
 	.APN = APN_STRING,
 	.APN_username =APN_USERNAME,
 	.APN_password=APN_PASSWORD,
-	.site = SITE,
+	.uploadsite = SITE,
 	.username= USERNAME,
 	.password=PASSWORD,
 	.cookie_respath=COOKIE_RESPATH,
@@ -51,7 +51,7 @@ struct config defconf ={
 	.APN = APN_STRING,
 	.APN_username =APN_USERNAME,
 	.APN_password=APN_PASSWORD,
-	.site = SITE,
+	.uploadsite = SITE,
 	.username= USERNAME,
 	.password=PASSWORD,
 	.cookie_respath=COOKIE_RESPATH,
@@ -192,14 +192,14 @@ void setsiteFunction(void){
 		printf("Format: setsite <sitename>\n\r");
 		return;
 	}
-	if(len < sizeof(sysconfdup.site)){
-		memset(&sysconfdup.site[0],'\0',sizeof(sysconfdup.site));
+	if(len < sizeof(sysconfdup.uploadsite)){
+		memset(&sysconfdup.uploadsite[0],'\0',sizeof(sysconfdup.uploadsite));
 				while(start != end && *start != ' ' ){
-			sysconfdup.site[i++]= *start++ ;
+			sysconfdup.uploadsite[i++]= *start++ ;
 		}
 	}
 	else{
-		printf("Max %d character allowed in argument\n\r",sizeof(sysconfdup.site));
+		printf("Max %d character allowed in argument\n\r",sizeof(sysconfdup.uploadsite));
 	}
 }
 

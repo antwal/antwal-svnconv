@@ -10,11 +10,12 @@
 #include "modem.h"
 #include "ntp.h"
 #include "debug.h"
+#include "config.h"
 
 	COX_SERIAL_PI *myUSART1 = &pi_serial1;
 
 
-
+	extern uint8_t chk[2];
 	unsigned char signal[2];							// Stores signal strength
 	char ipAddr[20] = {'\0'};							// used to store ip address
 
@@ -40,6 +41,8 @@
 	unsigned char addr1, addr2, addr3, addr4;      				// Assigned IP address
 	extern	cBuffer modem_buffer;								// Receive Buffer for modem
 	extern 	unsigned char *mBuffer;
+
+	extern struct config sysconfdup ;
 
 
 	// Takes the return values
@@ -112,6 +115,19 @@
 
 	}
 
+	mdmStatus mdmCheck(mdmIface *mdm)
+	{
+		uint8_t res,count=0;
+		res = sendwait(mdm,"\r|+++|\r", "OK", 200);
+		do{
+			count ++;
+			res = sendwait(mdm, "AT\r", "OK", 100);
+		}
+		while(res != mdmOK && count < 3);
+		sendwait(mdm, "ATE0\r", "OK", 100);
+		return res;
+
+	}
 	/* used to indicate if any write operation is done or not
 		toggle = 0; // write not done or same payload is requested to be read in small chunk
 		toggle = 1; // write done so new packet is available to be read
@@ -136,19 +152,19 @@
 
 			}
 			else{
-				debug(LOG,"Buffer Full %c\n\r",ch);
+				debug(CONSOLE,"Buffer Full %c\n\r",ch);
 			}
 		}
 		else if((USART1->SR & 0x08) != (u16)RESET)			// Handling overrun error
 		{
-			debug(LOG,"%s\n\r","Overrun");
+			debug(CONSOLE,"%s\n\r","Overrun");
 			ch = (USART1->DR & (us16)0x01FF);
 			if(bufferIsNotFull(&modem_buffer)){
 				bufferAddToEnd(&modem_buffer, ch);					// Keeping data into the buffer
 				//printf("-%c",ch);
 			}
 			else{
-				debug(LOG,"Buffer Full %c\n\r",ch);
+				debug(CONSOLE,"Buffer Full %c\n\r",ch);
 			}
 		}
 		CoExitISR ( );
@@ -162,7 +178,7 @@
 		*/
 		mdmStatus serialCopy(char* lbuff, char start, char end)
 		{
-			char i=0;
+			uint16_t i=0;
 			TIME_SET(0);
 			do{
 				if(serial_rx_ready())
@@ -261,7 +277,7 @@
 						dbg_printf("%s","\n\r");
 					if (send[addr3]=='|') { 												// if pause character
 						TIME_SET(0);
-						while (TIME_TICK < 100);     									// Polling; has 1 second expired yet?
+						while (TIME_TICK < 50);     									// Polling; has 1 second expired yet?
 						TIME_SET(0);													// if yes clear timer
 						addr3++;              				       							// and point to next character
 					}
@@ -343,7 +359,7 @@
 				try = 2;
 				do{
 					if(state == CONNECT || state == CLOSE)
-						sendwait(mdm, "|+++\r","OK",100);
+						sendwait(mdm, "||+++|\r","OK",100);
 
 					res = sendwait(mdm, "AT+CIPSTATUS\r", "STATE:",100);
 					try-- ;
@@ -430,7 +446,7 @@
 		state = CLOSE;
 
 		res = mdmState(mdm);
-		var = 10;
+		var = 20;
 		if(res == mdmOK){
 		do{
 			debug(CONSOLE,"step=%d\n\r",var);
@@ -489,7 +505,6 @@
 		return res;
 	}
 
-
 	/*
 	*	This function initialises the modem to its default state
 	*/
@@ -498,33 +513,42 @@
 		uint8_t count = 0;
 		res = mdmOK;
 
+		// Independent of state execution
+		do{
+			count ++;
+			res = sendwait(mdm,"\r||+++|\r", "OK", 200);
+			res = sendwait(mdm, "AT\r", "OK", 300);
+		}
+		while(res != mdmOK && count < 3);
+
+		if(res != mdmOK)
+			chk[1] = 1;					// indicating modem is not responding
+		res = sendwait(mdm, "|ATE0\r", "OK",500);
 		if(state == SHUT || state == CLOSE || state == FORCED)
 		{
-			do{
-				count ++;
-				res = sendwait(mdm,"\r|+++|\r", "OK", 200);
-				res = sendwait(mdm, "AT\r", "OK", 300);
+			if(res != mdmOK)
+			{
+				modm.pio->Out(modm.reset_pin, 1);		// Resetting Modem
+				CoTickDelay (10);		// For 2 MInute
+				modm.pio->Out(modm.reset_pin, 0);		// Resetting Modem
+				debug(LOG,"%s\n\r","Resetting Modem");
 			}
-			while(res != mdmOK && count < 3);
-
 			res	= sendwait(mdm,"ATZ\r", "OK",200);
 			res = sendwait(mdm,"|AT S7=45 S0=0 L1 V1 X4 &c1 E0 Q0\r", "OK", 1000);
 
-			if(res != mdmOK)
-			{
-				// reset the modem; It's not responding
-			}
+
 			//res = sendwait(mdm,"AT&FS11=55\r", "OK", 300);
 			res = sendwait(mdm,"|AT+IFC=2,2\r","OK",300); //for configuring h/w flow control
 			res = sendwait(mdm, "|ATE0\r", "OK",500);
 			res = sendwait(mdm, "AT+CMEE=0\r", "OK", 100);
-			res = sendwait(mdm, "|AT+CIPMODE=1\r","OK",300);
+			sendwait(mdm, "|AT+CIPMODE=1\r","OK",300);
 
 		}
 		state = INIT;
-		if(res != mdmOK)
+		if(res != mdmOK){
 			return mdmInitFail;
-
+		}
+		chk[1] = 0;						// Indicating modem is working fine
 		return res;
 
 	}
@@ -552,9 +576,9 @@
 		if (state == INIT || state == FORCED)
 		{
 			//Setting APN adddress for GSM
-			sendwait(mdm,"AT+CSTT=",NULL,0);			// Sending the command
-			sendwait(mdm, APaddr, NULL, 0);				// Send AP addr
-			res = sendwait(mdm,"\r","OK", 200);
+			sendwait(mdm,"AT+CSTT=\"",NULL,0);			// Sending the command
+			sendwait(mdm, &sysconfdup.APN[0], NULL, 0);			// Send AP addr
+			res = sendwait(mdm,"\"\r","OK", 200);
 
 			if(res != mdmOK)
 				return mdmApnFail;
@@ -563,9 +587,7 @@
 
 		return res;
 
-
 	}
-
 
 	/*
 	*	This function ups the Interface and get a new IP
@@ -634,7 +656,7 @@
 				sendwait(mdm, obj->port, NULL, 0);
 				res = sendwait(mdm, "\r","CONNECT\r\n",3000);
 
-				dbg_printf("TCPret=%d\n\r",res);
+				//dbg_printf("TCPret=%d\n\r",res);
 				// If timeout occured and connection does not succeded
 				if(res == mdmTimeOut){
 					debug(LOG,"%s\n\r","TCPConnectionFailed");
@@ -822,14 +844,14 @@
 	 */
 	mdmStatus mdmTransSend(mdmIface *mdm, char *buffer, uint32_t len)
 	{
-		uint32_t i;
-		debug(CONSOLE,"%s\n\r","In Transwrite");
-		  if(state == CONNECT){
+		uint32_t i =0;
+		//debug(CONSOLE,"%s\n\r","In TransSend");
 
+		  if(state == CONNECT){
 				for(i = 0; i< len; i++)
 				{
+					dbg_printf(" %c",buffer[i]);
 					serial_send(buffer[i]);
-					dbg_printf("%c ",buffer[i]);
 					// If while sending modem returns error transsend should exit
 					if(serial_rx_ready())
 					{
@@ -994,33 +1016,6 @@
 	}
 
 	/*
-	 * This function matches a string provided by match parameter
-	 *
-	 */
-	mdmStatus mdmReadMatch(mdmIface *mdm, char* match)
-	{
-		res = serialMatch(mdm, match, 100);
-		if(res == mdmTimeOut)  // No response or String not found
-		{
-			debug(CONSOLE,"%s\n\r","Match Not Found");
-			mdmSwitch(mdm,COMMAND);		// Come out of the command mode
-			return mdmTimeOut;
-		}else if (res == mdmErr) // Response: ERROR
-		{
-			debug(CONSOLE,"%s\n\r","Error Occured");
-			mdmSwitch(mdm,COMMAND);		// Come out of the command mode
-			return mdmReadFail;
-		}
-		else if (res == mdmFail) // Response: ERROR
-		{
-			debug(CONSOLE,"%s\n\r","Error Occured");
-			mdmSwitch(mdm,COMMAND);		// Come out of the command mode
-			return mdmReadFail;
-		}
-		return mdmOK;
-	}
-
-	/*
 	 * This function brings modem from data mode to command mode and vice-vesa
 	 * based on the @arg mode
 	 * For mode = COMMAND- to command mode from data
@@ -1030,7 +1025,7 @@
 	{
 			debug(CONSOLE,"%s\n\r","Switching");
 			if(mode == COMMAND)
-				res = sendwait(mdm, "|+++|\r", "OK", 500);				// For command mode
+				res = sendwait(mdm, "||+++|\r", "OK", 500);				// For command mode
 			else if(mode == DATA)
 				res = sendwait(mdm, "ATO\r", "OK", 500);					// For data mode
 
@@ -1103,5 +1098,34 @@
 
 		state = SHUT;
 		return res;
+	}
+
+	/* To know the balance using USSD service */
+	mdmStatus mdmBalance(mdmIface *mdm, uint16_t *Balance)
+	{
+		uint8_t lbuff[8], j=0;
+	    uint16_t bal =0;
+
+	    res = sendwait(mdm, "AT+CUSD=1,\"*123#\",0\r","OK",100);
+
+	    res = serialMatch(mdm, "Rs.",1000);                     // Find out the Rs. tag
+	    addr4 = 0;
+	    if(res == mdmOK)
+	    {
+	    	while(addr4 != '.'){
+	    		if(serial_rx_ready())
+	    		{
+	    			serial_get(addr4);
+	                lbuff[j++] = addr4;
+	            }
+	    	}
+	    	lbuff[--j] = '\0';
+	    	*Balance = atoin(&lbuff[0]);
+
+	        debug(LOG,"Balance=%d\n\r", *Balance);
+	    }
+	    else{
+	    	*Balance = 255;
+	    }
 	}
 

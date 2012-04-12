@@ -7,8 +7,12 @@
 #include "watchdog.h" // for debugging using watchdog
 #include "http.h"
 #include "debug.h"
+#include "config.h"
+#include "buffer.h"
 
 #define CLR_BUFFER(buff) memset(buff,'\0',MAX_BUFF_SIZE)
+
+extern struct config sysconfdup ;
 
 /*
  * External function and variables definition
@@ -25,9 +29,9 @@ extern dogDebug myDogDebug[];
 static char buffer[MAX_BUFF_SIZE]={'\0'};
 static char get[100]={'\0'};
 
-uint32_t size;				/* size of file */
+uint16_t size;				/* size of file */
 static mdmStatus res;
-
+extern	cBuffer modem_buffer;								// Receive Buffer for modem
 
 /*
  * This function will upload the file to the remote server
@@ -44,17 +48,17 @@ uint8_t uploadFile(mdmIface *mdm, const char *file, server *tcp){
 
 
 			if(res == mdmOK){
-			//if( (login(mdm)) == mdmOK ){
+			if( (login(mdm)) == mdmOK ){
 			//send the file size and the cookie stored in buffer
 			if( (sendHeader(mdm, getFileSize(file), &get[0] )) == mdmOK ){
 				//send the data
 				if( (sendData(mdm ,file)) == mdmOK){
 					// Read the response if sending is successful
-					res = mdmHttpRes(mdm, &size);
+					res = mdmHttpRes(mdm, &size, httpRes);
 					if(res == httpOK || res == httpLenUnkwn )
 					{
 						// Match the string in the body of the response
-						res = mdmReadMatch(mdm,"Upload");
+						res = mdmHttpBody(mdm, "Data recv OK", &size, 1500);
 						if(res == mdmOK)
 						{
 							debug(LOG,"%s\n\r","File uploaded");
@@ -74,11 +78,12 @@ uint8_t uploadFile(mdmIface *mdm, const char *file, server *tcp){
 					debug(LOG,"%s\n\r","Sending File Failed");
 			}else
 				debug(LOG,"%s\n\r","Header post failed");
-		//}else
+		}else
 		debug(LOG,"%s\n\r","Login Failed");
 			}
 		}
 		//close the TCP connection to the server
+		bufferFlush(&modem_buffer);
 		mdmSwitch(mdm, COMMAND);
 		mdmClose(mdm);
 		return mdmSendFail;
@@ -95,27 +100,30 @@ uint8_t uploadFile(mdmIface *mdm, const char *file, server *tcp){
  */
 mdmStatus login(mdmIface *mdm)
 {
-
 	// Retrieves the cookie for the site
 	//if(!mdmSend(mdm))
-		res = mdmTransSend(mdm, GET_COOKIE, strlen(GET_COOKIE));
+	uint8_t count = 0;
+	uint16_t len =0;
+	do{
+		dbg_printf("%s\n\r","Log in");
+		res = mdmTransSend(mdm, &GET_COOKIE_1[0], strlen(&GET_COOKIE_1[0]));
+		res = mdmTransSend(mdm,&sysconfdup.cookie_respath[0], strlen(&sysconfdup.cookie_respath[0]));
+		res = mdmTransSend(mdm, GET_COOKIE_2, strlen(GET_COOKIE_2));
+		res = mdmTransSend(mdm,&sysconfdup.uploadsite[0], strlen(&sysconfdup.uploadsite[0]));
+		res = mdmTransSend(mdm, GET_COOKIE_3, strlen(GET_COOKIE_3));
+		res = mdmTransSend(mdm,&sysconfdup.username[0], strlen(&sysconfdup.username[0]));
+		res = mdmTransSend(mdm, GET_COOKIE_4, strlen(GET_COOKIE_4));
+		res = mdmTransSend(mdm,&sysconfdup.password[0], strlen(&sysconfdup.password[0]));
+		res = mdmTransSend(mdm, GET_COOKIE_5, strlen(GET_COOKIE_5));
 
-	if(res == mdmOK)
-	{
-		res = serialMatch(mdm, "HTTP/1.1", 100);
-	    res = serialCopy(&get[0], ' ','\r');
-	    debug(CONSOLE,"response= %s\n\r",&get[0]);
+		if(res == mdmOK)
+		{
+			res = mdmHttpRes(mdm, NULL, httpLogin);
+		}
+		count++;
+	}
+	while(count < 3 && res != httpOK);
 
-	    res = serialMatch(mdm, "Set-Cookie:", 100);
-	    res = serialCopy(&get[0],' ',';');
-	    debug(CONSOLE,"Cookie=%s\n\r",&get[0]);
-
-	    res = serialMatch(mdm, "Set-Cookie:",100);
-	    if(res != mdmTimeOut)
-	    res = serialCopy(&get[0],' ',';');
-
-	    debug(CONSOLE,"NewCookie=%s\n",&get[0]);
-	 }
 	return res;
 
 }
@@ -135,29 +143,38 @@ mdmStatus sendHeader(mdmIface *mdm, uint32_t file_size, char *cookie ){
 
         CLR_BUFFER(buffer);
         //if((res = mdmSend(mdm)) == mdmOK){
+
+        // Uncomment below lines if POST File is used
+/*
         sprintf(buffer, "%d" ,(file_size + strlen(BEFORE_DATA) + strlen(AFTER_DATA)));
         debug(CONSOLE,"POSTDATA Size=%d\n\r",file_size+strlen(BEFORE_DATA)+strlen(AFTER_DATA) );
-
+*/
+        sprintf(buffer, "%d" ,(file_size));
+        debug(CONSOLE,"POSTDATA Size=%d\n\r",file_size);
 
         debug(CONSOLE,"%s\n\r","Sending Headers");
         //Sending  Header
-        res = mdmTransSend(mdm,POST_H, strlen(POST_H));
+        res = mdmTransSend(mdm,POST_H_1, strlen(POST_H_1));
+        res = mdmTransSend(mdm,&sysconfdup.upload_respath[0], strlen(&sysconfdup.upload_respath[0]));
+        res = mdmTransSend(mdm,POST_H_2, strlen(POST_H_2));
+        res = mdmTransSend(mdm,&sysconfdup.uploadsite[0], strlen(&sysconfdup.uploadsite[0]));
+        res = mdmTransSend(mdm,POST_H_3, strlen(POST_H_3));
         if(res != mdmOK) return res;
        // printf(POST_H);
         //send the content length
         res = mdmTransSend( mdm, buffer, strlen(buffer));
         if(res != mdmOK) return res;
         //printf("%s",buffer);
-       // res = mdmWrite(mdm, CLRF ,strlen(CLRF), 0);//uncomment if cookie is present
+        res = mdmTransSend(mdm, CLRF ,strlen(CLRF));//uncomment if cookie is present
 
         //send the string cookie
-       // res = mdmWrite(mdm, COOKIE , strlen(COOKIE),0);
+        res = mdmTransSend(mdm, COOKIE , strlen(COOKIE));
         //actual cookie
-        //res = mdmWrite(mdm, cookie , strlen(cookie),0);
-        //printf("\n My Cookie: %s",cookie);
+        res = mdmTransSend(mdm, cookie , strlen(cookie));
+       // dbg_printf("\n My Cookie: %s",cookie);
         res = mdmTransSend(mdm, DCLRF ,strlen(DCLRF));//send the header from the modem
         if(res != mdmOK) return res;
-       // printf(DCLRF);
+        //printf(DCLRF);
         debug(CONSOLE,"%s\n\r","End Headers");
         //}
         return res;
@@ -169,10 +186,11 @@ mdmStatus sendData(mdmIface *mdm ,const char *file){
 
         debug(LOG,"%s\n\r","SENDING DATA");
 
-        //sending BEFORE_DATA(needed for sending the file in multipart)
+        // Uncomment below lines if POST File is used
+/*        //sending BEFORE_DATA(needed for sending the file in multipart)
         res = mdmTransSend(mdm, BEFORE_DATA , strlen(BEFORE_DATA));
         if(res != mdmOK) return res;
-
+*/
       	//open file
     	rc = f_open(&send, file, FA_READ);
     	if (rc) die(rc);
@@ -188,12 +206,11 @@ mdmStatus sendData(mdmIface *mdm ,const char *file){
         	if (rc) die(rc);
         	if(rc != FR_OK)
         	{
-        		// If there is any prblem with file while reading
-        		// return
+        		// If there is any prblem with file while reading return
         		f_close(&send);
         		return rc;
         	}
-            debug(CONSOLE,"File Data = %d\n\r",size);
+            //debug(CONSOLE,"File Data = %d\n\r",size);
 
            //uncomment the below mentioned line if  using watchdog
            WDG_setTaskState(&myDogDebug[0], UPLOADING);
@@ -207,10 +224,11 @@ mdmStatus sendData(mdmIface *mdm ,const char *file){
         }
         f_close(&send);
 
-        //sending AFTER_DATA(needed for sending the file in multipart)
+        // Uncomment below lines if POST File is used
+/*        //sending AFTER_DATA(needed for sending the file in multipart)
         res = mdmTransSend(mdm, AFTER_DATA , strlen(AFTER_DATA));
         if (res != mdmOK) return res;
-
+*/
 
         debug(LOG,"%s\n\r","SENDING DATA DONE");
         return res;
@@ -246,28 +264,38 @@ uint32_t getFileSize(const char *file){
 	 * is there in response
 	 * Parameters:
 	 * @mdm: modem interface
-	 * @ContLen: Body length
+	 * @ContLen: Body length; If NULL length is not required else some variable address should be passed
+	 * @cond   : Tells if the response is from login(Cookies need to be stored) or general POST response
 	 * @return: mdmOK if response code is desired one
 	 * 			mdmTimeOut if response code is not found
 	 * 			mdmErr if Error is returned by Modem
 	 *
 	 */
-	httpStatus mdmHttpRes(mdmIface *mdm, uint32_t* ContLen)
+httpStatus mdmHttpRes(mdmIface *mdm, uint16_t* bodLen, uint8_t cond )
 	{
-		uint16_t code, i= 0;
+		uint16_t code = 0, i= 0;
 		CLR_BUFFER(buffer);
-		res = serialMatch(mdm, "HTTP/1.1", 60000);
+		res = serialMatch(mdm, "HTTP/1.1", 1500);
 		if(res == mdmOK )
 		{
 			res = serialCopy(&buffer[0], ' ','\r');
-			debug(CONSOLE,"response=%s\n\r",&buffer[0]);
+			//debug(CONSOLE,"response=%s\n\r",&buffer[0]);
+
 			while(i < 3){
 				if(i!= 0)
 					code *=10;
-				code += (buffer[i] - 48);
+				if(buffer[i] >47 && buffer[i] < 58)
+				{
+					code += (buffer[i] - 48);
+				}
+
 				i++;
 			}
 			i = 0;
+
+			// http response not found
+			if(res != mdmOK)
+				return httpErr;
 			debug(CONSOLE,"ResCode=%d\n\r",code);
 			switch(code)
 			{
@@ -283,51 +311,171 @@ uint32_t getFileSize(const char *file){
 			case 302:
 				res = httpOK;
 				break;
+			case 403:
+
+				//debug(LOG,"%s\r\n","Access Forbidden");
+				res = httpErr;
+				break;
 			default:
 				res = httpErr;
 				break;
 			}
 
-			// If response code is OK; Lets find the Content length
-			if(res == httpOK)
+			// Bring out the cookies
+			if(res == httpOK && cond == httpLogin)
+			{
+				 res = serialMatch(mdm, "Set-Cookie:", 200);
+			         res = serialCopy(&get[0],' ',';');
+				 debug(CONSOLE,"Cookie=%s\n\r",&get[0]);
+
+				 res = serialMatch(mdm, "Set-Cookie:",200);
+		       	     if(res != mdmTimeOut){
+       	        		 memset(get,0,sizeof(get));
+			       	     res = serialCopy(&get[0],' ',';');
+			       	     debug(CONSOLE,"NewCookie=%s\n",&get[0]);
+
+				}
+			}
+
+			// If response code is OK; and cookies requested are found Lets find the Content length
+//			if(res == httpOK)
 			{
 				i = 0;
-				res = serialMatch(mdm, "Content-Length:", 100);
-				if(res != mdmTimeOut && res != mdmErr )
+				code = serialMatch(mdm, "Content-Length:", 100);
+				if(code != mdmTimeOut && code != mdmErr )
 				{
-					res = serialCopy(&buffer[0], ' ','\r');
-					//printf("Length= %s\n\r",&buffer[0]);
+					serialCopy(&buffer[0], ' ','\r');
+					printf("Length= %s\n\r",&buffer[0]);
+					code = 0;
 					while(buffer[i]){
 						if(i!= 0)
-							*ContLen *=10;
+							code *=10;
 
-						*ContLen += buffer[i] - 48;
+						code += buffer[i] - 48;
 						i++;
 					}
-					debug(CONSOLE,"ResLength=%d\n",*ContLen);
+					if(bodLen != NULL)
+						*bodLen = code;
+					debug(CONSOLE,"ResLength=%d\n",code);
+
 				}
 				else
 				{
 					// Length field not found
-					return httpLenUnkwn;
+					*bodLen = 0;
+					code = httpLenUnkwn;
 				}
 			}
+
+			// If some error response is received its better to read out all the body here only
+			// Also if possible lets bring out the possible reason that caused the error
+			if(res == httpErr && code != httpLenUnkwn)
+			{
+				if(cond == httpLogin){
+				res = mdmHttpBody(mdm, "Page not found", bodLen, 200);			// Timeout is small coz error does not come with big content
+					if(res == httpOK)
+					debug(LOG, "%s\r\n","Page not found");
+				}
+				else if(cond == httpRes) {
+					res = mdmHttpBody(mdm, "forbidden", bodLen, 200);			// Timeout is small coz error does not come with big content
+				}
+				return httpErr;
+			}
+
 		}
 		else{
 			if(res == mdmTimeOut)res = httpTimeOut;
 			if(res == mdmErr || res == mdmFail)res = httpErr;
+			if(code == httpLenUnkwn)res = httpLenUnkwn;
 		}
 
 		return res;
 	}
 
-	/**
-	 * Function which collects the Body of the HTTP response and stores it
-	 * into the file
-	 * Parameters:
-	 * @mdm: modem interface
-	 * @file: where to save
-	 * @len: Length of the body to read
-	 */
-	httpStatus mdmHttpBody()
-	{}
+
+	/*
+		 * This function can be used to read the HTTP response sent by the server
+		 * It looks for the particular response code to match along with error strings:ERROR and CLOSED strings
+		 * If any of the two errorstrings is found it immediately comes out.
+		 * However if response code is found it keeps reading the len byte until it finish reading or timeout occurs
+		 * This is done so as to completely read the response from remote server and empty the buffer at modem side
+		 * Parameters:
+		 * @mdm: modem interface
+		 * @resp : response string which is to be matched in the body of the response; If res = NULL, body will be saved to some file
+		 * @len : length of the body
+		 * @timeout: wait for the response timeout amount of time and then come out if nothing is coming
+		 */
+		httpStatus mdmHttpBody(mdmIface *mdm, const char* resp, uint16_t *len, uint16_t timeout)
+		{
+			uint8_t addr2 =0, addr4 = 0;
+			char err[10]="ERROR\r\n";
+			char cls[11]="CLOSED\r\n";
+			uint8_t errVar = 0, clsVar = 0, out = 0 ;
+			uint16_t i =0;
+
+			// Discard all the http header response
+			serialMatch(mdm, "\r\n\r\n",100);
+			do{
+				if(serial_rx_ready())
+				{
+					serial_get(addr4);
+					if(addr4 != '\r' && addr4 != '\n')
+					dbg_printf("%c ",addr4);
+
+					// To match the response
+					if (resp[addr2] == addr4)
+					{
+						addr2++;  											// does char match response string
+						if (!resp[addr2]){										// All char are matched
+				//			printf("%s","\n\r");
+						  	out = 1;
+
+						addr2 = 0;					// Finish the remaining buffer
+						}
+					}
+					else addr2 = 0;
+
+					// To match error Condition
+					if(err[errVar] == addr4)
+					{
+						errVar++;  											// does char match response string
+						if (!err[errVar]){										// All char are matched
+							dbg_printf("%s","\n\r");
+							return httpErr;
+						}
+					}
+					else errVar = 0;													// otherwise reset match pointer
+					// To match close condition
+
+				if(cls[clsVar] == addr4)
+					{
+						clsVar++;  											// does char match response string
+						if (!cls[clsVar]){										// All char are matched
+							dbg_printf("%s","\n\r");
+							return httpErr;
+						}
+					}
+					else clsVar = 0;													// otherwise reset match pointer
+
+				i++;
+
+				TIME_SET(0);
+				}
+
+			}
+			while((*len != i) && (TIME_TICK < timeout));
+
+			// data read returned
+			*len = i;
+			debug(CONSOLE,"\n\rData read =%d\n\r",i);
+			// response or String found
+			if(out == 1)
+			{
+				debug(CONSOLE,"%s\n\r","Match Found");
+				return httpOK;
+
+		}
+			// Response not matched
+			return httpTimeOut;
+		}
+

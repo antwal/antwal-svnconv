@@ -25,28 +25,48 @@ typedef enum {
 	httpOK = 0,					// If response code is fine
 	httpErr,				// If Error returned from modem or Response code indicates error
 	httpTimeOut,			// Timeout while waiting for the response
-	httpLenUnkwn			// If length field is not present
+	httpLenUnkwn,			// If length field is not present
+	httpLogin,				// response is for Login request
+	httpRes					// General response from the server
 }httpStatus;
 
-#define GET_COOKIE \
-"POST /uagri/?q=user/login HTTP/1.1\r\n\
-Host: ubicomp.in\r\n\
-Accept: */*\r\n\
+//////////////////////////////////////////////////////////////////
+/*Cookie request string */
+#define GET_COOKIE_1 "POST "
+///uagri/?q=user/login
+#define GET_COOKIE_2 \
+" HTTP/1.1\r\n\
+Host: "
+//ubicomp.in
+#define GET_COOKIE_3 \
+"\r\nAccept: */*\r\n\
 Range: bytes=0-1\r\n\
 Content-Type: application/x-www-form-urlencoded\r\n\
 Content-Length: 55\r\n\
 \r\n\
-name=uagri&pass=uagri123&form_id=user_login&op=Log%20in"
+name="
+//uagri
+#define GET_COOKIE_4 "&pass="
+//uagri123
+#define GET_COOKIE_5 "&form_id=user_login&op=Log%20in\r\n"
 
+
+
+///////////////////////////////////////////////////////////////////////////////
 /*"POST /uagri/?q=node/75 HTTP/1.1\r\n*/
-#define POST_H \
-"POST /upload_file.php HTTP/1.1\r\n\
-Host: 14.96.145.172\r\n\
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n\
+/* POST strings */
+#define POST_H_1 "POST "
+#define POST_H_2 \
+" HTTP/1.1\r\n\
+Host: "
+
+//Content-Type: multipart/form-data; boundary=--80346\r\n\
+
+#define POST_H_3 \
+"\r\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n\
 Accept-Language: en-us,en;q=0.5\r\n\
 Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7\r\n\
 Keep-Alive: 115\r\n\
-Content-Type: multipart/form-data; boundary=--80346\r\n\
 Content-Length:"
 
 
@@ -101,7 +121,7 @@ struct status{
 /*---------------------------- Variable Define -------------------------------*/
 OS_STK     watchdog_stk[STACK_SIZE_WATCHDOG];	  /*!< Define "taskA" task stack */
 OS_STK     upload_stk[STACK_SIZE_UPLOAD];	  					/*!< Define "taskB" task stack */
-OS_STK     wsn_stk[STACK_SIZE_WSN];	  /*!< Define "led" task stack   */
+OS_STK     wsn_stk[STACK_SIZE_WSN];	  				/*!< Define "WSN" task stack   */
 OS_STK	   debug_stk[STACK_SIZE_DEBUG];
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -116,9 +136,6 @@ OS_FlagID flag;
 OS_MutexID file_mutex;
 
 // This mutex will be used to make sure the mutual exclusion of modem
-OS_MutexID modem_mutex;
-
-//Used to get the mutual access to GSM Gprs Modem
 OS_MutexID modem_mutex;
 
 //Used to get the mutual access to the Uart2 used for printf

@@ -17,9 +17,14 @@ typedef enum {
 		mdmErr							// If Error is returned in response
 	}mdmStatus;
 
+
 COX_SERIAL_PI *myUSART1;
+
+/* no longer using it. APN can be changed from config.h*/
 //#define APaddr "\"gprssouth.cellone.in\""
-#define APaddr "\"aircelwap\"\r\n"
+//#define APaddr "\"aircelwap\"\r\n"
+//#define APaddr "\"airtelgprs.com\"\r\n"
+
 
 #define serial_tx_ready()       1               							// Transmitter empty
 #define serial_send(a)          myUSART1->Write(&a, 1)      				// Transmit char a
@@ -38,6 +43,7 @@ typedef struct{
 
 	typedef struct {
 		uint16_t     dtr_pin;          // Pin of the dtr
+		uint16_t     reset_pin;          // Pin of the reset
 		COX_PIO_PI   *pio;             // The PIO Interface to use
 		char *ip_addr;
 		// This tells if the modem is locked by any task
@@ -76,5 +82,7 @@ mdmIface modm;
 	mdmStatus mdmTransSend(mdmIface *mdm, char *buffer, uint32_t len);
 	mdmStatus mdmSentData(mdmIface *mdm);
 	mdmStatus mdmSwitch(mdmIface *mdm, uint8_t mode);
+	mdmStatus mdmBalance(mdmIface *mdm, uint16_t *Balance);
 
+	// Defined in sms.c
 	mdmIface smsSend(mdmIface *mdm, const char* phNo, char * Msg);

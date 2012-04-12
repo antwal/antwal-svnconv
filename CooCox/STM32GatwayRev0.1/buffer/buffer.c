@@ -16,6 +16,7 @@
 //*****************************************************************************
 
 #include "buffer.h"
+#include "debug.h"
 
 
 //#ifdef PC
@@ -174,15 +175,19 @@ unsigned short bufferIsNotFull(cBuffer* buffer)
 	return FAIL;
 }
 
-unsigned char bufferDataAvail(cBuffer* buffer)
+uint16_t bufferDataAvail(cBuffer* buffer)
 {
 	// begin critical section
 	CRITICAL_SECTION_START;
 	// returns the number of bytes available to read; if nothing is present returns 0
+	//if(buffer->datalength > 10)
+	//dbg_printf("len=%d\t",buffer->datalength);
 	return (buffer-> datalength);
 	// end critical section
 	CRITICAL_SECTION_END;
 }
+
+
 void bufferFlush(cBuffer* buffer)
 {
 	// begin critical section

@@ -317,11 +317,13 @@ void Default_Reset_Handler(void)
   * @param  None
   * @retval None  
   */
+#include "debug.h"
 static void Default_Handler(void) 
 {
   /* Go into an infinite loop. */
   while (1) 
   {
+	  debug(LOG,"%s\r\n","In the default handler");
   }
 }
 

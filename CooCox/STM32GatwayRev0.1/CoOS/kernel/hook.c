@@ -52,12 +52,13 @@ void CoIdleTask(void* pdata)
  * @details    This function is a hook for stack overflow.	 
  *******************************************************************************
  */
+#include "debug.h"
 void CoStkOverflowHook(OS_TID taskID)
 {
     /* Process stack overflow  here */
     for(; ;) 
     {
-      
+    	debug(LOG,"Stack overflow=%d\r\n",taskID);
     }
 }
 

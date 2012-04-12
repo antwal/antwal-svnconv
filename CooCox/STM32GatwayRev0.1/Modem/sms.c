@@ -3,6 +3,7 @@
 #include "stddef.h"
 #include "debug.h"
 
+
 mdmIface smsSend(mdmIface *mdm, const char* phNo, char * Msg)
 {
 	uint8_t i = 0;

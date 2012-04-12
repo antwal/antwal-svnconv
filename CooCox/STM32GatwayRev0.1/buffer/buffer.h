@@ -31,7 +31,7 @@
 //
 //*****************************************************************************
 //@{
-
+#include <stdint.h>
 #ifndef BUFFER_H
 #define BUFFER_H
 
@@ -43,10 +43,10 @@
 //! cBuffer structure
 typedef struct struct_cBuffer
 {
-	unsigned char *dataptr;			///< the physical memory address where the buffer is stored
-	unsigned short size;			///< the allocated size of the buffer
-	unsigned short datalength;		///< the length of the data currently in the buffer
-	unsigned short dataindex;		///< the index into the buffer where the data starts
+	uint8_t *dataptr;			///< the physical memory address where the buffer is stored
+	uint16_t size;			///< the allocated size of the buffer
+	uint16_t datalength;		///< the length of the data currently in the buffer
+	uint16_t dataindex;		///< the index into the buffer where the data starts
 } cBuffer;
 
 // function prototypes
@@ -74,7 +74,7 @@ unsigned char	bufferAddToEnd(cBuffer* buffer, unsigned char data);
 unsigned short	bufferIsNotFull(cBuffer* buffer);
 
 //! returns number of bytes available to read
-unsigned char bufferDataAvail(cBuffer* buffer);
+uint16_t bufferDataAvail(cBuffer* buffer);
 
 //! flush (clear) the contents of the buffer
 void			bufferFlush(cBuffer* buffer);

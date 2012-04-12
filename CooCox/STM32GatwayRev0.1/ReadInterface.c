@@ -13,12 +13,14 @@
 #include "main.h"
 #include "watchdog.h"
 #include "debug.h"
+#include <stm32_pio.h>
 
 // Length of each queue used to hold the WSN data
 #define QUEUE_LENGTH 32
 
 // Buffer that keeps the XML formatted WSN data
 char destdata[250];
+uint16_t pktcount = 0;
 
 typedef struct Message {
 	unsigned char  DataBuffer[QUEUE_LENGTH];
@@ -28,6 +30,7 @@ typedef struct Message {
 MSG DataMsg[MAIL_QUEUE_SIZE];
 MSG Data;
 
+extern COX_PIO_Dev LED0;
 extern MSD_Dev *sd;
 
 /*
@@ -118,7 +121,6 @@ char * wsnPacketDecoding(dogDebug *dptr){
 	Tos_Msg *ToSMessage;		// Tos_Msg received //
 	SensedData *DataVal;
 	TIME cur_time;
-	static int32_t count = 0;
 	UINT bw,res;
 
 	 /* Wait for a mail, time-out:30seconds */
@@ -130,29 +132,28 @@ char * wsnPacketDecoding(dogDebug *dptr){
         }
     }
     else{
-    	debug(CONSOLE,"%s\n\r","WSN:Packet Recvd");
     	memcpy(&Data.DataBuffer[0], (uint8_t *)msg, 30);
+		pktcount++;
 		/******** Check type of the Raw Packet *******/
 		if (Data.DataBuffer[1] == P_PACKET_NO_ACK ) {
-
+			debug(CONSOLE,"%s\n\r","WSN:Packet Recvd");
 			WDG_setTaskState(dptr , SAVE_DATA);
 			/***** Parsing the Raw Packet ****/
 			ParsePkt((INT8U *)&Data.DataBuffer[0]);
 
 			/********* Get Tos_Msg from the Raw Packet ******/
 			ToSMessage = (Tos_Msg *)&Data.DataBuffer[RAWPKT_HEADER_LEN];
-			count = Data.DataBuffer[2];
-			/*
-			 * Here we'll add 0xA5A5 to the beginning of teh packet such that we can discriminate
-			 * between number of packets
-			 */
+
+
 			memmove(&Data.DataBuffer[0], &ToSMessage->data[0 + ROUTE_HEADER_LEN], sizeof(struct SensedData));
 //DONE		Time stamp + BaseStnIdneeds to be added over here
 
 			Cur_Time( &cur_time);							// Get the current time
 
 			DataVal= (SensedData *)&Data.DataBuffer[0];
-			sprintf(&destdata[0], packet, count, BaseStnNo, DataVal->crop_id[0],DataVal->crop_id[1], DataVal->plot_id, DataVal->node_id, DataVal->sensor_id, DataVal->value,cur_time.YYYY,cur_time.MM,cur_time.DD,cur_time.hh,cur_time.mm,cur_time.ss);
+			sprintf(&destdata[0], packet, pktcount, BaseStnNo, DataVal->crop_id[0],DataVal->crop_id[1], DataVal->plot_id, DataVal->node_id, DataVal->sensor_id, DataVal->value,cur_time.YYYY,cur_time.MM,cur_time.DD,cur_time.hh,cur_time.mm,cur_time.ss);
+
+			pi_pio.Out(LED0,(pktcount & 0x01));
 
 			/* Lock the Mutex*/
 			CoEnterMutexSection(file_mutex);

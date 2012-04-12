@@ -197,7 +197,7 @@ dogFlag WDG_getDebugState(dogDebug *dptr){
 void WDG_dogCheck( void ){
     uint8_t count = 0 ;
     dogDebug *dptr;
-    dogFlag flag = WAIT;
+    static dogFlag flag = WAIT;
 
 
     for(count=0 ;count < DEBUG_TASK_NO;count++){
@@ -222,8 +222,7 @@ void WDG_dogCheck( void ){
         		//reload the counter
         		dptr->counter = ((dptr->periodicity + dptr->exectime) / DOG_PERIODICITY )+ 1 ;
 
-        		printf("counter=%d, task=%d, state=%d\n\r",dptr->counter, dptr->taskID, dptr->state);
-        		//clear the state to UNKNOWN
+        		debug(CONSOLE,"counter=%d, task=%d, state=%d\n\r",dptr->counter, dptr->taskID, dptr->state);        		//clear the state to UNKNOWN
         		dptr->state = UNKNOWN;
         	}
         }
