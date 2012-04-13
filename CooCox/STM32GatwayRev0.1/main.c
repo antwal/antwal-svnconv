@@ -48,8 +48,6 @@ extern uint32_t dogStatus;
 MSD_Dev sd_var;
 MSD_Dev *sd= &sd_var;							// MSD instance
 
-#define MaxRx   1000     			// Maximum size of receive buffer
-
 // USed for appending data from send.xml to alldata.xml
 uint8_t lclbuff[100];
 
@@ -109,14 +107,19 @@ void modemConfig(void)
 {
 	COX_PIO_Dev DTR = COX_PIN(2,6);			// PORTC6
 	COX_PIO_Dev RST = COX_PIN(1,5);			// PORTB5
+	COX_PIO_Dev SWRTS = COX_PIN(1,8);		// PORTB8 ; Software RTS
 	COX_PIO_PI *PI = &pi_pio;
 
 	modm.dtr_pin = DTR;
+	modm.sw_rts = SWRTS;
 	modm.reset_pin = RST;
 	modm.pio = PI;
 
 	modm.pio->Init(modm.dtr_pin);
 	modm.pio->Dir(modm.dtr_pin,1);
+	modm.pio->Init(modm.sw_rts);
+	modm.pio->Dir(modm.sw_rts,1);
+	modm.pio->Out(modm.sw_rts, 1);			// Keeping it LOW = 1
 
 	modm.pio->Init(modm.reset_pin);
 	modm.pio->Out(modm.reset_pin, 0);		// Pull up reset pin
@@ -298,7 +301,7 @@ void TmrCallBack(void)
 				 *  once send.xml is uploaded, append the send.xml to alldata.xml.
 				 *  Then delete the send.xml file.
 				 */
-			debug(LOG,"%s\n\r","Upload Time");
+			debug(LOG,"%s\n\r","Uploading file..");
 			res = f_open(&send, "./root/send.xml", FA_READ);
 			f_close(&send);
 
@@ -416,6 +419,10 @@ void TmrCallBack(void)
 					debug(CONSOLE,"%s\n\r","Deleting send.xml\n\r");
 					f_unlink("./root/send.xml");		// Delete the file
 
+				}
+				else
+				{
+					debug(CONSOLE,"%s\n\r","Uploading Failed..");
 				}
 			  WDG_setTaskState(dptr , WAIT);
 			  CoTickDelay (12000);		// For 2 MInute

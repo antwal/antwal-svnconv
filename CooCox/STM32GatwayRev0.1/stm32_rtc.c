@@ -108,7 +108,7 @@ uint8_t gmtime( uint32_t time, TIME *tm, uint8_t ntp)
 		STM_RTC_Start();
 		STM_RTC_Write (tm);				// Writing time to RTC
 		STM_RTC_Stop();
-		debug(LOG,"%s\n\r","TimeUpdated\n\r");
+		//debug(LOG,"%s\n\r","TimeUpdated\n\r");
 	}
 	else
 		tm->YYYY = cur_yr;

@@ -27,7 +27,14 @@ typedef enum {
 	httpTimeOut,			// Timeout while waiting for the response
 	httpLenUnkwn,			// If length field is not present
 	httpLogin,				// response is for Login request
-	httpRes					// General response from the server
+	httpRes,					// General response from the server
+	httpErrAuth,
+	httpClose,
+	httpConnect,
+	httpLogged,
+	httpHead,
+	httpSendDone,
+	httpSent
 }httpStatus;
 
 //////////////////////////////////////////////////////////////////

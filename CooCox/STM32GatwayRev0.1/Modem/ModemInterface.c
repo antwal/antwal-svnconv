@@ -138,6 +138,7 @@
 	void USART1_IRQHandler(void)
 	{
 		char ch;
+		uint16_t data =0;
 		CoEnterISR ();
 
 		//RXNE interrupt occured
@@ -149,10 +150,17 @@
 			ch = (USART1->DR & (us16)0x01FF);
 			if(bufferIsNotFull(&modem_buffer)){
 				bufferAddToEnd(&modem_buffer, ch);					// Keeping data into the buffer
+				data = bufferDataAvail(&modem_buffer);
+				if(data > (MaxRx - 10))
+				{
+					modm.pio->Out(modm.sw_rts, 0);			// Making it High
+					//debug(CONSOLE,"maxrx=%d\n\r",data);
+				}
 
 			}
 			else{
-				debug(CONSOLE,"Buffer Full %c\n\r",ch);
+				data = bufferDataAvail(&modem_buffer);
+				debug(CONSOLE,"Buffer Full %d\n\r",data);
 			}
 		}
 		else if((USART1->SR & 0x08) != (u16)RESET)			// Handling overrun error
@@ -219,7 +227,8 @@
 		{
 			addr2 = addr4 = 0;
 			char err[10]="ERROR\r\n";
-			char errVar = 0;
+			char cls[11]="CLOSED\r\n";
+			uint8_t errVar = 0, clsVar = 0;
 			debug(CONSOLE,"%s","<<== ");
             for (TIME_SET(0); TIME_TICK<timeout; )           						// loop until time runs out
 			{
@@ -248,6 +257,19 @@
 							}
 						}
 						else errVar = 0;													// otherwise reset match pointer
+
+						// To match close condition
+
+					if(cls[clsVar] == addr4)
+						{
+							clsVar++;  											// does char match response string
+							if (!cls[clsVar]){									// All CLOSED char are matched
+								dbg_printf("%s","\n\r");
+								return mdmErr;
+							}
+						}
+						else clsVar = 0;													// otherwise reset match pointer
+
 						TIME_SET(0);
 
 						if (!resp[addr2]){										// All char are matched
@@ -356,7 +378,7 @@
 			static unsigned char var = 0;
 			count = 0;
 			do{
-				try = 2;
+				try = 4;
 				do{
 					if(state == CONNECT || state == CLOSE)
 						sendwait(mdm, "||+++|\r","OK",100);
@@ -369,6 +391,7 @@
 				try = 0;
 
 				/* CIPSTATUS output is like- STATE: IP INITIAL*/
+				if(res == mdmOK){
 				res = serialCopy(lBuff, ' ', '\r');
 				debug(CONSOLE,"Status is %s\n\r",lBuff);
 
@@ -424,6 +447,7 @@
 					count += 1;
 					try = 1;
 				}
+			}
 			}
 			while((count > 0 && count < 3) && (try == 1) );
 
@@ -640,9 +664,9 @@
 	mdmStatus mdmTCPConnect(mdmIface *mdm, server *obj)
 	{
 
-		char count = 2;
+		char count = 4;
 		do{
-		debug(CONSOLE,"%s\n\r","InTCPConnect");
+		debug(CONSOLE,"%s%d\n\r","InTCPConnect=",count);
 			mdmState(mdm);
 			count --;
 			// If state is one among the these start connecting
@@ -663,6 +687,7 @@
 					mdmSwitch(mdm,COMMAND);
 					mdmClose(mdm);
 					mdmShut(mdm);
+					if(count > 0)			// All retries are not over yet
 					mdmFSM(mdm);
 					res = mdmTimeOut;
 				}
@@ -671,10 +696,10 @@
 			else if(state == CLOSING)
 			{
 				res = mdmClose(mdm);
-				count ++;
+				//count ++;
 				res = mdmFail;
 			}
-			// If state is not among the above considered start from begining and get IP
+			// If state is not among the above considered state, start from begining and get IP
 			else{
 				mdmFSM(mdm);
 				res = mdmFail;
@@ -682,7 +707,7 @@
 		}
 		while(res != mdmOK && count > 0);
 
-		if(count > 0)
+		if(res == mdmOK)
 			state = CONNECT;
 		else
 			state = CONNECTING;
@@ -701,7 +726,7 @@
 		var =3;
 		do
 		{
-			debug(CONSOLE,"%s\n\r","InUDPConnect");
+			debug(CONSOLE,"%s%d\n\r","InUDPConnect=",var);
 			mdmState(mdm);
 			var --;
 			if(state == IP|| state == CLOSE || state == IPGPRSACT )
@@ -850,7 +875,7 @@
 		  if(state == CONNECT){
 				for(i = 0; i< len; i++)
 				{
-					dbg_printf(" %c",buffer[i]);
+					//dbg_printf(" %c",buffer[i]);
 					serial_send(buffer[i]);
 					// If while sending modem returns error transsend should exit
 					if(serial_rx_ready())

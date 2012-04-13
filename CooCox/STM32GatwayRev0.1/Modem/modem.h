@@ -33,6 +33,8 @@ COX_SERIAL_PI *myUSART1;
 #define serial_error()          0                               			// USART error
 #define serial_fix()            1               							// Clear error
 
+#define MaxRx   1000     			// Maximum size of receive buffer
+
 
 typedef struct{
 		//char 			*ip_addr;		// Point to the ip address(192:168:51:28)
@@ -42,9 +44,10 @@ typedef struct{
 	} mdmInfo;
 
 	typedef struct {
-		uint16_t     dtr_pin;          // Pin of the dtr
-		uint16_t     reset_pin;          // Pin of the reset
-		COX_PIO_PI   *pio;             // The PIO Interface to use
+		uint16_t     dtr_pin;          	// Pin of the dtr
+		uint16_t 	 sw_rts;			// Used for Software RTS pin
+		uint16_t     reset_pin;        	// Pin of the reset
+		COX_PIO_PI   *pio;             	// The PIO Interface to use
 		char *ip_addr;
 		// This tells if the modem is locked by any task
 		// It will be used for putting modem in sleep or waking it up

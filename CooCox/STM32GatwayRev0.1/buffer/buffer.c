@@ -17,7 +17,10 @@
 
 #include "buffer.h"
 #include "debug.h"
+#include "main.h"
+#include "modem.h"
 
+extern	cBuffer modem_buffer;								// Receive Buffer for modem
 
 //#ifdef PC
 void dummy(){}
@@ -167,12 +170,15 @@ unsigned short bufferIsNotFull(cBuffer* buffer)
 	// check to see if the buffer has room
 	// return true if there is room
 	unsigned short bytesleft = (buffer->size - buffer->datalength);
+
 	// end critical section
 	CRITICAL_SECTION_END;
 	if(bytesleft)
 	return SUCCESS;
-	else
-	return FAIL;
+	else{
+
+		return FAIL;
+	}
 }
 
 uint16_t bufferDataAvail(cBuffer* buffer)
@@ -182,6 +188,15 @@ uint16_t bufferDataAvail(cBuffer* buffer)
 	// returns the number of bytes available to read; if nothing is present returns 0
 	//if(buffer->datalength > 10)
 	//dbg_printf("len=%d\t",buffer->datalength);
+
+	if(buffer == &modem_buffer)
+	{
+		if((buffer->datalength) < (MaxRx - 100))
+		{
+			modm.pio->Out(modm.sw_rts, 1);			// Making it Low
+		}
+	}
+
 	return (buffer-> datalength);
 	// end critical section
 	CRITICAL_SECTION_END;

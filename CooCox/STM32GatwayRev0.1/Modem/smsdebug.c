@@ -52,6 +52,8 @@ cBuffer smsIndexQueue;
 //list of sms to be processed
 uint8_t list[MAX_SMS]={0};
 
+// Local buffer used by readdelsms
+char lbuff[163];
 //for temporary storage of the message
 recvMsg msg ;
 
@@ -214,7 +216,7 @@ void readAllUnreadSms(mdmIface *mdm,cBuffer *queue){
 
 void readDelSms(mdmIface *mdm, uint8_t index , char *phone ,char *msg ){
 
-	char lbuff[163], count = 9;
+	char count = 9;
 	unsigned char addr4;
 	mdmStatus res=0;
 	uint8_t j;

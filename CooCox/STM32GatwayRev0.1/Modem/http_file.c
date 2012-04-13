@@ -27,9 +27,9 @@ extern dogDebug myDogDebug[];
  */
 
 static char buffer[MAX_BUFF_SIZE]={'\0'};
-static char get[100]={'\0'};
+static char cookie[100]={'\0'};
 
-uint16_t size;				/* size of file */
+uint32_t size;				/* size of file */
 static mdmStatus res;
 extern	cBuffer modem_buffer;								// Receive Buffer for modem
 
@@ -37,56 +37,132 @@ extern	cBuffer modem_buffer;								// Receive Buffer for modem
  * This function will upload the file to the remote server
  */
 uint8_t uploadFile(mdmIface *mdm, const char *file, server *tcp){
-		res = mdmOK;
-		//start the fsm for modem
-		res = mdmFSM(mdm);
-		// If IP is received
-		if(res == mdmOK){
-			//create a TCP connection to the server
-			res = mdmTCPConnect(mdm, tcp);
-			//login and get the cookie
+	static uint8_t cook = 0;
+	uint8_t MaxRetry = 10, count=0;
+	uint8_t res = mdmOK;
+	//start the fsm for modem
+	res = mdmFSM(mdm);
+	// If IP is received
+	if(res == mdmOK){
+		res = httpClose;
+		do{
+			debug(CONSOLE,"HTTP=%d Try=%d\n\r",res,count);
+			switch(res)
+			{
+				case httpClose:
+					//create a TCP connection to the server
+					res = mdmTCPConnect(mdm, tcp);
+					if(res == mdmOK){
+						res = httpConnect;
+						debug(LOG,"%s\n\r","Connected..");
+					}
+					else{
+						res = httpClose;
+						debug(LOG,"%s\n\r","Connection failed");
+						count = MaxRetry;							// Connection is failing so no need to try again
+					}
+					break;
 
-
-			if(res == mdmOK){
-			if( (login(mdm)) == mdmOK ){
-			//send the file size and the cookie stored in buffer
-			if( (sendHeader(mdm, getFileSize(file), &get[0] )) == mdmOK ){
-				//send the data
-				if( (sendData(mdm ,file)) == mdmOK){
-					// Read the response if sending is successful
-					res = mdmHttpRes(mdm, &size, httpRes);
-					if(res == httpOK || res == httpLenUnkwn )
-					{
-						// Match the string in the body of the response
-						res = mdmHttpBody(mdm, "Data recv OK", &size, 1500);
-						if(res == mdmOK)
-						{
-							debug(LOG,"%s\n\r","File uploaded");
-							mdmClose(mdm);
-							return res;
+				case httpConnect:
+					// If Cookie is not present then only login
+					if(cook == 0){
+						res = login(mdm);
+						if(res == httpOK){
+							res = httpLogged;
+							cook = 1;
 						}
-						else
-						{
-							debug(LOG,"%s\n\r","File not uploaded");
+						else{
+							res = httpClose;
+							debug(LOG,"%s\n\r","Login Failed");
+							count++;
+						}
+					}
+					// Cookie is present
+					else{
+						res = httpLogged;
+					}
+
+					break;
+
+				case httpLogged:
+					if(cook == 1){
+						res = sendHeader(mdm, getFileSize(file), &cookie[0]);
+						if(res == httpOK){
+							res = httpHead;
 						}
 					}
 					else{
-						debug(LOG,"%s\n\r","Http Response not recvd");
+						res = httpClose;
+						count++;
+						debug(LOG,"%s\n\r","Header post failed");
 					}
-				}
-				else
-					debug(LOG,"%s\n\r","Sending File Failed");
-			}else
-				debug(LOG,"%s\n\r","Header post failed");
-		}else
-		debug(LOG,"%s\n\r","Login Failed");
+					break;
+
+				case httpHead:
+					// Chances are less that error will occur here; if error occurs try afresh
+					res = sendData(mdm ,file);
+					if(res == httpOK){
+						res = httpSendDone;
+					}
+					else{
+						res = httpClose;
+						count++;
+						debug(LOG,"%s\n\r","Sending Data problem");
+					}
+					break;
+
+				case httpSendDone:
+					res = mdmHttpRes(mdm, &size, httpRes);
+					if(res == httpOK)
+					{
+						res = mdmHttpBody(mdm, "Data recv OK", &size, 6000);					// For slow connections timeout should be high
+						if(res == httpOK){
+							res = httpSent;
+							debug(LOG,"%s\n\r","File uploaded");
+						}
+						else if(res == httpClose){						// Connection is closed; Connect first and then retry
+							res = httpClose;
+							//cook = 0;								//  sending failed;
+							debug(LOG,"%s\n\r","File not uploaded:Closed");
+							count ++;
+						}else{
+							debug(LOG,"%s\n\r","File not uploaded:Not Found");
+							res = httpLogged;						// Try again since connection is not yet closed
+							count++;
+						}
+					}
+					else if(res == httpErrAuth){						// Authorization problem
+						res = httpConnect;
+						debug(LOG,"%s\n\r","Authorization Problem");
+						cook = 0;									// Need to login
+						count++;
+					}
+					else{
+						res = httpClose;
+						debug(LOG,"%s\n\r","Http Response not recvd");
+						count++;
+					}
+					break;
+
+				default:
+					res = httpClose;
+					break;
 			}
 		}
-		//close the TCP connection to the server
-		bufferFlush(&modem_buffer);
-		mdmSwitch(mdm, COMMAND);
-		mdmClose(mdm);
-		return mdmSendFail;
+		while(res != httpSent && count < MaxRetry);
+
+	}
+	else{
+		debug(LOG,"%s\n\r","Upload:IP failed");
+	}
+	//close the TCP connection to the server
+	bufferFlush(&modem_buffer);
+	mdmSwitch(mdm, COMMAND);
+	mdmClose(mdm);
+	if(res == httpSent)
+	return mdmOK;
+	else
+	return mdmErr;
 
 }
 
@@ -103,10 +179,12 @@ mdmStatus login(mdmIface *mdm)
 	// Retrieves the cookie for the site
 	//if(!mdmSend(mdm))
 	uint8_t count = 0;
-	uint16_t len =0;
-	do{
-		dbg_printf("%s\n\r","Log in");
+	uint32_t len =0;
+
+		debug(LOG,"%s\n\r","Logging in..");
 		res = mdmTransSend(mdm, &GET_COOKIE_1[0], strlen(&GET_COOKIE_1[0]));
+		if(res == mdmSendFail)
+			return httpErr;
 		res = mdmTransSend(mdm,&sysconfdup.cookie_respath[0], strlen(&sysconfdup.cookie_respath[0]));
 		res = mdmTransSend(mdm, GET_COOKIE_2, strlen(GET_COOKIE_2));
 		res = mdmTransSend(mdm,&sysconfdup.uploadsite[0], strlen(&sysconfdup.uploadsite[0]));
@@ -118,14 +196,10 @@ mdmStatus login(mdmIface *mdm)
 
 		if(res == mdmOK)
 		{
-			res = mdmHttpRes(mdm, NULL, httpLogin);
+			res = mdmHttpRes(mdm, &len, httpLogin);
 		}
-		count++;
-	}
-	while(count < 3 && res != httpOK);
 
 	return res;
-
 }
 
 /*
@@ -210,7 +284,7 @@ mdmStatus sendData(mdmIface *mdm ,const char *file){
         		f_close(&send);
         		return rc;
         	}
-            //debug(CONSOLE,"File Data = %d\n\r",size);
+            debug(CONSOLE,"Remaining=%d\n\r",size);
 
            //uncomment the below mentioned line if  using watchdog
            WDG_setTaskState(&myDogDebug[0], UPLOADING);
@@ -271,11 +345,11 @@ uint32_t getFileSize(const char *file){
 	 * 			mdmErr if Error is returned by Modem
 	 *
 	 */
-httpStatus mdmHttpRes(mdmIface *mdm, uint16_t* bodLen, uint8_t cond )
+httpStatus mdmHttpRes(mdmIface *mdm, uint32_t* bodLen, uint8_t cond )
 	{
 		uint16_t code = 0, i= 0;
 		CLR_BUFFER(buffer);
-		res = serialMatch(mdm, "HTTP/1.1", 1500);
+		res = serialMatch(mdm, "HTTP/1.1", 6000);
 		if(res == mdmOK )
 		{
 			res = serialCopy(&buffer[0], ' ','\r');
@@ -314,7 +388,7 @@ httpStatus mdmHttpRes(mdmIface *mdm, uint16_t* bodLen, uint8_t cond )
 			case 403:
 
 				//debug(LOG,"%s\r\n","Access Forbidden");
-				res = httpErr;
+				res = httpErrAuth;
 				break;
 			default:
 				res = httpErr;
@@ -325,15 +399,14 @@ httpStatus mdmHttpRes(mdmIface *mdm, uint16_t* bodLen, uint8_t cond )
 			if(res == httpOK && cond == httpLogin)
 			{
 				 res = serialMatch(mdm, "Set-Cookie:", 200);
-			         res = serialCopy(&get[0],' ',';');
-				 debug(CONSOLE,"Cookie=%s\n\r",&get[0]);
+			     res = serialCopy(&cookie[0],' ',';');
+				 debug(CONSOLE,"Cookie=%s\n\r",&cookie[0]);
 
 				 res = serialMatch(mdm, "Set-Cookie:",200);
-		       	     if(res != mdmTimeOut){
-       	        		 memset(get,0,sizeof(get));
-			       	     res = serialCopy(&get[0],' ',';');
-			       	     debug(CONSOLE,"NewCookie=%s\n",&get[0]);
-
+		       	 if(res != mdmTimeOut){
+		       		 memset(&cookie[0], 0,sizeof(cookie));
+			       	 res = serialCopy(&cookie[0],' ',';');
+			       	 debug(CONSOLE,"NewCookie=%s\r\n",&cookie[0]);
 				}
 			}
 
@@ -362,6 +435,7 @@ httpStatus mdmHttpRes(mdmIface *mdm, uint16_t* bodLen, uint8_t cond )
 				else
 				{
 					// Length field not found
+					if(bodLen != NULL)
 					*bodLen = 0;
 					code = httpLenUnkwn;
 				}
@@ -369,17 +443,23 @@ httpStatus mdmHttpRes(mdmIface *mdm, uint16_t* bodLen, uint8_t cond )
 
 			// If some error response is received its better to read out all the body here only
 			// Also if possible lets bring out the possible reason that caused the error
-			if(res == httpErr && code != httpLenUnkwn)
+			if((res == httpErr || res == httpErrAuth) && code != httpLenUnkwn)
 			{
+				// If this is case for login
 				if(cond == httpLogin){
-				res = mdmHttpBody(mdm, "Page not found", bodLen, 200);			// Timeout is small coz error does not come with big content
-					if(res == httpOK)
+				cond = mdmHttpBody(mdm, "Page not found", bodLen, 200);			// Timeout is small coz error does not come with big content
+					if(cond == httpOK)
 					debug(LOG, "%s\r\n","Page not found");
+					else if(cond == httpClose)
+						return httpClose;
 				}
+				// if this is normal POST
 				else if(cond == httpRes) {
-					res = mdmHttpBody(mdm, "forbidden", bodLen, 200);			// Timeout is small coz error does not come with big content
+					cond = mdmHttpBody(mdm, "forbidden", bodLen, 200);			// Timeout is small coz error does not come with big content
+					if(cond == httpClose)
+						return httpClose;
 				}
-				return httpErr;
+				return res;
 			}
 
 		}
@@ -405,13 +485,13 @@ httpStatus mdmHttpRes(mdmIface *mdm, uint16_t* bodLen, uint8_t cond )
 		 * @len : length of the body
 		 * @timeout: wait for the response timeout amount of time and then come out if nothing is coming
 		 */
-		httpStatus mdmHttpBody(mdmIface *mdm, const char* resp, uint16_t *len, uint16_t timeout)
+		httpStatus mdmHttpBody(mdmIface *mdm, const char* resp, uint32_t *len, uint16_t timeout)
 		{
 			uint8_t addr2 =0, addr4 = 0;
 			char err[10]="ERROR\r\n";
 			char cls[11]="CLOSED\r\n";
 			uint8_t errVar = 0, clsVar = 0, out = 0 ;
-			uint16_t i =0;
+			uint32_t i =0;
 
 			// Discard all the http header response
 			serialMatch(mdm, "\r\n\r\n",100);
@@ -427,10 +507,8 @@ httpStatus mdmHttpRes(mdmIface *mdm, uint16_t* bodLen, uint8_t cond )
 					{
 						addr2++;  											// does char match response string
 						if (!resp[addr2]){										// All char are matched
-				//			printf("%s","\n\r");
 						  	out = 1;
-
-						addr2 = 0;					// Finish the remaining buffer
+						  	addr2 = 0;					// Finish the remaining buffer
 						}
 					}
 					else addr2 = 0;
@@ -439,9 +517,11 @@ httpStatus mdmHttpRes(mdmIface *mdm, uint16_t* bodLen, uint8_t cond )
 					if(err[errVar] == addr4)
 					{
 						errVar++;  											// does char match response string
-						if (!err[errVar]){										// All char are matched
+						if (!err[errVar]){									// All ERROR char are matched
 							dbg_printf("%s","\n\r");
-							return httpErr;
+							if(out != 1)									// Matching is unsuccessful then only error
+							return httpClose;
+							errVar = 0;
 						}
 					}
 					else errVar = 0;													// otherwise reset match pointer
@@ -450,24 +530,28 @@ httpStatus mdmHttpRes(mdmIface *mdm, uint16_t* bodLen, uint8_t cond )
 				if(cls[clsVar] == addr4)
 					{
 						clsVar++;  											// does char match response string
-						if (!cls[clsVar]){										// All char are matched
-							dbg_printf("%s","\n\r");
-							return httpErr;
+						if (!cls[clsVar]){									// All CLOSED char are matched
+							dbg_printf("%s","Connection closed\n\r");
+							if(out != 1)									// Matching is unsuccessful then only error
+							return httpClose;
+							clsVar = 0;
+							clsVar = 100;
+							TIME_TICK = timeout-10;							// Connection is closed; No data comes after connection close
 						}
 					}
 					else clsVar = 0;													// otherwise reset match pointer
 
 				i++;
-
+				if(clsVar >= 100)					// Connection is not closed
 				TIME_SET(0);
 				}
 
 			}
-			while((*len != i) && (TIME_TICK < timeout));
+			while((*len > i) && (TIME_TICK < timeout));
 
-			// data read returned
+			// No. of data read returned
 			*len = i;
-			debug(CONSOLE,"\n\rData read =%d\n\r",i);
+			debug(CONSOLE,"Data Recvd=%d\n\r",i);
 			// response or String found
 			if(out == 1)
 			{
@@ -478,4 +562,5 @@ httpStatus mdmHttpRes(mdmIface *mdm, uint16_t* bodLen, uint8_t cond )
 			// Response not matched
 			return httpTimeOut;
 		}
+
 

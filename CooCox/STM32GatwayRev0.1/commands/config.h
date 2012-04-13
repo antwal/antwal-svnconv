@@ -3,7 +3,7 @@
 #define BAUD2	 		57600							// MOTE
 #define BAUD3	 		115200							// DEBUG
 
-#define APN_STRING		"airtelgprs.com"
+#define APN_STRING		"gprssouth.cellone.in"
 #define APN_USERNAME 	""
 #define APN_PASSWORD 	""
 
@@ -11,8 +11,8 @@
 //#define SITE			"117.254.116.55"
 #define USERNAME		"uagri"
 #define PASSWORD		"uagri123"
-#define COOKIE_RESPATH	"/uagri/?q=user/login"
-#define UPLOAD_RESPATH  "/uagri/?q=node/74"
+#define COOKIE_RESPATH	"http://www.ubicomp.in/uagri/?q=user/login"
+#define UPLOAD_RESPATH  "http://www.ubicomp.in/uagri/?q=node/74"
 //#define UPLOAD_RESPATH  "/udata.php"
 #define WATCHDOG_STATUS	1
 #define ERR_RPT_STATUS  1
@@ -38,8 +38,8 @@ struct config{
 	unsigned char uploadsite[20];
 	unsigned char username[10];
 	unsigned char password[10];
-	unsigned char cookie_respath[30];//resource path
-	unsigned char upload_respath[30];//resource path
+	unsigned char cookie_respath[50];//resource path
+	unsigned char upload_respath[50];//resource path
 	//status for the watch dog(enable or disabled [1/0])
 	unsigned char watchdog_status;
 	//status for sending the error report via sms(enable or disable [1/0])
