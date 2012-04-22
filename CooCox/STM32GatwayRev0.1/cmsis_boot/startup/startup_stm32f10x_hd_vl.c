@@ -320,11 +320,10 @@ void Default_Reset_Handler(void)
 #include "debug.h"
 static void Default_Handler(void) 
 {
+	debug(LOG,"%s\r\n","In the default handler");
   /* Go into an infinite loop. */
-  while (1) 
-  {
-	  debug(LOG,"%s\r\n","In the default handler");
-  }
+  while (1);
+
 }
 
 /*********************** (C) COPYRIGHT 2011 Coocox ************END OF FILE*****/

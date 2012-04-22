@@ -95,7 +95,9 @@ void addAllcommand(void){
 void exitFunction(void){
 
 	extern volatile uint8_t Run;
-	//Run = 0;
+	Run = 0;
+	//TO DO:
+	//Turn off the debug LED
 	printf("Exiting Cmdline\n\r");
 }
 
@@ -458,11 +460,11 @@ void errphoneFunction(void){
 }
 //prints the system configurations
 void sysconfFunction(void){
-	printf("system configurations\n\r");
+	printf("TO DO system configurations\n\r");
 }
 //prints the current configurations of the system
 void curconfFunction(void){
-	printf("system current configurations\n\r");
+	printf("TO DO system current configurations\n\r");
 
 }
 //save the current configuration to system configurations

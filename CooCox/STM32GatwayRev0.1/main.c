@@ -449,8 +449,7 @@ void TmrCallBack(void)
 		//debug structure for task 3, periodicity 2 minutes
 		debug(LOG,"%s\n\r","taskWSN started");
 		WDG_initDebug(dptr , 3 , 120000 , 1);
-		 for (;;)
-		 {
+		 for (;;){
 			 wsnPacketDecoding(dptr);
 		 }
 	}
@@ -490,8 +489,7 @@ void TmrCallBack(void)
 		  /* Resource status check */
 		  // SD card is having some problem
 		  // Toggle @ 5sec
-		  if((chk[0] != 0) )
-		  {
+		  if((chk[0] != 0) ){
 			  //debug(CONSOLE,"%s%d\n\r","SD Problem=",chk[0]);
 			  if(tog == 1)
 			  {
@@ -517,22 +515,18 @@ void TmrCallBack(void)
 		 else
 		// Modem is having some problem
 		// Togle @ 1 sec
-		if(chk[1] != 0)
-		{
+		if(chk[1] != 0){
 			//debug(CONSOLE,"%s\n\r","Modem Problem");
-		  if(tog == 1)
-		  {
-			  pi_pio.Out(LED1,1);
-			  tog = ~tog;
-		  }
-		  else
-		  {
-			  pi_pio.Out(LED1,0);
-			  tog = ~tog;
-		  }
+			if(tog == 1){
+				pi_pio.Out(LED1,1);
+				tog = ~tog;
+			}
+			else{
+				pi_pio.Out(LED1,0);
+				tog = ~tog;
+			}
 		 }
-		else
-		{
+		else{
 			 pi_pio.Out(LED1,1);					// Switch off the LED
 		}
 
@@ -542,11 +536,9 @@ void TmrCallBack(void)
 		   * If it is in use wake up the modem
 		   * else put modem in sleep
 		   */
-		  if(modm.lock == 1)
-		  {
+		  if(modm.lock == 1){
 			  mdmWakeUp(&modm);
-		  }else
-		  {
+		  }else{
 			  mdmSleep(&modm);
 		  }
 
@@ -566,6 +558,7 @@ void TmrCallBack(void)
 void taskDebug (void* pdata){
 
 	uint8_t res, send[30], balChk=0;
+	uint8_t cflag;//flag for command line
 	uint16_t Bal = 255;
 	//initialize the buffer that will be used for command
 	bufferInit( &cmdBuffer, &debug_buffer[0], sizeof(debug_buffer) );
@@ -584,11 +577,20 @@ void taskDebug (void* pdata){
 	// send a CR to cmdline input to stimulate a prompt
 	cmdlineInputFunc('\r');
 	debug(LOG, "%s\n\r","taskDebug started");
-	// set state to run
-	Run = 1;
+
+	// Default value to the run is 0 , in order to use the command line interface
+	// a button press should change the state of this variable.
+	Run = 0;
 
 	for (;;) {
-/*		while(Run){
+		cflag = 0;
+		while(Run){
+			if(cflag == 0 ){
+				//TO DO
+				//Turn on the debug LED ON
+				printf("In command line mode");
+				cflag = 1;
+			}
 			// pass characters received on the uart (serial port)
 			// into the cmdline processor
 			while(bufferDataAvail(&cmdBuffer)){
@@ -597,9 +599,7 @@ void taskDebug (void* pdata){
 				cmdlineMainLoop();
 			}
 		}
-		//printf("Exited From the app...\r");
 
- */
 		mdmLock(&modm);
 
 		res = smsDebugInit(&modm);
@@ -620,7 +620,7 @@ void taskDebug (void* pdata){
 
 		mdmUnLock(&modm);
 
-		// Polling Period
+		// Polling Period 10 seconds
 		CoTickDelay (1000);
 
 	}
