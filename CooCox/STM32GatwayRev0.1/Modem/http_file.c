@@ -115,7 +115,7 @@ uint8_t uploadFile(mdmIface *mdm, const char *file, server *tcp){
 					res = mdmHttpRes(mdm, &size, httpRes);
 					if(res == httpOK)
 					{
-						res = mdmHttpBody(mdm, "Data recv OK", &size, 6000);					// For slow connections timeout should be high
+						res = mdmHttpBody(mdm, "Data recv OK", &size, 6000);// For slow connections timeout should be high
 						if(res == httpOK){
 							res = httpSent;
 							debug(LOG,"%s\n\r","File uploaded");

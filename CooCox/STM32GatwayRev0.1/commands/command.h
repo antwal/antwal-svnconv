@@ -6,21 +6,25 @@
 
 void addAllcommand(void);
 
-//User defined functions
-void exitFunction(void);
-void helpFunction(void);
-void clearFunction(void);
-void setbaudFunction(void);
-void setapnFunction(void);
-void setsiteFunction(void);
-void setuserFunction(void);
-void setpassFunction(void);
-void setcookieFunction(void);
-void setuploadFunction(void);
-void setstatusFunction(void);
-void regphoneFunction(void);
-void errphoneFunction(void);
-void sysconfFunction(void);
-void curconfFunction(void);
-void saveconfFunction(void);
-void setdefFunction(void);
+/*
+ * User defined commands that can be executed via serial interface
+ * the return type is unsigned char that tells that the command was
+ * either SUCCESS:0 of FAILURE
+ */
+unsigned char  exitFunction(void);
+unsigned char helpFunction(void);
+unsigned char clearFunction(void);
+unsigned char setbaudFunction(void);
+unsigned char setapnFunction(void);
+unsigned char setsiteFunction(void);
+unsigned char setuserFunction(void);
+unsigned char setpassFunction(void);
+unsigned char setcookieFunction(void);
+unsigned char setuploadFunction(void);
+unsigned char setstatusFunction(void);
+unsigned char regphoneFunction(void);
+unsigned char errphoneFunction(void);
+unsigned char sysconfFunction(void);
+unsigned char curconfFunction(void);
+unsigned char saveconfFunction(void);
+unsigned char setdefFunction(void);

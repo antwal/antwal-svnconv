@@ -13,6 +13,7 @@
 #endif
 
 #define MAX_SMS  30
+#define MAX_CMD  15
 
 typedef struct recvMsg{
 	char phone[11];		//10 digit phone number + \0 for string termination
@@ -31,6 +32,10 @@ void readAllUnreadSms(mdmIface *mdm,cBuffer *queue);
 void readDelSms(mdmIface *mdm, uint8_t index , char *phone ,char *msg );
 uint8_t isPhoneRegistered(char *str);
 
+void parser (unsigned char *ptr);
+void addToEnd(unsigned char data);
+
+
 /* Public function decleration */
 mdmStatus smsDebugInit(mdmIface *mdm);
 void smsDebugConnect(mdmIface *mdm);
@@ -48,9 +53,17 @@ volatile static voidFuncPtruVoid smsCmdLoopFunc = NULL;
 
 //queue for processing the messages
 cBuffer smsIndexQueue;
-
 //list of sms to be processed
 uint8_t list[MAX_SMS]={0};
+
+
+
+//Buffer for maintaining the return status of commands
+cBuffer cmdStatusQueue;
+//retuen status of commands will be stored in this list
+uint8_t status[MAX_CMD]={0};
+
+
 
 // Local buffer used by readdelsms
 char lbuff[163];
@@ -71,6 +84,8 @@ mdmStatus smsDebugInit(mdmIface *mdm){
 	uint8_t res;
 	//initllize the msg queue for keeping the index of sms msg
 	bufferInit(&smsIndexQueue, &list[0], sizeof(list));
+	//initllize the msg queue for keeping the return status of commands executed
+	bufferInit(&cmdStatusQueue, &status[0], sizeof(status));
 	//Make connection to the cmdline library
 	smsDebugSetOutputFunc(cmdlineInputFunc);
 	smsDebugSetLoopFunc(cmdlineMainLoop);
@@ -120,7 +135,9 @@ void smsDebugLoop(mdmIface *mdm){
 		if(isPhoneRegistered(( char * )&msg.phone[0])){
 			ptr = &msg.message[0];
 			debug(CONSOLE,"%s\n\r","SMS:Ph no. Regd");
-			while(*ptr != 0 ){
+			//parse the data according to the format and pass it to the commandline
+			parser(ptr);
+		/*	while(*ptr != 0 ){
 				// Function separator; Currently two functions are separated by \n
 				if(*ptr == '\n')
 				{
@@ -132,6 +149,7 @@ void smsDebugLoop(mdmIface *mdm){
 				smsCmdLoopFunc();
 				}
 			}
+		*/
 		}
 	}
 }
@@ -322,5 +340,50 @@ uint8_t isPhoneRegistered(char *str){
 	}
 	return 0;
 }
+
+
+
+//Function that is used to push the return code into a FIFO
+void addToEnd(unsigned char data){
+	bufferAddToEnd(&cmdStatusQueue,data);
+}
+/*This function will parse the incoming msg in the current format
+ * {cmd1,cmd2,.......,cmd(n),}
+ */
+void parser (unsigned char *ptr){
+	//disconnect the status collecting function before processing every msg
+	cmdlineClrCmdStatusOutputFunc();
+	//Flush the buffer for collecting the return status for the commands
+	bufferFlush(&cmdStatusQueue);
+	while(*ptr++ != 0){
+		switch(*ptr){
+			case '{':   //add the status collecting function
+						cmdlineSetCmdStatusOutputFunc(addToEnd);
+						break;
+
+			case '\n':	//smsCmdOutputFunc(' ');
+						//smsCmdLoopFunc();
+						break;
+			case ',':   smsCmdOutputFunc('\r');
+						smsCmdLoopFunc();
+						break;
+			case '\0':  smsCmdOutputFunc('\r');
+						smsCmdLoopFunc();
+			case '}':   if(cmdlineStatusOutputFunc){
+							cmdlineClrCmdStatusOutputFunc();
+							//TO DO: send the sms by dumping the FIFO
+							while(cmdStatusQueue.datalength)
+								debug(CONSOLE," %c,",bufferGetFromFront(&cmdStatusQueue));
+						}
+						break;
+			default : smsCmdOutputFunc(*ptr);
+				  	  smsCmdLoopFunc();
+
+		}//End Switch
+	}//End While
+
+}//End Parser
+
+
 
 //#endif /* SMS DEBUG */

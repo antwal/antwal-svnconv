@@ -81,7 +81,7 @@
 #include <stdint.h>
 
 // constants/macros/typdefs
-typedef void (*CmdlineFuncPtrType)(void);
+typedef unsigned char (*CmdlineFuncPtrType)(void);
 
 // functions
 
@@ -96,6 +96,16 @@ void cmdlineAddCommand(char* newCmdString, CmdlineFuncPtrType newCmdFuncPtr);
 
 //! sets the function used for sending characters to the user terminal
 void cmdlineSetOutputFunc(void (*output_func)(unsigned char c));
+
+//! sets the function used for logging the return status of executed functions SUCCESS or FAILLURE
+// currently used to log status of the commend executed by the sms //naini
+void cmdlineSetCmdStatusOutputFunc(void (*output_func)(unsigned char c));
+
+//! clears the function used for collecting  the return staus of executed function//naini
+void cmdlineClrCmdStatusOutputFunc(void);
+
+//check  if status check output function is set or not//naini
+unsigned char  cmdlineStatusOutputFunc(void);
 
 //! call this function to pass input charaters from the user terminal
 void cmdlineInputFunc(unsigned char c);

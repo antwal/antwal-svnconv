@@ -73,6 +73,8 @@ CmdlineFuncPtrType CmdlineExecFunction;
 
 // function pointer to single character output routine
 static void (*cmdlineOutputFunc)(unsigned char c);
+// another fp to a single character output routine
+static void (*cmdlineCmdStatusOutputFunc)(unsigned char c);
 
 void cmdlineInit(void)
 {
@@ -85,6 +87,8 @@ void cmdlineInit(void)
 	CmdlineExecFunction = 0;
 	// initialize command list
 	CmdlineNumCommands = 0;
+	//initilize the return status collectine functions
+	cmdlineCmdStatusOutputFunc = 0;
 }
 
 void cmdlineAddCommand(char* newCmdString, CmdlineFuncPtrType newCmdFuncPtr)
@@ -106,7 +110,25 @@ void cmdlineSetOutputFunc(void (*output_func)(unsigned char c))
 	// print a prompt
 	//cmdlinePrintPrompt();
 }
+//set the CmdStatusOutputFunc //naini
+void cmdlineSetCmdStatusOutputFunc(void (*output_func)(unsigned char c))
+{
+	//set the new Output function
+	cmdlineCmdStatusOutputFunc=output_func;
 
+}
+// disconnect the cmd status output fucntion//naini
+void cmdlineClrCmdStatusOutputFunc(void){
+	//cleat the Output function
+	cmdlineCmdStatusOutputFunc = 0;
+
+}
+//check  if status check output function is set or not//naini
+unsigned char  cmdlineStatusOutputFunc(void){
+	(cmdlineCmdStatusOutputFunc != 0) ? 1:0 ;
+
+
+}
 void cmdlineInputFunc(unsigned char c)
 {
 	uint8_t i;
@@ -364,8 +386,13 @@ void cmdlineMainLoop(void)
 	// do we have a command/function to be executed
 	if(CmdlineExecFunction)
 	{
+		// check if there is function for collecting the return status of function
+		if(cmdlineCmdStatusOutputFunc){
+			cmdlineCmdStatusOutputFunc(CmdlineExecFunction());
+		}else{
 		// run it
 		CmdlineExecFunction();
+		}
 		// reset
 		CmdlineExecFunction = 0;
 		// output new prompt

@@ -76,7 +76,7 @@ volatile TestStatus MemoryProgramStatus2 = PASSED;
   * @param  ptr to the dst , ptr to the src , number of bytes
   * @retval None
   */
-void flashpage(void* dst ,void* src , uint32_t len)
+unsigned char flashpage(void* dst ,void* src , uint32_t len)
 {
    uint32_t *data = (uint32_t *)src;
 
@@ -170,8 +170,10 @@ void flashpage(void* dst ,void* src , uint32_t len)
     if( MemoryProgramStatus == FAILED)
     {
     	debug(LOG,"%s\n\r","Flash Save Failed");
+    	return 1;//Error
         //while(1);
     }
+    return 0;//success
 
 }
 

@@ -320,6 +320,7 @@ void Default_Reset_Handler(void)
 #include "debug.h"
 static void Default_Handler(void) 
 {
+	// Make only one entry
 	debug(LOG,"%s\r\n","In the default handler");
   /* Go into an infinite loop. */
   while (1);
