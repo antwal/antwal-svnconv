@@ -1,0 +1,289 @@
+   1               		.file	"timer-4sec.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  17               	.Ltext0:
+  18               	.global	__vector_6
+  20               	__vector_6:
+  21               	.LFB6:
+  22               	.LM1:
+  23 0000 1F92      		push __zero_reg__
+  24 0002 0F92      		push r0
+  25 0004 0FB6      		in r0,__SREG__
+  26 0006 0F92      		push r0
+  27 0008 1124      		clr __zero_reg__
+  28 000a 8F93      		push r24
+  29 000c 9F93      		push r25
+  30               	/* prologue: Signal */
+  31               	/* frame size = 0 */
+  32               	.LM2:
+  33 000e 8091 0000 		lds r24,time
+  34 0012 9091 0000 		lds r25,(time)+1
+  35 0016 0197      		sbiw r24,1
+  36 0018 9093 0000 		sts (time)+1,r25
+  37 001c 8093 0000 		sts time,r24
+  38               	/* epilogue start */
+  39               	.LM3:
+  40 0020 9F91      		pop r25
+  41 0022 8F91      		pop r24
+  42 0024 0F90      		pop r0
+  43 0026 0FBE      		out __SREG__,r0
+  44 0028 0F90      		pop r0
+  45 002a 1F90      		pop __zero_reg__
+  46 002c 1895      		reti
+  47               	.LFE6:
+  49               	.global	sleeps
+  51               	sleeps:
+  52               	.LFB8:
+  53               	.LM4:
+  54               	/* prologue: function */
+  55               	/* frame size = 0 */
+  56               	.LM5:
+  57 002e 85B7      		in r24,85-32
+  58 0030 8068      		ori r24,lo8(-128)
+  59 0032 85BF      		out 85-32,r24
+  60               	.LM6:
+  61 0034 85B7      		in r24,85-32
+  62 0036 8F7E      		andi r24,lo8(-17)
+  63 0038 85BF      		out 85-32,r24
+  64               	.LM7:
+  65               	/* #APP */
+  66               	 ;  34 "timer-4sec.c" 1
+  67 003a 8895      		sleep
+  68               		
+  69               	 ;  0 "" 2
+  70               	.LM8:
+  71               	/* #NOAPP */
+  72 003c 85B7      		in r24,85-32
+  73 003e 8F77      		andi r24,lo8(127)
+  74 0040 85BF      		out 85-32,r24
+  75               	/* epilogue start */
+  76               	.LM9:
+  77 0042 0895      		ret
+  78               	.LFE8:
+  80               	.global	timer_init
+  82               	timer_init:
+  83               	.LFB9:
+  84               	.LM10:
+  85               	/* prologue: function */
+  86               	/* frame size = 0 */
+  87               	.LM11:
+  88 0044 8EB5      		in r24,78-32
+  89 0046 8860      		ori r24,lo8(8)
+  90 0048 8EBD      		out 78-32,r24
+  91               	.LM12:
+  92 004a 1DBC      		out (76)+1-32,__zero_reg__
+  93 004c 1CBC      		out 76-32,__zero_reg__
+  94               	.LM13:
+  95 004e 8EB5      		in r24,78-32
+  96 0050 8560      		ori r24,lo8(5)
+  97 0052 8EBD      		out 78-32,r24
+  98               	.LM14:
+  99 0054 82E1      		ldi r24,lo8(31250)
+ 100 0056 9AE7      		ldi r25,hi8(31250)
+ 101 0058 9BBD      		out (74)+1-32,r25
+ 102 005a 8ABD      		out 74-32,r24
+ 103               	.LM15:
+ 104               	/* #APP */
+ 105               	 ;  46 "timer-4sec.c" 1
+ 106 005c 7894      		sei
+ 107               	 ;  0 "" 2
+ 108               	.LM16:
+ 109               	/* #NOAPP */
+ 110 005e 89B7      		in r24,89-32
+ 111 0060 8061      		ori r24,lo8(16)
+ 112 0062 89BF      		out 89-32,r24
+ 113               	/* epilogue start */
+ 114               	.LM17:
+ 115 0064 0895      		ret
+ 116               	.LFE9:
+ 118               	.global	time_sleep
+ 120               	time_sleep:
+ 121               	.LFB10:
+ 122               	.LM18:
+ 123               	.LVL0:
+ 124               	/* prologue: function */
+ 125               	/* frame size = 0 */
+ 126               	.LM19:
+ 127 0066 1DBC      		out (76)+1-32,__zero_reg__
+ 128 0068 1CBC      		out 76-32,__zero_reg__
+ 129               	.LM20:
+ 130 006a 2EB5      		in r18,78-32
+ 131 006c 2560      		ori r18,lo8(5)
+ 132 006e 2EBD      		out 78-32,r18
+ 133               	.LM21:
+ 134 0070 22E1      		ldi r18,lo8(31250)
+ 135 0072 3AE7      		ldi r19,hi8(31250)
+ 136 0074 3BBD      		out (74)+1-32,r19
+ 137 0076 2ABD      		out 74-32,r18
+ 138               	.LM22:
+ 139               	/* #APP */
+ 140               	 ;  61 "timer-4sec.c" 1
+ 141 0078 7894      		sei
+ 142               	 ;  0 "" 2
+ 143               	.LM23:
+ 144               	/* #NOAPP */
+ 145 007a 9695      		lsr r25
+ 146 007c 8795      		ror r24
+ 147 007e 9695      		lsr r25
+ 148 0080 8795      		ror r24
+ 149               	.LVL1:
+ 150 0082 9093 0000 		sts (time)+1,r25
+ 151 0086 8093 0000 		sts time,r24
+ 152               	.LM24:
+ 153 008a 89B7      		in r24,89-32
+ 154               	.LVL2:
+ 155 008c 8061      		ori r24,lo8(16)
+ 156 008e 89BF      		out 89-32,r24
+ 157               	/* epilogue start */
+ 158               	.LM25:
+ 159 0090 0895      		ret
+ 160               	.LFE10:
+ 162               	.global	delay_sec
+ 164               	delay_sec:
+ 165               	.LFB7:
+ 166               	.LM26:
+ 167               	.LVL3:
+ 168 0092 DF92      		push r13
+ 169 0094 EF92      		push r14
+ 170 0096 FF92      		push r15
+ 171 0098 0F93      		push r16
+ 172 009a 1F93      		push r17
+ 173 009c CF93      		push r28
+ 174 009e DF93      		push r29
+ 175               	/* prologue: function */
+ 176               	/* frame size = 0 */
+ 177 00a0 EC01      		movw r28,r24
+ 178               	.LBB13:
+ 179               	.LBB14:
+ 180               	.LBB15:
+ 181               	.LBB16:
+ 182               	.LM27:
+ 183 00a2 30E5      		ldi r19,lo8(-15536)
+ 184 00a4 E32E      		mov r14,r19
+ 185 00a6 33EC      		ldi r19,hi8(-15536)
+ 186 00a8 F32E      		mov r15,r19
+ 187               	.LBE16:
+ 188               	.LBE15:
+ 189               	.LBE14:
+ 190               	.LBE13:
+ 191               	.LM28:
+ 192 00aa DD24      		clr r13
+ 193 00ac D394      		inc r13
+ 194 00ae 00E0      		ldi r16,lo8(__c.1386)
+ 195 00b0 10E0      		ldi r17,hi8(__c.1386)
+ 196 00b2 00C0      		rjmp .L10
+ 197               	.LVL4:
+ 198               	.L12:
+ 199               	.LM29:
+ 200 00b4 80E0      		ldi r24,lo8(0)
+ 201 00b6 90E0      		ldi r25,hi8(0)
+ 202               	.LVL5:
+ 203               	.L11:
+ 204               	.LBB20:
+ 205               	.LBB19:
+ 206               	.LBB18:
+ 207               	.LBB17:
+ 208               	.LM30:
+ 209 00b8 F701      		movw r30,r14
+ 210               	.LVL6:
+ 211               	/* #APP */
+ 212               	 ;  105 "/usr/lib/gcc/avr/4.3.3/../../../avr/include/util/delay_basic.h" 1
+ 213 00ba 3197      		1: sbiw r30,1
+ 214 00bc 01F4      		brne 1b
+ 215               	 ;  0 "" 2
+ 216               	/* #NOAPP */
+ 217               	.LBE17:
+ 218               	.LBE18:
+ 219               	.LBE19:
+ 220               	.LBE20:
+ 221               	.LM31:
+ 222 00be 0196      		adiw r24,1
+ 223 00c0 8832      		cpi r24,40
+ 224 00c2 9105      		cpc r25,__zero_reg__
+ 225 00c4 01F4      		brne .L11
+ 226               	.LM32:
+ 227               	/* #APP */
+ 228               	 ;  25 "timer-4sec.c" 1
+ 229 00c6 A895      		wdr
+ 230               	 ;  0 "" 2
+ 231               	.LM33:
+ 232               	/* #NOAPP */
+ 233 00c8 00D0      		rcall .
+ 234 00ca 00D0      		rcall .
+ 235 00cc 0F92      		push __tmp_reg__
+ 236 00ce EDB7      		in r30,__SP_L__
+ 237 00d0 FEB7      		in r31,__SP_H__
+ 238               	.LVL7:
+ 239 00d2 3196      		adiw r30,1
+ 240 00d4 ADB7      		in r26,__SP_L__
+ 241 00d6 BEB7      		in r27,__SP_H__
+ 242 00d8 1196      		adiw r26,1
+ 243 00da DC92      		st X,r13
+ 244 00dc 1283      		std Z+2,r17
+ 245 00de 0183      		std Z+1,r16
+ 246 00e0 D483      		std Z+4,r29
+ 247 00e2 C383      		std Z+3,r28
+ 248 00e4 00D0      		rcall rprintf1RamRom
+ 249               	.LVL8:
+ 250 00e6 2197      		sbiw r28,1
+ 251 00e8 0F90      		pop __tmp_reg__
+ 252 00ea 0F90      		pop __tmp_reg__
+ 253 00ec 0F90      		pop __tmp_reg__
+ 254 00ee 0F90      		pop __tmp_reg__
+ 255 00f0 0F90      		pop __tmp_reg__
+ 256               	.LVL9:
+ 257               	.L10:
+ 258               	.LM34:
+ 259 00f2 2097      		sbiw r28,0
+ 260 00f4 01F4      		brne .L12
+ 261               	/* epilogue start */
+ 262               	.LM35:
+ 263 00f6 DF91      		pop r29
+ 264 00f8 CF91      		pop r28
+ 265               	.LVL10:
+ 266 00fa 1F91      		pop r17
+ 267 00fc 0F91      		pop r16
+ 268 00fe FF90      		pop r15
+ 269 0100 EF90      		pop r14
+ 270 0102 DF90      		pop r13
+ 271 0104 0895      		ret
+ 272               	.LFE7:
+ 274               	.global	time
+ 275               	.global	time
+ 276               		.section .bss
+ 279               	time:
+ 280 0000 0000      		.skip 2,0
+ 281               		.section	.progmem.data,"a",@progbits
+ 284               	__c.1386:
+ 285 0000 5469 6D65 		.string	"Time left: %d to check\r"
+ 285      206C 6566 
+ 285      743A 2025 
+ 285      6420 746F 
+ 285      2063 6865 
+ 342               	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 timer-4sec.c
+     /tmp/ccwo8mR5.s:2      *ABS*:0000003f __SREG__
+     /tmp/ccwo8mR5.s:3      *ABS*:0000003e __SP_H__
+     /tmp/ccwo8mR5.s:4      *ABS*:0000003d __SP_L__
+     /tmp/ccwo8mR5.s:5      *ABS*:00000034 __CCP__
+     /tmp/ccwo8mR5.s:6      *ABS*:00000000 __tmp_reg__
+     /tmp/ccwo8mR5.s:7      *ABS*:00000001 __zero_reg__
+     /tmp/ccwo8mR5.s:20     .text:00000000 __vector_6
+     /tmp/ccwo8mR5.s:279    .bss:00000000 time
+     /tmp/ccwo8mR5.s:51     .text:0000002e sleeps
+     /tmp/ccwo8mR5.s:82     .text:00000044 timer_init
+     /tmp/ccwo8mR5.s:120    .text:00000066 time_sleep
+     /tmp/ccwo8mR5.s:164    .text:00000092 delay_sec
+     /tmp/ccwo8mR5.s:284    .progmem.data:00000000 __c.1386
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss
+rprintf1RamRom

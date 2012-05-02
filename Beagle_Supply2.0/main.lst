@@ -1,0 +1,1187 @@
+   1               		.file	"main.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  17               	.Ltext0:
+  18               	.global	chargeSense
+  20               	chargeSense:
+  21               	.LFB9:
+  22               	.LM1:
+  23               	/* prologue: function */
+  24               	/* frame size = 0 */
+  25               	.LM2:
+  26 0000 8499      		sbic 48-32,4
+  27 0002 00C0      		rjmp .L2
+  28               	.LM3:
+  29 0004 81E0      		ldi r24,lo8(1)
+  30 0006 8093 0000 		sts charge1,r24
+  31               	.LM4:
+  32 000a 00D0      		rcall .
+  33 000c 0F92      		push __tmp_reg__
+  34 000e EDB7      		in r30,__SP_L__
+  35 0010 FEB7      		in r31,__SP_H__
+  36 0012 8183      		std Z+1,r24
+  37 0014 80E0      		ldi r24,lo8(__c.1567)
+  38 0016 90E0      		ldi r25,hi8(__c.1567)
+  39 0018 00C0      		rjmp .L7
+  40               	.L2:
+  41               	.LM5:
+  42 001a 1092 0000 		sts charge1,__zero_reg__
+  43               	.LM6:
+  44 001e 00D0      		rcall .
+  45 0020 0F92      		push __tmp_reg__
+  46 0022 81E0      		ldi r24,lo8(1)
+  47 0024 EDB7      		in r30,__SP_L__
+  48 0026 FEB7      		in r31,__SP_H__
+  49 0028 8183      		std Z+1,r24
+  50 002a 80E0      		ldi r24,lo8(__c.1569)
+  51 002c 90E0      		ldi r25,hi8(__c.1569)
+  52               	.L7:
+  53 002e 9383      		std Z+3,r25
+  54 0030 8283      		std Z+2,r24
+  55 0032 00D0      		rcall rprintf1RamRom
+  56 0034 0F90      		pop __tmp_reg__
+  57 0036 0F90      		pop __tmp_reg__
+  58 0038 0F90      		pop __tmp_reg__
+  59               	.LM7:
+  60 003a 8399      		sbic 48-32,3
+  61 003c 00C0      		rjmp .L4
+  62               	.LM8:
+  63 003e 81E0      		ldi r24,lo8(1)
+  64 0040 8093 0000 		sts charge2,r24
+  65               	.LM9:
+  66 0044 00D0      		rcall .
+  67 0046 0F92      		push __tmp_reg__
+  68 0048 EDB7      		in r30,__SP_L__
+  69 004a FEB7      		in r31,__SP_H__
+  70 004c 8183      		std Z+1,r24
+  71 004e 80E0      		ldi r24,lo8(__c.1571)
+  72 0050 90E0      		ldi r25,hi8(__c.1571)
+  73 0052 00C0      		rjmp .L8
+  74               	.L4:
+  75               	.LM10:
+  76 0054 1092 0000 		sts charge2,__zero_reg__
+  77               	.LM11:
+  78 0058 00D0      		rcall .
+  79 005a 0F92      		push __tmp_reg__
+  80 005c 81E0      		ldi r24,lo8(1)
+  81 005e EDB7      		in r30,__SP_L__
+  82 0060 FEB7      		in r31,__SP_H__
+  83 0062 8183      		std Z+1,r24
+  84 0064 80E0      		ldi r24,lo8(__c.1573)
+  85 0066 90E0      		ldi r25,hi8(__c.1573)
+  86               	.L8:
+  87 0068 9383      		std Z+3,r25
+  88 006a 8283      		std Z+2,r24
+  89 006c 00D0      		rcall rprintf1RamRom
+  90 006e 0F90      		pop __tmp_reg__
+  91 0070 0F90      		pop __tmp_reg__
+  92 0072 0F90      		pop __tmp_reg__
+  93 0074 0895      		ret
+  94               	.LFE9:
+  96               	.global	wdt_chk
+  98               	wdt_chk:
+  99               	.LFB7:
+ 100               	.LM12:
+ 101               	/* prologue: function */
+ 102               	/* frame size = 0 */
+ 103               	.LM13:
+ 104 0076 04B6      		in __tmp_reg__,84-32
+ 105 0078 03FE      		sbrs __tmp_reg__,3
+ 106 007a 00C0      		rjmp .L10
+ 107               	.LM14:
+ 108 007c 84B7      		in r24,84-32
+ 109 007e 877F      		andi r24,lo8(-9)
+ 110 0080 84BF      		out 84-32,r24
+ 111               	.LM15:
+ 112 0082 00D0      		rcall .
+ 113 0084 0F92      		push __tmp_reg__
+ 114 0086 81E0      		ldi r24,lo8(1)
+ 115 0088 EDB7      		in r30,__SP_L__
+ 116 008a FEB7      		in r31,__SP_H__
+ 117 008c 8183      		std Z+1,r24
+ 118 008e 80E0      		ldi r24,lo8(__c.1508)
+ 119 0090 90E0      		ldi r25,hi8(__c.1508)
+ 120 0092 00C0      		rjmp .L13
+ 121               	.L10:
+ 122               	.LM16:
+ 123 0094 00D0      		rcall .
+ 124 0096 0F92      		push __tmp_reg__
+ 125 0098 81E0      		ldi r24,lo8(1)
+ 126 009a EDB7      		in r30,__SP_L__
+ 127 009c FEB7      		in r31,__SP_H__
+ 128 009e 8183      		std Z+1,r24
+ 129 00a0 80E0      		ldi r24,lo8(__c.1510)
+ 130 00a2 90E0      		ldi r25,hi8(__c.1510)
+ 131               	.L13:
+ 132 00a4 9383      		std Z+3,r25
+ 133 00a6 8283      		std Z+2,r24
+ 134 00a8 00D0      		rcall rprintf1RamRom
+ 135 00aa 0F90      		pop __tmp_reg__
+ 136 00ac 0F90      		pop __tmp_reg__
+ 137 00ae 0F90      		pop __tmp_reg__
+ 138 00b0 0895      		ret
+ 139               	.LFE7:
+ 141               	.global	adcSense
+ 143               	adcSense:
+ 144               	.LFB8:
+ 145               	.LM17:
+ 146 00b2 2F92      		push r2
+ 147 00b4 3F92      		push r3
+ 148 00b6 4F92      		push r4
+ 149 00b8 5F92      		push r5
+ 150 00ba 6F92      		push r6
+ 151 00bc 7F92      		push r7
+ 152 00be 8F92      		push r8
+ 153 00c0 9F92      		push r9
+ 154 00c2 AF92      		push r10
+ 155 00c4 BF92      		push r11
+ 156 00c6 CF92      		push r12
+ 157 00c8 DF92      		push r13
+ 158 00ca EF92      		push r14
+ 159 00cc FF92      		push r15
+ 160 00ce 0F93      		push r16
+ 161 00d0 1F93      		push r17
+ 162 00d2 CF93      		push r28
+ 163 00d4 DF93      		push r29
+ 164               	/* prologue: function */
+ 165               	/* frame size = 0 */
+ 166               	.LM18:
+ 167 00d6 8EE1      		ldi r24,lo8(30)
+ 168 00d8 00D0      		rcall a2dConvert10bit
+ 169 00da 9093 0000 		sts (a122)+1,r25
+ 170 00de 8093 0000 		sts a122,r24
+ 171               	.LM19:
+ 172 00e2 00D0      		rcall .
+ 173 00e4 00D0      		rcall .
+ 174 00e6 0F92      		push __tmp_reg__
+ 175 00e8 EDB7      		in r30,__SP_L__
+ 176 00ea FEB7      		in r31,__SP_H__
+ 177 00ec 3196      		adiw r30,1
+ 178 00ee 21E0      		ldi r18,lo8(1)
+ 179 00f0 ADB7      		in r26,__SP_L__
+ 180 00f2 BEB7      		in r27,__SP_H__
+ 181 00f4 1196      		adiw r26,1
+ 182 00f6 2C93      		st X,r18
+ 183 00f8 20E0      		ldi r18,lo8(__c.1521)
+ 184 00fa 30E0      		ldi r19,hi8(__c.1521)
+ 185 00fc 3283      		std Z+2,r19
+ 186 00fe 2183      		std Z+1,r18
+ 187 0100 9483      		std Z+4,r25
+ 188 0102 8383      		std Z+3,r24
+ 189 0104 00D0      		rcall rprintf1RamRom
+ 190               	.LM20:
+ 191 0106 8091 0000 		lds r24,sample_count
+ 192 010a 9091 0000 		lds r25,(sample_count)+1
+ 193 010e 0196      		adiw r24,1
+ 194 0110 9093 0000 		sts (sample_count)+1,r25
+ 195 0114 8093 0000 		sts sample_count,r24
+ 196 0118 10E0      		ldi r17,lo8(0)
+ 197               	.LVL0:
+ 198 011a 0F90      		pop __tmp_reg__
+ 199 011c 0F90      		pop __tmp_reg__
+ 200 011e 0F90      		pop __tmp_reg__
+ 201 0120 0F90      		pop __tmp_reg__
+ 202 0122 0F90      		pop __tmp_reg__
+ 203               	.LM21:
+ 204 0124 60E0      		ldi r22,lo8(__c.1540)
+ 205 0126 262E      		mov r2,r22
+ 206 0128 60E0      		ldi r22,hi8(__c.1540)
+ 207 012a 362E      		mov r3,r22
+ 208               	.LM22:
+ 209 012c 50E0      		ldi r21,lo8(__c.1542)
+ 210 012e 452E      		mov r4,r21
+ 211 0130 50E0      		ldi r21,hi8(__c.1542)
+ 212 0132 552E      		mov r5,r21
+ 213               	.LM23:
+ 214 0134 01E0      		ldi r16,lo8(1)
+ 215 0136 40E0      		ldi r20,lo8(__c.1535)
+ 216 0138 642E      		mov r6,r20
+ 217 013a 40E0      		ldi r20,hi8(__c.1535)
+ 218 013c 742E      		mov r7,r20
+ 219               	.LM24:
+ 220 013e 30E0      		ldi r19,lo8(__c.1537)
+ 221 0140 832E      		mov r8,r19
+ 222 0142 30E0      		ldi r19,hi8(__c.1537)
+ 223 0144 932E      		mov r9,r19
+ 224               	.LM25:
+ 225 0146 20E0      		ldi r18,lo8(__c.1524)
+ 226 0148 A22E      		mov r10,r18
+ 227 014a 20E0      		ldi r18,hi8(__c.1524)
+ 228 014c B22E      		mov r11,r18
+ 229               	.LM26:
+ 230 014e 90E0      		ldi r25,lo8(__c.1526)
+ 231 0150 C92E      		mov r12,r25
+ 232 0152 90E0      		ldi r25,hi8(__c.1526)
+ 233 0154 D92E      		mov r13,r25
+ 234               	.LM27:
+ 235 0156 80E0      		ldi r24,lo8(__c.1530)
+ 236 0158 E82E      		mov r14,r24
+ 237 015a 80E0      		ldi r24,hi8(__c.1530)
+ 238 015c F82E      		mov r15,r24
+ 239               	.LM28:
+ 240 015e C0E0      		ldi r28,lo8(__c.1532)
+ 241 0160 D0E0      		ldi r29,hi8(__c.1532)
+ 242               	.L20:
+ 243               	.LM29:
+ 244 0162 812F      		mov r24,r17
+ 245 0164 00D0      		rcall a2dConvert10bit
+ 246 0166 A0E0      		ldi r26,lo8(0)
+ 247 0168 B0E0      		ldi r27,hi8(0)
+ 248 016a BC01      		movw r22,r24
+ 249 016c CD01      		movw r24,r26
+ 250 016e 00D0      		rcall __floatunsisf
+ 251 0170 6093 0000 		sts volt,r22
+ 252 0174 7093 0000 		sts (volt)+1,r23
+ 253 0178 8093 0000 		sts (volt)+2,r24
+ 254 017c 9093 0000 		sts (volt)+3,r25
+ 255               	.LM30:
+ 256 0180 1130      		cpi r17,lo8(1)
+ 257 0182 01F4      		brne .+2
+ 258 0184 00C0      		rjmp .L17
+ 259 0186 1130      		cpi r17,lo8(1)
+ 260 0188 00F4      		brsh .+2
+ 261 018a 00C0      		rjmp .L16
+ 262 018c 1230      		cpi r17,lo8(2)
+ 263 018e 01F0      		breq .L18
+ 264 0190 1330      		cpi r17,lo8(3)
+ 265 0192 01F0      		breq .+2
+ 266 0194 00C0      		rjmp .L15
+ 267 0196 00C0      		rjmp .L24
+ 268               	.L18:
+ 269               	.LM31:
+ 270 0198 2AE0      		ldi r18,lo8(0x3b23d70a)
+ 271 019a 37ED      		ldi r19,hi8(0x3b23d70a)
+ 272 019c 43E2      		ldi r20,hlo8(0x3b23d70a)
+ 273 019e 5BE3      		ldi r21,hhi8(0x3b23d70a)
+ 274 01a0 00D0      		rcall __mulsf3
+ 275 01a2 2AE9      		ldi r18,lo8(0x4139999a)
+ 276 01a4 39E9      		ldi r19,hi8(0x4139999a)
+ 277 01a6 49E3      		ldi r20,hlo8(0x4139999a)
+ 278 01a8 51E4      		ldi r21,hhi8(0x4139999a)
+ 279 01aa 00D0      		rcall __mulsf3
+ 280 01ac 6093 0000 		sts batt1,r22
+ 281 01b0 7093 0000 		sts (batt1)+1,r23
+ 282 01b4 8093 0000 		sts (batt1)+2,r24
+ 283 01b8 9093 0000 		sts (batt1)+3,r25
+ 284               	.LM32:
+ 285 01bc 00D0      		rcall .
+ 286 01be 0F92      		push __tmp_reg__
+ 287 01c0 EDB7      		in r30,__SP_L__
+ 288 01c2 FEB7      		in r31,__SP_H__
+ 289 01c4 0183      		std Z+1,r16
+ 290 01c6 B382      		std Z+3,r11
+ 291 01c8 A282      		std Z+2,r10
+ 292 01ca 00D0      		rcall rprintf1RamRom
+ 293               	.LM33:
+ 294 01cc 0F90      		pop __tmp_reg__
+ 295 01ce 0F90      		pop __tmp_reg__
+ 296 01d0 0F90      		pop __tmp_reg__
+ 297 01d2 4091 0000 		lds r20,batt1
+ 298 01d6 5091 0000 		lds r21,(batt1)+1
+ 299 01da 6091 0000 		lds r22,(batt1)+2
+ 300 01de 7091 0000 		lds r23,(batt1)+3
+ 301 01e2 88E0      		ldi r24,lo8(8)
+ 302 01e4 00D0      		rcall rprintfFloat
+ 303               	.LM34:
+ 304 01e6 00D0      		rcall .
+ 305 01e8 0F92      		push __tmp_reg__
+ 306 01ea ADB7      		in r26,__SP_L__
+ 307 01ec BEB7      		in r27,__SP_H__
+ 308 01ee 1196      		adiw r26,1
+ 309 01f0 0C93      		st X,r16
+ 310 01f2 1197      		sbiw r26,1
+ 311 01f4 1396      		adiw r26,2+1
+ 312 01f6 DC92      		st X,r13
+ 313 01f8 CE92      		st -X,r12
+ 314 01fa 1297      		sbiw r26,2
+ 315 01fc 00C0      		rjmp .L23
+ 316               	.L24:
+ 317               	.LM35:
+ 318 01fe 2AE0      		ldi r18,lo8(0x3b23d70a)
+ 319 0200 37ED      		ldi r19,hi8(0x3b23d70a)
+ 320 0202 43E2      		ldi r20,hlo8(0x3b23d70a)
+ 321 0204 5BE3      		ldi r21,hhi8(0x3b23d70a)
+ 322 0206 00D0      		rcall __mulsf3
+ 323 0208 2AE9      		ldi r18,lo8(0x4139999a)
+ 324 020a 39E9      		ldi r19,hi8(0x4139999a)
+ 325 020c 49E3      		ldi r20,hlo8(0x4139999a)
+ 326 020e 51E4      		ldi r21,hhi8(0x4139999a)
+ 327 0210 00D0      		rcall __mulsf3
+ 328 0212 6093 0000 		sts batt2,r22
+ 329 0216 7093 0000 		sts (batt2)+1,r23
+ 330 021a 8093 0000 		sts (batt2)+2,r24
+ 331 021e 9093 0000 		sts (batt2)+3,r25
+ 332               	.LM36:
+ 333 0222 00D0      		rcall .
+ 334 0224 0F92      		push __tmp_reg__
+ 335 0226 EDB7      		in r30,__SP_L__
+ 336 0228 FEB7      		in r31,__SP_H__
+ 337 022a 0183      		std Z+1,r16
+ 338 022c F382      		std Z+3,r15
+ 339 022e E282      		std Z+2,r14
+ 340 0230 00D0      		rcall rprintf1RamRom
+ 341               	.LM37:
+ 342 0232 0F90      		pop __tmp_reg__
+ 343 0234 0F90      		pop __tmp_reg__
+ 344 0236 0F90      		pop __tmp_reg__
+ 345 0238 4091 0000 		lds r20,batt2
+ 346 023c 5091 0000 		lds r21,(batt2)+1
+ 347 0240 6091 0000 		lds r22,(batt2)+2
+ 348 0244 7091 0000 		lds r23,(batt2)+3
+ 349 0248 88E0      		ldi r24,lo8(8)
+ 350 024a 00D0      		rcall rprintfFloat
+ 351               	.LM38:
+ 352 024c 00D0      		rcall .
+ 353 024e 0F92      		push __tmp_reg__
+ 354 0250 ADB7      		in r26,__SP_L__
+ 355 0252 BEB7      		in r27,__SP_H__
+ 356 0254 1196      		adiw r26,1
+ 357 0256 0C93      		st X,r16
+ 358 0258 1197      		sbiw r26,1
+ 359 025a 1396      		adiw r26,2+1
+ 360 025c DC93      		st X,r29
+ 361 025e CE93      		st -X,r28
+ 362 0260 1297      		sbiw r26,2
+ 363 0262 00C0      		rjmp .L23
+ 364               	.L16:
+ 365               	.LM39:
+ 366 0264 2AE0      		ldi r18,lo8(0x3b23d70a)
+ 367 0266 37ED      		ldi r19,hi8(0x3b23d70a)
+ 368 0268 43E2      		ldi r20,hlo8(0x3b23d70a)
+ 369 026a 5BE3      		ldi r21,hhi8(0x3b23d70a)
+ 370 026c 00D0      		rcall __mulsf3
+ 371 026e 2AE9      		ldi r18,lo8(0x4139999a)
+ 372 0270 39E9      		ldi r19,hi8(0x4139999a)
+ 373 0272 49E3      		ldi r20,hlo8(0x4139999a)
+ 374 0274 51E4      		ldi r21,hhi8(0x4139999a)
+ 375 0276 00D0      		rcall __mulsf3
+ 376 0278 6093 0000 		sts solar,r22
+ 377 027c 7093 0000 		sts (solar)+1,r23
+ 378 0280 8093 0000 		sts (solar)+2,r24
+ 379 0284 9093 0000 		sts (solar)+3,r25
+ 380               	.LM40:
+ 381 0288 00D0      		rcall .
+ 382 028a 0F92      		push __tmp_reg__
+ 383 028c EDB7      		in r30,__SP_L__
+ 384 028e FEB7      		in r31,__SP_H__
+ 385 0290 0183      		std Z+1,r16
+ 386 0292 7382      		std Z+3,r7
+ 387 0294 6282      		std Z+2,r6
+ 388 0296 00D0      		rcall rprintf1RamRom
+ 389               	.LM41:
+ 390 0298 0F90      		pop __tmp_reg__
+ 391 029a 0F90      		pop __tmp_reg__
+ 392 029c 0F90      		pop __tmp_reg__
+ 393 029e 4091 0000 		lds r20,solar
+ 394 02a2 5091 0000 		lds r21,(solar)+1
+ 395 02a6 6091 0000 		lds r22,(solar)+2
+ 396 02aa 7091 0000 		lds r23,(solar)+3
+ 397 02ae 88E0      		ldi r24,lo8(8)
+ 398 02b0 00D0      		rcall rprintfFloat
+ 399               	.LM42:
+ 400 02b2 00D0      		rcall .
+ 401 02b4 0F92      		push __tmp_reg__
+ 402 02b6 ADB7      		in r26,__SP_L__
+ 403 02b8 BEB7      		in r27,__SP_H__
+ 404 02ba 1196      		adiw r26,1
+ 405 02bc 0C93      		st X,r16
+ 406 02be 1197      		sbiw r26,1
+ 407 02c0 1396      		adiw r26,2+1
+ 408 02c2 9C92      		st X,r9
+ 409 02c4 8E92      		st -X,r8
+ 410 02c6 1297      		sbiw r26,2
+ 411 02c8 00C0      		rjmp .L23
+ 412               	.L17:
+ 413               	.LM43:
+ 414 02ca 2AE0      		ldi r18,lo8(0x3b23d70a)
+ 415 02cc 37ED      		ldi r19,hi8(0x3b23d70a)
+ 416 02ce 43E2      		ldi r20,hlo8(0x3b23d70a)
+ 417 02d0 5BE3      		ldi r21,hhi8(0x3b23d70a)
+ 418 02d2 00D0      		rcall __mulsf3
+ 419 02d4 2AE9      		ldi r18,lo8(0x4139999a)
+ 420 02d6 39E9      		ldi r19,hi8(0x4139999a)
+ 421 02d8 49E3      		ldi r20,hlo8(0x4139999a)
+ 422 02da 51E4      		ldi r21,hhi8(0x4139999a)
+ 423 02dc 00D0      		rcall __mulsf3
+ 424 02de 6093 0000 		sts Volt5,r22
+ 425 02e2 7093 0000 		sts (Volt5)+1,r23
+ 426 02e6 8093 0000 		sts (Volt5)+2,r24
+ 427 02ea 9093 0000 		sts (Volt5)+3,r25
+ 428               	.LM44:
+ 429 02ee 00D0      		rcall .
+ 430 02f0 0F92      		push __tmp_reg__
+ 431 02f2 EDB7      		in r30,__SP_L__
+ 432 02f4 FEB7      		in r31,__SP_H__
+ 433 02f6 1183      		std Z+1,r17
+ 434 02f8 3382      		std Z+3,r3
+ 435 02fa 2282      		std Z+2,r2
+ 436 02fc 00D0      		rcall rprintf1RamRom
+ 437               	.LM45:
+ 438 02fe 0F90      		pop __tmp_reg__
+ 439 0300 0F90      		pop __tmp_reg__
+ 440 0302 0F90      		pop __tmp_reg__
+ 441 0304 4091 0000 		lds r20,Volt5
+ 442 0308 5091 0000 		lds r21,(Volt5)+1
+ 443 030c 6091 0000 		lds r22,(Volt5)+2
+ 444 0310 7091 0000 		lds r23,(Volt5)+3
+ 445 0314 88E0      		ldi r24,lo8(8)
+ 446 0316 00D0      		rcall rprintfFloat
+ 447               	.LM46:
+ 448 0318 00D0      		rcall .
+ 449 031a 0F92      		push __tmp_reg__
+ 450 031c ADB7      		in r26,__SP_L__
+ 451 031e BEB7      		in r27,__SP_H__
+ 452 0320 1196      		adiw r26,1
+ 453 0322 1C93      		st X,r17
+ 454 0324 1197      		sbiw r26,1
+ 455 0326 1396      		adiw r26,2+1
+ 456 0328 5C92      		st X,r5
+ 457 032a 4E92      		st -X,r4
+ 458 032c 1297      		sbiw r26,2
+ 459               	.L23:
+ 460 032e 00D0      		rcall rprintf1RamRom
+ 461 0330 0F90      		pop __tmp_reg__
+ 462 0332 0F90      		pop __tmp_reg__
+ 463 0334 0F90      		pop __tmp_reg__
+ 464               	.L15:
+ 465               	.LM47:
+ 466 0336 1F5F      		subi r17,lo8(-(1))
+ 467 0338 1430      		cpi r17,lo8(4)
+ 468 033a 01F0      		breq .+2
+ 469 033c 00C0      		rjmp .L20
+ 470               	.LM48:
+ 471 033e 00D0      		rcall .
+ 472 0340 00D0      		rcall .
+ 473 0342 0F92      		push __tmp_reg__
+ 474 0344 EDB7      		in r30,__SP_L__
+ 475 0346 FEB7      		in r31,__SP_H__
+ 476 0348 3196      		adiw r30,1
+ 477 034a 81E0      		ldi r24,lo8(1)
+ 478 034c ADB7      		in r26,__SP_L__
+ 479 034e BEB7      		in r27,__SP_H__
+ 480 0350 1196      		adiw r26,1
+ 481 0352 8C93      		st X,r24
+ 482 0354 80E0      		ldi r24,lo8(__c.1548)
+ 483 0356 90E0      		ldi r25,hi8(__c.1548)
+ 484 0358 9283      		std Z+2,r25
+ 485 035a 8183      		std Z+1,r24
+ 486 035c 8091 0000 		lds r24,sample_count
+ 487 0360 9091 0000 		lds r25,(sample_count)+1
+ 488 0364 9483      		std Z+4,r25
+ 489 0366 8383      		std Z+3,r24
+ 490 0368 00D0      		rcall rprintf1RamRom
+ 491 036a 0F90      		pop __tmp_reg__
+ 492 036c 0F90      		pop __tmp_reg__
+ 493 036e 0F90      		pop __tmp_reg__
+ 494 0370 0F90      		pop __tmp_reg__
+ 495 0372 0F90      		pop __tmp_reg__
+ 496               	.LM49:
+ 497 0374 80E0      		ldi r24,lo8(0)
+ 498               	/* epilogue start */
+ 499 0376 DF91      		pop r29
+ 500 0378 CF91      		pop r28
+ 501 037a 1F91      		pop r17
+ 502               	.LVL1:
+ 503 037c 0F91      		pop r16
+ 504 037e FF90      		pop r15
+ 505 0380 EF90      		pop r14
+ 506 0382 DF90      		pop r13
+ 507 0384 CF90      		pop r12
+ 508 0386 BF90      		pop r11
+ 509 0388 AF90      		pop r10
+ 510 038a 9F90      		pop r9
+ 511 038c 8F90      		pop r8
+ 512 038e 7F90      		pop r7
+ 513 0390 6F90      		pop r6
+ 514 0392 5F90      		pop r5
+ 515 0394 4F90      		pop r4
+ 516 0396 3F90      		pop r3
+ 517 0398 2F90      		pop r2
+ 518 039a 0895      		ret
+ 519               	.LFE8:
+ 521               	.global	chargeLogic
+ 523               	chargeLogic:
+ 524               	.LFB10:
+ 525               	.LM50:
+ 526               	/* prologue: function */
+ 527               	/* frame size = 0 */
+ 528               	.LM51:
+ 529 039c 6091 0000 		lds r22,solar
+ 530 03a0 7091 0000 		lds r23,(solar)+1
+ 531 03a4 8091 0000 		lds r24,(solar)+2
+ 532 03a8 9091 0000 		lds r25,(solar)+3
+ 533 03ac 20E0      		ldi r18,lo8(0x41500000)
+ 534 03ae 30E0      		ldi r19,hi8(0x41500000)
+ 535 03b0 40E5      		ldi r20,hlo8(0x41500000)
+ 536 03b2 51E4      		ldi r21,hhi8(0x41500000)
+ 537 03b4 00D0      		rcall __lesf2
+ 538 03b6 1816      		cp __zero_reg__,r24
+ 539 03b8 04F0      		brlt .L51
+ 540               	.LM52:
+ 541 03ba 9798      		cbi 50-32,7
+ 542               	.LM53:
+ 543 03bc 9698      		cbi 50-32,6
+ 544               	.LM54:
+ 545 03be 9598      		cbi 50-32,5
+ 546               	.LM55:
+ 547 03c0 00D0      		rcall .
+ 548 03c2 0F92      		push __tmp_reg__
+ 549 03c4 81E0      		ldi r24,lo8(1)
+ 550 03c6 EDB7      		in r30,__SP_L__
+ 551 03c8 FEB7      		in r31,__SP_H__
+ 552 03ca 8183      		std Z+1,r24
+ 553 03cc 80E0      		ldi r24,lo8(__c.1584)
+ 554 03ce 90E0      		ldi r25,hi8(__c.1584)
+ 555 03d0 9383      		std Z+3,r25
+ 556 03d2 8283      		std Z+2,r24
+ 557 03d4 00D0      		rcall rprintf1RamRom
+ 558               	.LM56:
+ 559 03d6 1092 0000 		sts state,__zero_reg__
+ 560 03da 00C0      		rjmp .L57
+ 561               	.L51:
+ 562               	.LM57:
+ 563 03dc 979A      		sbi 50-32,7
+ 564               	.LM58:
+ 565 03de 82E0      		ldi r24,lo8(2)
+ 566 03e0 90E0      		ldi r25,hi8(2)
+ 567 03e2 00D0      		rcall delay_sec
+ 568               	.LM59:
+ 569 03e4 00D0      		rcall adcSense
+ 570               	.LM60:
+ 571 03e6 00D0      		rcall chargeSense
+ 572               	.LM61:
+ 573 03e8 6091 0000 		lds r22,solar
+ 574 03ec 7091 0000 		lds r23,(solar)+1
+ 575 03f0 8091 0000 		lds r24,(solar)+2
+ 576 03f4 9091 0000 		lds r25,(solar)+3
+ 577 03f8 20E0      		ldi r18,lo8(0x41700000)
+ 578 03fa 30E0      		ldi r19,hi8(0x41700000)
+ 579 03fc 40E7      		ldi r20,hlo8(0x41700000)
+ 580 03fe 51E4      		ldi r21,hhi8(0x41700000)
+ 581 0400 00D0      		rcall __gesf2
+ 582 0402 8823      		tst r24
+ 583 0404 04F4      		brge .+2
+ 584 0406 00C0      		rjmp .L52
+ 585               	.LM62:
+ 586 0408 6091 0000 		lds r22,batt1
+ 587 040c 7091 0000 		lds r23,(batt1)+1
+ 588 0410 8091 0000 		lds r24,(batt1)+2
+ 589 0414 9091 0000 		lds r25,(batt1)+3
+ 590 0418 23E3      		ldi r18,lo8(0x41033333)
+ 591 041a 33E3      		ldi r19,hi8(0x41033333)
+ 592 041c 43E0      		ldi r20,hlo8(0x41033333)
+ 593 041e 51E4      		ldi r21,hhi8(0x41033333)
+ 594 0420 00D0      		rcall __ltsf2
+ 595 0422 8823      		tst r24
+ 596 0424 04F4      		brge .L31
+ 597 0426 8091 0000 		lds r24,charge1
+ 598 042a 8823      		tst r24
+ 599 042c 01F4      		brne .L31
+ 600               	.LM63:
+ 601 042e 969A      		sbi 50-32,6
+ 602               	.LM64:
+ 603 0430 85E0      		ldi r24,lo8(5)
+ 604 0432 90E0      		ldi r25,hi8(5)
+ 605 0434 00D0      		rcall delay_sec
+ 606               	.LM65:
+ 607 0436 00D0      		rcall adcSense
+ 608               	.LM66:
+ 609 0438 6091 0000 		lds r22,solar
+ 610 043c 7091 0000 		lds r23,(solar)+1
+ 611 0440 8091 0000 		lds r24,(solar)+2
+ 612 0444 9091 0000 		lds r25,(solar)+3
+ 613 0448 20E0      		ldi r18,lo8(0x41500000)
+ 614 044a 30E0      		ldi r19,hi8(0x41500000)
+ 615 044c 40E5      		ldi r20,hlo8(0x41500000)
+ 616 044e 51E4      		ldi r21,hhi8(0x41500000)
+ 617 0450 00D0      		rcall __lesf2
+ 618 0452 1816      		cp __zero_reg__,r24
+ 619 0454 04F0      		brlt .L53
+ 620               	.LM67:
+ 621 0456 1092 0000 		sts state,__zero_reg__
+ 622               	.LM68:
+ 623 045a 9698      		cbi 50-32,6
+ 624               	.LM69:
+ 625 045c 9798      		cbi 50-32,7
+ 626 045e 00C0      		rjmp .L35
+ 627               	.L53:
+ 628               	.LM70:
+ 629 0460 00D0      		rcall chargeSense
+ 630               	.LM71:
+ 631 0462 8091 0000 		lds r24,charge1
+ 632 0466 8823      		tst r24
+ 633 0468 01F4      		brne .L36
+ 634               	.LM72:
+ 635 046a 00D0      		rcall .
+ 636 046c 0F92      		push __tmp_reg__
+ 637 046e 81E0      		ldi r24,lo8(1)
+ 638 0470 EDB7      		in r30,__SP_L__
+ 639 0472 FEB7      		in r31,__SP_H__
+ 640 0474 8183      		std Z+1,r24
+ 641 0476 80E0      		ldi r24,lo8(__c.1586)
+ 642 0478 90E0      		ldi r25,hi8(__c.1586)
+ 643 047a 9383      		std Z+3,r25
+ 644 047c 8283      		std Z+2,r24
+ 645 047e 00D0      		rcall rprintf1RamRom
+ 646 0480 0F90      		pop __tmp_reg__
+ 647 0482 0F90      		pop __tmp_reg__
+ 648 0484 0F90      		pop __tmp_reg__
+ 649               	.L36:
+ 650               	.LM73:
+ 651 0486 81E0      		ldi r24,lo8(1)
+ 652 0488 8093 0000 		sts state,r24
+ 653 048c 00C0      		rjmp .L35
+ 654               	.L31:
+ 655               	.LM74:
+ 656 048e 8091 0000 		lds r24,charge1
+ 657 0492 8130      		cpi r24,lo8(1)
+ 658 0494 01F4      		brne .L37
+ 659               	.LM75:
+ 660 0496 8093 0000 		sts state,r24
+ 661               	.LM76:
+ 662 049a 00D0      		rcall .
+ 663 049c 0F92      		push __tmp_reg__
+ 664 049e EDB7      		in r30,__SP_L__
+ 665 04a0 FEB7      		in r31,__SP_H__
+ 666 04a2 8183      		std Z+1,r24
+ 667 04a4 80E0      		ldi r24,lo8(__c.1588)
+ 668 04a6 90E0      		ldi r25,hi8(__c.1588)
+ 669 04a8 00C0      		rjmp .L55
+ 670               	.L37:
+ 671               	.LM77:
+ 672 04aa 81E0      		ldi r24,lo8(1)
+ 673 04ac 8093 0000 		sts state,r24
+ 674               	.LM78:
+ 675 04b0 00D0      		rcall .
+ 676 04b2 0F92      		push __tmp_reg__
+ 677 04b4 EDB7      		in r30,__SP_L__
+ 678 04b6 FEB7      		in r31,__SP_H__
+ 679 04b8 8183      		std Z+1,r24
+ 680 04ba 80E0      		ldi r24,lo8(__c.1590)
+ 681 04bc 90E0      		ldi r25,hi8(__c.1590)
+ 682               	.L55:
+ 683 04be 9383      		std Z+3,r25
+ 684 04c0 8283      		std Z+2,r24
+ 685 04c2 00D0      		rcall rprintf1RamRom
+ 686 04c4 0F90      		pop __tmp_reg__
+ 687 04c6 0F90      		pop __tmp_reg__
+ 688 04c8 0F90      		pop __tmp_reg__
+ 689               	.L35:
+ 690               	.LM79:
+ 691 04ca 6091 0000 		lds r22,batt2
+ 692 04ce 7091 0000 		lds r23,(batt2)+1
+ 693 04d2 8091 0000 		lds r24,(batt2)+2
+ 694 04d6 9091 0000 		lds r25,(batt2)+3
+ 695 04da 23E3      		ldi r18,lo8(0x41033333)
+ 696 04dc 33E3      		ldi r19,hi8(0x41033333)
+ 697 04de 43E0      		ldi r20,hlo8(0x41033333)
+ 698 04e0 51E4      		ldi r21,hhi8(0x41033333)
+ 699 04e2 00D0      		rcall __ltsf2
+ 700 04e4 8823      		tst r24
+ 701 04e6 04F4      		brge .L38
+ 702 04e8 8091 0000 		lds r24,charge2
+ 703 04ec 8823      		tst r24
+ 704 04ee 01F4      		brne .L38
+ 705               	.LM80:
+ 706 04f0 959A      		sbi 50-32,5
+ 707               	.LM81:
+ 708 04f2 85E0      		ldi r24,lo8(5)
+ 709 04f4 90E0      		ldi r25,hi8(5)
+ 710 04f6 00D0      		rcall delay_sec
+ 711               	.LM82:
+ 712 04f8 00D0      		rcall adcSense
+ 713               	.LM83:
+ 714 04fa 6091 0000 		lds r22,solar
+ 715 04fe 7091 0000 		lds r23,(solar)+1
+ 716 0502 8091 0000 		lds r24,(solar)+2
+ 717 0506 9091 0000 		lds r25,(solar)+3
+ 718 050a 20E0      		ldi r18,lo8(0x41500000)
+ 719 050c 30E0      		ldi r19,hi8(0x41500000)
+ 720 050e 40E5      		ldi r20,hlo8(0x41500000)
+ 721 0510 51E4      		ldi r21,hhi8(0x41500000)
+ 722 0512 00D0      		rcall __lesf2
+ 723 0514 1816      		cp __zero_reg__,r24
+ 724 0516 04F0      		brlt .L54
+ 725               	.LM84:
+ 726 0518 1092 0000 		sts state,__zero_reg__
+ 727               	.LM85:
+ 728 051c 9598      		cbi 50-32,5
+ 729               	.LM86:
+ 730 051e 9798      		cbi 50-32,7
+ 731 0520 0895      		ret
+ 732               	.L54:
+ 733               	.LM87:
+ 734 0522 00D0      		rcall chargeSense
+ 735               	.LM88:
+ 736 0524 8091 0000 		lds r24,charge2
+ 737 0528 8823      		tst r24
+ 738 052a 01F4      		brne .L42
+ 739               	.LM89:
+ 740 052c 00D0      		rcall .
+ 741 052e 0F92      		push __tmp_reg__
+ 742 0530 81E0      		ldi r24,lo8(1)
+ 743 0532 EDB7      		in r30,__SP_L__
+ 744 0534 FEB7      		in r31,__SP_H__
+ 745 0536 8183      		std Z+1,r24
+ 746 0538 80E0      		ldi r24,lo8(__c.1592)
+ 747 053a 90E0      		ldi r25,hi8(__c.1592)
+ 748 053c 9383      		std Z+3,r25
+ 749 053e 8283      		std Z+2,r24
+ 750 0540 00D0      		rcall rprintf1RamRom
+ 751 0542 0F90      		pop __tmp_reg__
+ 752 0544 0F90      		pop __tmp_reg__
+ 753 0546 0F90      		pop __tmp_reg__
+ 754               	.L42:
+ 755               	.LM90:
+ 756 0548 81E0      		ldi r24,lo8(1)
+ 757 054a 8093 0000 		sts state,r24
+ 758 054e 0895      		ret
+ 759               	.L38:
+ 760               	.LM91:
+ 761 0550 8091 0000 		lds r24,charge2
+ 762 0554 8130      		cpi r24,lo8(1)
+ 763 0556 01F4      		brne .L43
+ 764               	.LM92:
+ 765 0558 8093 0000 		sts state,r24
+ 766               	.LM93:
+ 767 055c 00D0      		rcall .
+ 768 055e 0F92      		push __tmp_reg__
+ 769 0560 EDB7      		in r30,__SP_L__
+ 770 0562 FEB7      		in r31,__SP_H__
+ 771 0564 8183      		std Z+1,r24
+ 772 0566 80E0      		ldi r24,lo8(__c.1594)
+ 773 0568 90E0      		ldi r25,hi8(__c.1594)
+ 774 056a 00C0      		rjmp .L56
+ 775               	.L43:
+ 776               	.LM94:
+ 777 056c 81E0      		ldi r24,lo8(1)
+ 778 056e 8093 0000 		sts state,r24
+ 779               	.LM95:
+ 780 0572 00D0      		rcall .
+ 781 0574 0F92      		push __tmp_reg__
+ 782 0576 EDB7      		in r30,__SP_L__
+ 783 0578 FEB7      		in r31,__SP_H__
+ 784 057a 8183      		std Z+1,r24
+ 785 057c 80E0      		ldi r24,lo8(__c.1596)
+ 786 057e 90E0      		ldi r25,hi8(__c.1596)
+ 787 0580 00C0      		rjmp .L56
+ 788               	.L52:
+ 789               	.LM96:
+ 790 0582 1092 0000 		sts state,__zero_reg__
+ 791               	.LM97:
+ 792 0586 00D0      		rcall .
+ 793 0588 0F92      		push __tmp_reg__
+ 794 058a 81E0      		ldi r24,lo8(1)
+ 795 058c EDB7      		in r30,__SP_L__
+ 796 058e FEB7      		in r31,__SP_H__
+ 797 0590 8183      		std Z+1,r24
+ 798 0592 80E0      		ldi r24,lo8(__c.1598)
+ 799 0594 90E0      		ldi r25,hi8(__c.1598)
+ 800               	.L56:
+ 801 0596 9383      		std Z+3,r25
+ 802 0598 8283      		std Z+2,r24
+ 803 059a 00D0      		rcall rprintf1RamRom
+ 804               	.L57:
+ 805 059c 0F90      		pop __tmp_reg__
+ 806 059e 0F90      		pop __tmp_reg__
+ 807 05a0 0F90      		pop __tmp_reg__
+ 808 05a2 0895      		ret
+ 809               	.LFE10:
+ 811               	.global	main
+ 813               	main:
+ 814               	.LFB11:
+ 815               	.LM98:
+ 816 05a4 DF92      		push r13
+ 817 05a6 EF92      		push r14
+ 818 05a8 FF92      		push r15
+ 819 05aa 0F93      		push r16
+ 820 05ac 1F93      		push r17
+ 821 05ae CF93      		push r28
+ 822 05b0 DF93      		push r29
+ 823               	/* prologue: function */
+ 824               	/* frame size = 0 */
+ 825               	.LM99:
+ 826 05b2 00D0      		rcall uartInit
+ 827               	.LM100:
+ 828 05b4 60E8      		ldi r22,lo8(9600)
+ 829 05b6 75E2      		ldi r23,hi8(9600)
+ 830 05b8 80E0      		ldi r24,hlo8(9600)
+ 831 05ba 90E0      		ldi r25,hhi8(9600)
+ 832 05bc 00D0      		rcall uartSetBaudRate
+ 833               	.LM101:
+ 834 05be 80E0      		ldi r24,lo8(gs(uartSendByte))
+ 835 05c0 90E0      		ldi r25,hi8(gs(uartSendByte))
+ 836 05c2 00D0      		rcall rprintfInit
+ 837               	.LM102:
+ 838 05c4 00D0      		rcall .
+ 839 05c6 0F92      		push __tmp_reg__
+ 840 05c8 81E0      		ldi r24,lo8(1)
+ 841 05ca EDB7      		in r30,__SP_L__
+ 842 05cc FEB7      		in r31,__SP_H__
+ 843 05ce 8183      		std Z+1,r24
+ 844 05d0 80E0      		ldi r24,lo8(__c.1637)
+ 845 05d2 90E0      		ldi r25,hi8(__c.1637)
+ 846 05d4 9383      		std Z+3,r25
+ 847 05d6 8283      		std Z+2,r24
+ 848 05d8 00D0      		rcall rprintf1RamRom
+ 849               	.LM103:
+ 850 05da 0F90      		pop __tmp_reg__
+ 851 05dc 0F90      		pop __tmp_reg__
+ 852 05de 0F90      		pop __tmp_reg__
+ 853 05e0 00D0      		rcall a2dInit
+ 854               	.LM104:
+ 855 05e2 00D0      		rcall wdt_chk
+ 856               	.LM105:
+ 857 05e4 2FE0      		ldi r18,lo8(15)
+ 858 05e6 88E1      		ldi r24,lo8(24)
+ 859 05e8 90E0      		ldi r25,hi8(24)
+ 860               	/* #APP */
+ 861               	 ;  288 "main.c" 1
+ 862 05ea 0FB6      		in __tmp_reg__,__SREG__
+ 863 05ec F894      		cli
+ 864 05ee A895      		wdr
+ 865 05f0 81BD      		out 33,r24
+ 866 05f2 0FBE      		out __SREG__,__tmp_reg__
+ 867 05f4 21BD      		out 33,r18
+ 868               	 ;  0 "" 2
+ 869               	.LM106:
+ 870               	 ;  289 "main.c" 1
+ 871 05f6 A895      		wdr
+ 872               	 ;  0 "" 2
+ 873               	.LM107:
+ 874               	/* #NOAPP */
+ 875 05f8 14BA      		out 52-32,__zero_reg__
+ 876               	.LM108:
+ 877 05fa 15BA      		out 53-32,__zero_reg__
+ 878               	.LM109:
+ 879 05fc 81B3      		in r24,49-32
+ 880 05fe 806E      		ori r24,lo8(-32)
+ 881 0600 81BB      		out 49-32,r24
+ 882               	.LM110:
+ 883 0602 8B98      		cbi 49-32,3
+ 884               	.LM111:
+ 885 0604 8C98      		cbi 49-32,4
+ 886               	.LM112:
+ 887 0606 82B3      		in r24,50-32
+ 888 0608 8861      		ori r24,lo8(24)
+ 889 060a 82BB      		out 50-32,r24
+ 890               	.LM113:
+ 891 060c 87E0      		ldi r24,lo8(7)
+ 892 060e 00D0      		rcall a2dSetPrescaler
+ 893               	.LM114:
+ 894 0610 83E0      		ldi r24,lo8(3)
+ 895 0612 00D0      		rcall a2dSetReference
+ 896               	.LM115:
+ 897 0614 9698      		cbi 50-32,6
+ 898               	.LM116:
+ 899 0616 9598      		cbi 50-32,5
+ 900               	.LM117:
+ 901 0618 979A      		sbi 50-32,7
+ 902               	.LM118:
+ 903 061a DD24      		clr r13
+ 904 061c D394      		inc r13
+ 905 061e E0E0      		ldi r30,lo8(__c.1639)
+ 906 0620 EE2E      		mov r14,r30
+ 907 0622 E0E0      		ldi r30,hi8(__c.1639)
+ 908 0624 FE2E      		mov r15,r30
+ 909               	.LM119:
+ 910 0626 0FE0      		ldi r16,lo8(15)
+ 911 0628 10E0      		ldi r17,hi8(15)
+ 912               	.LM120:
+ 913 062a C4E8      		ldi r28,lo8(900)
+ 914 062c D3E0      		ldi r29,hi8(900)
+ 915               	.L62:
+ 916               	.LM121:
+ 917               	/* #APP */
+ 918               	 ;  333 "main.c" 1
+ 919 062e A895      		wdr
+ 920               	 ;  0 "" 2
+ 921               	.LM122:
+ 922               	/* #NOAPP */
+ 923 0630 00D0      		rcall .
+ 924 0632 0F92      		push __tmp_reg__
+ 925 0634 EDB7      		in r30,__SP_L__
+ 926 0636 FEB7      		in r31,__SP_H__
+ 927 0638 D182      		std Z+1,r13
+ 928 063a F382      		std Z+3,r15
+ 929 063c E282      		std Z+2,r14
+ 930 063e 00D0      		rcall rprintf1RamRom
+ 931               	.LM123:
+ 932 0640 0F90      		pop __tmp_reg__
+ 933 0642 0F90      		pop __tmp_reg__
+ 934 0644 0F90      		pop __tmp_reg__
+ 935 0646 00D0      		rcall adcSense
+ 936               	.LM124:
+ 937 0648 00D0      		rcall chargeSense
+ 938               	.LM125:
+ 939 064a 00D0      		rcall chargeLogic
+ 940               	.LM126:
+ 941 064c 8091 0000 		lds r24,state
+ 942 0650 8823      		tst r24
+ 943 0652 01F4      		brne .L59
+ 944               	.LM127:
+ 945 0654 8091 0000 		lds r24,timeout
+ 946 0658 9091 0000 		lds r25,(timeout)+1
+ 947 065c 880F      		lsl r24
+ 948 065e 991F      		rol r25
+ 949 0660 9093 0000 		sts (timeout)+1,r25
+ 950 0664 8093 0000 		sts timeout,r24
+ 951 0668 00C0      		rjmp .L60
+ 952               	.L59:
+ 953               	.LM128:
+ 954 066a 8130      		cpi r24,lo8(1)
+ 955 066c 01F4      		brne .L60
+ 956               	.LM129:
+ 957 066e 1093 0000 		sts (timeout)+1,r17
+ 958 0672 0093 0000 		sts timeout,r16
+ 959               	.L60:
+ 960               	.LM130:
+ 961 0676 8091 0000 		lds r24,timeout
+ 962 067a 9091 0000 		lds r25,(timeout)+1
+ 963 067e 8558      		subi r24,lo8(901)
+ 964 0680 9340      		sbci r25,hi8(901)
+ 965 0682 00F0      		brlo .L61
+ 966               	.LM131:
+ 967 0684 D093 0000 		sts (timeout)+1,r29
+ 968 0688 C093 0000 		sts timeout,r28
+ 969               	.L61:
+ 970               	.LM132:
+ 971 068c 8091 0000 		lds r24,timeout
+ 972 0690 9091 0000 		lds r25,(timeout)+1
+ 973 0694 00D0      		rcall delay_sec
+ 974               	.LM133:
+ 975               	/* #APP */
+ 976               	 ;  351 "main.c" 1
+ 977 0696 A895      		wdr
+ 978               	 ;  0 "" 2
+ 979               	/* #NOAPP */
+ 980 0698 00C0      		rjmp .L62
+ 981               	.LFE11:
+ 983               	.global	timeout
+ 984               		.data
+ 987               	timeout:
+ 988 0000 0100      		.word	1
+ 989               	.global	charge1
+ 990               	.global	charge1
+ 991               		.section .bss
+ 994               	charge1:
+ 995 0000 00        		.skip 1,0
+ 996               	.global	charge2
+ 997               	.global	charge2
+ 1000               	charge2:
+ 1001 0001 00        		.skip 1,0
+ 1002               	.global	state
+ 1003               	.global	state
+ 1006               	state:
+ 1007 0002 00        		.skip 1,0
+ 1008               	.global	sample_count
+ 1009               	.global	sample_count
+ 1012               	sample_count:
+ 1013 0003 0000      		.skip 2,0
+ 1014               		.section	.progmem.data,"a",@progbits
+ 1017               	__c.1639:
+ 1018 0000 0D0A 476F 		.string	"\r\nGoing to check state\r\n"
+ 1018      696E 6720 
+ 1018      746F 2063 
+ 1018      6865 636B 
+ 1018      2073 7461 
+ 1021               	__c.1637:
+ 1022 0019 5765 6C63 		.string	"Welcome to the Beagle Supply a2d test!\r\n"
+ 1022      6F6D 6520 
+ 1022      746F 2074 
+ 1022      6865 2042 
+ 1022      6561 676C 
+ 1025               	__c.1598:
+ 1026 0042 536F 6C61 		.string	"Solar power is weak\r\n"
+ 1026      7220 706F 
+ 1026      7765 7220 
+ 1026      6973 2077 
+ 1026      6561 6B0D 
+ 1029               	__c.1596:
+ 1030 0058 4261 7474 		.string	"Battery2 is charged\r\n"
+ 1030      6572 7932 
+ 1030      2069 7320 
+ 1030      6368 6172 
+ 1030      6765 640D 
+ 1033               	__c.1594:
+ 1034 006e 4261 7474 		.string	"Battery2 is charging\r\n"
+ 1034      6572 7932 
+ 1034      2069 7320 
+ 1034      6368 6172 
+ 1034      6769 6E67 
+ 1037               	__c.1592:
+ 1038 0085 4261 7474 		.string	"Battery2 denied Charging\r\n"
+ 1038      6572 7932 
+ 1038      2064 656E 
+ 1038      6965 6420 
+ 1038      4368 6172 
+ 1041               	__c.1590:
+ 1042 00a0 4261 7474 		.string	"Battery1 is charged\r\n"
+ 1042      6572 7931 
+ 1042      2069 7320 
+ 1042      6368 6172 
+ 1042      6765 640D 
+ 1045               	__c.1588:
+ 1046 00b6 4261 7474 		.string	"Battery1 is charging\r\n"
+ 1046      6572 7931 
+ 1046      2069 7320 
+ 1046      6368 6172 
+ 1046      6769 6E67 
+ 1049               	__c.1586:
+ 1050 00cd 4261 7474 		.string	"Battery1 denied Charging\r\n"
+ 1050      6572 7931 
+ 1050      2064 656E 
+ 1050      6965 6420 
+ 1050      4368 6172 
+ 1053               	__c.1584:
+ 1054 00e8 536F 6C61 		.string	"Solar is not present\r\n"
+ 1054      7220 6973 
+ 1054      206E 6F74 
+ 1054      2070 7265 
+ 1054      7365 6E74 
+ 1057               	__c.1573:
+ 1058 00ff 4368 6172 		.string	"Charge2: no\n"
+ 1058      6765 323A 
+ 1058      206E 6F0A 
+ 1058      00
+ 1061               	__c.1571:
+ 1062 010c 4368 6172 		.string	"Charge2: yes\n"
+ 1062      6765 323A 
+ 1062      2079 6573 
+ 1062      0A00 
+ 1065               	__c.1569:
+ 1066 011a 4368 6172 		.string	"Charge1: no\n"
+ 1066      6765 313A 
+ 1066      206E 6F0A 
+ 1066      00
+ 1069               	__c.1567:
+ 1070 0127 4368 6172 		.string	"Charge1: yes\n"
+ 1070      6765 313A 
+ 1070      2079 6573 
+ 1070      0A00 
+ 1073               	__c.1548:
+ 1074 0135 5361 6D70 		.string	"Sample: %d\n"
+ 1074      6C65 3A20 
+ 1074      2564 0A00 
+ 1077               	__c.1542:
+ 1078 0141 0900      		.string	"\t"
+ 1081               	__c.1540:
+ 1082 0143 5375 7070 		.string	"Supply: "
+ 1082      6C79 3A20 
+ 1082      00
+ 1085               	__c.1537:
+ 1086 014c 0900      		.string	"\t"
+ 1089               	__c.1535:
+ 1090 014e 536F 6C61 		.string	"Solar: "
+ 1090      723A 2000 
+ 1093               	__c.1532:
+ 1094 0156 0900      		.string	"\t"
+ 1097               	__c.1530:
+ 1098 0158 4261 7474 		.string	"Batt2: "
+ 1098      323A 2000 
+ 1101               	__c.1526:
+ 1102 0160 0900      		.string	"\t"
+ 1105               	__c.1524:
+ 1106 0162 4261 7474 		.string	"Batt1: "
+ 1106      313A 2000 
+ 1109               	__c.1521:
+ 1110 016a 4131 3232 		.string	"A122: %d "
+ 1110      3A20 2564 
+ 1110      2000 
+ 1113               	__c.1510:
+ 1114 0174 5265 7365 		.string	"Reset due to other reason\n"
+ 1114      7420 6475 
+ 1114      6520 746F 
+ 1114      206F 7468 
+ 1114      6572 2072 
+ 1117               	__c.1508:
+ 1118 018f 5761 7463 		.string	"Watchdog reset took place\n"
+ 1118      6864 6F67 
+ 1118      2072 6573 
+ 1118      6574 2074 
+ 1118      6F6F 6B20 
+ 1119               		.comm batt1,4,1
+ 1120               		.comm batt2,4,1
+ 1121               		.comm solar,4,1
+ 1122               		.comm Volt5,4,1
+ 1123               		.comm volt,4,1
+ 1124               		.comm a122,2,1
+ 1125               		.comm data,5,1
+ 1182               	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+     /tmp/ccH64dAs.s:2      *ABS*:0000003f __SREG__
+     /tmp/ccH64dAs.s:3      *ABS*:0000003e __SP_H__
+     /tmp/ccH64dAs.s:4      *ABS*:0000003d __SP_L__
+     /tmp/ccH64dAs.s:5      *ABS*:00000034 __CCP__
+     /tmp/ccH64dAs.s:6      *ABS*:00000000 __tmp_reg__
+     /tmp/ccH64dAs.s:7      *ABS*:00000001 __zero_reg__
+     /tmp/ccH64dAs.s:20     .text:00000000 chargeSense
+     /tmp/ccH64dAs.s:994    .bss:00000000 charge1
+     /tmp/ccH64dAs.s:1069   .progmem.data:00000127 __c.1567
+     /tmp/ccH64dAs.s:1065   .progmem.data:0000011a __c.1569
+     /tmp/ccH64dAs.s:1000   .bss:00000001 charge2
+     /tmp/ccH64dAs.s:1061   .progmem.data:0000010c __c.1571
+     /tmp/ccH64dAs.s:1057   .progmem.data:000000ff __c.1573
+     /tmp/ccH64dAs.s:98     .text:00000076 wdt_chk
+     /tmp/ccH64dAs.s:1117   .progmem.data:0000018f __c.1508
+     /tmp/ccH64dAs.s:1113   .progmem.data:00000174 __c.1510
+     /tmp/ccH64dAs.s:143    .text:000000b2 adcSense
+                            *COM*:00000002 a122
+     /tmp/ccH64dAs.s:1109   .progmem.data:0000016a __c.1521
+     /tmp/ccH64dAs.s:1012   .bss:00000003 sample_count
+     /tmp/ccH64dAs.s:1081   .progmem.data:00000143 __c.1540
+     /tmp/ccH64dAs.s:1077   .progmem.data:00000141 __c.1542
+     /tmp/ccH64dAs.s:1089   .progmem.data:0000014e __c.1535
+     /tmp/ccH64dAs.s:1085   .progmem.data:0000014c __c.1537
+     /tmp/ccH64dAs.s:1105   .progmem.data:00000162 __c.1524
+     /tmp/ccH64dAs.s:1101   .progmem.data:00000160 __c.1526
+     /tmp/ccH64dAs.s:1097   .progmem.data:00000158 __c.1530
+     /tmp/ccH64dAs.s:1093   .progmem.data:00000156 __c.1532
+                            *COM*:00000004 volt
+                            *COM*:00000004 batt1
+                            *COM*:00000004 batt2
+                            *COM*:00000004 solar
+                            *COM*:00000004 Volt5
+     /tmp/ccH64dAs.s:1073   .progmem.data:00000135 __c.1548
+     /tmp/ccH64dAs.s:523    .text:0000039c chargeLogic
+     /tmp/ccH64dAs.s:1053   .progmem.data:000000e8 __c.1584
+     /tmp/ccH64dAs.s:1006   .bss:00000002 state
+     /tmp/ccH64dAs.s:1049   .progmem.data:000000cd __c.1586
+     /tmp/ccH64dAs.s:1045   .progmem.data:000000b6 __c.1588
+     /tmp/ccH64dAs.s:1041   .progmem.data:000000a0 __c.1590
+     /tmp/ccH64dAs.s:1037   .progmem.data:00000085 __c.1592
+     /tmp/ccH64dAs.s:1033   .progmem.data:0000006e __c.1594
+     /tmp/ccH64dAs.s:1029   .progmem.data:00000058 __c.1596
+     /tmp/ccH64dAs.s:1025   .progmem.data:00000042 __c.1598
+     /tmp/ccH64dAs.s:813    .text:000005a4 main
+     /tmp/ccH64dAs.s:1021   .progmem.data:00000019 __c.1637
+     /tmp/ccH64dAs.s:1017   .progmem.data:00000000 __c.1639
+     /tmp/ccH64dAs.s:987    .data:00000000 timeout
+                            *COM*:00000005 data
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss
+rprintf1RamRom
+a2dConvert10bit
+__floatunsisf
+__mulsf3
+rprintfFloat
+__lesf2
+delay_sec
+__gesf2
+__ltsf2
+uartInit
+uartSetBaudRate
+uartSendByte
+rprintfInit
+a2dInit
+a2dSetPrescaler
+a2dSetReference

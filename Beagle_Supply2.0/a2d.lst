@@ -1,0 +1,254 @@
+   1               		.file	"a2d.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  17               	.Ltext0:
+  18               	.global	a2dInit
+  20               	a2dInit:
+  21               	.LFB3:
+  22               	.LM1:
+  23               	/* prologue: function */
+  24               	/* frame size = 0 */
+  25               	.LM2:
+  26 0000 379A      		sbi 38-32,7
+  27               	.LM3:
+  28 0002 3598      		cbi 38-32,5
+  29               	.LBB6:
+  30               	.LBB7:
+  31               	.LM4:
+  32 0004 86B1      		in r24,38-32
+  33 0006 887F      		andi r24,lo8(-8)
+  34 0008 8660      		ori r24,lo8(6)
+  35 000a 86B9      		out 38-32,r24
+  36               	.LBE7:
+  37               	.LBE6:
+  38               	.LBB8:
+  39               	.LBB9:
+  40               	.LM5:
+  41 000c 87B1      		in r24,39-32
+  42 000e 8F73      		andi r24,lo8(63)
+  43 0010 8064      		ori r24,lo8(64)
+  44 0012 87B9      		out 39-32,r24
+  45               	.LBE9:
+  46               	.LBE8:
+  47               	.LM6:
+  48 0014 3D98      		cbi 39-32,5
+  49               	.LM7:
+  50 0016 339A      		sbi 38-32,3
+  51               	.LM8:
+  52 0018 1092 0000 		sts a2dCompleteFlag,__zero_reg__
+  53               	.LM9:
+  54               	/* #APP */
+  55               	 ;  44 "a2d.c" 1
+  56 001c 7894      		sei
+  57               	 ;  0 "" 2
+  58               	/* epilogue start */
+  59               	.LM10:
+  60               	/* #NOAPP */
+  61 001e 0895      		ret
+  62               	.LFE3:
+  64               	.global	a2dOff
+  66               	a2dOff:
+  67               	.LFB4:
+  68               	.LM11:
+  69               	/* prologue: function */
+  70               	/* frame size = 0 */
+  71               	.LM12:
+  72 0020 3398      		cbi 38-32,3
+  73               	.LM13:
+  74 0022 3798      		cbi 38-32,7
+  75               	/* epilogue start */
+  76               	.LM14:
+  77 0024 0895      		ret
+  78               	.LFE4:
+  80               	.global	a2dSetPrescaler
+  82               	a2dSetPrescaler:
+  83               	.LFB5:
+  84               	.LM15:
+  85               	.LVL0:
+  86               	/* prologue: function */
+  87               	/* frame size = 0 */
+  88               	.LM16:
+  89 0026 96B1      		in r25,38-32
+  90 0028 987F      		andi r25,lo8(-8)
+  91 002a 982B      		or r25,r24
+  92 002c 96B9      		out 38-32,r25
+  93               	/* epilogue start */
+  94               	.LM17:
+  95 002e 0895      		ret
+  96               	.LFE5:
+  98               	.global	a2dSetReference
+ 100               	a2dSetReference:
+ 101               	.LFB6:
+ 102               	.LM18:
+ 103               	.LVL1:
+ 104               	/* prologue: function */
+ 105               	/* frame size = 0 */
+ 106               	.LM19:
+ 107 0030 97B1      		in r25,39-32
+ 108 0032 8295      		swap r24
+ 109               	.LVL2:
+ 110 0034 880F      		lsl r24
+ 111 0036 880F      		lsl r24
+ 112 0038 807C      		andi r24,lo8(-64)
+ 113 003a 9F73      		andi r25,lo8(63)
+ 114 003c 982B      		or r25,r24
+ 115 003e 97B9      		out 39-32,r25
+ 116               	/* epilogue start */
+ 117               	.LM20:
+ 118 0040 0895      		ret
+ 119               	.LFE6:
+ 121               	.global	a2dSetChannel
+ 123               	a2dSetChannel:
+ 124               	.LFB7:
+ 125               	.LM21:
+ 126               	.LVL3:
+ 127               	/* prologue: function */
+ 128               	/* frame size = 0 */
+ 129               	.LM22:
+ 130 0042 97B1      		in r25,39-32
+ 131 0044 8F71      		andi r24,lo8(31)
+ 132               	.LVL4:
+ 133 0046 907E      		andi r25,lo8(-32)
+ 134 0048 892B      		or r24,r25
+ 135 004a 87B9      		out 39-32,r24
+ 136               	/* epilogue start */
+ 137               	.LM23:
+ 138 004c 0895      		ret
+ 139               	.LFE7:
+ 141               	.global	a2dStartConvert
+ 143               	a2dStartConvert:
+ 144               	.LFB8:
+ 145               	.LM24:
+ 146               	/* prologue: function */
+ 147               	/* frame size = 0 */
+ 148               	.LM25:
+ 149 004e 349A      		sbi 38-32,4
+ 150               	.LM26:
+ 151 0050 369A      		sbi 38-32,6
+ 152               	/* epilogue start */
+ 153               	.LM27:
+ 154 0052 0895      		ret
+ 155               	.LFE8:
+ 157               	.global	a2dIsComplete
+ 159               	a2dIsComplete:
+ 160               	.LFB9:
+ 161               	.LM28:
+ 162               	/* prologue: function */
+ 163               	/* frame size = 0 */
+ 164               	.LM29:
+ 165 0054 86B1      		in r24,38-32
+ 166               	.LM30:
+ 167 0056 8074      		andi r24,lo8(64)
+ 168               	/* epilogue start */
+ 169 0058 0895      		ret
+ 170               	.LFE9:
+ 172               	.global	a2dConvert10bit
+ 174               	a2dConvert10bit:
+ 175               	.LFB10:
+ 176               	.LM31:
+ 177               	.LVL5:
+ 178               	/* prologue: function */
+ 179               	/* frame size = 0 */
+ 180               	.LM32:
+ 181 005a 1092 0000 		sts a2dCompleteFlag,__zero_reg__
+ 182               	.LM33:
+ 183 005e 97B1      		in r25,39-32
+ 184 0060 8F71      		andi r24,lo8(31)
+ 185               	.LVL6:
+ 186 0062 907E      		andi r25,lo8(-32)
+ 187 0064 892B      		or r24,r25
+ 188 0066 87B9      		out 39-32,r24
+ 189               	.LM34:
+ 190 0068 349A      		sbi 38-32,4
+ 191               	.LM35:
+ 192 006a 369A      		sbi 38-32,6
+ 193               	.L16:
+ 194               	.LM36:
+ 195 006c 3699      		sbic 38-32,6
+ 196 006e 00C0      		rjmp .L16
+ 197               	.LM37:
+ 198 0070 24B1      		in r18,36-32
+ 199 0072 45B1      		in r20,37-32
+ 200 0074 942F      		mov r25,r20
+ 201 0076 80E0      		ldi r24,lo8(0)
+ 202 0078 30E0      		ldi r19,lo8(0)
+ 203 007a 282B      		or r18,r24
+ 204 007c 392B      		or r19,r25
+ 205               	.LM38:
+ 206 007e C901      		movw r24,r18
+ 207               	/* epilogue start */
+ 208 0080 0895      		ret
+ 209               	.LFE10:
+ 211               	.global	a2dConvert8bit
+ 213               	a2dConvert8bit:
+ 214               	.LFB11:
+ 215               	.LM39:
+ 216               	.LVL7:
+ 217               	/* prologue: function */
+ 218               	/* frame size = 0 */
+ 219               	.LM40:
+ 220 0082 00D0      		rcall a2dConvert10bit
+ 221               	.LVL8:
+ 222 0084 9695      		lsr r25
+ 223 0086 8795      		ror r24
+ 224 0088 9695      		lsr r25
+ 225 008a 8795      		ror r24
+ 226               	/* epilogue start */
+ 227               	.LM41:
+ 228 008c 0895      		ret
+ 229               	.LFE11:
+ 231               	.global	__vector_14
+ 233               	__vector_14:
+ 234               	.LFB12:
+ 235               	.LM42:
+ 236 008e 1F92      		push __zero_reg__
+ 237 0090 0F92      		push r0
+ 238 0092 0FB6      		in r0,__SREG__
+ 239 0094 0F92      		push r0
+ 240 0096 1124      		clr __zero_reg__
+ 241 0098 8F93      		push r24
+ 242               	/* prologue: Signal */
+ 243               	/* frame size = 0 */
+ 244               	.LM43:
+ 245 009a 8FEF      		ldi r24,lo8(-1)
+ 246 009c 8093 0000 		sts a2dCompleteFlag,r24
+ 247               	/* epilogue start */
+ 248               	.LM44:
+ 249 00a0 8F91      		pop r24
+ 250 00a2 0F90      		pop r0
+ 251 00a4 0FBE      		out __SREG__,r0
+ 252 00a6 0F90      		pop r0
+ 253 00a8 1F90      		pop __zero_reg__
+ 254 00aa 1895      		reti
+ 255               	.LFE12:
+ 257               		.comm a2dCompleteFlag,1,1
+ 354               	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 a2d.c
+     /tmp/cc7k4fNA.s:2      *ABS*:0000003f __SREG__
+     /tmp/cc7k4fNA.s:3      *ABS*:0000003e __SP_H__
+     /tmp/cc7k4fNA.s:4      *ABS*:0000003d __SP_L__
+     /tmp/cc7k4fNA.s:5      *ABS*:00000034 __CCP__
+     /tmp/cc7k4fNA.s:6      *ABS*:00000000 __tmp_reg__
+     /tmp/cc7k4fNA.s:7      *ABS*:00000001 __zero_reg__
+     /tmp/cc7k4fNA.s:20     .text:00000000 a2dInit
+                            *COM*:00000001 a2dCompleteFlag
+     /tmp/cc7k4fNA.s:66     .text:00000020 a2dOff
+     /tmp/cc7k4fNA.s:82     .text:00000026 a2dSetPrescaler
+     /tmp/cc7k4fNA.s:100    .text:00000030 a2dSetReference
+     /tmp/cc7k4fNA.s:123    .text:00000042 a2dSetChannel
+     /tmp/cc7k4fNA.s:143    .text:0000004e a2dStartConvert
+     /tmp/cc7k4fNA.s:159    .text:00000054 a2dIsComplete
+     /tmp/cc7k4fNA.s:174    .text:0000005a a2dConvert10bit
+     /tmp/cc7k4fNA.s:213    .text:00000082 a2dConvert8bit
+     /tmp/cc7k4fNA.s:233    .text:0000008e __vector_14
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss

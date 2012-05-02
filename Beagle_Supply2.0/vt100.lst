@@ -1,0 +1,209 @@
+   1               		.file	"vt100.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  17               	.Ltext0:
+  18               	.global	vt100SetCursorPos
+  20               	vt100SetCursorPos:
+  21               	.LFB7:
+  22               	.LM1:
+  23               	.LVL0:
+  24               	/* prologue: function */
+  25               	/* frame size = 0 */
+  26               	.LM2:
+  27 0000 2DB7      		in r18,__SP_L__
+  28 0002 3EB7      		in r19,__SP_H__
+  29 0004 2750      		subi r18,lo8(-(-7))
+  30 0006 3040      		sbci r19,hi8(-(-7))
+  31 0008 0FB6      		in __tmp_reg__,__SREG__
+  32 000a F894      		cli
+  33 000c 3EBF      		out __SP_H__,r19
+  34 000e 0FBE      		out __SREG__,__tmp_reg__
+  35 0010 2DBF      		out __SP_L__,r18
+  36 0012 EDB7      		in r30,__SP_L__
+  37 0014 FEB7      		in r31,__SP_H__
+  38 0016 3196      		adiw r30,1
+  39 0018 91E0      		ldi r25,lo8(1)
+  40 001a ADB7      		in r26,__SP_L__
+  41 001c BEB7      		in r27,__SP_H__
+  42 001e 1196      		adiw r26,1
+  43 0020 9C93      		st X,r25
+  44 0022 20E0      		ldi r18,lo8(__c.1400)
+  45 0024 30E0      		ldi r19,hi8(__c.1400)
+  46 0026 3283      		std Z+2,r19
+  47 0028 2183      		std Z+1,r18
+  48 002a 8383      		std Z+3,r24
+  49 002c 1482      		std Z+4,__zero_reg__
+  50 002e 6583      		std Z+5,r22
+  51 0030 1682      		std Z+6,__zero_reg__
+  52 0032 00D0      		rcall rprintf1RamRom
+  53               	.LVL1:
+  54 0034 2DB7      		in r18,__SP_L__
+  55 0036 3EB7      		in r19,__SP_H__
+  56 0038 295F      		subi r18,lo8(-(7))
+  57 003a 3F4F      		sbci r19,hi8(-(7))
+  58 003c 0FB6      		in __tmp_reg__,__SREG__
+  59 003e F894      		cli
+  60 0040 3EBF      		out __SP_H__,r19
+  61 0042 0FBE      		out __SREG__,__tmp_reg__
+  62 0044 2DBF      		out __SP_L__,r18
+  63               	/* epilogue start */
+  64               	.LM3:
+  65 0046 0895      		ret
+  66               	.LFE7:
+  68               	.global	vt100SetCursorMode
+  70               	vt100SetCursorMode:
+  71               	.LFB6:
+  72               	.LM4:
+  73               	.LVL2:
+  74               	/* prologue: function */
+  75               	/* frame size = 0 */
+  76               	.LM5:
+  77 0048 8823      		tst r24
+  78 004a 01F0      		breq .L4
+  79               	.LM6:
+  80 004c 00D0      		rcall .
+  81 004e 0F92      		push __tmp_reg__
+  82 0050 81E0      		ldi r24,lo8(1)
+  83               	.LVL3:
+  84 0052 EDB7      		in r30,__SP_L__
+  85 0054 FEB7      		in r31,__SP_H__
+  86 0056 8183      		std Z+1,r24
+  87 0058 80E0      		ldi r24,lo8(__c.1392)
+  88 005a 90E0      		ldi r25,hi8(__c.1392)
+  89 005c 00C0      		rjmp .L7
+  90               	.LVL4:
+  91               	.L4:
+  92               	.LM7:
+  93 005e 00D0      		rcall .
+  94 0060 0F92      		push __tmp_reg__
+  95 0062 81E0      		ldi r24,lo8(1)
+  96               	.LVL5:
+  97 0064 EDB7      		in r30,__SP_L__
+  98 0066 FEB7      		in r31,__SP_H__
+  99 0068 8183      		std Z+1,r24
+ 100 006a 80E0      		ldi r24,lo8(__c.1394)
+ 101 006c 90E0      		ldi r25,hi8(__c.1394)
+ 102               	.L7:
+ 103 006e 9383      		std Z+3,r25
+ 104 0070 8283      		std Z+2,r24
+ 105 0072 00D0      		rcall rprintf1RamRom
+ 106 0074 0F90      		pop __tmp_reg__
+ 107 0076 0F90      		pop __tmp_reg__
+ 108 0078 0F90      		pop __tmp_reg__
+ 109 007a 0895      		ret
+ 110               	.LFE6:
+ 112               	.global	vt100SetAttr
+ 114               	vt100SetAttr:
+ 115               	.LFB5:
+ 116               	.LM8:
+ 117               	.LVL6:
+ 118               	/* prologue: function */
+ 119               	/* frame size = 0 */
+ 120               	.LM9:
+ 121 007c 00D0      		rcall .
+ 122 007e 00D0      		rcall .
+ 123 0080 0F92      		push __tmp_reg__
+ 124 0082 EDB7      		in r30,__SP_L__
+ 125 0084 FEB7      		in r31,__SP_H__
+ 126 0086 3196      		adiw r30,1
+ 127 0088 91E0      		ldi r25,lo8(1)
+ 128 008a ADB7      		in r26,__SP_L__
+ 129 008c BEB7      		in r27,__SP_H__
+ 130 008e 1196      		adiw r26,1
+ 131 0090 9C93      		st X,r25
+ 132 0092 20E0      		ldi r18,lo8(__c.1386)
+ 133 0094 30E0      		ldi r19,hi8(__c.1386)
+ 134 0096 3283      		std Z+2,r19
+ 135 0098 2183      		std Z+1,r18
+ 136 009a 8383      		std Z+3,r24
+ 137 009c 1482      		std Z+4,__zero_reg__
+ 138 009e 00D0      		rcall rprintf1RamRom
+ 139               	.LVL7:
+ 140 00a0 0F90      		pop __tmp_reg__
+ 141 00a2 0F90      		pop __tmp_reg__
+ 142 00a4 0F90      		pop __tmp_reg__
+ 143 00a6 0F90      		pop __tmp_reg__
+ 144 00a8 0F90      		pop __tmp_reg__
+ 145               	/* epilogue start */
+ 146               	.LM10:
+ 147 00aa 0895      		ret
+ 148               	.LFE5:
+ 150               	.global	vt100ClearScreen
+ 152               	vt100ClearScreen:
+ 153               	.LFB4:
+ 154               	.LM11:
+ 155               	/* prologue: function */
+ 156               	/* frame size = 0 */
+ 157               	.LM12:
+ 158 00ac 80E0      		ldi r24,lo8(__c.1381)
+ 159 00ae 90E0      		ldi r25,hi8(__c.1381)
+ 160 00b0 00D0      		rcall rprintfProgStr
+ 161               	/* epilogue start */
+ 162               	.LM13:
+ 163 00b2 0895      		ret
+ 164               	.LFE4:
+ 166               	.global	vt100Init
+ 168               	vt100Init:
+ 169               	.LFB3:
+ 170               	.LM14:
+ 171               	/* prologue: function */
+ 172               	/* frame size = 0 */
+ 173               	.LM15:
+ 174 00b4 80E0      		ldi r24,lo8(__c.1376)
+ 175 00b6 90E0      		ldi r25,hi8(__c.1376)
+ 176 00b8 00D0      		rcall rprintfProgStr
+ 177               	/* epilogue start */
+ 178               	.LM16:
+ 179 00ba 0895      		ret
+ 180               	.LFE3:
+ 182               		.section	.progmem.data,"a",@progbits
+ 185               	__c.1400:
+ 186 0000 1B5B 2564 		.string	"\033[%d;%dH"
+ 186      3B25 6448 
+ 186      00
+ 189               	__c.1394:
+ 190 0009 1B5B 3F32 		.string	"\033[?25l"
+ 190      356C 00
+ 193               	__c.1392:
+ 194 0010 1B5B 3F32 		.string	"\033[?25h"
+ 194      3568 00
+ 197               	__c.1386:
+ 198 0017 1B5B 2564 		.string	"\033[%dm"
+ 198      6D00 
+ 201               	__c.1381:
+ 202 001d 1B5B 324A 		.string	"\033[2J"
+ 202      00
+ 205               	__c.1376:
+ 206 0022 1B63 00   		.string	"\033c"
+ 263               	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 vt100.c
+     /tmp/ccgdROvM.s:2      *ABS*:0000003f __SREG__
+     /tmp/ccgdROvM.s:3      *ABS*:0000003e __SP_H__
+     /tmp/ccgdROvM.s:4      *ABS*:0000003d __SP_L__
+     /tmp/ccgdROvM.s:5      *ABS*:00000034 __CCP__
+     /tmp/ccgdROvM.s:6      *ABS*:00000000 __tmp_reg__
+     /tmp/ccgdROvM.s:7      *ABS*:00000001 __zero_reg__
+     /tmp/ccgdROvM.s:20     .text:00000000 vt100SetCursorPos
+     /tmp/ccgdROvM.s:185    .progmem.data:00000000 __c.1400
+     /tmp/ccgdROvM.s:70     .text:00000048 vt100SetCursorMode
+     /tmp/ccgdROvM.s:193    .progmem.data:00000010 __c.1392
+     /tmp/ccgdROvM.s:189    .progmem.data:00000009 __c.1394
+     /tmp/ccgdROvM.s:114    .text:0000007c vt100SetAttr
+     /tmp/ccgdROvM.s:197    .progmem.data:00000017 __c.1386
+     /tmp/ccgdROvM.s:152    .text:000000ac vt100ClearScreen
+     /tmp/ccgdROvM.s:201    .progmem.data:0000001d __c.1381
+     /tmp/ccgdROvM.s:168    .text:000000b4 vt100Init
+     /tmp/ccgdROvM.s:205    .progmem.data:00000022 __c.1376
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss
+rprintf1RamRom
+rprintfProgStr

@@ -1,0 +1,369 @@
+   1               		.file	"buffer.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  17               	.Ltext0:
+  18               	.global	bufferInit
+  20               	bufferInit:
+  21               	.LFB3:
+  22               	.LM1:
+  23               	.LVL0:
+  24               	/* prologue: function */
+  25               	/* frame size = 0 */
+  26 0000 FC01      		movw r30,r24
+  27               	.LM2:
+  28 0002 8FB7      		in r24,__SREG__
+  29               	.LVL1:
+  30               	/* #APP */
+  31               	 ;  34 "buffer.c" 1
+  32 0004 F894      		cli
+  33               	 ;  0 "" 2
+  34               	.LM3:
+  35               	/* #NOAPP */
+  36 0006 7183      		std Z+1,r23
+  37 0008 6083      		st Z,r22
+  38               	.LM4:
+  39 000a 5383      		std Z+3,r21
+  40 000c 4283      		std Z+2,r20
+  41               	.LM5:
+  42 000e 1782      		std Z+7,__zero_reg__
+  43 0010 1682      		std Z+6,__zero_reg__
+  44               	.LM6:
+  45 0012 1582      		std Z+5,__zero_reg__
+  46 0014 1482      		std Z+4,__zero_reg__
+  47               	.LM7:
+  48 0016 8FBF      		out __SREG__,r24
+  49               	/* epilogue start */
+  50               	.LM8:
+  51 0018 0895      		ret
+  52               	.LFE3:
+  54               	.global	bufferGetFromFront
+  56               	bufferGetFromFront:
+  57               	.LFB4:
+  58               	.LM9:
+  59               	.LVL2:
+  60               	/* prologue: function */
+  61               	/* frame size = 0 */
+  62 001a DC01      		movw r26,r24
+  63               	.LM10:
+  64 001c 4FB7      		in r20,__SREG__
+  65               	.LVL3:
+  66               	/* #APP */
+  67               	 ;  50 "buffer.c" 1
+  68 001e F894      		cli
+  69               	 ;  0 "" 2
+  70               	.LM11:
+  71               	/* #NOAPP */
+  72 0020 1496      		adiw r26,4
+  73 0022 8D91      		ld r24,X+
+  74 0024 9C91      		ld r25,X
+  75 0026 1597      		sbiw r26,4+1
+  76               	.LVL4:
+  77 0028 892B      		or r24,r25
+  78 002a 01F4      		brne .L4
+  79 002c E0E0      		ldi r30,lo8(0)
+  80               	.LVL5:
+  81 002e 00C0      		rjmp .L5
+  82               	.LVL6:
+  83               	.L4:
+  84               	.LM12:
+  85 0030 1696      		adiw r26,6
+  86 0032 8D91      		ld r24,X+
+  87 0034 9C91      		ld r25,X
+  88 0036 1797      		sbiw r26,6+1
+  89 0038 ED91      		ld r30,X+
+  90 003a FC91      		ld r31,X
+  91 003c 1197      		sbiw r26,1
+  92 003e E80F      		add r30,r24
+  93 0040 F91F      		adc r31,r25
+  94 0042 E081      		ld r30,Z
+  95               	.LVL7:
+  96               	.LM13:
+  97 0044 0196      		adiw r24,1
+  98 0046 1796      		adiw r26,6+1
+  99 0048 9C93      		st X,r25
+ 100 004a 8E93      		st -X,r24
+ 101 004c 1697      		sbiw r26,6
+ 102               	.LM14:
+ 103 004e 1296      		adiw r26,2
+ 104 0050 2D91      		ld r18,X+
+ 105 0052 3C91      		ld r19,X
+ 106 0054 1397      		sbiw r26,2+1
+ 107 0056 8217      		cp r24,r18
+ 108 0058 9307      		cpc r25,r19
+ 109 005a 00F0      		brlo .L6
+ 110               	.LM15:
+ 111 005c 821B      		sub r24,r18
+ 112 005e 930B      		sbc r25,r19
+ 113 0060 1796      		adiw r26,6+1
+ 114 0062 9C93      		st X,r25
+ 115 0064 8E93      		st -X,r24
+ 116 0066 1697      		sbiw r26,6
+ 117               	.L6:
+ 118               	.LM16:
+ 119 0068 1496      		adiw r26,4
+ 120 006a 8D91      		ld r24,X+
+ 121 006c 9C91      		ld r25,X
+ 122 006e 1597      		sbiw r26,4+1
+ 123 0070 0197      		sbiw r24,1
+ 124 0072 1596      		adiw r26,4+1
+ 125 0074 9C93      		st X,r25
+ 126 0076 8E93      		st -X,r24
+ 127 0078 1497      		sbiw r26,4
+ 128               	.L5:
+ 129               	.LM17:
+ 130 007a 4FBF      		out __SREG__,r20
+ 131               	.LM18:
+ 132 007c 8E2F      		mov r24,r30
+ 133               	/* epilogue start */
+ 134 007e 0895      		ret
+ 135               	.LFE4:
+ 137               	.global	bufferDumpFromFront
+ 139               	bufferDumpFromFront:
+ 140               	.LFB5:
+ 141               	.LM19:
+ 142               	.LVL8:
+ 143               	/* prologue: function */
+ 144               	/* frame size = 0 */
+ 145 0080 FC01      		movw r30,r24
+ 146               	.LM20:
+ 147 0082 4FB7      		in r20,__SREG__
+ 148               	.LVL9:
+ 149               	/* #APP */
+ 150               	 ;  73 "buffer.c" 1
+ 151 0084 F894      		cli
+ 152               	 ;  0 "" 2
+ 153               	.LM21:
+ 154               	/* #NOAPP */
+ 155 0086 8481      		ldd r24,Z+4
+ 156 0088 9581      		ldd r25,Z+5
+ 157               	.LVL10:
+ 158 008a 6817      		cp r22,r24
+ 159 008c 7907      		cpc r23,r25
+ 160 008e 00F4      		brsh .L9
+ 161               	.LM22:
+ 162 0090 8681      		ldd r24,Z+6
+ 163 0092 9781      		ldd r25,Z+7
+ 164 0094 860F      		add r24,r22
+ 165 0096 971F      		adc r25,r23
+ 166 0098 9783      		std Z+7,r25
+ 167 009a 8683      		std Z+6,r24
+ 168               	.LM23:
+ 169 009c 2281      		ldd r18,Z+2
+ 170 009e 3381      		ldd r19,Z+3
+ 171 00a0 8217      		cp r24,r18
+ 172 00a2 9307      		cpc r25,r19
+ 173 00a4 00F0      		brlo .L10
+ 174               	.LM24:
+ 175 00a6 821B      		sub r24,r18
+ 176 00a8 930B      		sbc r25,r19
+ 177 00aa 9783      		std Z+7,r25
+ 178 00ac 8683      		std Z+6,r24
+ 179               	.L10:
+ 180               	.LM25:
+ 181 00ae 8481      		ldd r24,Z+4
+ 182 00b0 9581      		ldd r25,Z+5
+ 183 00b2 861B      		sub r24,r22
+ 184 00b4 970B      		sbc r25,r23
+ 185 00b6 9583      		std Z+5,r25
+ 186 00b8 8483      		std Z+4,r24
+ 187 00ba 00C0      		rjmp .L11
+ 188               	.L9:
+ 189               	.LM26:
+ 190 00bc 1582      		std Z+5,__zero_reg__
+ 191 00be 1482      		std Z+4,__zero_reg__
+ 192               	.L11:
+ 193               	.LM27:
+ 194 00c0 4FBF      		out __SREG__,r20
+ 195               	/* epilogue start */
+ 196               	.LM28:
+ 197 00c2 0895      		ret
+ 198               	.LFE5:
+ 200               	.global	bufferGetAtIndex
+ 202               	bufferGetAtIndex:
+ 203               	.LFB6:
+ 204               	.LM29:
+ 205               	.LVL11:
+ 206               	/* prologue: function */
+ 207               	/* frame size = 0 */
+ 208 00c4 FC01      		movw r30,r24
+ 209 00c6 CB01      		movw r24,r22
+ 210               	.LVL12:
+ 211               	.LM30:
+ 212 00c8 2FB7      		in r18,__SREG__
+ 213               	.LVL13:
+ 214               	/* #APP */
+ 215               	 ;  98 "buffer.c" 1
+ 216 00ca F894      		cli
+ 217               	 ;  0 "" 2
+ 218               	.LM31:
+ 219               	/* #NOAPP */
+ 220 00cc 2FBF      		out __SREG__,r18
+ 221 00ce 2681      		ldd r18,Z+6
+ 222 00d0 3781      		ldd r19,Z+7
+ 223               	.LVL14:
+ 224 00d2 6281      		ldd r22,Z+2
+ 225 00d4 7381      		ldd r23,Z+3
+ 226               	.LVL15:
+ 227 00d6 820F      		add r24,r18
+ 228 00d8 931F      		adc r25,r19
+ 229               	.LVL16:
+ 230 00da 00D0      		rcall __udivmodhi4
+ 231 00dc 0190      		ld __tmp_reg__,Z+
+ 232 00de F081      		ld r31,Z
+ 233 00e0 E02D      		mov r30,__tmp_reg__
+ 234               	.LVL17:
+ 235 00e2 E80F      		add r30,r24
+ 236 00e4 F91F      		adc r31,r25
+ 237               	.LM32:
+ 238 00e6 8081      		ld r24,Z
+ 239               	/* epilogue start */
+ 240 00e8 0895      		ret
+ 241               	.LFE6:
+ 243               	.global	bufferAddToEnd
+ 245               	bufferAddToEnd:
+ 246               	.LFB7:
+ 247               	.LM33:
+ 248               	.LVL18:
+ 249 00ea 1F93      		push r17
+ 250 00ec CF93      		push r28
+ 251 00ee DF93      		push r29
+ 252               	/* prologue: function */
+ 253               	/* frame size = 0 */
+ 254 00f0 EC01      		movw r28,r24
+ 255 00f2 162F      		mov r17,r22
+ 256               	.LM34:
+ 257 00f4 4FB7      		in r20,__SREG__
+ 258               	.LVL19:
+ 259               	/* #APP */
+ 260               	 ;  109 "buffer.c" 1
+ 261 00f6 F894      		cli
+ 262               	 ;  0 "" 2
+ 263               	.LM35:
+ 264               	/* #NOAPP */
+ 265 00f8 2C81      		ldd r18,Y+4
+ 266 00fa 3D81      		ldd r19,Y+5
+ 267 00fc 6A81      		ldd r22,Y+2
+ 268 00fe 7B81      		ldd r23,Y+3
+ 269               	.LVL20:
+ 270 0100 2617      		cp r18,r22
+ 271 0102 3707      		cpc r19,r23
+ 272 0104 00F4      		brsh .L16
+ 273               	.LVL21:
+ 274               	.LM36:
+ 275 0106 8E81      		ldd r24,Y+6
+ 276 0108 9F81      		ldd r25,Y+7
+ 277 010a 820F      		add r24,r18
+ 278 010c 931F      		adc r25,r19
+ 279 010e 00D0      		rcall __udivmodhi4
+ 280 0110 E881      		ld r30,Y
+ 281 0112 F981      		ldd r31,Y+1
+ 282 0114 E80F      		add r30,r24
+ 283 0116 F91F      		adc r31,r25
+ 284 0118 1083      		st Z,r17
+ 285               	.LM37:
+ 286 011a 8C81      		ldd r24,Y+4
+ 287 011c 9D81      		ldd r25,Y+5
+ 288 011e 0196      		adiw r24,1
+ 289 0120 9D83      		std Y+5,r25
+ 290 0122 8C83      		std Y+4,r24
+ 291               	.LM38:
+ 292 0124 4FBF      		out __SREG__,r20
+ 293 0126 8FEF      		ldi r24,lo8(-1)
+ 294 0128 00C0      		rjmp .L17
+ 295               	.LVL22:
+ 296               	.L16:
+ 297               	.LM39:
+ 298 012a 4FBF      		out __SREG__,r20
+ 299 012c 80E0      		ldi r24,lo8(0)
+ 300               	.L17:
+ 301               	/* epilogue start */
+ 302               	.LM40:
+ 303 012e DF91      		pop r29
+ 304 0130 CF91      		pop r28
+ 305               	.LVL23:
+ 306 0132 1F91      		pop r17
+ 307               	.LVL24:
+ 308 0134 0895      		ret
+ 309               	.LFE7:
+ 311               	.global	bufferIsNotFull
+ 313               	bufferIsNotFull:
+ 314               	.LFB8:
+ 315               	.LM41:
+ 316               	.LVL25:
+ 317               	/* prologue: function */
+ 318               	/* frame size = 0 */
+ 319 0136 FC01      		movw r30,r24
+ 320               	.LM42:
+ 321 0138 8FB7      		in r24,__SREG__
+ 322               	.LVL26:
+ 323               	/* #APP */
+ 324               	 ;  131 "buffer.c" 1
+ 325 013a F894      		cli
+ 326               	 ;  0 "" 2
+ 327               	.LM43:
+ 328               	/* #NOAPP */
+ 329 013c 8FBF      		out __SREG__,r24
+ 330 013e 2281      		ldd r18,Z+2
+ 331 0140 3381      		ldd r19,Z+3
+ 332 0142 8481      		ldd r24,Z+4
+ 333 0144 9581      		ldd r25,Z+5
+ 334               	.LVL27:
+ 335 0146 281B      		sub r18,r24
+ 336 0148 390B      		sbc r19,r25
+ 337               	.LM44:
+ 338 014a C901      		movw r24,r18
+ 339               	/* epilogue start */
+ 340 014c 0895      		ret
+ 341               	.LFE8:
+ 343               	.global	bufferFlush
+ 345               	bufferFlush:
+ 346               	.LFB9:
+ 347               	.LM45:
+ 348               	.LVL28:
+ 349               	/* prologue: function */
+ 350               	/* frame size = 0 */
+ 351 014e FC01      		movw r30,r24
+ 352               	.LM46:
+ 353 0150 8FB7      		in r24,__SREG__
+ 354               	.LVL29:
+ 355               	/* #APP */
+ 356               	 ;  143 "buffer.c" 1
+ 357 0152 F894      		cli
+ 358               	 ;  0 "" 2
+ 359               	.LM47:
+ 360               	/* #NOAPP */
+ 361 0154 1582      		std Z+5,__zero_reg__
+ 362 0156 1482      		std Z+4,__zero_reg__
+ 363               	.LM48:
+ 364 0158 8FBF      		out __SREG__,r24
+ 365               	/* epilogue start */
+ 366               	.LM49:
+ 367 015a 0895      		ret
+ 368               	.LFE9:
+ 442               	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 buffer.c
+     /tmp/cc5YFBmO.s:2      *ABS*:0000003f __SREG__
+     /tmp/cc5YFBmO.s:3      *ABS*:0000003e __SP_H__
+     /tmp/cc5YFBmO.s:4      *ABS*:0000003d __SP_L__
+     /tmp/cc5YFBmO.s:5      *ABS*:00000034 __CCP__
+     /tmp/cc5YFBmO.s:6      *ABS*:00000000 __tmp_reg__
+     /tmp/cc5YFBmO.s:7      *ABS*:00000001 __zero_reg__
+     /tmp/cc5YFBmO.s:20     .text:00000000 bufferInit
+     /tmp/cc5YFBmO.s:56     .text:0000001a bufferGetFromFront
+     /tmp/cc5YFBmO.s:139    .text:00000080 bufferDumpFromFront
+     /tmp/cc5YFBmO.s:202    .text:000000c4 bufferGetAtIndex
+     /tmp/cc5YFBmO.s:245    .text:000000ea bufferAddToEnd
+     /tmp/cc5YFBmO.s:313    .text:00000136 bufferIsNotFull
+     /tmp/cc5YFBmO.s:345    .text:0000014e bufferFlush
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss
+__udivmodhi4
