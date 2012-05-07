@@ -55,6 +55,7 @@ mdmStatus ntp_time(mdmIface *mdm)
 {
 	char port[4],res;
 	char addr[20];
+	static uint8_t ntpUpdate = 0;
 	server udp;
 	uint32_t ntpbytes = 48;
 
@@ -66,31 +67,35 @@ mdmStatus ntp_time(mdmIface *mdm)
 	udp.port = port;
 	udp.addr = addr;
 
-	res = mdmFSM(mdm);
-
-	if(res == mdmOK){
-	res = mdmUDPConnect(mdm, &udp);
-
-	// Send data only when connection is established
-	if(res == mdmOK)
+	if((tm->DD == 1 && tm->MM == 1 && tm->YYYY == 2012) || ntpUpdate == 10 )
 	{
-		sendNTPRequest((ntpMsg*)ntp); 		// Initialise the ntp structure
+		debug(CONSOLE,"%s\r\n","Going to Update Time");
+		ntpUpdate =0;
+		res = mdmFSM(mdm);
 
-		// Try Once only
-		res = mdmTransSend(mdm,(char *) ntp, ntpbytes);
-		if(res == mdmOK)
-		res = mdmTransRead(mdm,(char *) ntp, &ntpbytes);
+		if(res == mdmOK){
+			res = mdmUDPConnect(mdm, &udp);
 
-		if(res != mdmReadFail)
-			NtpDCall((ntpMsg *)ntp);
-		else
-			return res;
+			// Send data only when connection is established
+			if(res == mdmOK)
+			{
+				sendNTPRequest((ntpMsg*)ntp); 		// Initialise the ntp structure
 
-		Cur_Time(tm);
-	}
-	else
-		return res;
+				// Try Once only
+				res = mdmTransSend(mdm,(char *) ntp, ntpbytes);
+				if(res == mdmOK)
+					res = mdmTransRead(mdm,(char *) ntp, &ntpbytes);
 
+				if(res != mdmReadFail)
+					NtpDCall((ntpMsg *)ntp);
+				else
+					return res;
+
+				Cur_Time(tm);
+			}
+			else
+				return res;
+		}
 	debug(LOG,"%s\n\r","Time Updated");
 	res = mdmSwitch(mdm, COMMAND);
 	res = mdmClose(mdm);

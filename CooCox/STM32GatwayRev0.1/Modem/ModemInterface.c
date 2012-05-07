@@ -75,7 +75,8 @@
 			mdm->lock = 1;
 			// If modem is locked it's time to wake it up
 			mdmWakeUp(mdm);
-			sendwait(mdm, "AT+CFUN=1\r", "OK", 200);
+			sendwait(mdm, "|AT+CFUN=1,0\r", "OK", 200);
+			sendwait(mdm, "|AT+CFUN=1,0\r", "OK", 200);
 		}
 		return res;
 	}
@@ -94,7 +95,7 @@
 		if(res == E_OK)
 			mdm->lock = 0;
 
-		sendwait(mdm, "AT+CFUN=0\r", "OK", 500);
+		sendwait(mdm, "AT+CFUN=4,0\r", "OK", 500);
 		return res;
 	}
 
@@ -217,6 +218,7 @@
 			return mdmFail;
 		}
 
+		extern char ServerRes[8];
 		/*
 		* This function matches the data received with the res buffer
 		* @res buffer with which rcvd data to be matched
@@ -228,7 +230,7 @@
 			addr2 = addr4 = 0;
 			char err[10]="ERROR\r\n";
 			char cls[11]="CLOSED\r\n";
-			uint8_t errVar = 0, clsVar = 0;
+			uint8_t errVar = 0, clsVar = 0, serVar = 0;
 			debug(CONSOLE,"%s","<<== ");
             for (TIME_SET(0); TIME_TICK<timeout; )           						// loop until time runs out
 			{
@@ -270,6 +272,15 @@
 						}
 						else clsVar = 0;													// otherwise reset match pointer
 
+					if(ServerRes[serVar] == addr4)
+						{
+							serVar++;  											// does char match response string
+							if (!ServerRes[serVar]){							// All Server response char are matched
+								dbg_printf("%s","\n\r");
+								return httpSent;
+							}
+						}
+						else serVar = 0;
 						TIME_SET(0);
 
 						if (!resp[addr2]){										// All char are matched
@@ -376,9 +387,10 @@
 			char lBuff[20];
 			uint8_t try;
 			static unsigned char var = 0;
-			count = 0;
+			uint8_t count = 0;
 			do{
-				try = 4;
+				try = 8;
+				do{
 				do{
 					if(state == CONNECT || state == CLOSE)
 						sendwait(mdm, "||+++|\r","OK",100);
@@ -388,6 +400,18 @@
 				}
 				while(res != mdmOK && try > 0);
 
+				if(res == mdmErr)
+				{
+					//modm.pio->Out(modm.reset_pin, 1);		// Resetting Modem
+					//CoTickDelay (10);						// For 100ms
+					//modm.pio->Out(modm.reset_pin, 0);		// Resetting Modem
+					sendwait(mdm,"AT+CFUN=1,1","",300);
+					debug(LOG,"%s\n\r","Resetting Modem");
+					mdmInit(mdm);
+				}
+				count++;
+				}
+				while(count != 2 && res != mdmOK);
 				try = 0;
 
 				/* CIPSTATUS output is like- STATE: IP INITIAL*/
@@ -466,8 +490,8 @@
 	mdmStatus mdmFSM(mdmIface *mdm)
 	{
 		int8_t var;
-		res = mdmInit(mdm);
 		state = CLOSE;
+		res = mdmInit(mdm);
 
 		res = mdmState(mdm);
 		var = 20;
@@ -565,8 +589,12 @@
 			res = sendwait(mdm,"|AT+IFC=2,2\r","OK",300); //for configuring h/w flow control
 			res = sendwait(mdm, "|ATE0\r", "OK",500);
 			res = sendwait(mdm, "AT+CMEE=0\r", "OK", 100);
-			sendwait(mdm, "|AT+CIPMODE=1\r","OK",300);
-
+			count =0;
+			do{
+				count ++;
+				sendwait(mdm, "||AT+CIPMODE=1\r","OK",300);
+			}
+			while(res != mdmOK && count < 3);
 		}
 		state = INIT;
 		if(res != mdmOK){

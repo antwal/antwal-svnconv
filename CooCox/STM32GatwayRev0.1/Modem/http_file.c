@@ -28,6 +28,7 @@ extern dogDebug myDogDebug[];
 
 static char buffer[MAX_BUFF_SIZE]={'\0'};
 static char cookie[100]={'\0'};
+char ServerRes[8] = "recv OK";
 
 uint32_t size;				/* size of file */
 static mdmStatus res;
@@ -115,7 +116,7 @@ uint8_t uploadFile(mdmIface *mdm, const char *file, server *tcp){
 					res = mdmHttpRes(mdm, &size, httpRes);
 					if(res == httpOK)
 					{
-						res = mdmHttpBody(mdm, "Data recv OK", &size, 6000);// For slow connections timeout should be high
+						res = mdmHttpBody(mdm, ServerRes, &size, 6000);// For slow connections timeout should be high
 						if(res == httpOK){
 							res = httpSent;
 							debug(LOG,"%s\n\r","File uploaded");
@@ -130,6 +131,10 @@ uint8_t uploadFile(mdmIface *mdm, const char *file, server *tcp){
 							res = httpLogged;						// Try again since connection is not yet closed
 							count++;
 						}
+					}
+					else if(res == httpSent)
+					{
+						debug(LOG,"%s\n\r","File uploaded");
 					}
 					else if(res == httpErrAuth){						// Authorization problem
 						res = httpConnect;
@@ -349,7 +354,7 @@ httpStatus mdmHttpRes(mdmIface *mdm, uint32_t* bodLen, uint8_t cond )
 	{
 		uint16_t code = 0, i= 0;
 		CLR_BUFFER(buffer);
-		res = serialMatch(mdm, "HTTP/1.1", 6000);
+		res = serialMatch(mdm, "HTTP/1.1", 9000);
 		if(res == mdmOK )
 		{
 			res = serialCopy(&buffer[0], ' ','\r');
@@ -414,7 +419,7 @@ httpStatus mdmHttpRes(mdmIface *mdm, uint32_t* bodLen, uint8_t cond )
 //			if(res == httpOK)
 			{
 				i = 0;
-				code = serialMatch(mdm, "Content-Length:", 100);
+				code = serialMatch(mdm, "Content-Length:", 200);
 				if(code != mdmTimeOut && code != mdmErr )
 				{
 					serialCopy(&buffer[0], ' ','\r');
@@ -432,6 +437,10 @@ httpStatus mdmHttpRes(mdmIface *mdm, uint32_t* bodLen, uint8_t cond )
 					debug(CONSOLE,"ResLength=%d\n",code);
 
 				}
+				else if(res == httpSent)
+				{
+					return httpSent;
+				}
 				else
 				{
 					// Length field not found
@@ -447,7 +456,7 @@ httpStatus mdmHttpRes(mdmIface *mdm, uint32_t* bodLen, uint8_t cond )
 			{
 				// If this is case for login
 				if(cond == httpLogin){
-				cond = mdmHttpBody(mdm, "Page not found", bodLen, 200);			// Timeout is small coz error does not come with big content
+				cond = mdmHttpBody(mdm, "Page not found", bodLen, 2000);			// Timeout is small coz error does not come with big content
 					if(cond == httpOK)
 					debug(LOG, "%s\r\n","Page not found");
 					else if(cond == httpClose)
@@ -455,13 +464,17 @@ httpStatus mdmHttpRes(mdmIface *mdm, uint32_t* bodLen, uint8_t cond )
 				}
 				// if this is normal POST
 				else if(cond == httpRes) {
-					cond = mdmHttpBody(mdm, "forbidden", bodLen, 200);			// Timeout is small coz error does not come with big content
+					cond = mdmHttpBody(mdm, "forbidden", bodLen, 2000);			// Timeout is small coz error does not come with big content
 					if(cond == httpClose)
 						return httpClose;
 				}
 				return res;
 			}
 
+		}
+		else
+		if(res == httpSent ){
+			return httpSent;
 		}
 		else{
 			if(res == mdmTimeOut)res = httpTimeOut;

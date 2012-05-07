@@ -136,7 +136,6 @@ char * wsnPacketDecoding(dogDebug *dptr){
 		pktcount++;
 		/******** Check type of the Raw Packet *******/
 		if (Data.DataBuffer[1] == P_PACKET_NO_ACK ) {
-			debug(CONSOLE,"%s\n\r","WSN:Packet Recvd");
 			WDG_setTaskState(dptr , SAVE_DATA);
 			/***** Parsing the Raw Packet ****/
 			ParsePkt((INT8U *)&Data.DataBuffer[0]);
@@ -152,7 +151,7 @@ char * wsnPacketDecoding(dogDebug *dptr){
 
 			DataVal= (SensedData *)&Data.DataBuffer[0];
 			sprintf(&destdata[0], packet, pktcount, BaseStnNo, DataVal->crop_id[0],DataVal->crop_id[1], DataVal->plot_id, DataVal->node_id, DataVal->sensor_id, DataVal->value,cur_time.YYYY,cur_time.MM,cur_time.DD,cur_time.hh,cur_time.mm,cur_time.ss);
-
+			debug(CONSOLE,"%s%d:%02x:%08x\n\r","WSN:Packet Recvd:",DataVal->node_id,DataVal->sensor_id,DataVal->value);
 			pi_pio.Out(LED0,(pktcount & 0x01));
 
 			/* Lock the Mutex*/

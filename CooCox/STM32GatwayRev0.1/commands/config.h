@@ -1,5 +1,5 @@
 /* configurations for the Gateway */
-#define BAUD1	 		115200							// MODEM
+#define BAUD1	 		9600							// MODEM
 #define BAUD2	 		57600							// MOTE
 #define BAUD3	 		115200							// DEBUG
 

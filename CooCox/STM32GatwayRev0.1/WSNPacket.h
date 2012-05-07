@@ -22,7 +22,7 @@
                                         "\t<PLOTID>%04x</PLOTID>\n\t"\
                                         "\t<MOTEID>%04x</MOTEID>\n\t"\
                                         "\t<PARAID>%02x</PARAID>\n\t"\
-                                        "\t<PARAVAL>%04x</PARAVAL>\n\t"\
+                                        "\t<PARAVAL>%08x</PARAVAL>\n\t"\
                                         "\t<TIME>%04x%02x%02x%02x%02x%02x</TIME>\n\t"\
                                 "</WSN_DATA_PKT>\n"
 #define ENDTAG "</DATA>"
@@ -217,7 +217,7 @@ typedef struct SensedData{
  INT8U sensor_id;
  INT8S crop_id[1];
  INT16U plot_id;
- INT16U value;
+ INT32U value;
 // INT32U Gtimestamp;
 } __attribute__ ((packed)) SensedData;
 #endif

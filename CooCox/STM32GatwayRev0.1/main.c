@@ -279,19 +279,13 @@ void TmrCallBack(void)
 		for(;;)
 		{
 			mdmLock(&modm);					// Get modem lock
-			ntp_update ++;
-			if(ntp_update > 10){ 			// Update time after each 10 uploads
-				ntp_update = 0;
+			for(ntp_update =0; ntp_update < 3; ntp_update++){
 				WDG_setTaskState(dptr , NTP_TIME);
-				debug(CONSOLE,"%s\r\n","Going to Update Time");
-				for(ntp_update =0; ntp_update < 3; ntp_update++){
-						res = ntp_time(&modm);
-						if(res == mdmOK){
-							ntp_update =0;
-							break;
-						}
+				res = ntp_time(&modm);
+				if(res == mdmOK){
+						break;
+					}
 				}
-			}
 				/*
 				 *  If send.xml file exists that means last uploading was unsuccessful.
 				 *  so  first upload the send.xml data of previous failed
@@ -580,7 +574,7 @@ void taskDebug (void* pdata){
 
 	// Default value to the run is 0 , in order to use the command line interface
 	// a button press should change the state of this variable.
-	Run = 0;
+	Run = 1;
 
 	for (;;) {
 		cflag = 0;
@@ -641,6 +635,7 @@ int main(void)
 	sdConfig();
 	// SD card plug in detection
 	EXTIenable();
+	//buttonEnable();
 
 	// Initializing RTC clk
 	RTC_Timer();

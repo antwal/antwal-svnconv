@@ -231,7 +231,13 @@ static COX_Status STM32_SPI_Init (SPI_TypeDef * SPIx, uint8_t mode,  uint32_t ra
 		//SPI1->CR1 |= 0x100;
 
 		/* SPI Slave Service configuration */
-		SPI2->CR1 &= 0xFFFB ;
+		//SPI2->CR1 &= 0xFFFB ;
+
+		// SSOE bit is high// No multimaster conf
+		SPI2->CR2 |= 0x04;
+		/* SPI Master Service configuration */
+		SPI2->CR1 |= SPI_CR1_MSTR ;
+
 
 	}
   
