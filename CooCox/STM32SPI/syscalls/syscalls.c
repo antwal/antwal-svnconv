@@ -7,10 +7,12 @@
 #include <stdarg.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-
+#include "STM32_USART.h"
 #undef errno
 extern int errno;
 extern int  _end;
+
+extern COX_SERIAL_PI *UART3;
 
 caddr_t _sbrk ( int incr )
 {
@@ -59,6 +61,12 @@ int _read(int file, char *ptr, int len)
 
 int _write(int file, char *ptr, int len)
 {
+	uint16_t txcount;
+	(void)file;
+	for(txcount =0; txcount < len; txcount++)
+	{
+		UART3->Write(&ptr[txcount],1);
+	}
   return len;
 }
 

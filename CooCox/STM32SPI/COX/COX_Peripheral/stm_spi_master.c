@@ -8,9 +8,14 @@
 
 #include "stm32f10x.h"
 #include "stm_spi_master.h"
+#include "cox_pio.h"
+#include "stm32_pio.h"
+#include "buffer.h"
+extern COX_PIO_Dev ss;
+extern cBuffer spi_buff;
 
 
-#define RCC_PCLK2_72M   (72000000UL)
+#define RCC_PCLK2_72M   (24000000UL)
 #define RCC_PCLK1_36M   (36000000UL)
 
 /** RCC Flag */
@@ -42,8 +47,26 @@ void SPI1_IRQHandler(void)
 *******************************************************************************/
 void SPI2_IRQHandler(void)
 {
+	//printf("IN Handler\n\r");
+//	while((SPI2->SR & SPI_SR_BSY) != 0);
+	/* if TX buffer is  empty */
+	if((SPI2->SR & SPI_SR_TXE) != 0)
+	{
 
-
+		/* Send data through the SPIx peripheral */
+		SPI2->DR = 0xff;
+	}else
+	/* Loop while RX buffer is not empty */
+	if((SPI2->SR & SPI_SR_RXNE )!= 0)
+	{
+		/* Return the data read from the SPI bus */
+		bufferAddToEnd(&spi_buff, SPI2->DR);
+		//printf("r=%x\t",SPI2->DR);
+	}
+	else if(SPI2->SR & (SPI_SR_MODF | SPI_SR_OVR))
+	{
+		printf("Error=%x\n\r",SPI2->SR);
+	}
 }
 
 
@@ -164,7 +187,7 @@ static COX_Status STM32_SPI_Init (SPI_TypeDef * SPIx, uint8_t mode,  uint32_t ra
 		RCC->APB2ENR |= RCC_APB2ENR_IOPBEN;
 
 		/* Configure SPI2 pins: NSS, SCK, MISO and MOSI */
-		GPIOB->CRH |= (GPIO_CRH_MODE13 | GPIO_CRH_MODE14 | GPIO_CRH_MODE15 );
+		GPIOB->CRH |=  GPIO_CRH_MODE15 |(GPIO_CRH_MODE13) |GPIO_CRH_MODE14 ;
 		GPIOB->CRH &= 0x333FFFFF;
 		GPIOB->CRH |= (GPIO_CRH_CNF13_1 | GPIO_CRH_CNF14_1 | GPIO_CRH_CNF15_1);
 	}
@@ -224,30 +247,34 @@ static COX_Status STM32_SPI_Init (SPI_TypeDef * SPIx, uint8_t mode,  uint32_t ra
 		/* transmits  NSS   */
 		SPI2->CR1 |= 0x200;
 		/* transmits  NSS   */
-		SPI1->CR1 |= 0x100;
+		SPI1->CR1 &= ~0x100;
 
 		/* SPI Slave Service configuration */
 		SPI2->CR1 &= 0xFFFB ;
-
+		/* SPI Master Service configuration */
+		SPI2->CR2 |= 0x04;
+		//SPI2->CR1 |= SPI_CR1_MSTR ;
+		//SPI2->CR1 |=  (1 << 10);
 	}
   
 	/* Enable SPIx  */
 	SPIx->CR1 |= SPI_CR1_SPE ;
 
+	if(SPIx == SPI2){
 	/* Enable SPIx Tx buffer empty Interrupt */
-	//SPIx->CR2 |= 0x80;
+	SPIx->CR2 |= 0x80;
 
 	/* Enable SPIx Rx buffer empty Interrupt */
-	//SPIx->CR2 |= 0x40;
+	SPIx->CR2 |= 0x40;
 
 	/* Enable SPIx Error Interrupt */
-	//SPIx->CR2 |= 0x20;
+	SPIx->CR2 |= 0x20;
 
-	/*if(SPIx == SPI1 )
+	if(SPIx == SPI1 )
 		NVIC_EnableIRQ(SPI1_IRQn);
 	else if(SPIx == SPI2 )
 		NVIC_EnableIRQ(SPI2_IRQn);
-*/
+	}
 	/* Check busy*/
 	i32TimeOut = 0x10000;
 	while((SPIx->SR & SPI_SR_BSY) != 0)
@@ -271,12 +298,13 @@ static COX_Status STM32_SPI_Init (SPI_TypeDef * SPIx, uint8_t mode,  uint32_t ra
 *******************************************************************************/
 static uint32_t STM32_SPI_ReadWrite (SPI_TypeDef * SPIx,uint32_t send_data)
 {
-	uint32_t read_data;
+	uint32_t read_data ;
+	//pi_pio.Out(ss,1);
 
 	/* Check busy*/
 	while((SPIx->SR & SPI_SR_BSY) != 0);
 
-	/* Loop while TX buffer is  empty */
+	/* Loop while TX buffer is not empty */
 	while((SPIx->SR & SPI_SR_TXE) == 0);
 
 	/* Send data through the SPIx peripheral */
@@ -288,7 +316,9 @@ static uint32_t STM32_SPI_ReadWrite (SPI_TypeDef * SPIx,uint32_t send_data)
 	while((SPIx->SR & SPI_SR_RXNE )== 0);
 	/* Return the data read from the SPI bus */
 	read_data = SPIx->DR ;
-	printf("Read %d\t",read_data);
+
+	//pi_pio.Out(ss,0);
+//	printf("Read %x\t",read_data);
 	return read_data;
 }
 
@@ -336,8 +366,17 @@ static uint32_t STM32_SPI_Write (SPI_TypeDef * SPIx,const void *wbuf, uint32_t w
 *******************************************************************************/
 static uint32_t STM32_SPI_Read (SPI_TypeDef * SPIx,void *rbuf, uint32_t rlen)
 {
-	uint32_t i;
+	uint32_t i,i32TimeOut;
 	uint8_t data_size;
+
+	SPIx->CR1 |= SPI_CR1_SPE ;
+	i32TimeOut = 0x10000;
+	while((SPIx->SR & SPI_SR_BSY) != 0)
+	{
+		i32TimeOut--;
+		if(i32TimeOut <= 0)
+			return COX_ERROR;
+	}
 
 	/* 8bits or 16bits */
 	if((SPIx->CR1 & SPI_CR1_DFF) == 0)
@@ -350,7 +389,15 @@ static uint32_t STM32_SPI_Read (SPI_TypeDef * SPIx,void *rbuf, uint32_t rlen)
 		else
 			((uint16_t *)rbuf)[i] = STM32_SPI_ReadWrite(SPIx, 0xFFFF);
 	}
+	i32TimeOut = 0x10000;
+		while((SPIx->SR & SPI_SR_BSY) != 0)
+		{
+			i32TimeOut--;
+			if(i32TimeOut <= 0)
+				return COX_ERROR;
+		}
 
+	SPIx->CR1 &= ~SPI_CR1_SPE ;
   return rlen;
 }
 
