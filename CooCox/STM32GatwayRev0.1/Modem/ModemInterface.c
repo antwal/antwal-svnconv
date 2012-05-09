@@ -385,11 +385,11 @@
 		mdmStatus mdmState(mdmIface *mdm)
 		{
 			char lBuff[20];
-			uint8_t try;
+			int8_t try;
 			static unsigned char var = 0;
 			uint8_t count = 0;
 			do{
-				try = 8;
+				try = 4;
 				do{
 				do{
 					if(state == CONNECT || state == CLOSE)
@@ -409,9 +409,10 @@
 					debug(LOG,"%s\n\r","Resetting Modem");
 					mdmInit(mdm);
 				}
+				try = 0;
 				count++;
 				}
-				while(count != 2 && res != mdmOK);
+				while(count < 3 && res != mdmOK);
 				try = 0;
 
 				/* CIPSTATUS output is like- STATE: IP INITIAL*/
@@ -592,9 +593,9 @@
 			count =0;
 			do{
 				count ++;
-				sendwait(mdm, "||AT+CIPMODE=1\r","OK",300);
+				res = sendwait(mdm, "||AT+CIPMODE=1\r","OK",200);
 			}
-			while(res != mdmOK && count < 3);
+			while(res != mdmOK && count < 2);
 		}
 		state = INIT;
 		if(res != mdmOK){
@@ -751,7 +752,7 @@
 
 		char var;
 		res = mdmFail;
-		var =3;
+		var =1;
 		do
 		{
 			debug(CONSOLE,"%s%d\n\r","InUDPConnect=",var);

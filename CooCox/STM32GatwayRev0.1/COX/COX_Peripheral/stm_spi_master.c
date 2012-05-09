@@ -9,7 +9,7 @@
 #include "stm32f10x.h"
 #include "stm_spi_master.h"
 #include <stdio.h>
-
+#include "powermgmnt.h"
 
 #define RCC_PCLK2_72M   (72000000UL)
 #define RCC_PCLK1_36M   (36000000UL)
@@ -43,7 +43,24 @@ void SPI1_IRQHandler(void)
 *******************************************************************************/
 void SPI2_IRQHandler(void)
 {
+	/* if TX buffer is  empty */
+	if((SPI2->SR & SPI_SR_TXE) != 0)
+	{
 
+		/* Send data through the SPIx peripheral */
+		SPI2->DR = 0xff;
+	}else
+	/* Loop while RX buffer is not empty */
+	if((SPI2->SR & SPI_SR_RXNE )!= 0)
+	{
+		/* Return the data read from the SPI bus */
+		bufferAddToEnd(&spi_buff, SPI2->DR);
+		//printf("r=%x\t",SPI2->DR);
+	}
+	else if(SPI2->SR & (SPI_SR_MODF | SPI_SR_OVR))
+	{
+		printf("Error=%x\n\r",SPI2->SR);
+	}
 
 }
 
@@ -226,38 +243,37 @@ static COX_Status STM32_SPI_Init (SPI_TypeDef * SPIx, uint8_t mode,  uint32_t ra
 	else if(SPIx == SPI2 )
 	{
 		/* transmits  NSS   */
-		//SPI2->CR1 |= 0x200;
+		SPI2->CR1 |= 0x200;
 		/* transmits  NSS   */
-		//SPI1->CR1 |= 0x100;
+		SPI2->CR1 &= ~0x100;
 
 		/* SPI Slave Service configuration */
-		//SPI2->CR1 &= 0xFFFB ;
+		SPI2->CR1 &= 0xFFFB ;
 
 		// SSOE bit is high// No multimaster conf
 		SPI2->CR2 |= 0x04;
-		/* SPI Master Service configuration */
-		SPI2->CR1 |= SPI_CR1_MSTR ;
-
 
 	}
-  
+
 	/* Enable SPIx  */
 	SPIx->CR1 |= SPI_CR1_SPE ;
 
-	/* Enable SPIx Tx buffer empty Interrupt */
-	//SPIx->CR2 |= 0x80;
+	if(SPIx == SPI2)
+	{
+		/* Enable SPIx Tx buffer empty Interrupt */
+		SPIx->CR2 |= 0x80;
 
-	/* Enable SPIx Rx buffer empty Interrupt */
-	//SPIx->CR2 |= 0x40;
+		/* Enable SPIx Rx buffer empty Interrupt */
+		SPIx->CR2 |= 0x40;
 
-	/* Enable SPIx Error Interrupt */
-	//SPIx->CR2 |= 0x20;
+		/* Enable SPIx Error Interrupt */
+		SPIx->CR2 |= 0x20;
 
-	/*if(SPIx == SPI1 )
-		NVIC_EnableIRQ(SPI1_IRQn);
-	else if(SPIx == SPI2 )
-		NVIC_EnableIRQ(SPI2_IRQn);
-*/
+		if(SPIx == SPI1 )
+			NVIC_EnableIRQ(SPI1_IRQn);
+		else if(SPIx == SPI2 )
+			NVIC_EnableIRQ(SPI2_IRQn);
+	}
 	/* Check busy*/
 	i32TimeOut = 0x10000;
 	while((SPIx->SR & SPI_SR_BSY) != 0)

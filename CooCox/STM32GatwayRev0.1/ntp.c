@@ -54,18 +54,21 @@ void NtpDCall(ntpMsg *msg)
 mdmStatus ntp_time(mdmIface *mdm)
 {
 	char port[4],res;
-	char addr[20];
+	char addr1[20],addr2[20];
 	static uint8_t ntpUpdate = 0;
-	server udp;
+	server udp[2];
 	uint32_t ntpbytes = 48;
 
 	strcpy(port, "123");
-	strcpy(addr, "1.in.pool.ntp.org" );
+	strcpy(addr1, "1.in.pool.ntp.org" );
+	strcpy(addr2, "1.asia.pool.ntp.org");
 	//port = "123";
 	//addr = "1.in.pool.ntp.org";
 
-	udp.port = port;
-	udp.addr = addr;
+	udp[0].port = port;
+	udp[0].addr = addr1;
+	udp[1].port = port;
+	udp[1].addr = addr2;
 
 	if((tm->DD == 1 && tm->MM == 1 && tm->YYYY == 2012) || ntpUpdate == 10 )
 	{
@@ -74,8 +77,11 @@ mdmStatus ntp_time(mdmIface *mdm)
 		res = mdmFSM(mdm);
 
 		if(res == mdmOK){
-			res = mdmUDPConnect(mdm, &udp);
-
+			res = mdmUDPConnect(mdm, &udp[0]);
+			if(res != mdmOK)
+			{
+				res = mdmUDPConnect(mdm,&udp[1]);
+			}
 			// Send data only when connection is established
 			if(res == mdmOK)
 			{
@@ -92,11 +98,12 @@ mdmStatus ntp_time(mdmIface *mdm)
 					return res;
 
 				Cur_Time(tm);
+				debug(LOG,"%s\n\r","Time Updated");
 			}
 			else
 				return res;
 		}
-	debug(LOG,"%s\n\r","Time Updated");
+
 	res = mdmSwitch(mdm, COMMAND);
 	res = mdmClose(mdm);
 	}

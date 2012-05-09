@@ -63,6 +63,7 @@
       <includepath path="cmdline"/>
       <includepath path="commands"/>
       <includepath path="vt100"/>
+      <includepath path="powermgmnt"/>
       
       <!-- arm-none-eabi-gcc compiler arguments -->
       <compilerarg value="-mcpu=cortex-m3"/>

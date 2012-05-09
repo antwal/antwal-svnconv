@@ -21,6 +21,7 @@
 #include "http.h"
 #include "string.h"
 #include "debug.h"
+#include "powermgmnt.h"
 
 //------------------------Debug task variables for cmdline--------------------------
 
@@ -127,6 +128,15 @@ void modemConfig(void)
 	modm.pio->Out(modm.reset_pin, 0);		// Pull up reset pin
 
 }
+
+void powerconfig(void)
+{
+	pi_spi2.Cfg(COX_SPI_CFG_BITS,8,0);
+	pi_spi2.Cfg(COX_SPI_CFG_FSB,COX_MSPI_FSB_MSB,0);
+	pi_spi2.Init(COX_SPI_MODE0, SPI_BaudRatePrescaler_16);
+	bufferInit(&spi_buff,spi_buffer,30);
+}
+
 
 void debugLedInit(void)
 {
@@ -265,7 +275,7 @@ void TmrCallBack(void)
 		for(ntp_update =0; ntp_update < 3; ntp_update++){
 			res = ntp_time(&modm);
 			if(res == mdmOK){
-				ntp_update =0;
+				//ntp_update =0;
 				break;
 			}
 		}
@@ -461,7 +471,7 @@ void TmrCallBack(void)
 
 	void taskWatchDog (void* pdata){
 	//dogDebug *dptr;
-	uint8_t tog = 1,count=0;
+	uint8_t tog = 1,count=0,pwrVar =0,pwrInterval = 4;
 	systemCheck(&modm);
 	mdmLock(&modm);
 	intimateState(&modm);// place some where else
@@ -480,6 +490,7 @@ void TmrCallBack(void)
 		    IWDG_ReloadCounter();
 		  }
 
+		  ////////////////////////////////////////////////////////////////
 		  /* Resource status check */
 		  // SD card is having some problem
 		  // Toggle @ 5sec
@@ -523,8 +534,16 @@ void TmrCallBack(void)
 		else{
 			 pi_pio.Out(LED1,1);					// Switch off the LED
 		}
+/////////////////////////////////////////////////////////////////////////////
 
 		  /* Power down will be implemented after this */
+		  pwrVar++;
+		  if(pwrVar >= pwrInterval)					// 20 Secs
+		  {
+			  pwrInterval = 20;
+			  pwrVar = 0;
+			  powerHandler();				// Check battery status
+		  }
 		  /*
 		   * If modem is in use or not
 		   * If it is in use wake up the modem
@@ -636,6 +655,8 @@ int main(void)
 	// SD card plug in detection
 	EXTIenable();
 	//buttonEnable();
+
+	powerconfig();
 
 	// Initializing RTC clk
 	RTC_Timer();

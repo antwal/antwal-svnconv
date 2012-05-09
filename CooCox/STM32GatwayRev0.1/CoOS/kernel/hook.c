@@ -56,9 +56,10 @@ void CoIdleTask(void* pdata)
 void CoStkOverflowHook(OS_TID taskID)
 {
     /* Process stack overflow  here */
-    for(; ;) 
+	debug(LOG,"Stack overflow=%d\r\n",taskID);
+    for(;;)
     {
-    	debug(LOG,"Stack overflow=%d\r\n",taskID);
+
     }
 }
 

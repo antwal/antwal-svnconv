@@ -4,6 +4,9 @@
 #include "ff.h"
 #include "diskio.h"
 #include "coocox.h"
+#include "powermgmnt.h"
+extern power_status power;
+extern batt_percentage charge;
 
 #define LOG     1
 #define CONSOLE 2
@@ -30,7 +33,7 @@ extern TIME *tm;
 #define  debug(var, fmt, ...)\
         do {\
         	Cur_Time(tm);\
-        	sprintf(slog,"%d:%d:%d-%d:%d:%d %d::",tm->YYYY,tm->MM,tm->DD,tm->hh,tm->mm, tm->ss, TCBRunning->taskID);\
+        	sprintf(slog,"%d:%d:%d-%d:%d:%d %d:%d%%:%d%% %d::",tm->YYYY,tm->MM,tm->DD,tm->hh,tm->mm, tm->ss, power.sol, charge.bat1,charge.bat2, TCBRunning->taskID);\
                 switch(var){\
                         case LOG:\
                         f_open(&logger, "./root/log.txt", FA_WRITE|FA_READ);\

@@ -14,6 +14,7 @@
 #include "watchdog.h"
 #include "debug.h"
 #include <stm32_pio.h>
+#include "powermgmnt.h"
 
 // Length of each queue used to hold the WSN data
 #define QUEUE_LENGTH 32
@@ -150,27 +151,33 @@ char * wsnPacketDecoding(dogDebug *dptr){
 			Cur_Time( &cur_time);							// Get the current time
 
 			DataVal= (SensedData *)&Data.DataBuffer[0];
+			//sprintf(&destdata[0], packet, pktcount, BaseStnNo, DataVal->crop_id[0],DataVal->crop_id[1], DataVal->plot_id, DataVal->node_id, DataVal->sensor_id, DataVal->value,cur_time.YYYY,cur_time.MM,cur_time.DD,cur_time.hh,cur_time.mm,cur_time.ss);
+			if(DataVal->sensor_id == 2)
+			sprintf(&destdata[0], packet, pktcount, BaseStnNo, DataVal->crop_id[0],DataVal->crop_id[1], DataVal->plot_id, DataVal->node_id, DataVal->sensor_id, (float)power.bat2,cur_time.YYYY,cur_time.MM,cur_time.DD,cur_time.hh,cur_time.mm,cur_time.ss);
+			else
 			sprintf(&destdata[0], packet, pktcount, BaseStnNo, DataVal->crop_id[0],DataVal->crop_id[1], DataVal->plot_id, DataVal->node_id, DataVal->sensor_id, DataVal->value,cur_time.YYYY,cur_time.MM,cur_time.DD,cur_time.hh,cur_time.mm,cur_time.ss);
-			debug(CONSOLE,"%s%d:%02x:%08x\n\r","WSN:Packet Recvd:",DataVal->node_id,DataVal->sensor_id,DataVal->value);
+			debug(CONSOLE,"%s:%d:%02x:%08x\n\r","WSN:Packet Recvd",DataVal->node_id,DataVal->sensor_id,DataVal->value);
 			pi_pio.Out(LED0,(pktcount & 0x01));
 
 			/* Lock the Mutex*/
 			CoEnterMutexSection(file_mutex);
 
 			rc = f_open(&store, "./root/store.xml", FA_WRITE|FA_READ);
+			if(!rc)
 			f_sync(&store);
 			if (rc) die(rc);
 			if(rc != 0)
 			{
 				if(rc == 4)				// If file is not found
 				{
-					debug(LOG,"%s\n\r","WSN:store.xml not Found");
+					debug(CONSOLE,"%s\n\r","WSN:store.xml not Found");
 					rc = f_open(&store, "./root/store.xml", FA_WRITE|FA_READ|FA_CREATE_ALWAYS);
 					f_sync(&store);
-					if (rc) die(rc);
+					//if (rc) die(rc);
 				}
 			}
-
+			else{
+				debug(LOG,"WSN:Packet Number:%d\n\r",pktcount);
 			// IF something is there in destn file
 			if(!(f_size(&store) == 0))
 			{
@@ -181,23 +188,25 @@ char * wsnPacketDecoding(dogDebug *dptr){
 			else{
 				rc = f_write(&store, STARTTAG, strlen(STARTTAG), &bw);
 				f_sync(&store);
-				if (rc) die(rc);
+				//if (rc) die(rc);
 			}
 
 			rc = f_write(&store, destdata, strlen(destdata),&bw);
 			f_sync(&store);
-			if (rc) die(rc);
+			//if (rc) die(rc);
 
 			rc = f_write(&store, ENDTAG, strlen(ENDTAG),&bw);
 			f_sync(&store);
-			if (rc) die(rc);
+			//if (rc) die(rc);
 
 			rc = f_close(&store);
-			if (rc) die(rc);
+			//if (rc) die(rc);
+			}
 
 			/* Release the lock */
 			CoLeaveMutexSection(file_mutex);
 			WDG_setTaskState(dptr , SAVE_DONE);
+
 		}
 		else{
 			debug(LOG,"%s\n\r","WSN:Msg Discarded");
