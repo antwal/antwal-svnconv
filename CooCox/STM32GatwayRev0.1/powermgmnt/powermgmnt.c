@@ -6,7 +6,7 @@
 #include "powermgmnt.h"
 #include "debug.h"
 #include "string.h"
-
+#include "time.h"
 
 cBuffer spi_buff;
 unsigned char spi_buffer[30];
@@ -69,6 +69,7 @@ powerState powerLogic(power_status *powerVar)
 	power.sol = (power.sol + powerVar->sol) / 2;
 	power.supply = (power.supply + powerVar->supply) / 2;
 
+	// Calculating the charge percentage of batteries
 	if(power.bat1 > BAT_MIN)
 	charge.bat1 = (power.bat1 - BAT_MIN) / 12 ;
 	else
@@ -78,13 +79,30 @@ powerState powerLogic(power_status *powerVar)
 	else
 		charge.bat2 = 0;
 
-	if((power.bat1 <= BAT_MAX && power.bat1 >= BAT_15 ) || (power.bat2 <= BAT_MAX && power.bat2 >= BAT_15))
+	//Solar percentage calculation between 9:0am to 5:0pm
+	if(!isTime(9,0,GREATER) && !isTime(17,0,LESSER))
+	{
+		if(power.sol > SOL_MIN)
+			charge.sol = (power.sol - SOL_MIN) / 70;
+		else
+			charge.sol = 0;
+	}
+	else
+		charge.sol = 0;
+
+	//Power state decision baased on battery voltages and solar percentage
+	if((power.bat1 <= BAT_MAX && power.bat1 >= BAT_30 ) || (power.bat2 <= BAT_MAX && power.bat2 >= BAT_30) || (charge.sol <= 100 && charge.sol >= 40 ))
 	{
 		pwrstate = powerGood;
 		debug(CONSOLE,"%s\n\r","Power Good");
 	}
 	else
-	if((power.bat1 <= BAT_15 && power.bat1 >= BAT_MIN ) || (power.bat2 <= BAT_15 && power.bat2 >= BAT_MIN))
+	if((power.bat1 <= BAT_30 && power.bat1 >= BAT_15 )  || (power.bat2 <= BAT_30 && power.bat2 >= BAT_15 ) || (charge.sol <= 40 && charge.sol >= 20 ))
+	{
+		pwrstate = powerMedium;
+		debug(CONSOLE,"%s\n\r","Power Medium");
+	}
+	if((power.bat1 <= BAT_15 && power.bat1 >= BAT_MIN ) || (power.bat2 <= BAT_15 && power.bat2 >= BAT_MIN) || (charge.sol <= 20 && charge.sol >= 0 ))
 	{
 		pwrstate = powerLow;
 		debug(CONSOLE,"%s\n\r","Power Low");
@@ -101,7 +119,6 @@ powerState powerLogic(power_status *powerVar)
 		debug(CONSOLE,"%s\n\r","Power Down");
 	}
 
-
 	return pwrstate;
 }
 
@@ -111,7 +128,7 @@ powerState powerHandler(void)
 {
 	char recv[sizeof(power_status)+ 10], ch;
 	uint32_t i,j;
-	uint8_t dataGot = 0, datarecvd = 0, ret = powerInvalid;
+	uint8_t dataGot = 0, datarecvd = 0, ret = powerCritical;
 	static uint8_t powerAlive = 0;
 	power_status *tempPower;
 
@@ -176,12 +193,13 @@ powerState powerHandler(void)
 			{
 				charge.bat1 = -1;
 				charge.bat2 = -1;
+				charge.sol = -1;
+				ret = powerInvalid;
 			}
 		}
 		SPI_RESET();
 
 		return ret;
-
 }
 
 

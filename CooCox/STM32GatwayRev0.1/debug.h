@@ -5,8 +5,7 @@
 #include "diskio.h"
 #include "coocox.h"
 #include "powermgmnt.h"
-extern power_status power;
-extern batt_percentage charge;
+#include "time.h"
 
 #define LOG     1
 #define CONSOLE 2
@@ -19,8 +18,7 @@ uint32_t bw;
 extern P_OSTCB  TCBRunning;
 extern FIL logger;
 extern FRESULT rc;
-#include "stm32_rtc.h"
-extern TIME *tm;
+
 
 #define dbg_printf(fmt,...)\
 		do{\
@@ -33,7 +31,7 @@ extern TIME *tm;
 #define  debug(var, fmt, ...)\
         do {\
         	Cur_Time(tm);\
-        	sprintf(slog,"%d:%d:%d-%d:%d:%d %d:%d%%:%d%% %d::",tm->YYYY,tm->MM,tm->DD,tm->hh,tm->mm, tm->ss, power.sol, charge.bat1,charge.bat2, TCBRunning->taskID);\
+        	sprintf(slog,"%d:%d:%d-%d:%d:%d %d%%:%d%%:%d%% %d::",tm->YYYY,tm->MM,tm->DD,tm->hh,tm->mm, tm->ss, charge.sol, charge.bat1,charge.bat2, TCBRunning->taskID);\
                 switch(var){\
                         case LOG:\
                         f_open(&logger, "./root/log.txt", FA_WRITE|FA_READ);\

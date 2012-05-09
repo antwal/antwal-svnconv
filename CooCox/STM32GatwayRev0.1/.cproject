@@ -13,9 +13,9 @@
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
 				<externalSettings containerId="org.coocox.ExternalSettings" factoryId="org.eclipse.cdt.core.extension.container.factory">
 					<externalSetting>
-						<entry flags="" kind="includePath" name="C:\Program Files\CooCox\CoIDE\gcc\arm-none-eabi\include"/>
-						<entry flags="" kind="includePath" name="C:\Program Files\CooCox\CoIDE\gcc\lib\gcc\arm-none-eabi\4.5.2\include"/>
-						<entry flags="" kind="includePath" name="C:\Program Files\CooCox\CoIDE\gcc\lib\gcc\arm-none-eabi\4.5.2\include-fixed"/>
+						<entry flags="" kind="includePath" name="J:\CoCenter\coide\gcc\arm-none-eabi\include"/>
+						<entry flags="" kind="includePath" name="J:\CoCenter\coide\gcc\lib\gcc\arm-none-eabi\4.5.2\include"/>
+						<entry flags="" kind="includePath" name="J:\CoCenter\coide\gcc\lib\gcc\arm-none-eabi\4.5.2\include-fixed"/>
 						<entry flags="" kind="includePath" name="."/>
 						<entry flags="" kind="includePath" name="buffer"/>
 						<entry flags="" kind="includePath" name="cmdline"/>
@@ -32,6 +32,7 @@
 						<entry flags="" kind="includePath" name="powermgmnt"/>
 						<entry flags="" kind="includePath" name="stm_lib"/>
 						<entry flags="" kind="includePath" name="stm_lib/inc"/>
+						<entry flags="" kind="includePath" name="Time"/>
 						<entry flags="" kind="includePath" name="vt100"/>
 						<entry flags="" kind="includePath" name="watchdog"/>
 						<entry flags="" kind="macro" name="__GNUC__" value=""/>
@@ -47,27 +48,28 @@
 			<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 			<storageModule moduleId="org.eclipse.cdt.core.pathentry">
 				<pathentry kind="src" path=""/>
-				<pathentry include="C:/Program Files/CooCox/CoIDE/gcc/arm-none-eabi/include" kind="inc" path="" system="true"/>
-				<pathentry include="C:/Program Files/CooCox/CoIDE/gcc/lib/gcc/arm-none-eabi/4.5.2/include" kind="inc" path="" system="true"/>
-				<pathentry include="C:/Program Files/CooCox/CoIDE/gcc/lib/gcc/arm-none-eabi/4.5.2/include-fixed" kind="inc" path="" system="true"/>
-				<pathentry include="C:/Documents and Settings/pluto/Desktop/STM32GatwayRev0.1" kind="inc" path="" system="true"/>
-				<pathentry include="C:/Documents and Settings/pluto/Desktop/STM32GatwayRev0.1/buffer" kind="inc" path="" system="true"/>
-				<pathentry include="C:/Documents and Settings/pluto/Desktop/STM32GatwayRev0.1/cmdline" kind="inc" path="" system="true"/>
-				<pathentry include="C:/Documents and Settings/pluto/Desktop/STM32GatwayRev0.1/cmsis" kind="inc" path="" system="true"/>
-				<pathentry include="C:/Documents and Settings/pluto/Desktop/STM32GatwayRev0.1/cmsis_boot" kind="inc" path="" system="true"/>
-				<pathentry include="C:/Documents and Settings/pluto/Desktop/STM32GatwayRev0.1/commands" kind="inc" path="" system="true"/>
-				<pathentry include="C:/Documents and Settings/pluto/Desktop/STM32GatwayRev0.1/CoOS" kind="inc" path="" system="true"/>
-				<pathentry include="C:/Documents and Settings/pluto/Desktop/STM32GatwayRev0.1/CoOS/kernel" kind="inc" path="" system="true"/>
-				<pathentry include="C:/Documents and Settings/pluto/Desktop/STM32GatwayRev0.1/CoOS/portable" kind="inc" path="" system="true"/>
-				<pathentry include="C:/Documents and Settings/pluto/Desktop/STM32GatwayRev0.1/COX" kind="inc" path="" system="true"/>
-				<pathentry include="C:/Documents and Settings/pluto/Desktop/STM32GatwayRev0.1/COX/COX_Peripheral" kind="inc" path="" system="true"/>
-				<pathentry include="C:/Documents and Settings/pluto/Desktop/STM32GatwayRev0.1/FAT" kind="inc" path="" system="true"/>
-				<pathentry include="C:/Documents and Settings/pluto/Desktop/STM32GatwayRev0.1/Modem" kind="inc" path="" system="true"/>
-				<pathentry include="C:/Documents and Settings/pluto/Desktop/STM32GatwayRev0.1/powermgmnt" kind="inc" path="" system="true"/>
-				<pathentry include="C:/Documents and Settings/pluto/Desktop/STM32GatwayRev0.1/stm_lib" kind="inc" path="" system="true"/>
-				<pathentry include="C:/Documents and Settings/pluto/Desktop/STM32GatwayRev0.1/stm_lib/inc" kind="inc" path="" system="true"/>
-				<pathentry include="C:/Documents and Settings/pluto/Desktop/STM32GatwayRev0.1/vt100" kind="inc" path="" system="true"/>
-				<pathentry include="C:/Documents and Settings/pluto/Desktop/STM32GatwayRev0.1/watchdog" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CoCenter/coide/gcc/arm-none-eabi/include" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CoCenter/coide/gcc/lib/gcc/arm-none-eabi/4.5.2/include" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CoCenter/coide/gcc/lib/gcc/arm-none-eabi/4.5.2/include-fixed" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CooCox/Gateway100RE" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CooCox/Gateway100RE/buffer" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CooCox/Gateway100RE/cmdline" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CooCox/Gateway100RE/cmsis" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CooCox/Gateway100RE/cmsis_boot" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CooCox/Gateway100RE/commands" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CooCox/Gateway100RE/CoOS" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CooCox/Gateway100RE/CoOS/kernel" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CooCox/Gateway100RE/CoOS/portable" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CooCox/Gateway100RE/COX" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CooCox/Gateway100RE/COX/COX_Peripheral" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CooCox/Gateway100RE/FAT" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CooCox/Gateway100RE/Modem" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CooCox/Gateway100RE/powermgmnt" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CooCox/Gateway100RE/stm_lib" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CooCox/Gateway100RE/stm_lib/inc" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CooCox/Gateway100RE/Time" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CooCox/Gateway100RE/vt100" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CooCox/Gateway100RE/watchdog" kind="inc" path="" system="true"/>
 				<pathentry kind="mac" name="__GNUC__" path="" value=""/>
 				<pathentry kind="mac" name="USE_STDPERIPH_DRIVER" path="" value=""/>
 				<pathentry kind="mac" name="__ASSEMBLY__" path="" value=""/>

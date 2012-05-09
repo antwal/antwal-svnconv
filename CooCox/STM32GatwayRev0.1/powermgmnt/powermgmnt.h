@@ -21,6 +21,7 @@ uint8_t supply;
 typedef struct batt_percentage{
 	int8_t bat1;
 	int8_t bat2;
+	int8_t sol;
 } batt_percentage;
 
 extern power_status power;
@@ -38,9 +39,10 @@ extern batt_percentage charge;
 
 #define BAT_MAX			8500				// 8.5V
 #define BAT_MIN			7200				// 7.2V
+#define BAT_30			7560				// 7.4V
 #define BAT_15			7400				// 7.4V
 #define SOL_MAX			21000				// 21V
-#define SOL_MIN			9000				// 9V
+#define SOL_MIN			14000				// 9V
 #define VCC				50					// 5.3V
 #define IDLE_VOL		7000				// 6.8V
 
