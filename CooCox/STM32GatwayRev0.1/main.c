@@ -22,6 +22,7 @@
 #include "string.h"
 #include "debug.h"
 #include "powermgmnt.h"
+#include "power.h"
 
 //------------------------Debug task variables for cmdline--------------------------
 
@@ -542,7 +543,8 @@ void TmrCallBack(void)
 		  {
 			  pwrInterval = 20;
 			  pwrVar = 0;
-			  powerHandler();				// Check battery status
+			  pwrUpdateSwitchs(powerHandler());				// Check battery status
+
 		  }
 		  /*
 		   * If modem is in use or not
