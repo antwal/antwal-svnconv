@@ -15,6 +15,7 @@
 #include "debug.h"
 #include <stm32_pio.h>
 #include "powermgmnt.h"
+#include "power.h"
 
 // Length of each queue used to hold the WSN data
 #define QUEUE_LENGTH 32
@@ -113,10 +114,11 @@ void Read_Data(unsigned char ch){
 /*----------------------------------------------------------------------------*/
 /*	  This is called by task 2 to eat the MsgQ of created by read interface   */
 /*----------------------------------------------------------------------------*/
-char * wsnPacketDecoding(dogDebug *dptr){
-
+void * wsnPacketDecoding(void* ptr){
+	dogDebug *dptr;
 	StatusType result;
 	void *msg;
+	dptr = (dogDebug *)ptr;
 	uint8_t j,i;
 	uint8_t BaseStnNo = BaseStnId;
 	Tos_Msg *ToSMessage;		// Tos_Msg received //
@@ -217,6 +219,29 @@ char * wsnPacketDecoding(dogDebug *dptr){
 		}
 		return 0;
     }
+}
+
+void * taskWsnNoStoring(void * ptr){
+	WDG_setTaskState((dogDebug *)ptr , WAIT);
+	CoTickDelay (3000);
+}
+
+void * setTaskWsnProfile( void ){
+	taskPwr *pptr;
+	pptr = &myTaskPwr[0];
+	//Initilize the power structure for wsn task
+	pwrInit(pptr, WSN);
+
+	//As there are five power state we will have to add 5 functions
+	pwrAddMap( pptr,powerInvalid, wsnPacketDecoding);
+	pwrAddMap( pptr,powerGood, wsnPacketDecoding);
+	pwrAddMap( pptr,powerMedium, wsnPacketDecoding);
+	pwrAddMap( pptr,powerLow, wsnPacketDecoding);
+	pwrAddMap( pptr,powerCritical, taskWsnNoStoring);
+	pwrAddMap( pptr,powerDown, wsnPacketDecoding);
+	pwrAddDefault(pptr,taskWsnNoStoring);
+
+	return (void*)pptr;
 }
 
 

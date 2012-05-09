@@ -72,7 +72,8 @@ COX_PIO_Dev LED1 = COX_PIN(2,9);
 void *MailQueue[MAIL_QUEUE_SIZE];
 
 extern void Read_Data(unsigned char );
-extern char* wsnPacketDecoding(dogDebug *dptr );
+extern void* wsnPacketDecoding(void* dptr );
+void * setTaskWsnProfile(void);
 extern FRESULT SDInterface(char *);
 
 uint8_t sdConfig(void)
@@ -450,12 +451,16 @@ void TmrCallBack(void)
 	void taskWSN (void* pdata)
 	{
 		dogDebug *dptr = (dogDebug *) pdata;
+		taskPwr *pptr;
 		sdConfig();
 		//debug structure for task 3, periodicity 2 minutes
 		debug(LOG,"%s\n\r","taskWSN started");
 		WDG_initDebug(dptr , 3 , 120000 , 1);
+		pptr=(taskPwr *)setTaskWsnProfile();
+
 		 for (;;){
-			 wsnPacketDecoding(dptr);
+			// wsnPacketDecoding(dptr);
+			 pwrExecFunction(pptr, (void *)dptr );
 		 }
 	}
 

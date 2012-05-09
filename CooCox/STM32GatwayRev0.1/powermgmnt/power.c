@@ -63,17 +63,17 @@ void pwrSwitch(taskPwr *ptr, uint8_t action){
 }
 
 //function that will be called by the task
-void pwrExecFunction(taskPwr *ptr){
+void pwrExecFunction(taskPwr *ptr, void *arg){
 
 	if(ptr->status && ptr->switching){
 		if(ptr->pwrExecFunction){
-			ptr->pwrExecFunction();
+			ptr->pwrExecFunction(arg);
 		}
 		return;
 	}
 	else{
 		if(ptr->status && ptr->pwrDefaultFunction){
-					ptr->pwrDefaultFunction();
+					ptr->pwrDefaultFunction(arg);
 		}
 	}
 }

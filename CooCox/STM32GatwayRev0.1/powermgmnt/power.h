@@ -1,13 +1,15 @@
 #include "powermgmnt.h"
 
 
-#define MAX_PRW_LEVEL 5
+#define MAX_PRW_LEVEL 6
 #define MAX_MAP_FUNCTIONS MAX_PRW_LEVEL
 #define POWER_TASK_NO 2 //Number of task that uses Power management framework
 
 typedef powerState pstate;
 
-typedef  void (*SysPwrFuncPtrType)(void);
+
+
+typedef  void * (*SysPwrFuncPtrType)(void *);
 
 typedef struct taskPwr{
 	uint8_t status;		//tells if this is active or not(registered or not )
@@ -18,7 +20,11 @@ typedef struct taskPwr{
 	SysPwrFuncPtrType pwrDefaultFunction;
 }taskPwr;
 
-//run the algorithm for updating the system state
+//external variables/structure
+extern taskPwr myTaskPwr[POWER_TASK_NO];
+
+
+//run the algorithm for updating the system state not to be used or called by task
 void pwrUpdateSwitchs( pstate pwr_state);
 
 //Initilize the power mapping of functions to default
@@ -34,7 +40,7 @@ void pwrAddDefault(taskPwr *ptr,SysPwrFuncPtrType fptr);
 void pwrSwitch(taskPwr *ptr, uint8_t action);
 
 //function that will be called by the task
-void pwrExecFunction(taskPwr *ptr);
+void pwrExecFunction(taskPwr *ptr, void *arg);
 
 
 

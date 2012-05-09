@@ -48,6 +48,7 @@ typedef enum
 {
 	powerInvalid = 0,
 	powerGood,
+	powerMedium,
 	powerLow,
 	powerCritical,
 	powerDown
