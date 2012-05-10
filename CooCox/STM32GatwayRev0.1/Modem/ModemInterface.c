@@ -789,7 +789,7 @@
 		}
 		while(res != mdmOK && var > 0);
 
-		if(var > 0)
+		if(res == mdmOK)
 		state = CONNECT;
 		else
 		state = CONNECTING;

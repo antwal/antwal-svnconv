@@ -47,7 +47,7 @@ uint8_t uploadFile(mdmIface *mdm, const char *file, server *tcp){
 	if(res == mdmOK){
 		res = httpClose;
 		do{
-			debug(CONSOLE,"HTTP=%d Try=%d\n\r",res,count);
+			debug(CONSOLE,"UPLOAD:HTTP=%d Try=%d\n\r",res,count);
 			switch(res)
 			{
 				case httpClose:
@@ -55,11 +55,11 @@ uint8_t uploadFile(mdmIface *mdm, const char *file, server *tcp){
 					res = mdmTCPConnect(mdm, tcp);
 					if(res == mdmOK){
 						res = httpConnect;
-						debug(LOG,"%s\n\r","Connected..");
+						debug(LOG,"%s\n\r","UPLOAD:Connected..");
 					}
 					else{
 						res = httpClose;
-						debug(LOG,"%s\n\r","Connection failed");
+						debug(LOG,"%s\n\r","UPLOAD:Connection failed");
 						count = MaxRetry;							// Connection is failing so no need to try again
 					}
 					break;
@@ -74,7 +74,7 @@ uint8_t uploadFile(mdmIface *mdm, const char *file, server *tcp){
 						}
 						else{
 							res = httpClose;
-							debug(LOG,"%s\n\r","Login Failed");
+							debug(LOG,"%s\n\r","UPLOAD:Login Failed");
 							count++;
 						}
 					}
@@ -95,7 +95,7 @@ uint8_t uploadFile(mdmIface *mdm, const char *file, server *tcp){
 					else{
 						res = httpClose;
 						count++;
-						debug(LOG,"%s\n\r","Header post failed");
+						debug(LOG,"%s\n\r","UPLOAD:Header post failed");
 					}
 					break;
 
@@ -108,7 +108,7 @@ uint8_t uploadFile(mdmIface *mdm, const char *file, server *tcp){
 					else{
 						res = httpClose;
 						count++;
-						debug(LOG,"%s\n\r","Sending Data problem");
+						debug(LOG,"%s\n\r","UPLOAD:Sending Data problem");
 					}
 					break;
 
@@ -119,32 +119,32 @@ uint8_t uploadFile(mdmIface *mdm, const char *file, server *tcp){
 						res = mdmHttpBody(mdm, ServerRes, &size, 6000);// For slow connections timeout should be high
 						if(res == httpOK){
 							res = httpSent;
-							debug(LOG,"%s\n\r","File uploaded");
+							debug(LOG,"%s\n\r","UPLOAD:File uploaded");
 						}
 						else if(res == httpClose){						// Connection is closed; Connect first and then retry
 							res = httpClose;
 							//cook = 0;								//  sending failed;
-							debug(LOG,"%s\n\r","File not uploaded:Closed");
+							debug(LOG,"%s\n\r","UPLOAD:File not uploaded:Closed");
 							count ++;
 						}else{
-							debug(LOG,"%s\n\r","File not uploaded:Not Found");
+							debug(LOG,"%s\n\r","UPLOAD:File not uploaded:Not Found");
 							res = httpLogged;						// Try again since connection is not yet closed
 							count++;
 						}
 					}
 					else if(res == httpSent)
 					{
-						debug(LOG,"%s\n\r","File uploaded");
+						debug(LOG,"%s\n\r","UPLOAD:File uploaded");
 					}
 					else if(res == httpErrAuth){						// Authorization problem
 						res = httpConnect;
-						debug(LOG,"%s\n\r","Authorization Problem");
+						debug(LOG,"%s\n\r","UPLOAD:Authorization Problem");
 						cook = 0;									// Need to login
 						count++;
 					}
 					else{
 						res = httpClose;
-						debug(LOG,"%s\n\r","Http Response not recvd");
+						debug(LOG,"%s\n\r","UPLOAD:Http Response not recvd");
 						count++;
 					}
 					break;
@@ -158,7 +158,7 @@ uint8_t uploadFile(mdmIface *mdm, const char *file, server *tcp){
 
 	}
 	else{
-		debug(LOG,"%s\n\r","Upload:IP failed");
+		debug(LOG,"%s\n\r","UPLOAD:IP failed");
 	}
 	//close the TCP connection to the server
 	bufferFlush(&modem_buffer);
@@ -186,7 +186,7 @@ mdmStatus login(mdmIface *mdm)
 	uint8_t count = 0;
 	uint32_t len =0;
 
-		debug(LOG,"%s\n\r","Logging in..");
+		debug(LOG,"%s\n\r","UPLOAD:Logging in..");
 		res = mdmTransSend(mdm, &GET_COOKIE_1[0], strlen(&GET_COOKIE_1[0]));
 		if(res == mdmSendFail)
 			return httpErr;
@@ -229,9 +229,9 @@ mdmStatus sendHeader(mdmIface *mdm, uint32_t file_size, char *cookie ){
         debug(CONSOLE,"POSTDATA Size=%d\n\r",file_size+strlen(BEFORE_DATA)+strlen(AFTER_DATA) );
 */
         sprintf(buffer, "%d" ,(file_size));
-        debug(CONSOLE,"POSTDATA Size=%d\n\r",file_size);
+        debug(CONSOLE,"UPLOAD:POSTDATA Size=%d\n\r",file_size);
 
-        debug(CONSOLE,"%s\n\r","Sending Headers");
+        debug(CONSOLE,"%s\n\r","UPLOAD:Sending Headers");
         //Sending  Header
         res = mdmTransSend(mdm,POST_H_1, strlen(POST_H_1));
         res = mdmTransSend(mdm,&sysconfdup.upload_respath[0], strlen(&sysconfdup.upload_respath[0]));
@@ -254,7 +254,7 @@ mdmStatus sendHeader(mdmIface *mdm, uint32_t file_size, char *cookie ){
         res = mdmTransSend(mdm, DCLRF ,strlen(DCLRF));//send the header from the modem
         if(res != mdmOK) return res;
         //printf(DCLRF);
-        debug(CONSOLE,"%s\n\r","End Headers");
+        debug(CONSOLE,"%s\n\r","UPLOAD:End Headers");
         //}
         return res;
 }
@@ -263,7 +263,7 @@ mdmStatus sendData(mdmIface *mdm ,const char *file){
         mdmStatus res = mdmOK ;
         UINT rbytes;			/* Read bytes */
 
-        debug(LOG,"%s\n\r","SENDING DATA");
+        debug(LOG,"%s\n\r","UPLOAD:SENDING DATA");
 
         // Uncomment below lines if POST File is used
 /*        //sending BEFORE_DATA(needed for sending the file in multipart)
@@ -289,13 +289,13 @@ mdmStatus sendData(mdmIface *mdm ,const char *file){
         		f_close(&send);
         		return rc;
         	}
-            debug(CONSOLE,"Remaining=%d\n\r",size);
+            debug(CONSOLE,"UPLOAD:Remaining=%d\n\r",size);
 
            //uncomment the below mentioned line if  using watchdog
            WDG_setTaskState(&myDogDebug[0], UPLOADING);
            res = mdmTransSend(mdm, buffer ,(uint32_t)rbytes );
            if (res != mdmOK){
-        	   debug(LOG,"%s\n\r","send Fail");
+        	   debug(LOG,"%s\n\r","UPLOAD:send Fail");
         	   f_close(&send);
         	   return res;
                }
@@ -309,7 +309,7 @@ mdmStatus sendData(mdmIface *mdm ,const char *file){
         if (res != mdmOK) return res;
 */
 
-        debug(LOG,"%s\n\r","SENDING DATA DONE");
+        debug(LOG,"%s\n\r","UPLOAD:SENDING DATA DONE");
         return res;
 }
 
@@ -331,7 +331,7 @@ uint32_t getFileSize(const char *file){
 	if (rc) die(rc);
 
 
-	debug(CONSOLE,"FileSize=%d\n\r",size);
+	debug(CONSOLE,"UPLOAD:FileSize=%d\n\r",size);
 	return size;
 }
 
@@ -375,7 +375,7 @@ httpStatus mdmHttpRes(mdmIface *mdm, uint32_t* bodLen, uint8_t cond )
 			// http response not found
 			if(res != mdmOK)
 				return httpErr;
-			debug(CONSOLE,"ResCode=%d\n\r",code);
+			debug(CONSOLE,"UPLOAD:ResCode=%d\n\r",code);
 			switch(code)
 			{
 			case 100:
@@ -405,13 +405,13 @@ httpStatus mdmHttpRes(mdmIface *mdm, uint32_t* bodLen, uint8_t cond )
 			{
 				 res = serialMatch(mdm, "Set-Cookie:", 200);
 			     res = serialCopy(&cookie[0],' ',';');
-				 debug(CONSOLE,"Cookie=%s\n\r",&cookie[0]);
+				 debug(CONSOLE,"UPLOAD:Cookie=%s\n\r",&cookie[0]);
 
 				 res = serialMatch(mdm, "Set-Cookie:",200);
 		       	 if(res != mdmTimeOut){
 		       		 memset(&cookie[0], 0,sizeof(cookie));
 			       	 res = serialCopy(&cookie[0],' ',';');
-			       	 debug(CONSOLE,"NewCookie=%s\r\n",&cookie[0]);
+			       	 debug(CONSOLE,"UPLOAD:NewCookie=%s\r\n",&cookie[0]);
 				}
 			}
 
@@ -423,7 +423,7 @@ httpStatus mdmHttpRes(mdmIface *mdm, uint32_t* bodLen, uint8_t cond )
 				if(code != mdmTimeOut && code != mdmErr )
 				{
 					serialCopy(&buffer[0], ' ','\r');
-					printf("Length= %s\n\r",&buffer[0]);
+					debug(CONSOLE,"UPLOAD:Length= %s\n\r",&buffer[0]);
 					code = 0;
 					while(buffer[i]){
 						if(i!= 0)
@@ -434,7 +434,7 @@ httpStatus mdmHttpRes(mdmIface *mdm, uint32_t* bodLen, uint8_t cond )
 					}
 					if(bodLen != NULL)
 						*bodLen = code;
-					debug(CONSOLE,"ResLength=%d\n",code);
+					debug(CONSOLE,"UPLOAD:ResLength=%d\n",code);
 
 				}
 				else if(res == httpSent)
@@ -458,7 +458,7 @@ httpStatus mdmHttpRes(mdmIface *mdm, uint32_t* bodLen, uint8_t cond )
 				if(cond == httpLogin){
 				cond = mdmHttpBody(mdm, "Page not found", bodLen, 2000);			// Timeout is small coz error does not come with big content
 					if(cond == httpOK)
-					debug(LOG, "%s\r\n","Page not found");
+					debug(LOG, "%s\r\n","UPLOAD:Page not found");
 					else if(cond == httpClose)
 						return httpClose;
 				}
@@ -513,15 +513,15 @@ httpStatus mdmHttpRes(mdmIface *mdm, uint32_t* bodLen, uint8_t cond )
 				{
 					serial_get(addr4);
 					if(addr4 != '\r' && addr4 != '\n')
-					dbg_printf("%c ",addr4);
+					//dbg_printf("%c ",addr4);				// Printing response from server
 
 					// To match the response
 					if (resp[addr2] == addr4)
 					{
-						addr2++;  											// does char match response string
-						if (!resp[addr2]){										// All char are matched
+						addr2++;  							// does char match response string
+						if (!resp[addr2]){					// All char are matched
 						  	out = 1;
-						  	addr2 = 0;					// Finish the remaining buffer
+						  	addr2 = 0;						// Finish the remaining buffer
 						}
 					}
 					else addr2 = 0;
@@ -564,11 +564,11 @@ httpStatus mdmHttpRes(mdmIface *mdm, uint32_t* bodLen, uint8_t cond )
 
 			// No. of data read returned
 			*len = i;
-			debug(CONSOLE,"Data Recvd=%d\n\r",i);
+			debug(CONSOLE,"UPLOAD:Data Recvd=%d\n\r",i);
 			// response or String found
 			if(out == 1)
 			{
-				debug(CONSOLE,"%s\n\r","Match Found");
+				debug(CONSOLE,"%s\n\r","UPLOAD:Match Found");
 				return httpOK;
 
 		}

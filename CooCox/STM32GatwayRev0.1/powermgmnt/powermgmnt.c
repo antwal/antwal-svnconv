@@ -17,7 +17,7 @@ struct power_status power =
 {
 		.bat1 = 6800,
 		.bat2 = 6800,
-		.sol = 0,
+		.sol = 12000,
 		.supply = 0,
 };
 
@@ -51,9 +51,9 @@ uint8_t  checksum(char *var)
 		locl += var[i];
 	}
 	locl = ~locl;
-	debug(CONSOLE,"chk=%x,%x\n\r",locl, var[PACKET_SIZE - 2]);
+//	debug(CONSOLE,"chk=%x,%x\n\r",locl, var[PACKET_SIZE - 2]);
 	if(locl == var[PACKET_SIZE-2]){
-		debug(CONSOLE,"%s\n\r","chksum matched");
+//		debug(CONSOLE,"%s\n\r","chksum matched");
 		return 1;
 	}
 	else
@@ -71,11 +71,11 @@ powerState powerLogic(power_status *powerVar)
 
 	// Calculating the charge percentage of batteries
 	if(power.bat1 > BAT_MIN)
-	charge.bat1 = (power.bat1 - BAT_MIN) / 12 ;
+	charge.bat1 = (power.bat1 - BAT_MIN) / 13 ;
 	else
 		charge.bat1 = 0;
 	if(power.bat2 > BAT_MIN)
-	charge.bat2 = (power.bat2 - BAT_MIN) / 12 ;
+	charge.bat2 = (power.bat2 - BAT_MIN) / 13 ;
 	else
 		charge.bat2 = 0;
 
@@ -102,7 +102,8 @@ powerState powerLogic(power_status *powerVar)
 		pwrstate = powerMedium;
 		debug(CONSOLE,"%s\n\r","Power Medium");
 	}
-	if((power.bat1 <= BAT_15 && power.bat1 >= BAT_MIN ) || (power.bat2 <= BAT_15 && power.bat2 >= BAT_MIN) || (charge.sol <= 20 && charge.sol >= 0 ))
+	else
+	if((power.bat1 <= BAT_15 && power.bat1 >= BAT_MIN ) || (power.bat2 <= BAT_15 && power.bat2 >= BAT_MIN) || (charge.sol <= 20 && charge.sol >= 1 ))
 	{
 		pwrstate = powerLow;
 		debug(CONSOLE,"%s\n\r","Power Low");

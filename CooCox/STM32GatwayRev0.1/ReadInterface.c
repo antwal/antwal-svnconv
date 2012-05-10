@@ -223,6 +223,7 @@ void * wsnPacketDecoding(void* ptr){
 
 void * taskWsnNoStoring(void * ptr){
 	WDG_setTaskState((dogDebug *)ptr , WAIT);
+	debug(CONSOLE,"%s\n\r","WSN:Power Down");
 	CoTickDelay (3000);
 }
 
@@ -238,7 +239,7 @@ void * setTaskWsnProfile( void ){
 	pwrAddMap( pptr,powerMedium, wsnPacketDecoding);
 	pwrAddMap( pptr,powerLow, wsnPacketDecoding);
 	pwrAddMap( pptr,powerCritical, taskWsnNoStoring);
-	pwrAddMap( pptr,powerDown, wsnPacketDecoding);
+	pwrAddMap( pptr,powerDown, taskWsnNoStoring);
 	pwrAddDefault(pptr,taskWsnNoStoring);
 
 	return (void*)pptr;

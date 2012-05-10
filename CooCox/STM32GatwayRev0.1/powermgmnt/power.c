@@ -15,9 +15,7 @@ void pwrUpdateSwitchs( pstate pwr_state){
 		if(ptr->status && ptr->switching ){
 			ptr->pwrExecFunction = ptr->pwrFunctionMap[pwr_state];
 		}
-
 	}
-
 }
 
 //Initilize the power mapping of functions to default
@@ -47,9 +45,7 @@ void pwrAddDefault(taskPwr *ptr,SysPwrFuncPtrType fptr){
 			ptr->pwrDefaultFunction= fptr;
 			//initially the default function pointer is also the execution function
 			ptr->pwrExecFunction= fptr;
-
 	}
-
 }
 
 //turn automatic switching on/off (1- On / 0 - off) by default switching is off

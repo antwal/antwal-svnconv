@@ -608,7 +608,7 @@ void taskDebug (void* pdata){
 			if(cflag == 0 ){
 				//TO DO
 				//Turn on the debug LED ON
-				printf("In command line mode");
+				debug(CONSOLE,"%s\n\r","In command line mode");
 				cflag = 1;
 			}
 			// pass characters received on the uart (serial port)
@@ -683,6 +683,9 @@ int main(void)
     /* Create a mutex: used by the file handling ReadInterface Function */
     file_mutex = CoCreateMutex( );
 
+    //Used to get the mutual access to the printf logging function defined in debug.h
+    printf_mutex = CoCreateMutex( );
+
     /* Mutex for modem*/
     mdmCreateLock(&modm);
 
@@ -694,6 +697,7 @@ int main(void)
 
     sftmr = CoCreateTmr(TMR_TYPE_PERIODIC, 1,1, TmrCallBack);
     CoStartTmr (sftmr);
+
     CoStartOS ();			    /*!< Start multitask	           */
 
 

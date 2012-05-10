@@ -6,6 +6,7 @@
 #include "coocox.h"
 #include "powermgmnt.h"
 #include "time.h"
+#include "main.h"
 
 #define LOG     1
 #define CONSOLE 2
@@ -34,6 +35,7 @@ extern FRESULT rc;
         	sprintf(slog,"%d:%d:%d-%d:%d:%d %d%%:%d%%:%d%% %d::",tm->YYYY,tm->MM,tm->DD,tm->hh,tm->mm, tm->ss, charge.sol, charge.bat1,charge.bat2, TCBRunning->taskID);\
                 switch(var){\
                         case LOG:\
+                        CoEnterMutexSection(printf_mutex);\
                         f_open(&logger, "./root/log.txt", FA_WRITE|FA_READ);\
                         f_sync(&logger);\
 						f_lseek(&logger, f_size(&logger));\
@@ -46,6 +48,7 @@ extern FRESULT rc;
 			            sprintf(slog, fmt, __VA_ARGS__);\
 			            rc = f_write(&logger, slog, strlen(slog),&bw);\
 						rc = f_close(&logger);\
+						CoLeaveMutexSection(printf_mutex);\
 						if(DBG == 1)\
                         printf("%s",slog);\
                         break;\

@@ -41,8 +41,8 @@ extern batt_percentage charge;
 #define BAT_MIN			7200				// 7.2V
 #define BAT_30			7560				// 7.4V
 #define BAT_15			7400				// 7.4V
-#define SOL_MAX			21000				// 21V
-#define SOL_MIN			14000				// 9V
+#define SOL_MAX			19000				// 19V
+#define SOL_MIN			12000				// 12V
 #define VCC				50					// 5.3V
 #define IDLE_VOL		7000				// 6.8V
 
