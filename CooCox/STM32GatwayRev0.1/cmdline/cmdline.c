@@ -403,7 +403,7 @@ void cmdlineMainLoop(void)
 void cmdlinePrintPrompt(void)
 {
 	// print a new command prompt
-	uint8_t* ptr = CmdlinePrompt;
+	uint8_t* ptr = &CmdlinePrompt[0];
 	//while(pgm_read_byte(ptr)) cmdlineOutputFunc( pgm_read_byte(ptr++) );
 	while(*ptr) cmdlineOutputFunc( *ptr++) ;
 }

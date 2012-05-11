@@ -37,6 +37,9 @@ struct config sysconf ={
 	.upload_respath=UPLOAD_RESPATH,
 	.watchdog_status = WATCHDOG_STATUS,
 	.err_report_status = ERR_RPT_STATUS,
+	.upload_freq = UPLOAD_FREQ,
+	.upload_freq_night = UPLOAD_FREQ_NIGHT,
+	.debug = DEBUGVAL,
     .reg_phoneno[0]=RES_PHONE0,
 	.reg_phoneno[1]=RES_PHONE1,
 	.err_phoneno[0]=ERR_PHONE0,
@@ -61,6 +64,9 @@ struct config defconf ={
 	.upload_respath=UPLOAD_RESPATH,
 	.watchdog_status = WATCHDOG_STATUS,
 	.err_report_status = ERR_RPT_STATUS,
+	.upload_freq = UPLOAD_FREQ,
+	.upload_freq_night = UPLOAD_FREQ_NIGHT,
+	.debug = DEBUGVAL,
     .reg_phoneno[0]=RES_PHONE0,
 	.reg_phoneno[1]=RES_PHONE1,
 	.err_phoneno[0]=ERR_PHONE0,
@@ -393,7 +399,7 @@ unsigned char regphoneFunction(void){
 	else if(cmdlineGetArgInt(1) == 0 || cmdlineGetArgInt(1) == 1){
 		switch(cmdlineGetArgInt(1)){
 			case 0 :if(strlen(cmdlineGetArgStr(2))  == 10 ){
-						ptr = &sysconfdup.reg_phoneno[0];
+						ptr = (uint8_t *)&sysconfdup.reg_phoneno[0];
 						memset(ptr,'\0',10);
 						start = cmdlineGetArgStr(2);
 						for (len = 0 ;len < 10 ;len++ ){
@@ -407,7 +413,7 @@ unsigned char regphoneFunction(void){
 					}
 					break;
 			case 1 : if(strlen(cmdlineGetArgStr(2)) == 10 ){
-						ptr = &sysconfdup.reg_phoneno[1];
+						ptr = (uint8_t*)&sysconfdup.reg_phoneno[1];
 						memset(ptr,'\0',10);
 						start = cmdlineGetArgStr(2);
 						for (len = 0 ;len < 10 ;len++ ){
@@ -451,7 +457,7 @@ unsigned char errphoneFunction(void){
 	else if(cmdlineGetArgInt(1) == 0 || cmdlineGetArgInt(1) == 1){
 		switch(cmdlineGetArgInt(1)){
 			case 0 :if(strlen(cmdlineGetArgStr(2))  == 10 ){
-						ptr = &sysconfdup.err_phoneno[0];
+						ptr = (uint8_t*)&sysconfdup.err_phoneno[0];
 						memset(ptr,'\0',10);
 						start = cmdlineGetArgStr(2);
 						for (len = 0 ;len < 10 ;len++ ){
@@ -465,7 +471,7 @@ unsigned char errphoneFunction(void){
 					}
 					break;
 			case 1 : if(strlen(cmdlineGetArgStr(2)) == 10 ){
-						ptr = &sysconfdup.err_phoneno[1];
+						ptr = (uint8_t *)&sysconfdup.err_phoneno[1];
 						memset(ptr,'\0',10);
 						start = cmdlineGetArgStr(2);
 						for (len = 0 ;len < 10 ;len++ ){

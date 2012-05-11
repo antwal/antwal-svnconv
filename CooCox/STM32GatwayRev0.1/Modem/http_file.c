@@ -239,11 +239,11 @@ mdmStatus sendHeader(mdmIface *mdm, uint32_t file_size, char *cookie ){
         res = mdmTransSend(mdm,&sysconfdup.uploadsite[0], strlen(&sysconfdup.uploadsite[0]));
         res = mdmTransSend(mdm,POST_H_3, strlen(POST_H_3));
         if(res != mdmOK) return res;
-       // printf(POST_H);
+
         //send the content length
         res = mdmTransSend( mdm, buffer, strlen(buffer));
         if(res != mdmOK) return res;
-        //printf("%s",buffer);
+        debug(VERBOSE,"%s",buffer);
         res = mdmTransSend(mdm, CLRF ,strlen(CLRF));//uncomment if cookie is present
 
         //send the string cookie
@@ -304,7 +304,7 @@ mdmStatus sendData(mdmIface *mdm ,const char *file){
         f_close(&send);
 
         // Uncomment below lines if POST File is used
-/*        //sending AFTER_DATA(needed for sending the file in multipart)
+/*      //sending AFTER_DATA(needed for sending the file in multipart)
         res = mdmTransSend(mdm, AFTER_DATA , strlen(AFTER_DATA));
         if (res != mdmOK) return res;
 */
@@ -358,7 +358,7 @@ httpStatus mdmHttpRes(mdmIface *mdm, uint32_t* bodLen, uint8_t cond )
 		if(res == mdmOK )
 		{
 			res = serialCopy(&buffer[0], ' ','\r');
-			//debug(CONSOLE,"response=%s\n\r",&buffer[0]);
+			debug(VERBOSE,"response=%s\n\r",&buffer[0]);
 
 			while(i < 3){
 				if(i!= 0)
@@ -513,7 +513,7 @@ httpStatus mdmHttpRes(mdmIface *mdm, uint32_t* bodLen, uint8_t cond )
 				{
 					serial_get(addr4);
 					if(addr4 != '\r' && addr4 != '\n')
-					//dbg_printf("%c ",addr4);				// Printing response from server
+					debug(VERBOSE,"%c ",addr4);				// Printing response from server
 
 					// To match the response
 					if (resp[addr2] == addr4)

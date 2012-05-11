@@ -45,9 +45,9 @@ typedef struct {
   COX_Status (*Init)   (void);
   void       (*Start)  (void);
   void       (*Stop)   (void);
-  void       (*Read)   (void *tm);
-  COX_Status (*Write)  (void *tm);
-  COX_Status (*Alarm)  (uint8_t freq, void *tm, RTC_Event_Handler handler);
+  void       (*Read)   (TIME *tm);
+  COX_Status (*Write)  (TIME *tm);
+  COX_Status (*Alarm)  (uint8_t freq, TIME *tm, RTC_Event_Handler handler);
   COX_Status (*Event)  (uint8_t event, RTC_Event_Handler handler, uint32_t arg);
 } COX_RTC_PI_Def;
 

@@ -1,5 +1,5 @@
 #include "stm32_rtc.h"
-#include "time.h"
+#include "timevar.h"
 
 
 uint8_t isTime(uint8_t hr, uint8_t min, uint8_t decsn)

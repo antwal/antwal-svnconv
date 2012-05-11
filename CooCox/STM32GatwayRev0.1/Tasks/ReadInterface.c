@@ -154,9 +154,9 @@ void * wsnPacketDecoding(void* ptr){
 
 			DataVal= (SensedData *)&Data.DataBuffer[0];
 			//sprintf(&destdata[0], packet, pktcount, BaseStnNo, DataVal->crop_id[0],DataVal->crop_id[1], DataVal->plot_id, DataVal->node_id, DataVal->sensor_id, DataVal->value,cur_time.YYYY,cur_time.MM,cur_time.DD,cur_time.hh,cur_time.mm,cur_time.ss);
-			if(DataVal->sensor_id == 2)
-			sprintf(&destdata[0], packet, pktcount, BaseStnNo, DataVal->crop_id[0],DataVal->crop_id[1], DataVal->plot_id, DataVal->node_id, DataVal->sensor_id, (float)power.bat2,cur_time.YYYY,cur_time.MM,cur_time.DD,cur_time.hh,cur_time.mm,cur_time.ss);
-			else
+			//if(DataVal->sensor_id == 2)
+			//sprintf(&destdata[0], packet, pktcount, BaseStnNo, DataVal->crop_id[0],DataVal->crop_id[1], DataVal->plot_id, DataVal->node_id, DataVal->sensor_id, (float)power.bat2,cur_time.YYYY,cur_time.MM,cur_time.DD,cur_time.hh,cur_time.mm,cur_time.ss);
+			//else
 			sprintf(&destdata[0], packet, pktcount, BaseStnNo, DataVal->crop_id[0],DataVal->crop_id[1], DataVal->plot_id, DataVal->node_id, DataVal->sensor_id, DataVal->value,cur_time.YYYY,cur_time.MM,cur_time.DD,cur_time.hh,cur_time.mm,cur_time.ss);
 			debug(CONSOLE,"%s:%d:%02x:%08x\n\r","WSN:Packet Recvd",DataVal->node_id,DataVal->sensor_id,DataVal->value);
 			pi_pio.Out(LED0,(pktcount & 0x01));

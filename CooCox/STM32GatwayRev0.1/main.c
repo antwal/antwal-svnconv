@@ -23,7 +23,7 @@
 #include "debug.h"
 #include "powermgmnt.h"
 #include "power.h"
-
+#include "task.h"
 //------------------------Debug task variables for cmdline--------------------------
 
 /* Variable used for command line   */
@@ -50,8 +50,7 @@ extern uint32_t dogStatus;
 MSD_Dev sd_var;
 MSD_Dev *sd= &sd_var;							// MSD instance
 
-// USed for appending data from send.xml to alldata.xml
-uint8_t lclbuff[100];
+
 
 cBuffer modem_buffer;								// Receive Buffer for modem
 unsigned char mBuffer[MaxRx];
@@ -259,181 +258,38 @@ void TmrCallBack(void)
 	void taskUpload (void* pdata)
 	{
 		dogDebug *dptr = (dogDebug *) pdata;
-		char buff[16]= "0.0.0.0";
-		modm.ip_addr = buff;
-		uint8_t res, ntp_update =0;
-		uint32_t br, bw;
-		server tcp;
-
-		TIME_SET(0);
-		tcp.port ="80";
-		tcp.addr = &sysconfdup.uploadsite[0];
-
-		sdConfig();
-
+		taskPwr *pptr;
 		debug(LOG,"%s\n\r","taskUpload started");
-		WDG_setTaskState(dptr , NTP_TIME);
-		mdmLock(&modm);
-		for(ntp_update =0; ntp_update < 3; ntp_update++){
-			res = ntp_time(&modm);
-			if(res == mdmOK){
-				//ntp_update =0;
-				break;
-			}
-		}
-		mdmUnLock(&modm);
-
 		/*
 		 * initilize the watch dog debugging structure
 		 *	debug structure for task 2, periodicity 30 minutes
 		 */
-		WDG_initDebug(dptr , TCBRunning->taskID , 1800000, 1);
+		WDG_initDebug(dptr , TCBRunning->taskID , 1800100, 1);
+
+		pptr=(taskPwr *)setTaskUploadProfile();
 		for(;;)
 		{
-			mdmLock(&modm);					// Get modem lock
-			for(ntp_update =0; ntp_update < 3; ntp_update++){
-				WDG_setTaskState(dptr , NTP_TIME);
-				res = ntp_time(&modm);
-				if(res == mdmOK){
-						break;
-					}
-				}
-				/*
-				 *  If send.xml file exists that means last uploading was unsuccessful.
-				 *  so  first upload the send.xml data of previous failed
-				 *  upload trial.
-				 * 	If file is not present that means last upload is successful
-				 * 	so rename the store.xml to send.xml and try to upload.
-				 *  once send.xml is uploaded, append the send.xml to alldata.xml.
-				 *  Then delete the send.xml file.
-				 */
-			debug(LOG,"%s\n\r","Uploading file..");
-			res = f_open(&send, "./root/send.xml", FA_READ);
-			f_close(&send);
+			 pwrExecFunction(pptr, (void *)dptr );
 
-			// If send.xml file does not exists
-			if(res == FR_NO_FILE)
-			{
-				CoEnterMutexSection(file_mutex);
-				// Copy store.xml to send.xml
-				res = f_rename("./root/store.xml", "./root/send.xml");
-				CoLeaveMutexSection(file_mutex);
-				debug(CONSOLE,"rename=%d\n\r",res);
-				chk[0] = 0;						// to indicate SD is working fine
-
-				if(res == 0){
-					WDG_setTaskState(dptr , UPLOADING);
-					res = uploadFile(&modm, "./root/send.xml", &tcp);
-				}
-				else if (res == 4){
-					// Store.xml is not present
-					debug(CONSOLE,"%s\n\r","store.xml not present");
-				}
-				else{
-					// Some problem with SDcard
-					debug(LOG,"%s\n\r","Problem With SD card");
-					chk[0] = 1;				// To indiacte SD is having some problem
-					SDCheck();
-				}
-			}
-			else
-			if(res == FR_OK)
-			{
-				WDG_setTaskState(dptr , UPLOADING);
-				debug(CONSOLE,"%s\n\r","send.xml present");
-				res = uploadFile(&modm, "./root/send.xml", &tcp);
-				chk[0] = 0;						// to indicate SD is working fine
-			}
-			else
-			if(res == 3){
-				debug(LOG,"%s\n\r","SD card not present");
-			}
-			else{
-				debug(LOG,"%s\n\r","Some problem With SDCard");
-				chk[0] = 1;				// To indiacte SD is having some problem
-				SDCheck();
-			}
-
-				// Modem Work is over; Release it
-				mdmUnLock(&modm);
-
-				WDG_setTaskState(dptr , MODEM_FREE);
-				// If file is uploaded successfully
-				if(res == mdmOK)
-				{
-					// Appending send.xml data to alldata.xml
-					debug(CONSOLE,"%s\n\r","Open read send.xml");
-					res = f_open(&send, "./root/send.xml", FA_READ );
-					if (res) die(res);
-					f_sync(&send);
-
-					debug(CONSOLE,"%s\n\r","Write alldata.xml");
-					res = f_open(&alldata, "./root/alldata.xml", FA_WRITE|FA_READ);//| FA_CREATE_ALWAYS);
-					if (res) die(res);
-					f_sync(&alldata);
-
-					if( res == FR_NO_FILE)
-					{
-						debug(CONSOLE,"%s\n\r","Creating alldata.xml");
-						res = f_open(&alldata, "./root/alldata.xml", FA_WRITE|FA_READ| FA_CREATE_ALWAYS);
-						if (res) die(res);
-						f_sync(&alldata);
-					}
-
-					// If the alldata.xml has already some data present
-					if(!(f_size(&alldata) == 0))
-					{
-						debug(CONSOLE,"%s\n\r","append alldata.xml");
-						// Overwriting the Endtag
-						res = f_lseek(&alldata, f_size(&alldata)- strlen(ENDTAG)-1);
-						// Read after the head tag
-						res = f_read(&send, lclbuff, strlen(STARTTAG)+2, &br);
-						if (res || !br) die(res);
-						//for(res = 0; res < br;res++)
-							//printf(" %c",lclbuff[res]);
-						res = f_write(&alldata, "\t", 1,&bw);
-						if (res) die(res);
-						f_sync(&alldata);
-					}
-					//If nothing is present in the file
-					else{
-						debug(CONSOLE,"%s\n\r","alldata.xml empty");
-						res = f_write(&alldata, STARTTAG, strlen(STARTTAG), &bw);
-						if (res) die(res);
-						f_sync(&alldata);
-					}
-
-					debug(LOG,"%s\n\r","copying content");
-					// Start copying content from send.xml to alldata.xml
-					do {
-						WDG_setTaskState(dptr , APPEND);
-						res = f_read(&send, lclbuff, sizeof(lclbuff), &br);	/* Read a chunk of file */
-
-						if (res || !br) break;								/* Error or end of file */
-						res = f_write(&alldata, lclbuff, br, &bw);
-						if (res) break;
-						f_sync(&alldata);
-					}
-					while(f_eof(&send)!= 1);
-
-					res = f_close(&send);
-					if (res) die(res);
-
-					res = f_close(&alldata);
-					if (res) die(res);
-
-					debug(CONSOLE,"%s\n\r","Deleting send.xml\n\r");
-					f_unlink("./root/send.xml");		// Delete the file
-
-				}
-				else
-				{
-					debug(CONSOLE,"%s\n\r","Uploading Failed..");
-				}
-			  WDG_setTaskState(dptr , WAIT);
-			  CoTickDelay (12000);		// For 2 MInute
-		 }
-
+			 while(PERIOD)
+			 {
+				 if(PERIOD < 30000 )				// 5 minutes
+				 {
+					 CoTickDelay (PERIOD);
+					 PERIOD = 0;
+				 }
+				 else
+				 {
+					 PERIOD = PERIOD - 30000;
+					 CoTickDelay(30000);
+					 if(powerLevel < powerMedium)
+					 {
+						 PERIOD = 0;
+					 }
+				 }
+				 WDG_setTaskState(dptr , WAIT);
+			 }
+		}
 	}
 
 
@@ -548,7 +404,8 @@ void TmrCallBack(void)
 		  {
 			  pwrInterval = 20;
 			  pwrVar = 0;
-			  pwrUpdateSwitchs(powerHandler());				// Check battery status
+			  powerLevel = powerHandler();
+			  pwrUpdateSwitchs(powerLevel);				// Check battery status
 
 		  }
 		  /*

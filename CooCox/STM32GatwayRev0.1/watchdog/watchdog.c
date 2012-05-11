@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include "watchdog.h"
 #include "stdint.h"
+#include "string.h"
 #include "stm32f10x.h"
 #include "stm32_rtc.h"
 #include "modem.h"
 #include "stm32f10x_bkp.h"
+#include "stm32f10x_rcc.h"
 #include "debug.h"
 
 /*

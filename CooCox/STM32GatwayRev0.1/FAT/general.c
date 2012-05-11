@@ -3,6 +3,7 @@
 #include "di_msd.h"
 #include "ff.h"
 #include "debug.h"
+#include "string.h"
 
 extern MSD_Dev *sd;
 extern TIME *tm;

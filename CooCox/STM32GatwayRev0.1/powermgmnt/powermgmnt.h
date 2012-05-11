@@ -37,7 +37,7 @@ extern batt_percentage charge;
 #define STOP_BYTE  0X7E
 #define ESC_CHAR  0X7D
 
-#define BAT_MAX			8500				// 8.5V
+#define BAT_MAX			8450				// 8.45V
 #define BAT_MIN			7200				// 7.2V
 #define BAT_30			7560				// 7.4V
 #define BAT_15			7400				// 7.4V
@@ -56,7 +56,7 @@ typedef enum
 	powerDown
 }powerState;
 
-
+extern powerState powerLevel;
 powerState powerHandler(void);
 
 #endif

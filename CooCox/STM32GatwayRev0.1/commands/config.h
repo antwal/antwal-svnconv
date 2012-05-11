@@ -1,25 +1,31 @@
+#ifndef __CONFIG_H__
+#define __CONFIG_H__
+
 /* configurations for the Gateway */
-#define BAUD1	 		9600							// MODEM
-#define BAUD2	 		57600							// MOTE
-#define BAUD3	 		115200							// DEBUG
+#define BAUD1	 			9600							// MODEM
+#define BAUD2	 			57600							// MOTE
+#define BAUD3	 			115200							// DEBUG
 
-#define APN_STRING		"gprssouth.cellone.in"
-#define APN_USERNAME 	""
-#define APN_PASSWORD 	""
+#define APN_STRING			"gprssouth.cellone.in"
+#define APN_USERNAME 		""
+#define APN_PASSWORD 		""
 
-#define SITE			"www.ubicomp.in"
-//#define SITE			"117.254.116.55"
-#define USERNAME		"uagri"
-#define PASSWORD		"uagri123"
-#define COOKIE_RESPATH	"http://www.ubicomp.in/uagri/?q=user/login"
-#define UPLOAD_RESPATH  "http://www.ubicomp.in/uagri/?q=node/74"
-//#define UPLOAD_RESPATH  "/udata.php"
-#define WATCHDOG_STATUS	1
-#define ERR_RPT_STATUS  1
-#define RES_PHONE0		"9848969645"
-#define RES_PHONE1		"8978517460"
-#define ERR_PHONE0		"9848969645"
-#define ERR_PHONE1		"8978517460"
+#define SITE				"www.ubicomp.in"
+//#define SITE				"117.254.116.55"
+#define USERNAME			"uagri"
+#define PASSWORD			"uagri123"
+#define COOKIE_RESPATH		"http://www.ubicomp.in/uagri/?q=user/login"
+#define UPLOAD_RESPATH  	"http://www.ubicomp.in/uagri/?q=node/74"
+//#define UPLOAD_RESPATH 	 "/udata.php"
+#define WATCHDOG_STATUS		1
+#define ERR_RPT_STATUS  	1
+#define UPLOAD_FREQ			12000						// 2 Minutes
+#define UPLOAD_FREQ_NIGHT	360000						// 1Hour
+#define DEBUGVAL 			1							// Level 1 debug
+#define RES_PHONE0			"9848969645"
+#define RES_PHONE1			"8978517460"
+#define ERR_PHONE0			"9848969645"
+#define ERR_PHONE1			"8978517460"
 
 typedef struct phone{
 	unsigned char phoneno[10]; // 10 digit phone number as string
@@ -44,7 +50,13 @@ struct config{
 	unsigned char watchdog_status;
 	//status for sending the error report via sms(enable or disable [1/0])
 	unsigned char err_report_status;
+	uint32_t  upload_freq;				// Upload frequency generally
+	uint32_t  upload_freq_night;		// Upload frequency at night if battery is down
+	unsigned char debug;				// sets the level of debug messages required
+
 	//registered phone numbers
 	phone	reg_phoneno[2];
 	phone 	err_phoneno[2];
 };
+
+#endif

@@ -6,12 +6,13 @@
 #include "powermgmnt.h"
 #include "debug.h"
 #include "string.h"
-#include "time.h"
+#include "timevar.h"
 
 cBuffer spi_buff;
 unsigned char spi_buffer[30];
 power_status power;
 batt_percentage charge;
+powerState powerLevel;
 
 struct power_status power =
 {
@@ -129,7 +130,8 @@ powerState powerHandler(void)
 {
 	char recv[sizeof(power_status)+ 10], ch;
 	uint32_t i,j;
-	uint8_t dataGot = 0, datarecvd = 0, ret = powerCritical;
+	uint8_t dataGot = 0, datarecvd = 0;
+	static uint8_t ret = powerInvalid;
 	static uint8_t powerAlive = 0;
 	power_status *tempPower;
 

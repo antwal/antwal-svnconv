@@ -8,7 +8,7 @@
 #ifndef __COX_STM32_RTC_H
 #define __COX_STM32_RTC_H
 
-#include "cox_rtc.h"
+
 #include "stdint.h"
 #include "TypeDefs.h"
 
@@ -29,12 +29,21 @@
 /** BDCR register base address */
 #define BDCR_BASE                 (PERIPH_BASE + BDCR_OFFSET)
 #define FLAG_Mask                 ((uint8_t)0x1F)
+
+/*
+#ifndef RCC_APB1Periph_BKP
 #define RCC_APB1Periph_BKP               ((ul32)0x08000000)
+#endif
+#ifndef  RCC_APB1Periph_PWR
 #define RCC_APB1Periph_PWR               ((ul32)0x10000000)
+#endif
+#ifndef RCC_FLAG_LSERDY
 #define RCC_FLAG_LSERDY                  ((ui8)0x41)
+#endif
+#ifndef RCC_RTCCLKSource_LSE
 #define RCC_RTCCLKSource_LSE             ((ul32)0x00000100)
-
-
+#endif
+*/
 /** RTC Value Write to regsiter*/
 #define RTC_LSB_Mask     ((ul32)0x0000FFFF)  /* !< RTC LSB Mask */
 #define RTC_MSB_Mask     ((ul32)0xFFFF0000)  /* !< RTC MSB Mask */
@@ -77,7 +86,7 @@ uint8_t mm;				// minute
 uint8_t ss;				// Seconds
 }TIME;
 
-
+#include "cox_rtc.h"
 void Cur_Time(TIME *);
 void RTC_WaitForSynchro(void);
 void RTC_WaitForLastTask(void);

@@ -11,7 +11,8 @@
 #include "debug.h"
 
 extern TIME *tm;
-char ntp[48];
+static char ntp[48];
+static char addr1[20],addr2[20];
 /* This packet need to be send to through UDP to ntp server
  * The Output will be embedded into the tx_timestamp_i this
  * data should be sent to gmtime() to get the time.
@@ -54,7 +55,6 @@ void NtpDCall(ntpMsg *msg)
 mdmStatus ntp_time(mdmIface *mdm)
 {
 	char port[4],res;
-	char addr1[20],addr2[20];
 	static uint8_t ntpUpdate = 0;
 	server udp[2];
 	uint32_t ntpbytes = 48;

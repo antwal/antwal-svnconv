@@ -1,5 +1,7 @@
 #include "debug.h"
 
+char slog[100];
+uint8_t DBG;
 
 void debugInit(void)
 {

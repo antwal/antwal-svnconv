@@ -1,4 +1,5 @@
-#ifndef __TIME_H__
+#ifndef __TIMEVAR_H__
+#define __TIMEVAR_H__
 
 #include "stm32_rtc.h"
 

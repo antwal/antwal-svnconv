@@ -357,11 +357,16 @@
 								}
 							}
 							while(TIME_TICK < 1000 && res != '\r');
-							mdm->ip_addr[addr2]= '\0';
-							debug(CONSOLE,"IPlen=%d\n\r",addr2);
-							debug(LOG,"IP=%s\n\r",mdm->ip_addr);
-							if(addr2 < 6)
+
+							if(addr2 < 6){
 								state = IPGPRSACT;						// IPaddress cannot be retrieved
+							}
+							else
+							{
+								mdm->ip_addr[addr2]= '\0';
+								debug(CONSOLE,"IPlen=%d\n\r",addr2);
+								debug(LOG,"IP=%s\n\r",mdm->ip_addr);
+							}
 							res = mdmOK;
 
 							break;
