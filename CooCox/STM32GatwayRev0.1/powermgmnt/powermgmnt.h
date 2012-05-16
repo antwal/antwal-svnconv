@@ -2,13 +2,14 @@
 #define _POWERMGMNT_H_
 
 #include "buffer.h"
-
+#include <stm32_pio.h>
 extern cBuffer spi_buff;
 extern unsigned char spi_buffer[30];
 
 
 #define spi_read()		bufferGetFromFront(&spi_buff)
 #define SPI_RESET()		SPI2->CR1 |= 0x100; SPI2->CR1 &= ~0x100
+extern COX_PIO_Dev CHG_RESET;
 
 typedef struct power_status{
 uint16_t bat1;

@@ -60,10 +60,12 @@ uint8_t monthlen(uint8_t isleapyear,uint8_t month){
 // write current time (clock). That way an LCD display needs complete
 // re-write only every minute.
 /*
- * This funtion can be used before writing the new time obtained from NTP
+ * --> This funtion can be used before writing the new time obtained from NTP
  * to the RTC.
- * Also it can be used when RTC time is read to convert that back in the
- * YYYY:MM:DD:hh:mm:ss format and store it in TIME struct
+ * -->It can be used when RTC time is read to convert that back in the
+ * YYYY:MM:DD:hh:mm:ss format and store it in TIME struct; ntp =1
+ * --> It can also be used to update time with TIME structure provided;
+ *  here ntp value should be 2
  * @param time: this is the seconds which is either obtained from NTP or
  * 				read from RTC
  * @param ntp : This tells if the time is from NTP or from local RTC
@@ -75,46 +77,48 @@ uint8_t gmtime( uint32_t time, TIME *tm, uint8_t ntp)
     uint16_t dayno;
     uint16_t zone = 15 * 60;
     uint16_t cur_yr;
+    uint8_t ret;
 
     cur_yr = tm->YYYY;
     // If time is from NTP else continue with current year
-    if(ntp){
+    if(ntp == 1){
     	tm->YYYY = EPOCH_YR;
     	time += zone * TimeZone;
     }
+    else if(ntp == 0)
+    {
+    	dayclock = time % SECS_DAY;
+    	dayno = time / SECS_DAY;
+    	tm->DD = dayno+1;
+    	tm->ss = dayclock % 60UL;
+    	tm->mm = (dayclock % 3600UL) / 60;
+    	tm->hh = dayclock / 3600UL;
 
-	dayclock = time % SECS_DAY;
-	dayno = time / SECS_DAY;
-	tm->DD = dayno+1;
-	tm->ss = dayclock % 60UL;
-	tm->mm = (dayclock % 3600UL) / 60;
-	tm->hh = dayclock / 3600UL;
+    	// IT does not touch the year if days are less than 366
+    	while (dayno >= YEARSIZE(tm->YYYY)) {
+    		dayno -= YEARSIZE(tm->YYYY);
+    		tm->YYYY++;
+    	}
 
-	// IT does not touch the year if days are less than 366
-	while (dayno >= YEARSIZE(tm->YYYY)) {
-		dayno -= YEARSIZE(tm->YYYY);
-		tm->YYYY++;
-	}
-
-	tm->MM = 0;
-	while (dayno >= monthlen(LEAPYEAR(tm->YYYY),tm->MM)) {
-		dayno -= monthlen(LEAPYEAR(tm->YYYY),tm->MM);
-		tm->MM++;
-	}
-	tm->MM++;
-	tm->DD = dayno+1;
-
+    	tm->MM = 0;
+    	while (dayno >= monthlen(LEAPYEAR(tm->YYYY),tm->MM)) {
+    		dayno -= monthlen(LEAPYEAR(tm->YYYY),tm->MM);
+    		tm->MM++;
+    	}
+    	tm->MM++;
+    	tm->DD = dayno+1;
+    }
 	if(ntp && tm->YYYY >= 2012)
 	{
 		STM_RTC_Start();
-		STM_RTC_Write (tm);				// Writing time to RTC
+		ret = STM_RTC_Write (tm);				// Writing time to RTC
 		STM_RTC_Stop();
 		//debug(LOG,"%s\n\r","TimeUpdated\n\r");
 	}
 	else
 		tm->YYYY = cur_yr;
 
-	return(COX_SUCCESS);
+	return(ret);
 }
 
 /**

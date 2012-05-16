@@ -34,7 +34,7 @@ cBuffer cmdBuffer;
 //structure containing system configurations
 extern struct config sysconf;
 extern struct config sysconfdup ;
-
+extern uint8_t statusUpload;
 
 
 // This flag is set in RTime.c; if restart is due to Watchdog
@@ -66,6 +66,7 @@ void TIME_SET(uint16_t a){ TIME_TICK=a;}                      	// Set 10 millise
 //attach and initilize the leds on stm32 board
 COX_PIO_Dev LED0 = COX_PIN(2,8);
 COX_PIO_Dev LED1 = COX_PIN(2,9);
+COX_PIO_Dev CHG_RESET = COX_PIN(1,8);
 
 
 void *MailQueue[MAIL_QUEUE_SIZE];
@@ -109,19 +110,19 @@ void modemConfig(void)
 {
 	COX_PIO_Dev DTR = COX_PIN(2,6);			// PORTC6
 	COX_PIO_Dev RST = COX_PIN(1,5);			// PORTB5
-	COX_PIO_Dev SWRTS = COX_PIN(1,8);		// PORTB8 ; Software RTS
+	//COX_PIO_Dev SWRTS = COX_PIN(1,8);		// PORTB8 ; Software RTS
 	COX_PIO_PI *PI = &pi_pio;
 
 	modm.dtr_pin = DTR;
-	modm.sw_rts = SWRTS;
+	//modm.sw_rts = SWRTS;
 	modm.reset_pin = RST;
 	modm.pio = PI;
 
 	modm.pio->Init(modm.dtr_pin);
 	modm.pio->Dir(modm.dtr_pin,1);
-	modm.pio->Init(modm.sw_rts);
-	modm.pio->Dir(modm.sw_rts,1);
-	modm.pio->Out(modm.sw_rts, 1);			// Keeping it LOW = 1
+	//modm.pio->Init(modm.sw_rts);
+	//modm.pio->Dir(modm.sw_rts,1);
+	//modm.pio->Out(modm.sw_rts, 1);			// Keeping it LOW = 1
 
 	modm.pio->Init(modm.reset_pin);
 	modm.pio->Out(modm.reset_pin, 0);		// Pull up reset pin
@@ -136,6 +137,9 @@ void powerconfig(void)
 	pi_spi2.Cfg(COX_SPI_CFG_FSB,COX_MSPI_FSB_MSB,0);
 	pi_spi2.Init(COX_SPI_MODE0, SPI_BaudRatePrescaler_16);
 	bufferInit(&spi_buff,spi_buffer,30);
+	pi_pio.Init(CHG_RESET);
+	pi_pio.Dir(CHG_RESET, 1);
+	pi_pio.Out(CHG_RESET,0);
 }
 
 
@@ -282,6 +286,7 @@ void TmrCallBack(void)
 				 {
 					 PERIOD = PERIOD - 30000;
 					 CoTickDelay(30000);
+					 debug(CONSOLE,"%s%d\n\r","UPLOAD:Time remaining",(PERIOD));
 					 if(powerLevel < powerMedium)
 					 {
 						 PERIOD = 0;
@@ -333,7 +338,7 @@ void TmrCallBack(void)
 
 	void taskWatchDog (void* pdata){
 	//dogDebug *dptr;
-	uint8_t tog = 1,count=0,pwrVar =0,pwrInterval = 4;
+	uint8_t tog = 1,count=0,pwrVar =0,pwrInterval = 6,statusVar = 0;
 	systemCheck(&modm);
 	mdmLock(&modm);
 	intimateState(&modm);// place some where else
@@ -393,9 +398,9 @@ void TmrCallBack(void)
 				tog = ~tog;
 			}
 		 }
-		else{
-			 pi_pio.Out(LED1,1);					// Switch off the LED
-		}
+		//else if(Run == 1){
+		//	 pi_pio.Out(LED1,1);					// Switch off the LED
+		//}
 /////////////////////////////////////////////////////////////////////////////
 
 		  /* Power down will be implemented after this */
@@ -408,10 +413,22 @@ void TmrCallBack(void)
 			  pwrUpdateSwitchs(powerLevel);				// Check battery status
 
 		  }
+
+		  statusVar++;
+		  if((statusVar >= 255) && (statusUpload > 1))
+		  {
+			  debug(CONSOLE,"%s%d\n\r","STATUS:Status logged",statusUpload);
+			  sys_status();
+			  //debug(CONSOLE,"%s\n\r","status msg done ");
+			  statusUpload --;
+			  statusVar = 0;
+		  }
+
 		  /*
 		   * If modem is in use or not
 		   * If it is in use wake up the modem
 		   * else put modem in sleep
+		   * lock == 1 indicates modem in use
 		   */
 		  if(modm.lock == 1){
 			  mdmWakeUp(&modm);
@@ -462,6 +479,7 @@ void taskDebug (void* pdata){
 	for (;;) {
 		cflag = 0;
 		while(Run){
+			pi_pio.Out(LED1,0);
 			if(cflag == 0 ){
 				//TO DO
 				//Turn on the debug LED ON
@@ -474,31 +492,36 @@ void taskDebug (void* pdata){
 				cmdlineInputFunc(bufferGetFromFront(&cmdBuffer));
 				// run the cmdline execution functions
 				cmdlineMainLoop();
+				//CoTickDelay (100);				// 10ms delay
 			}
 		}
+		pi_pio.Out(LED1,1);
+		//mdmLock(&modm);
+		// If modem is not lock
+		if(modm.lock != 1)
+		{
+			mdmLock(&modm);
+			res = smsDebugInit(&modm);
+			if(res == mdmOK)
+				smsDebugLoop(&modm);
 
-		mdmLock(&modm);
-
-		res = smsDebugInit(&modm);
-		if(res == mdmOK)
-			smsDebugLoop(&modm);
-		if(balChk >= 20){
-			mdmBalance(&modm, &Bal);
-			debug(LOG, "Balance Low: Rs.%d :(",Bal);
+			/*if(balChk >= 200){
+				mdmBalance(&modm, &Bal);
+				debug(LOG, "Balance Low: Rs.%d :(",Bal);
+				*/
 			/*if(Bal < 10)
 			{
 				smsSend(&modm, (char*)&sysconfdup.err_phoneno[1],&send[0]);
 			}*/
-			balChk = 0;
+			/*	balChk = 0;
+			}
+			else{
+				balChk++;
+			}*/
+			mdmUnLock(&modm);
+			// Polling Period 60 seconds
+			CoTickDelay (6000);
 		}
-		else{
-			balChk++;
-		}
-
-		mdmUnLock(&modm);
-
-		// Polling Period 10 seconds
-		CoTickDelay (1000);
 
 	}
 }
@@ -518,7 +541,7 @@ int main(void)
 	sdConfig();
 	// SD card plug in detection
 	EXTIenable();
-	//buttonEnable();
+	buttonEnable();
 
 	powerconfig();
 
@@ -535,7 +558,7 @@ int main(void)
 	WATCH = CoCreateTask (taskWatchDog,0,1,&watchdog_stk[STACK_SIZE_WATCHDOG-1],STACK_SIZE_WATCHDOG);
 	UPLOAD = CoCreateTask (taskUpload,&myDogDebug[0],3,&upload_stk[STACK_SIZE_UPLOAD-1],STACK_SIZE_UPLOAD);
   	WSN = CoCreateTask (taskWSN,&myDogDebug[1],2,&wsn_stk[STACK_SIZE_WSN-1],STACK_SIZE_WSN);
-    DEBUG = CoCreateTask (taskDebug,0,4,&debug_stk[STACK_SIZE_DEBUG-1],STACK_SIZE_DEBUG);
+    DEBUG = CoCreateTask (taskDebug,0,3,&debug_stk[STACK_SIZE_DEBUG-1],STACK_SIZE_DEBUG);
 
     /* Create a mutex: used by the file handling ReadInterface Function */
     file_mutex = CoCreateMutex( );

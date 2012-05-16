@@ -29,7 +29,7 @@ extern char slog[100];
 #define dbg_printf(fmt,...)\
 		do{\
 			DBG = sysconfdup.debug;\
-			if(DBG == 1)\
+			if(DBG == 1 || DBG == 3)\
 			printf(fmt,__VA_ARGS__);\
 		}\
 		while(0)
@@ -60,7 +60,7 @@ extern char slog[100];
 						rc = f_close(&logger);\
 						}\
 						CoLeaveMutexSection(printf_mutex);\
-						if(DBG == 1)\
+						if(DBG == 1 || DBG == 3)\
                         printf("%s",slog);\
                         break;\
                         case CONSOLE:\

@@ -25,6 +25,7 @@
 #include <stdint.h>
 
 #include "cmdline.h"
+#include "debug.h"
 
 // include project-specific configuration
 #include "cmdlineconf.h"
@@ -343,19 +344,23 @@ void cmdlineProcessInputString(void)
 {
 	uint8_t cmdIndex;
 	uint8_t i=0;
+	uint8_t j = 0;
 
 	// save command in history
 	cmdlineDoHistory(CMDLINE_HISTORY_SAVE);
 
+	while( ((CmdlineBuffer[j] == ' ') || (CmdlineBuffer[j] == 0)) ) j++;
 	// find the end of the command (excluding arguments)
 	// find first whitespace character in CmdlineBuffer
-	while( !((CmdlineBuffer[i] == ' ') || (CmdlineBuffer[i] == 0)) ) i++;
+
+	while( !((CmdlineBuffer[j] == ' ') || (CmdlineBuffer[j] == 0)) ){ i++;j++;}
 
 	if(!i)
 	{
 		// command was null or empty
 		// output a new prompt
 		cmdlinePrintPrompt();
+		debug(CONSOLE,"%s\n\r", "No cmd executed");
 		// we're done
 		return;
 	}

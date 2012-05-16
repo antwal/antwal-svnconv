@@ -28,3 +28,6 @@ unsigned char sysconfFunction(void);
 unsigned char curconfFunction(void);
 unsigned char saveconfFunction(void);
 unsigned char setdefFunction(void);
+unsigned char setdateFunction(void);
+unsigned char setupprdFunction(void);
+unsigned char setbidFunction(void);

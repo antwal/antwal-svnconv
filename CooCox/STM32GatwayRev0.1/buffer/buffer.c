@@ -193,7 +193,7 @@ uint16_t bufferDataAvail(cBuffer* buffer)
 	{
 		if((buffer->datalength) < (MaxRx - 100))
 		{
-			modm.pio->Out(modm.sw_rts, 1);			// Making it Low
+			//modm.pio->Out(modm.sw_rts, 1);			// Making it Low
 		}
 	}
 

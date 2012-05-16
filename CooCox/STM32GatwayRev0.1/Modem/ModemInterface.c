@@ -95,7 +95,7 @@
 		if(res == E_OK)
 			mdm->lock = 0;
 
-		sendwait(mdm, "AT+CFUN=4,0\r", "OK", 500);
+		sendwait(mdm, "AT+CFUN=0,0\r", "OK", 500);
 		return res;
 	}
 
@@ -154,7 +154,7 @@
 				data = bufferDataAvail(&modem_buffer);
 				if(data > (MaxRx - 10))
 				{
-					modm.pio->Out(modm.sw_rts, 0);			// Making it High
+					//modm.pio->Out(modm.sw_rts, 0);			// Making it High
 					//debug(CONSOLE,"maxrx=%d\n\r",data);
 				}
 

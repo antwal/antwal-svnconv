@@ -253,8 +253,8 @@ uint8_t intimateState(mdmIface *mdm)
 
 		flag = BKP_ReadBackupRegister(BKP_DR2);
 		sprintf(&buff[0], "Restart:WSN=%d;UP=%d:(",(flag >> 8),(flag & 0x00ff));
-		smsSend(mdm, "919848969645",&buff[0]);
-		smsSend(mdm, "918978517460" ,&buff[0]);
+		smsSend(mdm, "9848969645",&buff[0]);
+		smsSend(mdm, "8978517460" ,&buff[0]);
 		Dog=0;
 	}
 	// Reset the value

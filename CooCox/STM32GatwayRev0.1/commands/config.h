@@ -15,13 +15,14 @@
 #define USERNAME			"uagri"
 #define PASSWORD			"uagri123"
 #define COOKIE_RESPATH		"http://www.ubicomp.in/uagri/?q=user/login"
-#define UPLOAD_RESPATH  	"http://www.ubicomp.in/uagri/?q=node/74"
+#define UPLOAD_RESPATH  	"http://www.ubicomp.in/uagri/?q=node/83"
 //#define UPLOAD_RESPATH 	 "/udata.php"
 #define WATCHDOG_STATUS		1
 #define ERR_RPT_STATUS  	1
 #define UPLOAD_FREQ			12000						// 2 Minutes
 #define UPLOAD_FREQ_NIGHT	360000						// 1Hour
 #define DEBUGVAL 			1							// Level 1 debug
+#define BASESTNID			12
 #define RES_PHONE0			"9848969645"
 #define RES_PHONE1			"8978517460"
 #define ERR_PHONE0			"9848969645"
@@ -53,6 +54,7 @@ struct config{
 	uint32_t  upload_freq;				// Upload frequency generally
 	uint32_t  upload_freq_night;		// Upload frequency at night if battery is down
 	unsigned char debug;				// sets the level of debug messages required
+	unsigned char basestnid;
 
 	//registered phone numbers
 	phone	reg_phoneno[2];

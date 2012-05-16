@@ -52,7 +52,7 @@ void NtpDCall(ntpMsg *msg)
         gmtime(time,tm,1);
 }
 
-mdmStatus ntp_time(mdmIface *mdm)
+mdmStatus ntp_time(mdmIface *mdm, uint8_t arg)
 {
 	char port[4],res;
 	static uint8_t ntpUpdate = 0;
@@ -70,7 +70,7 @@ mdmStatus ntp_time(mdmIface *mdm)
 	udp[1].port = port;
 	udp[1].addr = addr2;
 
-	if((tm->DD == 1 && tm->MM == 1 && tm->YYYY == 2012) || ntpUpdate == 10 )
+	if((tm->DD == 1 && tm->MM == 1 && tm->YYYY == 2012) || arg == FORCED )
 	{
 		debug(CONSOLE,"%s\r\n","Going to Update Time");
 		ntpUpdate =0;

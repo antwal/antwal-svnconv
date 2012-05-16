@@ -46,7 +46,7 @@ void EXTI0_IRQHandler(void)
 
 	if(stm32_exti_handler != COX_NULL)
 	{
-
+		stm32_exti_handler(COX_PIN(0,0));			// PA0
 	}
 }
 

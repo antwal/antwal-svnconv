@@ -104,6 +104,7 @@ Submit\r\n\
 /*
  *  Global status structure which keeps the system status
  */
+/*
 struct status{
 	uint8_t WSNTask;
 	uint8_t UPLOADTask;
@@ -117,7 +118,7 @@ struct status{
 	uint8_t lastMote;
 
 };
-
+*/
 ////////////////////////////////////////////////////////////////////////////////////////////
 #include "coocox.h"
 /*---------------------------- Symbol Define -------------------------------*/

@@ -20,6 +20,7 @@ typedef struct recvMsg{
 	char message[163];	//160 bytes of message + <CR><LF> + \0 for string termination
 }recvMsg;
 
+char smsbuff[20];
 /* external variables */
 extern	cBuffer modem_buffer;
 extern volatile uint32_t TIME_TICK;
@@ -32,7 +33,7 @@ void readAllUnreadSms(mdmIface *mdm,cBuffer *queue);
 void readDelSms(mdmIface *mdm, uint8_t index , char *phone ,char *msg );
 uint8_t isPhoneRegistered(char *str);
 
-void parser (unsigned char *ptr);
+uint8_t parser (unsigned char *ptr);
 void addToEnd(unsigned char data);
 
 
@@ -60,7 +61,7 @@ uint8_t list[MAX_SMS]={0};
 
 //Buffer for maintaining the return status of commands
 cBuffer cmdStatusQueue;
-//retuen status of commands will be stored in this list
+//return status of commands will be stored in this list
 uint8_t status[MAX_CMD]={0};
 
 
@@ -123,6 +124,7 @@ void smsDebugConnect(mdmIface *mdm){
 
 void smsDebugLoop(mdmIface *mdm){
 	char *ptr;
+	uint8_t ret = 1;
 	//flush the sms index Msg Queue
 	bufferFlush(&smsIndexQueue);
 	//extract the index number of all the unread sms and put them in to queue
@@ -136,7 +138,11 @@ void smsDebugLoop(mdmIface *mdm){
 			ptr = &msg.message[0];
 			debug(CONSOLE,"%s\n\r","SMS:Ph no. Regd");
 			//parse the data according to the format and pass it to the commandline
-			parser(ptr);
+			ret = parser(ptr);
+			if(ret == 0)
+			{
+				smsSend(mdm, &msg.phone[0],&smsbuff[0]);
+			}
 		/*	while(*ptr != 0 ){
 				// Function separator; Currently two functions are separated by \n
 				if(*ptr == '\n')
@@ -151,6 +157,7 @@ void smsDebugLoop(mdmIface *mdm){
 			}
 		*/
 		}
+
 	}
 }
 
@@ -350,14 +357,16 @@ void addToEnd(unsigned char data){
 /*This function will parse the incoming msg in the current format
  * {cmd1,cmd2,.......,cmd(n),}
  */
-void parser (unsigned char *ptr){
+uint8_t parser(unsigned char *ptr){
+	uint8_t i =0;
 	//disconnect the status collecting function before processing every msg
 	cmdlineClrCmdStatusOutputFunc();
 	//Flush the buffer for collecting the return status for the commands
 	bufferFlush(&cmdStatusQueue);
-	while(*ptr++ != 0){
+	while(*ptr != 0){
 		switch(*ptr){
 			case '{':   //add the status collecting function
+						debug(CONSOLE,"%s \n\r", "Opening Braces ");
 						cmdlineSetCmdStatusOutputFunc(addToEnd);
 						break;
 
@@ -372,16 +381,29 @@ void parser (unsigned char *ptr){
 			case '}':   if(cmdlineStatusOutputFunc){
 							cmdlineClrCmdStatusOutputFunc();
 							//TO DO: send the sms by dumping the FIFO
-							while(cmdStatusQueue.datalength)
-								debug(CONSOLE," %c,",bufferGetFromFront(&cmdStatusQueue));
+							if(cmdStatusQueue.datalength)
+							{
+
+								while(cmdStatusQueue.datalength)
+								{
+									smsbuff[i++] = bufferGetFromFront(&cmdStatusQueue);
+								}
+								smsbuff[i] = '\0';
+								debug(CONSOLE,"SMS_DEBUG:%s\n\r,",smsbuff);
+							}
 						}
 						break;
 			default : smsCmdOutputFunc(*ptr);
 				  	  smsCmdLoopFunc();
 
 		}//End Switch
+		ptr++;
 	}//End While
-
+	// If something is there to reply as sms
+	if(i)
+		return 0;
+	else
+		return 1;
 }//End Parser
 
 

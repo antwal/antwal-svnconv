@@ -56,6 +56,7 @@ void * taskUploadStop(void *pdata)
 
 }
 
+extern uint8_t statusUpload;
 
 void * Upload(void *pdata)
 {
@@ -79,11 +80,24 @@ void * Upload(void *pdata)
 	mdmLock(&modm);					// Get modem lock
 	for(ntp_update =0; ntp_update < 3; ntp_update++){
 		WDG_setTaskState(dptr , NTP_TIME);
-		res = ntp_time(&modm);
+		res = ntp_time(&modm, 0);
 		if(res == mdmOK){
-				break;
-			}
+			break;
 		}
+	}
+
+	// Upload the status file
+	if(statusUpload <= 1)
+	{
+		debug(LOG,"%s\n\r","Uploading Status file..");
+		res = uploadFile(&modm, "./root/status.xml", &tcp);
+		CoEnterMutexSection(file_mutex);
+		if(res == mdmOK)
+		f_unlink("./root/status.xml");		// Delete the file
+		CoLeaveMutexSection(file_mutex);
+		statusUpload = 13;
+	}
+
 	/*
 	 *  If send.xml file exists that means last uploading was unsuccessful.
 	 *  so  first upload the send.xml data of previous failed
@@ -113,7 +127,7 @@ void * Upload(void *pdata)
 		}
 		else if (res == 4){
 			// Store.xml is not present
-			debug(CONSOLE,"%s\n\r","No data to upload");
+			debug(LOG,"%s\n\r","No data to upload");
 		}
 		else{
 			// Some problem with SDcard
@@ -189,6 +203,7 @@ void * Upload(void *pdata)
 		}
 			debug(LOG,"%s\n\r","copying content");
 		// Start copying content from send.xml to alldata.xml
+		CoEnterMutexSection(file_mutex);
 		do {
 			WDG_setTaskState(dptr , APPEND);
 			res = f_read(&send, lclbuff, sizeof(lclbuff), &br);	/* Read a chunk of file */
@@ -198,6 +213,7 @@ void * Upload(void *pdata)
 			f_sync(&alldata);
 		}
 		while(f_eof(&send)!= 1);
+		CoLeaveMutexSection(file_mutex);
 
 		res = f_close(&send);
 		if (res) die(res);
@@ -211,7 +227,7 @@ void * Upload(void *pdata)
 	}
 	else
 	{
-		debug(CONSOLE,"%s\n\r","Uploading Failed..");
+		debug(LOG,"%s\n\r","Uploading Failed..");
 	}
 	WDG_setTaskState(dptr , WAIT);
 }

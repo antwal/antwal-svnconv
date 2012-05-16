@@ -39,7 +39,7 @@ extern	cBuffer modem_buffer;								// Receive Buffer for modem
  */
 uint8_t uploadFile(mdmIface *mdm, const char *file, server *tcp){
 	static uint8_t cook = 0;
-	uint8_t MaxRetry = 10, count=0;
+	uint8_t MaxRetry = 3, count=0;
 	uint8_t res = mdmOK;
 	//start the fsm for modem
 	res = mdmFSM(mdm);
@@ -116,7 +116,7 @@ uint8_t uploadFile(mdmIface *mdm, const char *file, server *tcp){
 					res = mdmHttpRes(mdm, &size, httpRes);
 					if(res == httpOK)
 					{
-						res = mdmHttpBody(mdm, ServerRes, &size, 6000);// For slow connections timeout should be high
+						res = mdmHttpBody(mdm, ServerRes, &size, 12000);// For slow connections timeout should be high
 						if(res == httpOK){
 							res = httpSent;
 							debug(LOG,"%s\n\r","UPLOAD:File uploaded");
@@ -229,7 +229,7 @@ mdmStatus sendHeader(mdmIface *mdm, uint32_t file_size, char *cookie ){
         debug(CONSOLE,"POSTDATA Size=%d\n\r",file_size+strlen(BEFORE_DATA)+strlen(AFTER_DATA) );
 */
         sprintf(buffer, "%d" ,(file_size));
-        debug(CONSOLE,"UPLOAD:POSTDATA Size=%d\n\r",file_size);
+        debug(LOG,"UPLOAD:POSTDATA Size=%d\n\r",file_size);
 
         debug(CONSOLE,"%s\n\r","UPLOAD:Sending Headers");
         //Sending  Header
@@ -354,7 +354,7 @@ httpStatus mdmHttpRes(mdmIface *mdm, uint32_t* bodLen, uint8_t cond )
 	{
 		uint16_t code = 0, i= 0;
 		CLR_BUFFER(buffer);
-		res = serialMatch(mdm, "HTTP/1.1", 9000);
+		res = serialMatch(mdm, "HTTP/1.1", 12000);
 		if(res == mdmOK )
 		{
 			res = serialCopy(&buffer[0], ' ','\r');

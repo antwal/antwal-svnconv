@@ -71,12 +71,19 @@ powerState powerLogic(power_status *powerVar)
 	power.supply = (power.supply + powerVar->supply) / 2;
 
 	// Calculating the charge percentage of batteries
-	if(power.bat1 > BAT_MIN)
-	charge.bat1 = (power.bat1 - BAT_MIN) / 13 ;
+	if(power.bat1 > BAT_MIN){
+		charge.bat1 = (power.bat1 - BAT_MIN) / 12 ;
+		if(charge.bat1>100)
+			charge.bat1 = 100;
+	}
 	else
 		charge.bat1 = 0;
-	if(power.bat2 > BAT_MIN)
-	charge.bat2 = (power.bat2 - BAT_MIN) / 13 ;
+
+	if(power.bat2 > BAT_MIN){
+		charge.bat2 = (power.bat2 - BAT_MIN) / 12 ;
+		if(charge.bat2>100)
+			charge.bat2 = 100;
+	}
 	else
 		charge.bat2 = 0;
 
@@ -92,19 +99,19 @@ powerState powerLogic(power_status *powerVar)
 		charge.sol = 0;
 
 	//Power state decision baased on battery voltages and solar percentage
-	if((power.bat1 <= BAT_MAX && power.bat1 >= BAT_30 ) || (power.bat2 <= BAT_MAX && power.bat2 >= BAT_30) || (charge.sol <= 100 && charge.sol >= 40 ))
+	if((charge.bat1 <= 100 && charge.bat1 >= 30 ) || (charge.bat2 <= 100 && charge.bat2 >= 30) || (charge.sol <= 100 && charge.sol >= 40 ))
 	{
 		pwrstate = powerGood;
 		debug(CONSOLE,"%s\n\r","Power Good");
 	}
 	else
-	if((power.bat1 <= BAT_30 && power.bat1 >= BAT_15 )  || (power.bat2 <= BAT_30 && power.bat2 >= BAT_15 ) || (charge.sol <= 40 && charge.sol >= 20 ))
+	if((charge.bat1 <= 30 && charge.bat1 >= 15 )  || (charge.bat2 <= 30 && charge.bat2 >= 15 ) || (charge.sol <= 40 && charge.sol >= 20 ))
 	{
 		pwrstate = powerMedium;
 		debug(CONSOLE,"%s\n\r","Power Medium");
 	}
 	else
-	if((power.bat1 <= BAT_15 && power.bat1 >= BAT_MIN ) || (power.bat2 <= BAT_15 && power.bat2 >= BAT_MIN) || (charge.sol <= 20 && charge.sol >= 1 ))
+	if((charge.bat1 <= 15 && charge.bat1 >= 0 ) || (charge.bat2 <= 15 && charge.bat2 >= 0) || (charge.sol <= 20 && charge.sol >= 1 ))
 	{
 		pwrstate = powerLow;
 		debug(CONSOLE,"%s\n\r","Power Low");
@@ -157,7 +164,7 @@ powerState powerHandler(void)
 						{
 							datarecvd = 1;
 							tempPower = (power_status *)&recv[1];
-							debug(CONSOLE,"batt1=%d\tbatt2=%d\tsolar=%d\tsup=%d\n\r",tempPower->bat1,tempPower->bat2,tempPower->sol,tempPower->supply);
+							debug(VERBOSE,"batt1=%d\tbatt2=%d\tsolar=%d\tsup=%d\n\r",tempPower->bat1,tempPower->bat2,tempPower->sol,tempPower->supply);
 							ret = powerLogic(tempPower);
 						}
 						dataGot = 0;
@@ -198,6 +205,9 @@ powerState powerHandler(void)
 				charge.bat2 = -1;
 				charge.sol = -1;
 				ret = powerInvalid;
+				pi_pio.Out(CHG_RESET,1);
+				CoTickDelay(10);
+				pi_pio.Out(CHG_RESET,0);
 			}
 		}
 		SPI_RESET();

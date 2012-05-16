@@ -120,13 +120,14 @@ void * wsnPacketDecoding(void* ptr){
 	void *msg;
 	dptr = (dogDebug *)ptr;
 	uint8_t j,i;
-	uint8_t BaseStnNo = BaseStnId;
+	uint8_t BaseStnNo = sysconfdup.basestnid;
 	Tos_Msg *ToSMessage;		// Tos_Msg received //
 	SensedData *DataVal;
 	TIME cur_time;
 	UINT bw,res;
 
 	 /* Wait for a mail, time-out:30seconds */
+	debug(CONSOLE,"%s\n\r","WSN:Waiting for Packet");
 	WDG_setTaskState(dptr , WAIT);
 	msg = CoPendQueueMail (raw_queue_id, 3000, &result);
 	if (result != E_OK){

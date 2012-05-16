@@ -7,9 +7,10 @@
 #include "vt100.h"
 #include "command.h"
 #include "config.h"
+#include "timevar.h"
 // In stm32f10xh ERROR= 0 and SUCCESS=!ERROR be aware
-#define SUCCESS 0
-#define ERROR 	1
+#define SUCCESS 'S'
+#define ERROR 	'F'
 
 /*----------Symbols defined in linker script----------------------------------*/
 extern uint32_t _sconf;    /*!< Start address for the initialization
@@ -40,6 +41,7 @@ struct config sysconf ={
 	.upload_freq = UPLOAD_FREQ,
 	.upload_freq_night = UPLOAD_FREQ_NIGHT,
 	.debug = DEBUGVAL,
+	.basestnid = BASESTNID,
     .reg_phoneno[0]=RES_PHONE0,
 	.reg_phoneno[1]=RES_PHONE1,
 	.err_phoneno[0]=ERR_PHONE0,
@@ -67,6 +69,7 @@ struct config defconf ={
 	.upload_freq = UPLOAD_FREQ,
 	.upload_freq_night = UPLOAD_FREQ_NIGHT,
 	.debug = DEBUGVAL,
+	.basestnid = BASESTNID,
     .reg_phoneno[0]=RES_PHONE0,
 	.reg_phoneno[1]=RES_PHONE1,
 	.err_phoneno[0]=ERR_PHONE0,
@@ -98,6 +101,10 @@ void addAllcommand(void){
 	cmdlineAddCommand("curconf",	curconfFunction);
 	cmdlineAddCommand("saveconf",   saveconfFunction);
 	cmdlineAddCommand("setdef",     setdefFunction);
+	cmdlineAddCommand("setbid",		setbidFunction);
+	cmdlineAddCommand("setupprd",   setupprdFunction);
+	cmdlineAddCommand("setdate",   setdateFunction);
+
 }
 
 
@@ -122,6 +129,9 @@ unsigned char helpFunction(void)
 	printf("curconf		- display the current systen configurations\n\r");
 	printf("saveconf	- save the current configurations  into system configurations\n\r");
 	printf("setdef 		- reverts back system configurations to the default conf\n\r");
+	printf("setbid 		- sets base station id\n\r");
+	printf("setupprd 	- sets upload period(in second);minimum period 300secs(5 minutes)\n\r");
+	printf("setdate		- sets date of system: input YYYY MM DD HH MM SS\n\r");
 	return SUCCESS;
 
 }
@@ -356,7 +366,8 @@ unsigned char setstatusFunction(void){
 	len = end - start;
 	if(len == 0 ){
 		printf("No arguments \n\r");
-		printf("Format: setstatus < dog/err > < 0 / 1 >\n\r");
+		printf("Format: setstatus < dog/err/msg > < 0 / 1 >\n\r");
+		printf("Format: setstatus <msg> <0-3>\n\r");
 		return ERROR;
 	}
 	if(strncmp(cmdlineGetArgStr(1),"dog", 3) == 0){
@@ -374,6 +385,15 @@ unsigned char setstatusFunction(void){
 		}
 		else{
 			printf("Val can be 0 or 1\n\r");
+			return ERROR;
+		}
+	}
+	else if(strncmp(cmdlineGetArgStr(1),"msg", 3) == 0){
+		if(cmdlineGetArgInt(2) == 0 || cmdlineGetArgInt(2) == 1 || cmdlineGetArgInt(2) == 2 || cmdlineGetArgInt(2) == 3){
+			sysconfdup.debug= (uint8_t) cmdlineGetArgInt(2);
+		}
+		else{
+			printf("Val can be in range 0-3\n\r");
 			return ERROR;
 		}
 	}
@@ -497,12 +517,36 @@ unsigned char errphoneFunction(void){
 }
 //prints the system configurations
 unsigned char sysconfFunction(void){
-	printf("TO DO print system configurations\n\r");
+	//printf("TO DO print system configurations\n\r");
+	printf("System configuration:\n\r");
+	printf("Modem Baud 		:%d\n\r",sysconf.baud_uart1);
+	printf("Mote Baud  		:%d\n\r",sysconf.baud_uart2);
+	printf("Debug Baud 		:%d\n\r",sysconf.baud_uart3);
+	printf("Site 			:%s\n\r",sysconf.uploadsite);
+	printf("Site username	:%s\n\r",sysconf.username);
+	printf("Site password	:%s\n\r",sysconf.password);
+	printf("Site login URL	:%s\n\r",sysconf.cookie_respath);
+	printf("Site upload URL	:%s\n\r",sysconf.upload_respath);
+	printf("Upload Period 	:%d\n\r",sysconf.upload_freq);
+	printf("BaseStation ID 	:%d\n\r",sysconf.basestnid);
+	printf("Debug Level 	:%d\n\r",sysconf.debug);
+
 	return SUCCESS;
 }
 //prints the current configurations of the system
 unsigned char curconfFunction(void){
-	printf("TO DO print system current configurations\n\r");
+	printf("Current system configuration:\n\r");
+	printf("Modem Baud 		:%d\n\r",sysconfdup.baud_uart1);
+	printf("Mote Baud  		:%d\n\r",sysconfdup.baud_uart2);
+	printf("Debug Baud 		:%d\n\r",sysconfdup.baud_uart3);
+	printf("Site 			:%s\n\r",sysconfdup.uploadsite);
+	printf("Site username	:%s\n\r",sysconfdup.username);
+	printf("Site password	:%s\n\r",sysconfdup.password);
+	printf("Site login URL	:%s\n\r",sysconfdup.cookie_respath);
+	printf("Site upload URL	:%s\n\r",sysconfdup.upload_respath);
+	printf("Upload Period 	:%d\n\r",sysconfdup.upload_freq);
+	printf("BaseStation ID 	:%d\n\r",sysconfdup.basestnid);
+	printf("Debug Level 	:%d\n\r",sysconfdup.debug);
 	return SUCCESS;
 
 }
@@ -534,4 +578,75 @@ unsigned char setdefFunction(void){
 		printf("No change in configurations found \n\r");
 	}
 	return SUCCESS;//denotes success
+}
+
+
+unsigned char setbidFunction(void)
+{
+	if(cmdlineGetArgInt(1) > 0)
+	{
+		sysconfdup.basestnid = cmdlineGetArgInt(1);
+		printf("New basestnid is %d\n\r",sysconfdup.basestnid);
+	}
+	else{
+		printf("Error: BaseStnID cannot be negative\n\r");
+		return ERROR;
+	}
+	return SUCCESS;
+}
+
+unsigned char setupprdFunction(void)
+{
+	//Period should be positive and greater than 300 seconds
+	if(cmdlineGetArgInt(1) > 0 && cmdlineGetArgInt(1) > 300)
+	{
+		sysconfdup.upload_freq = cmdlineGetArgInt(1);
+		printf("New upload period is %d\n\r",sysconfdup.upload_freq);
+	}
+	else
+	{
+		printf("Error:Period cannot be negative or less than 300 seconds\n\r");
+		return ERROR;
+	}
+	return SUCCESS;
+}
+
+
+unsigned char setdateFunction(void)
+{
+	TIME tm;
+	char *start;
+	char *end;
+	uint8_t ret = 0;
+
+	start = cmdlineGetArgStr(1);
+	end   = cmdlineGetArgStr(2);
+
+	ret = end - start;
+	if(ret == 0 ){
+		printf("No arguments \n\r");
+		printf("Format: setdate YYYY MM DD hh mm ss\n\r");
+		return ERROR;
+	}
+	tm.YYYY = cmdlineGetArgInt(1);
+	tm.MM = cmdlineGetArgInt(2);
+	tm.DD = cmdlineGetArgInt(3);
+	tm.hh = cmdlineGetArgInt(4);
+	tm.mm = cmdlineGetArgInt(5);
+	tm.ss = cmdlineGetArgInt(6);
+
+	ret = gmtime(0, &tm, 2);
+	Cur_Time(&tm);
+	if(ret == 0)
+	{
+		printf("Updated Time is: %d:%d:%d - %d,%d,%d\r",tm.hh,tm.mm, tm.ss, tm.DD,tm.MM, tm.YYYY);
+	}
+	else
+	{
+		printf("Error: Format: setdate YYYY MM DD hh mm ss\n\r");
+		printf("Current Time is: %d:%d:%d - %d,%d,%d\r",tm.hh,tm.mm, tm.ss, tm.DD,tm.MM, tm.YYYY);
+		return ERROR;
+	}
+	return SUCCESS;
+
 }

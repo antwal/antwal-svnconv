@@ -16,7 +16,7 @@ void exti_handler(uint16_t pin)
 {
 	COX_PIO_Dev SD = COX_PIN(2,10);
 	COX_PIO_Dev BUTTON;
-	BUTTON = COX_PIN(1,9);
+	BUTTON = COX_PIN(0,0);
 
 	if( pin == (uint16_t)SD)
 	{
@@ -38,16 +38,18 @@ void exti_handler(uint16_t pin)
 
 	if(pin == (uint16_t)BUTTON)
 	{
-		if (event == COX_EXTI_EDGE_FALLING)
-		{
-			if(Run == 0){
-				pi_pio.Out(LED1,0);
-				Run = 1;
-			}
-			else{
-				pi_pio.Out(LED1,1);
-				Run = 0;
-			}
+		if(Run == 0){
+			pi_exti.Event(BUTTON, COX_EXTI_EDGE_RISING);
+			pi_pio.Out(LED1,0);
+			Run = 1;
+			debug(CONSOLE,"%s%d\n\r","Run=",Run);
+		}
+		else{
+			pi_exti.Event(BUTTON, COX_EXTI_EDGE_RISING);
+			pi_pio.Out(LED1,1);
+			Run = 0;
+			debug(CONSOLE,"%s%d\n\r","Run=",Run);
 		}
 	}
+
 }

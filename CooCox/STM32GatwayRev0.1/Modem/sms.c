@@ -10,12 +10,14 @@ mdmIface smsSend(mdmIface *mdm, const char* phNo, char * Msg)
 	mdmWakeUp(mdm);
 	mdmSwitch(mdm, COMMAND);
 
+	//changing the mode to normal mode
+	//sendwait(mdm, "|AT+CIPMODE=0\r","OK", 300);
 	// SMS system to test mode
 	sendwait(mdm, "|AT+CMGF=1\r","OK", 300);
 	// GSM 7 bit mode character set
 	sendwait(mdm, "|AT+CSCS=\"GSM\"\r","OK",300);
 	// Send sms
-	sendwait(mdm,"|AT+CMGS=\"+",NULL,0);		// Send Command
+	sendwait(mdm,"|AT+CMGS=\"+91",NULL,0);		// Send Command
 	sendwait(mdm,phNo,NULL,0);					// Send Ph No.
 	sendwait(mdm, "\"\r",">",3000);				// Send \r with closing quotes
 
