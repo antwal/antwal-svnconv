@@ -349,18 +349,18 @@ void cmdlineProcessInputString(void)
 	// save command in history
 	cmdlineDoHistory(CMDLINE_HISTORY_SAVE);
 
-	while( ((CmdlineBuffer[j] == ' ') || (CmdlineBuffer[j] == 0)) ) j++;
+	//while( ((CmdlineBuffer[j] == ' ') || (CmdlineBuffer[j] == 0)) ) j++;
 	// find the end of the command (excluding arguments)
 	// find first whitespace character in CmdlineBuffer
 
-	while( !((CmdlineBuffer[j] == ' ') || (CmdlineBuffer[j] == 0)) ){ i++;j++;}
+	while( !((CmdlineBuffer[i] == ' ') || (CmdlineBuffer[i] == 0)) ){ i++;j++;}
 
 	if(!i)
 	{
 		// command was null or empty
 		// output a new prompt
 		cmdlinePrintPrompt();
-		debug(CONSOLE,"%s\n\r", "No cmd executed");
+		//debug(CONSOLE,"%s\n\r", "No cmd executed");
 		// we're done
 		return;
 	}

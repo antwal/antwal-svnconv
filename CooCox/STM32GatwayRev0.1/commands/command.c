@@ -536,10 +536,10 @@ unsigned char sysconfFunction(void){
 //prints the current configurations of the system
 unsigned char curconfFunction(void){
 	printf("Current system configuration:\n\r");
-	printf("Modem Baud 		:%d\n\r",sysconfdup.baud_uart1);
-	printf("Mote Baud  		:%d\n\r",sysconfdup.baud_uart2);
-	printf("Debug Baud 		:%d\n\r",sysconfdup.baud_uart3);
-	printf("Site 			:%s\n\r",sysconfdup.uploadsite);
+	printf("Modem Baud 	:%d\n\r",sysconfdup.baud_uart1);
+	printf("Mote Baud  	:%d\n\r",sysconfdup.baud_uart2);
+	printf("Debug Baud 	:%d\n\r",sysconfdup.baud_uart3);
+	printf("Site		:%s\n\r",sysconfdup.uploadsite);
 	printf("Site username	:%s\n\r",sysconfdup.username);
 	printf("Site password	:%s\n\r",sysconfdup.password);
 	printf("Site login URL	:%s\n\r",sysconfdup.cookie_respath);
@@ -600,7 +600,7 @@ unsigned char setupprdFunction(void)
 	//Period should be positive and greater than 300 seconds
 	if(cmdlineGetArgInt(1) > 0 && cmdlineGetArgInt(1) > 300)
 	{
-		sysconfdup.upload_freq = cmdlineGetArgInt(1);
+		sysconfdup.upload_freq = cmdlineGetArgInt(1) * 100;
 		printf("New upload period is %d\n\r",sysconfdup.upload_freq);
 	}
 	else
@@ -639,7 +639,7 @@ unsigned char setdateFunction(void)
 	Cur_Time(&tm);
 	if(ret == 0)
 	{
-		printf("Updated Time is: %d:%d:%d - %d,%d,%d\r",tm.hh,tm.mm, tm.ss, tm.DD,tm.MM, tm.YYYY);
+		printf("Updated Time is: %d:%d:%d - %d,%d,%d\r\n",tm.hh,tm.mm, tm.ss, tm.DD,tm.MM, tm.YYYY);
 	}
 	else
 	{

@@ -10,7 +10,7 @@
 
 cBuffer spi_buff;
 unsigned char spi_buffer[30];
-power_status power;
+//power_status power;
 batt_percentage charge;
 powerState powerLevel;
 
@@ -69,6 +69,7 @@ powerState powerLogic(power_status *powerVar)
 	power.bat2 = (power.bat2 + powerVar->bat2) / 2;
 	power.sol = (power.sol + powerVar->sol) / 2;
 	power.supply = (power.supply + powerVar->supply) / 2;
+	power.charge_status = powerVar->charge_status;
 
 	// Calculating the charge percentage of batteries
 	if(power.bat1 > BAT_MIN){

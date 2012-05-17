@@ -61,4 +61,11 @@ struct config{
 	phone 	err_phoneno[2];
 };
 
+//structure containing system configurations
+
+extern struct config sysconf;
+extern struct config sysconfdup ;
+
+
+
 #endif

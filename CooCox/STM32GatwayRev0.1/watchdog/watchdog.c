@@ -8,6 +8,8 @@
 #include "stm32f10x_bkp.h"
 #include "stm32f10x_rcc.h"
 #include "debug.h"
+#include "status.h"
+#include "config.h"
 
 /*
  * private functions definitions
@@ -243,24 +245,34 @@ uint8_t intimateState(mdmIface *mdm)
 	uint16_t flag = 0;
 	//char phno1[] = ;
 	//char phno2[] = ;
+	/* Enable PWR and BKP clocks */
+	RCC->APB1ENR |= (RCC_APB1Periph_PWR | RCC_APB1Periph_BKP);
+
+	/* Allow access to BKP Domain */
+	*(vu32 *) CR_DBP_BB = (ul32)ENABLE;
+
+	// Taking out number of times reset took place
+	sysstatus.restart = BKP_ReadBackupRegister(BKP_DR3);
+	debug(CONSOLE,"STATUS: RESET=%d\n\r",sysstatus.restart);
 	if(Dog == 1)
 	{
-		/* Enable PWR and BKP clocks */
-		RCC->APB1ENR |= (RCC_APB1Periph_PWR | RCC_APB1Periph_BKP);
-
-		/* Allow access to BKP Domain */
-		*(vu32 *) CR_DBP_BB = (ul32)ENABLE;
-
+		sysstatus.restart += 1;
 		flag = BKP_ReadBackupRegister(BKP_DR2);
 		sprintf(&buff[0], "Restart:WSN=%d;UP=%d:(",(flag >> 8),(flag & 0x00ff));
-		smsSend(mdm, "9848969645",&buff[0]);
-		smsSend(mdm, "8978517460" ,&buff[0]);
+		smsSend(mdm, &sysconfdup.reg_phoneno[0],&buff[0]);
+		smsSend(mdm, &sysconfdup.reg_phoneno[1],&buff[0]);
 		Dog=0;
 	}
+	else
+	{
+		sysstatus.restart += 256;
+		debug(LOG,"%s\n\r","External Reset");
+	}
+	// Storing number of resets
+	BKP_WriteBackupRegister(BKP_DR3, sysstatus.restart);
 	// Reset the value
 	BKP_WriteBackupRegister(BKP_DR2, 0x00);
 	return 0;
-
 }
 
 /*

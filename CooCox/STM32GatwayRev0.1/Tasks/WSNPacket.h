@@ -145,7 +145,7 @@ enum {
  * Data Packet Size
  */
 
-#define TOSH_DATA_LENGTH 40 	// node_id(1) + crop_id(2) + plot_id(2) + Readings(2*MAXSENSORS) + RouteHeader(7), maximum size
+#define TOSH_DATA_LENGTH  sizeof(struct SensedData)	// node_id(1) + crop_id(2) + plot_id(2) + Readings(2*MAXSENSORS) + RouteHeader(7), maximum size
 #define TOSH_MSG_LENGTH  TOSH_DATA_LENGTH + TOS_HEADER_LEN + TOS_FOOTER_LEN
 #define UAGRI_DATA_LEN  (TOSH_DATA_LENGTH - ROUTE_HEADER_LEN)
 

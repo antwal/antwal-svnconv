@@ -4,27 +4,12 @@
 #include "ff.h"
 #include "timevar.h"
 #include "WSNPacket.h"
-
-#define STATSTARTTAG		"<GATEWAY>"
-#define STATENDTAG			"</GATEWAY>"
-extern uint8_t chk[2];
-
-
-#define stats			"\n\t<GATEWAY>\n\t"\
-									"\t<BATT>%04x</BATT>\n\t"\
-									"\t<SOLAR>%02x</SOLAR>\n\t"\
-									"\t<STATUS>%02x</STATUS>\n\t"\
-									"\t<TIME>%04x%02x%02x%02x%02x%02x</TIME>\n\t"\
-						"</GATEWAY>\n"
+#include "status.h"
 
 char statdata[170];
 uint8_t statusUpload = 13;
 
-struct sysstatus{
-uint16_t bat;
-uint8_t sol;
-uint8_t stat;
-}sysstatus;
+struct sysstatus sysstatus;
 
 
 uint8_t sys_status(void)
@@ -38,9 +23,12 @@ uint8_t sys_status(void)
 	sysstatus.stat = 0;
 	sysstatus.stat = (!chk[0])<< 6;
 	sysstatus.stat |= (!chk[1]) << 4;
-	sysstatus.stat |= (power.charge_status && (0x10)) << 2;
+	sysstatus.stat |= ((power.charge_status & (0x10)) & 1) << 2;
 	sysstatus.stat |= (power.charge_status & (0x01)) << 0;
-	sprintf(&statdata[0], stats, sysstatus.bat, sysstatus.sol,sysstatus.stat,tm->YYYY,tm->MM,tm->DD,tm->hh,tm->mm,tm->ss);
+
+	sysstatus.timeSinceMote = timeInterval(0,END);
+
+	sprintf(&statdata[0], stats, sysstatus.bat, sysstatus.sol,sysstatus.stat,sysstatus.uploadTime,sysstatus.timeSinceMote,sysstatus.restart,tm->YYYY,tm->MM,tm->DD,tm->hh,tm->mm,tm->ss);
 
 	debug(VERBOSE,"%s\n\r",&statdata[0]);
 	/* Lock the Mutex*/

@@ -31,6 +31,7 @@
 						<entry flags="" kind="includePath" name="Modem"/>
 						<entry flags="" kind="includePath" name="powermgmnt"/>
 						<entry flags="" kind="includePath" name="SDCard"/>
+						<entry flags="" kind="includePath" name="status"/>
 						<entry flags="" kind="includePath" name="stm_lib"/>
 						<entry flags="" kind="includePath" name="stm_lib/inc"/>
 						<entry flags="" kind="includePath" name="Tasks"/>
@@ -68,6 +69,7 @@
 				<pathentry include="J:/CooCox/Gateway100RE/Modem" kind="inc" path="" system="true"/>
 				<pathentry include="J:/CooCox/Gateway100RE/powermgmnt" kind="inc" path="" system="true"/>
 				<pathentry include="J:/CooCox/Gateway100RE/SDCard" kind="inc" path="" system="true"/>
+				<pathentry include="J:/CooCox/Gateway100RE/status" kind="inc" path="" system="true"/>
 				<pathentry include="J:/CooCox/Gateway100RE/stm_lib" kind="inc" path="" system="true"/>
 				<pathentry include="J:/CooCox/Gateway100RE/stm_lib/inc" kind="inc" path="" system="true"/>
 				<pathentry include="J:/CooCox/Gateway100RE/Tasks" kind="inc" path="" system="true"/>

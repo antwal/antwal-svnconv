@@ -70,7 +70,7 @@ mdmStatus ntp_time(mdmIface *mdm, uint8_t arg)
 	udp[1].port = port;
 	udp[1].addr = addr2;
 
-	if((tm->DD == 1 && tm->MM == 1 && tm->YYYY == 2012) || arg == FORCED )
+	if((tm->DD == 1 && tm->MM == 1 && tm->YYYY == 2012) || arg == 1 )
 	{
 		debug(CONSOLE,"%s\r\n","Going to Update Time");
 		ntpUpdate =0;

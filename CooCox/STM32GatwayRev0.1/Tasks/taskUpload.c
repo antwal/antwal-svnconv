@@ -7,13 +7,12 @@
 #include "task.h"
 #include "modem.h"
 #include "WSNPacket.h"
+#include "timevar.h"
+#include "status.h"
 
 uint32_t PERIOD;
 // USed for appending data from send.xml to alldata.xml
 uint8_t lclbuff[100];
-// used in system check
-extern uint8_t chk[2];
-
 
 void * setTaskUploadProfile( void ){
 	taskPwr *pptr;
@@ -123,7 +122,10 @@ void * Upload(void *pdata)
 
 		if(res == 0){
 			WDG_setTaskState(dptr , UPLOADING);
+			// Start Timer
+			timeInterval(1,START);
 			res = uploadFile(&modm, "./root/send.xml", &tcp);
+			sysstatus.uploadTime = timeInterval(1,END);
 		}
 		else if (res == 4){
 			// Store.xml is not present
@@ -141,7 +143,10 @@ void * Upload(void *pdata)
 	{
 		WDG_setTaskState(dptr , UPLOADING);
 		debug(CONSOLE,"%s\n\r","send.xml present");
+		// Start Timer
+		timeInterval(1,START);
 		res = uploadFile(&modm, "./root/send.xml", &tcp);
+		sysstatus.uploadTime = timeInterval(1,END);
 		chk[0] = 0;						// to indicate SD is working fine
 	}
 	else
@@ -155,6 +160,8 @@ void * Upload(void *pdata)
 	}
 	// Modem Work is over; Release it
 	mdmUnLock(&modm);
+
+	debug(LOG,"UPLOAD:UploadTime taken: %d min\n\r",sysstatus.uploadTime);
 
 	WDG_setTaskState(dptr , MODEM_FREE);
 	// If file is uploaded successfully
@@ -228,6 +235,7 @@ void * Upload(void *pdata)
 	else
 	{
 		debug(LOG,"%s\n\r","Uploading Failed..");
+		sysstatus.uploadFail++;
 	}
 	WDG_setTaskState(dptr , WAIT);
 }

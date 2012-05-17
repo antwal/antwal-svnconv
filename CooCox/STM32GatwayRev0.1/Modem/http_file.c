@@ -43,6 +43,7 @@ uint8_t uploadFile(mdmIface *mdm, const char *file, server *tcp){
 	uint8_t res = mdmOK;
 	//start the fsm for modem
 	res = mdmFSM(mdm);
+
 	// If IP is received
 	if(res == mdmOK){
 		res = httpClose;
@@ -164,6 +165,7 @@ uint8_t uploadFile(mdmIface *mdm, const char *file, server *tcp){
 	bufferFlush(&modem_buffer);
 	mdmSwitch(mdm, COMMAND);
 	mdmClose(mdm);
+
 	if(res == httpSent)
 	return mdmOK;
 	else
@@ -434,7 +436,7 @@ httpStatus mdmHttpRes(mdmIface *mdm, uint32_t* bodLen, uint8_t cond )
 					}
 					if(bodLen != NULL)
 						*bodLen = code;
-					debug(CONSOLE,"UPLOAD:ResLength=%d\n",code);
+					debug(CONSOLE,"UPLOAD:ResLength=%d\n\r",code);
 
 				}
 				else if(res == httpSent)

@@ -16,9 +16,10 @@
 #include <stm32_pio.h>
 #include "powermgmnt.h"
 #include "power.h"
+#include "timevar.h"
 
 // Length of each queue used to hold the WSN data
-#define QUEUE_LENGTH 32
+#define QUEUE_LENGTH 40
 
 // Buffer that keeps the XML formatted WSN data
 char destdata[250];
@@ -75,12 +76,20 @@ void Read_Data(unsigned char ch){
 
 		if (ch == STOP_BYTE) {
 
-			//printf("\nData is: ");
+			/*
+			printf("\nData is: %d: ",i);
 
-			//for (j=0; j < i; j++){
-			//	printf("\t%x ",DataMsg[buf].DataBuffer[j]);
-			//}
-			//printf(" \n");
+
+			for (j=0; j < (i + sizeof(TIME)); j++){
+				printf("\t%x ",DataMsg[buf].DataBuffer[j]);
+			}
+			printf(" \n");
+			*/
+
+
+			// Appending time in the message buffer at the end of it
+			memcpy(&DataMsg[buf].DataBuffer[i],tm, sizeof(TIME));
+
 			/* Calling from Interrupt context*/
 			result = isr_PostQueueMail (raw_queue_id, (void *) &DataMsg[buf]);
 			if (result != E_OK){
@@ -123,11 +132,11 @@ void * wsnPacketDecoding(void* ptr){
 	uint8_t BaseStnNo = sysconfdup.basestnid;
 	Tos_Msg *ToSMessage;		// Tos_Msg received //
 	SensedData *DataVal;
-	TIME cur_time;
+	TIME *cur_time;
 	UINT bw,res;
 
 	 /* Wait for a mail, time-out:30seconds */
-	debug(CONSOLE,"%s\n\r","WSN:Waiting for Packet");
+	debug(VERBOSE,"%s\n\r","WSN:Waiting for Packet");
 	WDG_setTaskState(dptr , WAIT);
 	msg = CoPendQueueMail (raw_queue_id, 3000, &result);
 	if (result != E_OK){
@@ -136,7 +145,7 @@ void * wsnPacketDecoding(void* ptr){
         }
     }
     else{
-    	memcpy(&Data.DataBuffer[0], (uint8_t *)msg, 30);
+    	memcpy(&Data.DataBuffer[0], (uint8_t *)msg, QUEUE_LENGTH);
 		pktcount++;
 		/******** Check type of the Raw Packet *******/
 		if (Data.DataBuffer[1] == P_PACKET_NO_ACK ) {
@@ -144,6 +153,8 @@ void * wsnPacketDecoding(void* ptr){
 			/***** Parsing the Raw Packet ****/
 			ParsePkt((INT8U *)&Data.DataBuffer[0]);
 
+			//Cur_Time( &cur_time);							// Get the current time
+			cur_time = (TIME *)&Data.DataBuffer[sizeof(Tos_Msg) + RAWPKT_HEADER_LEN];
 			/********* Get Tos_Msg from the Raw Packet ******/
 			ToSMessage = (Tos_Msg *)&Data.DataBuffer[RAWPKT_HEADER_LEN];
 
@@ -151,17 +162,13 @@ void * wsnPacketDecoding(void* ptr){
 			memmove(&Data.DataBuffer[0], &ToSMessage->data[0 + ROUTE_HEADER_LEN], sizeof(struct SensedData));
 //DONE		Time stamp + BaseStnIdneeds to be added over here
 
-			Cur_Time( &cur_time);							// Get the current time
-
 			DataVal= (SensedData *)&Data.DataBuffer[0];
-			//sprintf(&destdata[0], packet, pktcount, BaseStnNo, DataVal->crop_id[0],DataVal->crop_id[1], DataVal->plot_id, DataVal->node_id, DataVal->sensor_id, DataVal->value,cur_time.YYYY,cur_time.MM,cur_time.DD,cur_time.hh,cur_time.mm,cur_time.ss);
-			//if(DataVal->sensor_id == 2)
-			//sprintf(&destdata[0], packet, pktcount, BaseStnNo, DataVal->crop_id[0],DataVal->crop_id[1], DataVal->plot_id, DataVal->node_id, DataVal->sensor_id, (float)power.bat2,cur_time.YYYY,cur_time.MM,cur_time.DD,cur_time.hh,cur_time.mm,cur_time.ss);
-			//else
-			sprintf(&destdata[0], packet, pktcount, BaseStnNo, DataVal->crop_id[0],DataVal->crop_id[1], DataVal->plot_id, DataVal->node_id, DataVal->sensor_id, DataVal->value,cur_time.YYYY,cur_time.MM,cur_time.DD,cur_time.hh,cur_time.mm,cur_time.ss);
-			debug(CONSOLE,"%s:%d:%02x:%08x\n\r","WSN:Packet Recvd",DataVal->node_id,DataVal->sensor_id,DataVal->value);
+
+			sprintf(&destdata[0], packet, pktcount, BaseStnNo, DataVal->crop_id[0],DataVal->crop_id[1], DataVal->plot_id, DataVal->node_id, DataVal->sensor_id, DataVal->value,cur_time->YYYY,cur_time->MM,cur_time->DD,cur_time->hh,cur_time->mm,cur_time->ss);
+			debug(CONSOLE,"%s:%d:%02x:%08x@%d:%d:%d\n\r","WSN:Packet Recvd",DataVal->node_id,DataVal->sensor_id,DataVal->value,cur_time->hh,cur_time->mm,cur_time->ss);
 			pi_pio.Out(LED0,(pktcount & 0x01));
 
+			timeInterval(0,START);
 			/* Lock the Mutex*/
 			CoEnterMutexSection(file_mutex);
 
@@ -180,7 +187,7 @@ void * wsnPacketDecoding(void* ptr){
 				}
 			}
 			else{
-				debug(LOG,"WSN:Packet Number:%d\n\r",pktcount);
+				debug(LOG,"WSN::%d\n\r",pktcount);
 			// IF something is there in destn file
 			if(!(f_size(&store) == 0))
 			{

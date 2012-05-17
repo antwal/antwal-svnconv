@@ -24,6 +24,7 @@
 #include "powermgmnt.h"
 #include "power.h"
 #include "task.h"
+#include "status.h"
 //------------------------Debug task variables for cmdline--------------------------
 
 /* Variable used for command line   */
@@ -31,16 +32,11 @@ volatile uint8_t Run;
 uint8_t debug_buffer[15];
 cBuffer cmdBuffer;
 
-//structure containing system configurations
-extern struct config sysconf;
-extern struct config sysconfdup ;
-extern uint8_t statusUpload;
-
 
 // This flag is set in RTime.c; if restart is due to Watchdog
 uint8_t Dog = 0;
 // used in system check
-__IO uint8_t chk[2];
+volatile uint8_t chk[2];
 
 // Debug structure for tasks
 extern dogDebug myDogDebug[];
@@ -287,10 +283,12 @@ void TmrCallBack(void)
 					 PERIOD = PERIOD - 30000;
 					 CoTickDelay(30000);
 					 debug(CONSOLE,"%s%d\n\r","UPLOAD:Time remaining",(PERIOD));
-					 if(powerLevel < powerMedium)
+					 /*if(powerLevel < powerMedium)
 					 {
 						 PERIOD = 0;
 					 }
+					 */
+
 				 }
 				 WDG_setTaskState(dptr , WAIT);
 			 }
@@ -339,10 +337,12 @@ void TmrCallBack(void)
 	void taskWatchDog (void* pdata){
 	//dogDebug *dptr;
 	uint8_t tog = 1,count=0,pwrVar =0,pwrInterval = 6,statusVar = 0;
+	// System check before start
 	systemCheck(&modm);
 	mdmLock(&modm);
 	intimateState(&modm);// place some where else
 	mdmUnLock(&modm);
+
 	debug(LOG, "%s\n\r","taskWDOG started");
 	/* configure and start the watch dog timer */
 	IWDG_dogStart();
@@ -541,6 +541,7 @@ int main(void)
 	sdConfig();
 	// SD card plug in detection
 	EXTIenable();
+	// button support
 	buttonEnable();
 
 	powerconfig();
@@ -552,6 +553,8 @@ int main(void)
 	// Mount Filesystem
 	mount(fatfs);
 	/*!< Initial CooCox CoOS          */
+
+
 	CoInitOS();
 
     /*!< Create three tasks	*/

@@ -95,7 +95,8 @@
 		if(res == E_OK)
 			mdm->lock = 0;
 
-		sendwait(mdm, "AT+CFUN=0,0\r", "OK", 500);
+		mdmNWControl(mdm, 0);
+		sendwait(mdm, "AT+CFUN=4,0\r", "OK", 500);
 		return res;
 	}
 

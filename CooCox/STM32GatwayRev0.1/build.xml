@@ -67,6 +67,7 @@
       <includepath path="Time"/>
       <includepath path="Tasks"/>
       <includepath path="SDCard"/>
+      <includepath path="status"/>
       
       <!-- arm-none-eabi-gcc compiler arguments -->
       <compilerarg value="-mcpu=cortex-m3"/>
