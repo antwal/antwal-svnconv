@@ -169,7 +169,7 @@ Enable(1) or disable(0) TimeDelay() API.
 /*!< 
 Enable(1) or disable(0) timer management.		      
 */
-#define CFG_TMR_EN              (1)		
+#define CFG_TMR_EN              (1)
 
 /*!< 
 Specify max number timer.(must be less than 32)      

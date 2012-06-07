@@ -29,7 +29,7 @@
 #define ERR_PHONE1			"8978517460"
 
 typedef struct phone{
-	unsigned char phoneno[10]; // 10 digit phone number as string
+	unsigned char phoneno[11]; // 10 digit phone number as string
 }phone;
 
 struct config{

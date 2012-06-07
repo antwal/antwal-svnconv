@@ -72,9 +72,15 @@
 		// If lock is assigned indicate it by lock var in mdmiface
 		if(res == E_OK)
 		{
-			mdm->lock = 1;
+			//mdm->lock = 1;
+			while(!(__STREXB(1, &mdm->lock)));			// Loop until it is set
 			// If modem is locked it's time to wake it up
 			mdmWakeUp(mdm);
+			/*modm.pio->Out(modm.reset_pin, 1);		// Resetting Modem
+			CoTickDelay (10);						// For 100ms
+			modm.pio->Out(modm.reset_pin, 0);		// Resetting Modem
+			debug(CONSOLE,"%s\n\r","Resetting Modem");
+			*/
 			sendwait(mdm, "|AT+CFUN=1,0\r", "OK", 200);
 			sendwait(mdm, "|AT+CFUN=1,0\r", "OK", 200);
 		}
@@ -93,10 +99,12 @@
 		res = CoLeaveMutexSection(modem_mutex);
 		// If lock is unassigned indicate it by lock var in mdmiface
 		if(res == E_OK)
-			mdm->lock = 0;
+			//mdm->lock = 0;
+			__STREXB(0, &mdm->lock);
 
 		mdmNWControl(mdm, 0);
 		sendwait(mdm, "AT+CFUN=4,0\r", "OK", 500);
+		//sendwait(mdm, "AT+CPOWD=1\r", "DOWN", 1000);
 		return res;
 	}
 
@@ -596,12 +604,9 @@
 			res = sendwait(mdm,"|AT+IFC=2,2\r","OK",300); //for configuring h/w flow control
 			res = sendwait(mdm, "|ATE0\r", "OK",500);
 			res = sendwait(mdm, "AT+CMEE=0\r", "OK", 100);
-			count =0;
-			do{
-				count ++;
-				res = sendwait(mdm, "||AT+CIPMODE=1\r","OK",200);
-			}
-			while(res != mdmOK && count < 2);
+
+			res = sendwait(mdm, "||AT+CIPMODE=1\r","OK",200);
+
 		}
 		state = INIT;
 		if(res != mdmOK){

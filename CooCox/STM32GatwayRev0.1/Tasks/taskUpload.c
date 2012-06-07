@@ -44,18 +44,19 @@ void * taskUploadRedFreq(void *pdata)
 	Upload(pdata);
 }
 
+extern uint8_t statusUpload;
+
 void * taskUploadStop(void *pdata)
 {
 //	PERIOD = &sysconfdup.upload_freq;
 	dogDebug *dptr = (dogDebug *) pdata;
 	WDG_setTaskState(dptr , WAIT);
 	debug(LOG,"%s\n\r","UPLOAD:Power Low");
+	statusUpload = 13;
 	CoTickDelay(3000);
 	PERIOD =0;
 
 }
-
-extern uint8_t statusUpload;
 
 void * Upload(void *pdata)
 {
@@ -129,7 +130,7 @@ void * Upload(void *pdata)
 		}
 		else if (res == 4){
 			// Store.xml is not present
-			debug(LOG,"%s\n\r","No data to upload");
+			//debug(LOG,"%s\n\r","No data to upload");
 		}
 		else{
 			// Some problem with SDcard
@@ -155,7 +156,7 @@ void * Upload(void *pdata)
 	}
 	else{
 		debug(LOG,"%s\n\r","Some problem With SDCard");
-		chk[0] = 1;				// To indiacte SD is having some problem
+		chk[0] = 1;						// To indicate SD is having some problem
 		SDCheck();
 	}
 	// Modem Work is over; Release it
@@ -234,8 +235,14 @@ void * Upload(void *pdata)
 	}
 	else
 	{
-		debug(LOG,"%s\n\r","Uploading Failed..");
-		sysstatus.uploadFail++;
+		if(res == 4)
+		{
+			debug(LOG,"%s\n\r","UPLOAD:No Data to Upload");
+		}
+		else{
+			debug(LOG,"%s\n\r","Uploading Failed..");
+			sysstatus.uploadFail++;
+		}
 	}
 	WDG_setTaskState(dptr , WAIT);
 }

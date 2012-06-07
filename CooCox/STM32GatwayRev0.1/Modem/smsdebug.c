@@ -13,7 +13,7 @@
 #endif
 
 #define MAX_SMS  30
-#define MAX_CMD  15
+#define MAX_CMD  15 + 34
 
 typedef struct recvMsg{
 	char phone[11];		//10 digit phone number + \0 for string termination

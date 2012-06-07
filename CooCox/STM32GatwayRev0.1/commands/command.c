@@ -8,9 +8,16 @@
 #include "command.h"
 #include "config.h"
 #include "timevar.h"
+#include "buffer.h"
+#include "status.h"
+
 // In stm32f10xh ERROR= 0 and SUCCESS=!ERROR be aware
 #define SUCCESS 'S'
 #define ERROR 	'F'
+
+//Buffer for maintaining the return status of commands
+extern cBuffer cmdStatusQueue;
+extern struct sysstatus sysstatus;
 
 /*----------Symbols defined in linker script----------------------------------*/
 extern uint32_t _sconf;    /*!< Start address for the initialization
@@ -103,7 +110,8 @@ void addAllcommand(void){
 	cmdlineAddCommand("setdef",     setdefFunction);
 	cmdlineAddCommand("setbid",		setbidFunction);
 	cmdlineAddCommand("setupprd",   setupprdFunction);
-	cmdlineAddCommand("setdate",   setdateFunction);
+	cmdlineAddCommand("setdate",    setdateFunction);
+	cmdlineAddCommand("sysstatus",  sysStatusFunction);
 
 }
 
@@ -132,6 +140,7 @@ unsigned char helpFunction(void)
 	printf("setbid 		- sets base station id\n\r");
 	printf("setupprd 	- sets upload period(in second);minimum period 300secs(5 minutes)\n\r");
 	printf("setdate		- sets date of system: input YYYY MM DD HH MM SS\n\r");
+	printf("sysstatus	- sends the system status through the SMS as well display on screen\n\r");
 	return SUCCESS;
 
 }
@@ -519,10 +528,10 @@ unsigned char errphoneFunction(void){
 unsigned char sysconfFunction(void){
 	//printf("TO DO print system configurations\n\r");
 	printf("System configuration:\n\r");
-	printf("Modem Baud 		:%d\n\r",sysconf.baud_uart1);
-	printf("Mote Baud  		:%d\n\r",sysconf.baud_uart2);
-	printf("Debug Baud 		:%d\n\r",sysconf.baud_uart3);
-	printf("Site 			:%s\n\r",sysconf.uploadsite);
+	printf("Modem Baud 	:%d\n\r",sysconf.baud_uart1);
+	printf("Mote Baud  	:%d\n\r",sysconf.baud_uart2);
+	printf("Debug Baud 	:%d\n\r",sysconf.baud_uart3);
+	printf("Site 		:%s\n\r",sysconf.uploadsite);
 	printf("Site username	:%s\n\r",sysconf.username);
 	printf("Site password	:%s\n\r",sysconf.password);
 	printf("Site login URL	:%s\n\r",sysconf.cookie_respath);
@@ -644,9 +653,25 @@ unsigned char setdateFunction(void)
 	else
 	{
 		printf("Error: Format: setdate YYYY MM DD hh mm ss\n\r");
-		printf("Current Time is: %d:%d:%d - %d,%d,%d\r",tm.hh,tm.mm, tm.ss, tm.DD,tm.MM, tm.YYYY);
+		printf("Current Time is: %d:%d:%d - %d,%d,%d\n\r",tm.hh,tm.mm, tm.ss, tm.DD,tm.MM, tm.YYYY);
 		return ERROR;
 	}
 	return SUCCESS;
 
+}
+
+unsigned char sysStatusFunction(void)
+{
+	char lbuff[37],i;
+	sprintf(&lbuff[0],"[B%d:%d;S0X%02x;TM%d;UF%d;R0X%04x]",(sysstatus.bat >> 8),(sysstatus.bat & 0xff),sysstatus.stat, sysstatus.timeSinceMote, sysstatus.uploadFail, sysstatus.restart);
+	lbuff[37] = '\0';
+	printf("s\n\r",&lbuff[0]);
+	// Fill the buffer which will be ultimately sent through SMS
+	for(i = 0; i < 35; i++)
+	{
+		bufferAddToEnd(&cmdStatusQueue, lbuff[i]);
+	}
+
+
+	return SUCCESS;
 }

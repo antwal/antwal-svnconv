@@ -9,6 +9,7 @@ extern volatile uint8_t chk[2];
 									"\t<STATUS>%02x</STATUS>\n\t"\
 									"\t<UTIME>%04x</UTIME>\n\t"\
 									"\t<MTIME>%04x</MTIME>\n\t"\
+									"\t<UFAIL>%02x</UFAIL>\n\t"\
 									"\t<RST>%04x</RST>\n\t"\
 									"\t<TIME>%04x%02x%02x%02x%02x%02x</TIME>\n\t"\
 						"</GATEWAY>\n"
@@ -27,8 +28,8 @@ struct sysstatus{
  */
 	uint8_t stat;
 	uint16_t timeSinceMote;					// This tells since how long mote data does not come
-	uint16_t uploadTime;					// This tells how much time was required for upload data
-	uint8_t uploadFail;						// This counter counts number of time upload fail
+	int16_t uploadTime;						// This tells how much time was required for upload data
+	uint32_t uploadFail;					// This counter counts number of time upload fail
 	uint16_t restart;						// counts number of restarts; upper 8 bit: External reset;lower 8bit: watchdog reset
 };
 

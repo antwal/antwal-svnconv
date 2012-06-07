@@ -77,7 +77,7 @@ unsigned short	bufferIsNotFull(cBuffer* buffer);
 uint16_t bufferDataAvail(cBuffer* buffer);
 
 //! flush (clear) the contents of the buffer
-void			bufferFlush(cBuffer* buffer);
+void bufferFlush(cBuffer* buffer);
 
 #endif
 //@}

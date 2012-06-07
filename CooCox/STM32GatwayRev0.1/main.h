@@ -75,7 +75,7 @@ Host: "
 "\r\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n\
 Accept-Language: en-us,en;q=0.5\r\n\
 Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7\r\n\
-Keep-Alive: 115\r\n\
+Connection: close\r\n\
 Content-Length:"
 
 

@@ -253,14 +253,13 @@ uint8_t intimateState(mdmIface *mdm)
 
 	// Taking out number of times reset took place
 	sysstatus.restart = BKP_ReadBackupRegister(BKP_DR3);
-	debug(CONSOLE,"STATUS: RESET=%d\n\r",sysstatus.restart);
 	if(Dog == 1)
 	{
 		sysstatus.restart += 1;
 		flag = BKP_ReadBackupRegister(BKP_DR2);
 		sprintf(&buff[0], "Restart:WSN=%d;UP=%d:(",(flag >> 8),(flag & 0x00ff));
-		smsSend(mdm, &sysconfdup.reg_phoneno[0],&buff[0]);
-		smsSend(mdm, &sysconfdup.reg_phoneno[1],&buff[0]);
+		smsSend(mdm, (char *)&sysconfdup.reg_phoneno[0],&buff[0]);
+		smsSend(mdm, (char *)&sysconfdup.reg_phoneno[1],&buff[0]);
 		Dog=0;
 	}
 	else
@@ -268,6 +267,7 @@ uint8_t intimateState(mdmIface *mdm)
 		sysstatus.restart += 256;
 		debug(LOG,"%s\n\r","External Reset");
 	}
+	debug(CONSOLE,"STATUS: RESET=0x%x\n\r",sysstatus.restart);
 	// Storing number of resets
 	BKP_WriteBackupRegister(BKP_DR3, sysstatus.restart);
 	// Reset the value

@@ -6,7 +6,7 @@
 #include "WSNPacket.h"
 #include "status.h"
 
-char statdata[170];
+char statdata[300];
 uint8_t statusUpload = 13;
 
 struct sysstatus sysstatus;
@@ -28,9 +28,15 @@ uint8_t sys_status(void)
 
 	sysstatus.timeSinceMote = timeInterval(0,END);
 
-	sprintf(&statdata[0], stats, sysstatus.bat, sysstatus.sol,sysstatus.stat,sysstatus.uploadTime,sysstatus.timeSinceMote,sysstatus.restart,tm->YYYY,tm->MM,tm->DD,tm->hh,tm->mm,tm->ss);
+	sprintf(&statdata[0], stats, sysstatus.bat, sysstatus.sol,sysstatus.stat,sysstatus.uploadTime,sysstatus.timeSinceMote,sysstatus.uploadFail,sysstatus.restart,tm->YYYY,tm->MM,tm->DD,tm->hh,tm->mm,tm->ss);
 
-	debug(VERBOSE,"%s\n\r",&statdata[0]);
+	debug(VERBOSE,"STATUS:Last Upload Time:%d\n\r",sysstatus.uploadTime);
+	debug(VERBOSE,"STATUS:Total Upload fail:%d\n\r",sysstatus.uploadFail);
+	debug(VERBOSE,"STATUS:Last mote data:%d\n\r",sysstatus.timeSinceMote);
+
+	// Making it invalid
+	sysstatus.uploadTime = 255;
+
 	/* Lock the Mutex*/
 	CoEnterMutexSection(file_mutex);
 

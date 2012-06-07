@@ -41,6 +41,7 @@ volatile uint8_t chk[2];
 // Debug structure for tasks
 extern dogDebug myDogDebug[];
 extern uint32_t dogStatus;
+uint8_t debugVar =0;
 
 /*-----------------------------SD card Variable-----------------------------*/
 MSD_Dev sd_var;
@@ -424,13 +425,14 @@ void TmrCallBack(void)
 			  statusVar = 0;
 		  }
 
+		  debugVar++;
 		  /*
 		   * If modem is in use or not
 		   * If it is in use wake up the modem
 		   * else put modem in sleep
 		   * lock == 1 indicates modem in use
 		   */
-		  if(modm.lock == 1){
+		  if(__LDREXB(&modm.lock) == 1){
 			  mdmWakeUp(&modm);
 		  }else{
 			  mdmSleep(&modm);
@@ -454,6 +456,7 @@ void taskDebug (void* pdata){
 	uint8_t res, send[30], balChk=0;
 	uint8_t cflag;//flag for command line
 	uint16_t Bal = 255;
+	extern P_OSTCB  TCBRunning;
 	//initialize the buffer that will be used for command
 	bufferInit( &cmdBuffer, &debug_buffer[0], sizeof(debug_buffer) );
 
@@ -485,6 +488,8 @@ void taskDebug (void* pdata){
 				//Turn on the debug LED ON
 				debug(CONSOLE,"%s\n\r","In command line mode");
 				cflag = 1;
+				TCBRunning->prio = 3;		// Keeping the priority of task same as UPLOAD
+				debugVar = 0;
 			}
 			// pass characters received on the uart (serial port)
 			// into the cmdline processor
@@ -493,9 +498,17 @@ void taskDebug (void* pdata){
 				// run the cmdline execution functions
 				cmdlineMainLoop();
 				//CoTickDelay (100);				// 10ms delay
+				debugVar = 0;						// reset timeout
+			}
+			// Timeout 2min
+			if(debugVar >= 120)
+			{
+				debug(CONSOLE,"%s\n\r","CommandLine TimeOut");
+				Run = 0;
 			}
 		}
 		pi_pio.Out(LED1,1);
+		TCBRunning->prio = 4;		// Degrading its priority
 		//mdmLock(&modm);
 		// If modem is not lock
 		if(modm.lock != 1)
@@ -520,7 +533,7 @@ void taskDebug (void* pdata){
 			}*/
 			mdmUnLock(&modm);
 			// Polling Period 60 seconds
-			CoTickDelay (6000);
+			CoTickDelay (30000);
 		}
 
 	}
@@ -561,7 +574,7 @@ int main(void)
 	WATCH = CoCreateTask (taskWatchDog,0,1,&watchdog_stk[STACK_SIZE_WATCHDOG-1],STACK_SIZE_WATCHDOG);
 	UPLOAD = CoCreateTask (taskUpload,&myDogDebug[0],3,&upload_stk[STACK_SIZE_UPLOAD-1],STACK_SIZE_UPLOAD);
   	WSN = CoCreateTask (taskWSN,&myDogDebug[1],2,&wsn_stk[STACK_SIZE_WSN-1],STACK_SIZE_WSN);
-    DEBUG = CoCreateTask (taskDebug,0,3,&debug_stk[STACK_SIZE_DEBUG-1],STACK_SIZE_DEBUG);
+    DEBUG = CoCreateTask (taskDebug,0,4,&debug_stk[STACK_SIZE_DEBUG-1],STACK_SIZE_DEBUG);
 
     /* Create a mutex: used by the file handling ReadInterface Function */
     file_mutex = CoCreateMutex( );

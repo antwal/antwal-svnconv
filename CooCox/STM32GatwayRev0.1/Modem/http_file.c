@@ -39,7 +39,7 @@ extern	cBuffer modem_buffer;								// Receive Buffer for modem
  */
 uint8_t uploadFile(mdmIface *mdm, const char *file, server *tcp){
 	static uint8_t cook = 0;
-	uint8_t MaxRetry = 3, count=0;
+	uint8_t MaxRetry = 2, count=0;
 	uint8_t res = mdmOK;
 	//start the fsm for modem
 	res = mdmFSM(mdm);
