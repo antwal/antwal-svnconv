@@ -35,9 +35,9 @@ void GPIO_Blink(void)
         Delay(0xFFFFF);
         GPIO_WriteBit(LED_PORT, GPIO_Pin_8, Bit_RESET);
         Delay(0xFFFFF);
-        GPIO_WriteBit(LED_PORT, GPIO_Pin_9, Bit_SET);
-        Delay(0xFFFFF);t
-        GPIO_WriteBit(LED_PORT, GPIO_Pin_9, Bit_RESET);
+      //  GPIO_WriteBit(LED_PORT, GPIO_Pin_9, Bit_SET);
+      //  Delay(0xFFFFF);
+      //  GPIO_WriteBit(LED_PORT, GPIO_Pin_9, Bit_RESET);
     }
 }
 

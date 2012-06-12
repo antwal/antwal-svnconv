@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="arm-none-eabi-gcc noversion nomachine -mcpu=cortex-m3 -mthumb -Wall -ffunction-sections -Os -g -c -DSTM32F10X_HD_VL -DUSE_STDPERIPH_DRIVER -D__ASSEMBLY__ -DSTM32F100RE -I. -Icmsis -Icmsis_boot -ISource -Iport">
+      <target file="os_flag.o" lastModified="137db9df516">
+         <source file="..\..\Source\os_flag.c" lastModified="1326b8fc9d0"/>
+      </target>
+      <target file="os_dbg.o" lastModified="137db9df996">
+         <source file="..\..\port\os_dbg.c" lastModified="137db8687b6"/>
+      </target>
+      <target file="core_cm3.o" lastModified="137db9df1b9">
+         <source file="..\..\cmsis\core_cm3.c" lastModified="137db7c92f8"/>
+      </target>
+      <target file="os_sem.o" lastModified="137db9dfb4e">
+         <source file="..\..\Source\os_sem.c" lastModified="1326b8fc9d0"/>
+      </target>
+      <target file="os_mbox.o" lastModified="137db9e0f38">
+         <source file="..\..\Source\os_mbox.c" lastModified="1326b8fc9d0"/>
+      </target>
+      <target file="ucos_ii.o" lastModified="137db9e0e3d">
+         <source file="..\..\Source\ucos_ii.c" lastModified="1326b8fc9d0"/>
+      </target>
+      <target file="os_cpu_a.o" lastModified="137dbbc08d4">
+         <source file="..\..\port\os_cpu_a.s" lastModified="137dbbbfd54"/>
+      </target>
+      <target file="os_mutex.o" lastModified="137db9e07d3">
+         <source file="..\..\Source\os_mutex.c" lastModified="1326b8fc9d0"/>
+      </target>
+      <target file="os_cpu_c.o" lastModified="137db9df295">
+         <source file="..\..\port\os_cpu_c.c" lastModified="1326b8fc9d0"/>
+      </target>
+      <target file="os_mem.o" lastModified="137db9e030d">
+         <source file="..\..\Source\os_mem.c" lastModified="1326b8fc9d0"/>
+      </target>
+      <target file="os_q.o" lastModified="137db9e0552">
+         <source file="..\..\Source\os_q.c" lastModified="1326b8fc9d0"/>
+      </target>
+      <target file="os_time.o" lastModified="137db9df0e6">
+         <source file="..\..\Source\os_time.c" lastModified="1326b8fc9d0"/>
+      </target>
+      <target file="system_stm32f10x.o" lastModified="137db9df693">
+         <source file="..\..\cmsis_boot\system_stm32f10x.c" lastModified="137db7cbdec"/>
+      </target>
+      <target file="syscalls.o" lastModified="137db9e03f3">
+         <source file="..\..\syscalls\syscalls.c" lastModified="137db7c9908"/>
+      </target>
+      <target file="os_tmr.o" lastModified="137db9e0913">
+         <source file="..\..\Source\os_tmr.c" lastModified="1326b8fc9d0"/>
+      </target>
+      <target file="startup_stm32f10x_hd_vl.o" lastModified="137db9dfee8">
+         <source file="..\..\cmsis_boot\startup\startup_stm32f10x_hd_vl.c" lastModified="137db7cbd92"/>
+      </target>
+      <target file="os_core.o" lastModified="137db9dfe51">
+         <source file="..\..\Source\os_core.c" lastModified="1326b8fc9d0"/>
+      </target>
+      <target file="os_task.o" lastModified="137db9e06a6">
+         <source file="..\..\Source\os_task.c" lastModified="1326b8fc9d0"/>
+      </target>
+      <target file="main.o" lastModified="137db9df70b">
+         <source file="..\..\main.c" lastModified="137db7c585e"/>
+      </target>
+   </processor>
+</history>

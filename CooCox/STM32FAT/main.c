@@ -9,6 +9,7 @@
 #include <stm_spi_master.h>
 #include "di_msd.h"
 #include "Packet.h"
+#include "debug.h"
 
 #define packet "\n\t<WSN_DATA_PKT>\n\t"\
                                         "\t<COUNT>%04x</COUNT>\n\t"\
@@ -87,7 +88,7 @@ MSD_Dev *sd= &sd_var;
 		printf("Failed with rc=%d\r\n",rc);
 		SS_HIGH(sd);
 		pi_pio.Out(LED0, 1);      /* Output hign level to turn on LED0 */
-		for (;;) ;
+		//for (;;) ;
 	}
 
 	/*---------------------------------------------------------*/
@@ -122,9 +123,9 @@ int main(void)
 	COX_Status ret;
 	uint32_t Size;
 
-
-	FRESULT rc;				/* Result code */
 	FATFS fatfs;			/* File system object */
+    DWORD plist[] = {100, 0, 0, 0};  /* Divide drive into two partitions */
+    BYTE work[_MAX_SS];
 
 	DIR dir;				/* Directory object */
 	FILINFO fno;			/* File information object */
@@ -165,21 +166,43 @@ int main(void)
 		EXTIenable();
 	ret = MSD_Init(sd);					// mmc_driver.c
 	Size = MSD_GetChipSize(sd);
-	printf("SD Card Size is=%d\n\r",Size);
 
-		f_mount(0, &fatfs);		/* Register volume work area (never fails) */
+	/* Initialize a brand-new disk drive mapped to physical drive 0 */
+
+
+
+	    //f_fdisk(0, plist, work);  /* Divide physical drive 0 */
+
+
+	    /*
+	    f_mount(0, &Fatfs);
+	    f_mkfs(0, 0, 0);
+	    f_mount(0, 0);
+*/
+
+		f_mount(0, &fatfs);		//* Register volume work area (never fails)
+		debugInit();
+		debug(LOG,"SD Card Size is=%d\n\r",Size);
 
 		printf("Open a store.xml to read\r\n");
 		//rc = f_open(&fil1, "./root/store.xml", FA_READ );
 		//if (rc) die(rc);
 
-		printf("\r\nWrite to file (alldata.xml).\r\n");
+		printf("Write to file (alldata.xml).\r\n");
 		rc = f_open(&fil2, "./root/alldata.xml", FA_WRITE|FA_READ);//| FA_CREATE_ALWAYS);
-		//if (rc) die(rc);
+		if (rc) die(rc);
 		if(rc == 4)
 			rc = f_open(&fil2, "./root/alldata.xml", FA_WRITE|FA_READ| FA_CREATE_ALWAYS);
 		//rc = f_sync(&fil2);
-		if (rc) die(rc);
+		//if (rc) die(rc);
+		if(rc == 5)
+		{
+			rc = f_mkdir("root");
+			if(rc) die(rc);
+
+		}
+		rc = f_open(&fil2, "./root/alldata.xml", FA_WRITE|FA_READ| FA_CREATE_ALWAYS);
+		//if (rc) die(rc);
 
 		printf("OSize=%d\n\r",(uint16_t)f_size(&fil2));
 
@@ -213,8 +236,8 @@ int main(void)
 
 
 		//do {
-			//rc = f_read(&fil1, buff, sizeof(buff), &br);	/* Read a chunk of file */
-			//if (rc || !br) break;							/* Error or end of file */
+			//rc = f_read(&fil1, buff, sizeof(buff), &br);	//* Read a chunk of file
+			//if (rc || !br) break;							//* Error or end of file
 			//for(res = 0; res < 16;res++)
 			//printf(" %c",buff[res]);
 			//res = f_lseek(&fil2, f_size(&fil2));
@@ -238,14 +261,15 @@ int main(void)
 		rc = f_close(&fil2);
 		if (rc) die(rc);
 
-		printf("\r\nopening(test.txt).\r\n");
-		rc = f_open(&fil2, "./root/alldata.xml",FA_READ);
+		printf("opening(test.txt).\r\n");
+		rc = f_open(&fil2, "./root/log.txt",FA_READ);
+		if (rc) die(rc);
 		//printf("\r\nNSize=%d\n\r",(uint16_t)f_size(&fil2));
 		res = f_lseek(&fil2, 0);
 
 		do {
-			rc = f_read(&fil2, buff, sizeof(buff), &br);	/* Read a chunk of file */
-			if (rc || !br) break;			/* Error or end of file */
+			rc = f_read(&fil2, buff, sizeof(buff), &br);	//* Read a chunk of file
+			if (rc || !br) break;			//* Error or end of file
 			for(res = 0; res < br;res++)
 			printf(" %c",buff[res]);
 		}

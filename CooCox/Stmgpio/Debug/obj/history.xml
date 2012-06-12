@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <history>
    <processor signature="arm-none-eabi-gcc noversion nomachine -mcpu=cortex-m3 -mthumb -Wall -ffunction-sections -O0 -g3 -c -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -DSTM32F100RB -D__ASSEMBLY__ -Istm_lib\inc -Istm_lib -Icmsis -Icmsis_boot -ICOX\COX_Peripheral -ICOX -I.">
-      <target file="GPIO_Example.o" lastModified="135af169d6c">
-         <source file="..\..\example\GPIO_Example.c" lastModified="135af1210f9"/>
+      <target file="GPIO_Example.o" lastModified="1371cb5acc6">
+         <source file="..\..\example\GPIO_Example.c" lastModified="1371cb588aa"/>
       </target>
       <target file="syscalls.o" lastModified="135af169aa5">
          <source file="..\..\syscalls\syscalls.c" lastModified="132b5a19baf"/>

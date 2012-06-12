@@ -818,9 +818,9 @@ Disassembly of section .text:
  80008a0:	81fb      	strh	r3, [r7, #14]
  80008a2:	f240 130d 	movw	r3, #269	; 0x10d
  80008a6:	81bb      	strh	r3, [r7, #12]
- 80008a8:	f44f 7387 	mov.w	r3, #270	; 0x10e
+ 80008a8:	f240 2309 	movw	r3, #521	; 0x209
  80008ac:	817b      	strh	r3, [r7, #10]
- 80008ae:	f240 130f 	movw	r3, #271	; 0x10f
+ 80008ae:	f44f 7302 	mov.w	r3, #520	; 0x208
  80008b2:	813b      	strh	r3, [r7, #8]
  80008b4:	f240 230a 	movw	r3, #522	; 0x20a
  80008b8:	80fb      	strh	r3, [r7, #6]

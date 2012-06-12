@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dependencies>
+   <includePath signature="/I. /Icmsis /Icmsis_boot /ISource /Iport">
+      <source file="..\..\Source\os_cfg.h" lastModified="137db924322">
+      </source>
+      <source file="..\..\Source\os_time.c" lastModified="1326b8fc9d0">
+         <include file="..\..\Source\ucos_ii.h"/>
+      </source>
+      <source file="..\..\cmsis_boot\startup\startup_stm32f10x_hd_vl.c" lastModified="137db7cbd92">
+      </source>
+      <source file="..\..\port\os_cpu_a.s" lastModified="137dbbbfd54">
+      </source>
+      <source file="..\..\main.c" lastModified="137db7c585e">
+      </source>
+      <source file="..\..\cmsis\core_cm3.h" lastModified="137db7c9ae6">
+      </source>
+      <source file="..\..\Source\os_sem.c" lastModified="1326b8fc9d0">
+         <include file="..\..\Source\ucos_ii.h"/>
+      </source>
+      <source file="..\..\cmsis_boot\stm32f10x_conf.h" lastModified="137db7cbdce">
+      </source>
+      <source file="..\..\cmsis\core_cm3.c" lastModified="137db7c96e0">
+      </source>
+      <source file="..\..\cmsis_boot\system_stm32f10x.h" lastModified="137db7cbdec">
+      </source>
+      <source file="..\..\Source\os_core.c" lastModified="1326b8fc9d0">
+         <include file="..\..\Source\ucos_ii.h"/>
+      </source>
+      <source file="..\..\Source\os_task.c" lastModified="1326b8fc9d0">
+         <include file="..\..\Source\ucos_ii.h"/>
+      </source>
+      <source file="..\..\cmsis_boot\system_stm32f10x.c" lastModified="137db7cbdec">
+         <include file="..\..\cmsis_boot\stm32f10x.h"/>
+      </source>
+      <source file="..\..\Source\os_flag.c" lastModified="1326b8fc9d0">
+         <include file="..\..\Source\ucos_ii.h"/>
+      </source>
+      <source file="..\..\Source\os_mem.c" lastModified="1326b8fc9d0">
+         <include file="..\..\Source\ucos_ii.h"/>
+      </source>
+      <source file="..\..\syscalls\syscalls.c" lastModified="137db7ca8a8">
+      </source>
+      <source file="..\..\Source\os_mutex.c" lastModified="1326b8fc9d0">
+         <include file="..\..\Source\ucos_ii.h"/>
+      </source>
+      <source file="..\..\Source\os_q.c" lastModified="1326b8fc9d0">
+         <include file="..\..\Source\ucos_ii.h"/>
+      </source>
+      <source file="..\..\port\os_cpu_c.c" lastModified="1326b8fc9d0">
+         <include file="..\..\Source\ucos_ii.h"/>
+      </source>
+      <source file="..\..\Source\ucos_ii.h" lastModified="137db858216">
+         <include file="..\..\Source\app_cfg.h"/>
+         <include file="..\..\Source\os_cfg.h"/>
+         <include file="..\..\port\os_cpu.h"/>
+      </source>
+      <source file="..\..\Source\os_mbox.c" lastModified="1326b8fc9d0">
+         <include file="..\..\Source\ucos_ii.h"/>
+      </source>
+      <source file="..\..\port\os_dbg.c" lastModified="137db8687b6">
+         <include file="..\..\Source\ucos_ii.h"/>
+      </source>
+      <source file="..\..\cmsis_boot\stm32f10x.h" lastModified="137db7cc1ac">
+         <include file="..\..\cmsis\core_cm3.h"/>
+         <include file="..\..\cmsis_boot\system_stm32f10x.h"/>
+         <include file="..\..\cmsis_boot\stm32f10x_conf.h"/>
+      </source>
+      <source file="..\..\Source\ucos_ii.c" lastModified="1326b8fc9d0">
+         <include file="..\..\Source\ucos_ii.h"/>
+         <include file="..\..\Source\os_core.c"/>
+         <include file="..\..\Source\os_flag.c"/>
+         <include file="..\..\Source\os_mbox.c"/>
+         <include file="..\..\Source\os_mem.c"/>
+         <include file="..\..\Source\os_mutex.c"/>
+         <include file="..\..\Source\os_q.c"/>
+         <include file="..\..\Source\os_sem.c"/>
+         <include file="..\..\Source\os_task.c"/>
+         <include file="..\..\Source\os_time.c"/>
+         <include file="..\..\Source\os_tmr.c"/>
+      </source>
+      <source file="..\..\Source\os_tmr.c" lastModified="1326b8fc9d0">
+         <include file="..\..\Source\ucos_ii.h"/>
+      </source>
+      <source file="..\..\port\os_cpu.h" lastModified="1326b8fc9d0">
+      </source>
+      <source file="..\..\Source\app_cfg.h" lastModified="1326b8fc9d0">
+      </source>
+   </includePath>
+</dependencies>

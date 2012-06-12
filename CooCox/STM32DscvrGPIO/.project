@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
 	<name>STM32DscvrGPIO</name>
-	<comment/>
+	<comment></comment>
 	<projects>
 	</projects>
 	<buildSpec>
@@ -11,7 +11,7 @@
 			<arguments>
 				<dictionary>
 					<key>?name?</key>
-					<value/>
+					<value></value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.append_environment</key>
@@ -19,7 +19,7 @@
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.buildArguments</key>
-					<value/>
+					<value></value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.buildCommand</key>
@@ -62,4 +62,16 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>stm_lib/src/exti.c</name>
+			<type>1</type>
+			<location>J:/CooCox/working/COX/COX_Peripheral/exti.c</location>
+		</link>
+		<link>
+			<name>stm_lib/src/stm32_pio.c</name>
+			<type>1</type>
+			<location>J:/CooCox/working/COX/COX_Peripheral/stm32_pio.c</location>
+		</link>
+	</linkedResources>
 </projectDescription>

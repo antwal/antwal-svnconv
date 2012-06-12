@@ -445,7 +445,7 @@ Linker script and memory map
                 0x20000000                _sdata = .
  *(.data .data.*)
  .data          0x20000000        0x4 ..\obj\main.o
-                0x20000000                UART1
+                0x20000000                UART3
  .data          0x20000004       0xf4 ..\obj\printf.o
                 0x20000004                r
                 0x200000f4                _impure_ptr
@@ -477,8 +477,8 @@ LOAD ..\obj\stm32f10x_rcc.o
 LOAD ..\obj\stm32f10x_usart.o
 LOAD ..\obj\syscalls.o
 START GROUP
-LOAD j:/cocenter/cooide/gcc/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2\libgcc.a
-LOAD j:/cocenter/cooide/gcc/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2\libc.a
+LOAD j:/cocenter/coide/gcc/bin/../lib/gcc/arm-none-eabi/4.5.2/thumb2\libgcc.a
+LOAD j:/cocenter/coide/gcc/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib/thumb2\libc.a
 END GROUP
 OUTPUT(STM32uartself.elf elf32-littlearm)
 
@@ -506,17 +506,17 @@ OUTPUT(STM32uartself.elf elf32-littlearm)
  .debug_info    0x00003cc8      0xa6c ..\obj\stm32f10x_usart.o
  .debug_info    0x00004734      0x440 ..\obj\syscalls.o
 
-.debug_line     0x00000000     0x1dad
+.debug_line     0x00000000     0x1d15
  .debug_line    0x00000000       0xab ..\obj\startup_stm32f10x_md_vl.o
  .debug_line    0x000000ab      0x286 ..\obj\core_cm3.o
  .debug_line    0x00000331      0x21e ..\obj\system_stm32f10x.o
  .debug_line    0x0000054f      0x4d9 ..\obj\STM32_USART.o
  .debug_line    0x00000a28      0x373 ..\obj\stm32f10x_gpio.o
- .debug_line    0x00000d9b      0x14f ..\obj\main.o
- .debug_line    0x00000eea      0x437 ..\obj\printf.o
- .debug_line    0x00001321      0x499 ..\obj\stm32f10x_rcc.o
- .debug_line    0x000017ba      0x45f ..\obj\stm32f10x_usart.o
- .debug_line    0x00001c19      0x194 ..\obj\syscalls.o
+ .debug_line    0x00000d9b      0x116 ..\obj\main.o
+ .debug_line    0x00000eb1      0x3d8 ..\obj\printf.o
+ .debug_line    0x00001289      0x499 ..\obj\stm32f10x_rcc.o
+ .debug_line    0x00001722      0x45f ..\obj\stm32f10x_usart.o
+ .debug_line    0x00001b81      0x194 ..\obj\syscalls.o
 
 .debug_loc      0x00000000     0x2140
  .debug_loc     0x00000000       0x64 ..\obj\startup_stm32f10x_md_vl.o
@@ -587,7 +587,7 @@ OUTPUT(STM32uartself.elf elf32-littlearm)
  .debug_ranges  0x000003f8       0xf0 ..\obj\stm32f10x_usart.o
  .debug_ranges  0x000004e8       0x50 ..\obj\syscalls.o
 
-.debug_str      0x00000000     0x1caa
+.debug_str      0x00000000     0x1ca6
  .debug_str     0x00000000       0xc5 ..\obj\startup_stm32f10x_md_vl.o
                                  0xe4 (size before relaxing)
  .debug_str     0x000000c5      0x1d2 ..\obj\core_cm3.o
@@ -598,26 +598,27 @@ OUTPUT(STM32uartself.elf elf32-littlearm)
                                 0xad8 (size before relaxing)
  .debug_str     0x00000d7c      0x238 ..\obj\stm32f10x_gpio.o
                                 0x47c (size before relaxing)
- .debug_str     0x00000fb4       0x72 ..\obj\main.o
-                                0x154 (size before relaxing)
- .debug_str     0x00001026      0x4ad ..\obj\printf.o
-                                0x61f (size before relaxing)
- .debug_str     0x000014d3      0x34d ..\obj\stm32f10x_rcc.o
+ .debug_str     0x00000fb4       0x4c ..\obj\main.o
+                                0x12e (size before relaxing)
+ .debug_str     0x00001000      0x49a ..\obj\printf.o
+                                0x5f9 (size before relaxing)
+ .debug_str     0x0000149a      0x34d ..\obj\stm32f10x_rcc.o
                                 0x5d0 (size before relaxing)
- .debug_str     0x00001820      0x33d ..\obj\stm32f10x_usart.o
+ .debug_str     0x000017e7      0x33d ..\obj\stm32f10x_usart.o
                                 0x5f3 (size before relaxing)
- .debug_str     0x00001b5d      0x14d ..\obj\syscalls.o
+ .debug_str     0x00001b24      0x182 ..\obj\syscalls.o
                                 0x257 (size before relaxing)
 
-.comment        0x00000000       0x2a
+.comment        0x00000000       0x3b
  .comment       0x00000000       0x2a ..\obj\startup_stm32f10x_md_vl.o
                                  0x2b (size before relaxing)
  .comment       0x00000000       0x2b ..\obj\core_cm3.o
  .comment       0x00000000       0x2b ..\obj\system_stm32f10x.o
  .comment       0x00000000       0x2b ..\obj\STM32_USART.o
  .comment       0x00000000       0x2b ..\obj\stm32f10x_gpio.o
- .comment       0x00000000       0x2b ..\obj\main.o
- .comment       0x00000000       0x2b ..\obj\printf.o
+ .comment       0x0000002a       0x11 ..\obj\main.o
+                                 0x12 (size before relaxing)
+ .comment       0x00000000       0x12 ..\obj\printf.o
  .comment       0x00000000       0x2b ..\obj\stm32f10x_rcc.o
  .comment       0x00000000       0x2b ..\obj\stm32f10x_usart.o
  .comment       0x00000000       0x2b ..\obj\syscalls.o

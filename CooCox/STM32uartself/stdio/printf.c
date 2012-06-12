@@ -8,7 +8,7 @@
 #include <stdarg.h>
 #include "STM32_USART.h"
 
-extern COX_SERIAL_PI *UART1;
+extern COX_SERIAL_PI *UART3;
 
 /**
  * @brief  Transmit a char, if you want to use printf(), 
@@ -24,7 +24,7 @@ void PrintChar(char c)
 	   Transmit a char;
 	*/
 	uint8_t ch = c;
-	UART1->Write(&ch,1);
+	UART3->Write(&ch,1);
 }
 
 /** Maximum string size allowed (in bytes). */

@@ -153,7 +153,7 @@ static uint8_t STM32_PIO_Read(COX_PIO_Dev pio)
 		if((((pGPIO -> CRH)>>((pin-8)*4)) & 0x3) == 0)
 		{
 			/* input state */
-			if((pGPIO -> IDR)>>pin == 0x0)
+			if((((pGPIO -> IDR) & (1 << pin))&& 1) == 0x0)
 				level = 0;
 			else
 				level = 1;
@@ -172,10 +172,11 @@ static uint8_t STM32_PIO_Read(COX_PIO_Dev pio)
     {
     	if((((pGPIO -> CRL)>>(pin*4)) & 0x3) == 0)
     	{
-    		if((pGPIO -> IDR)>>pin == 0x0)
-    			level = 0;
-    		else
-    			level = 1;
+			/* input state */
+			if((((pGPIO -> IDR) & (1 << pin))&& 1) == 0x0)
+				level = 0;
+			else
+				level = 1;
     	}
     	else
     	{

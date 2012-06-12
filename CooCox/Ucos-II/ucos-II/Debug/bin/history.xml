@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="4.5.2 -Os -nostartfiles -Map=ucos-II.map -mcpu=cortex-m3 -mthumb -LJ:\CooCox\Ucos-II\ucos-II --gc-sections -TJ:\CooCox\Ucos-II\ucos-II\link.ld -g">
+      <target file="ucos-II.elf" lastModified="137dbbe1b5c">
+         <source file="..\obj\os_cpu_a.o" lastModified="137dbbc08d4"/>
+         <source file="..\obj\core_cm3.o" lastModified="137db9df1b9"/>
+         <source file="..\obj\os_cpu_c.o" lastModified="137db9df295"/>
+         <source file="..\obj\system_stm32f10x.o" lastModified="137db9df693"/>
+         <source file="..\obj\main.o" lastModified="137db9df70b"/>
+         <source file="..\obj\os_dbg.o" lastModified="137db9df996"/>
+         <source file="..\obj\startup_stm32f10x_hd_vl.o" lastModified="137db9dfee8"/>
+         <source file="..\obj\syscalls.o" lastModified="137db9e03f3"/>
+         <source file="..\obj\ucos_ii.o" lastModified="137db9e0e3d"/>
+      </target>
+   </processor>
+</history>
