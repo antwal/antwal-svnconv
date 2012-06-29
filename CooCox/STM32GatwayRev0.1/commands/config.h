@@ -19,10 +19,11 @@
 //#define UPLOAD_RESPATH 	 "/udata.php"
 #define WATCHDOG_STATUS		1
 #define ERR_RPT_STATUS  	1
-#define UPLOAD_FREQ			12000						// 2 Minutes
+#define UPLOAD_FREQ			90000						// 15 Minutes
 #define UPLOAD_FREQ_NIGHT	360000						// 1Hour
 #define DEBUGVAL 			1							// Level 1 debug
 #define BASESTNID			12
+#define SMSDBGPRD			60000						// 10 minutes
 #define RES_PHONE0			"9848969645"
 #define RES_PHONE1			"8978517460"
 #define ERR_PHONE0			"9848969645"
@@ -55,6 +56,7 @@ struct config{
 	uint32_t  upload_freq_night;		// Upload frequency at night if battery is down
 	unsigned char debug;				// sets the level of debug messages required
 	unsigned char basestnid;
+	uint16_t  sms_dbgprd;				// Sets the sms debug period
 
 	//registered phone numbers
 	phone	reg_phoneno[2];

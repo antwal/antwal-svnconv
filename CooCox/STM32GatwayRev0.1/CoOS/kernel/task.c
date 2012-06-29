@@ -864,7 +864,7 @@ OS_TID CreateTask(FUNCPtr task,void *argv,U32 parameter,OS_STK *stk)
     
     ptcb = AssignTCB();                 /* Get free TCB to use                */
     
-    if(ptcb == Co_NULL)                    /* Is free TCB equal to Co_NULL?         */
+    if(ptcb == Co_NULL)                   /* Is free TCB equal to Co_NULL?         */
     {
         return E_CREATE_FAIL;           /* Yes,error return                   */
     }

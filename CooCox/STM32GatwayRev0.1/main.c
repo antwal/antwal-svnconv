@@ -154,7 +154,7 @@ void debugLedInit(void)
 void systemCheck(mdmIface *mdm)
 {
 	chk[0] = SDCheck();
-	chk[1] = mdmCheck(mdm);
+	//chk[1] = mdmCheck(mdm);
 }
 
 /*Mote data receive handler*/
@@ -432,7 +432,8 @@ void TmrCallBack(void)
 		   * else put modem in sleep
 		   * lock == 1 indicates modem in use
 		   */
-		  if(__LDREXB(&modm.lock) == 1){
+		  //if(__LDREXB(&modm.lock) == 1){
+		   if(modm.lock == 1){
 			  mdmWakeUp(&modm);
 		  }else{
 			  mdmSleep(&modm);
@@ -532,8 +533,8 @@ void taskDebug (void* pdata){
 				balChk++;
 			}*/
 			mdmUnLock(&modm);
-			// Polling Period 60 seconds
-			CoTickDelay (30000);
+
+			CoTickDelay (sysconfdup.sms_dbgprd);
 		}
 
 	}

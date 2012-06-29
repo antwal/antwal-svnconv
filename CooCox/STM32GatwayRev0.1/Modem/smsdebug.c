@@ -96,7 +96,7 @@ mdmStatus smsDebugInit(mdmIface *mdm){
 	//configure the modem in text mode
 	sendwait(mdm, "|AT+CMGF=1\r","OK", 300);
 	//configure the CNMI option
-	sendwait(mdm, "AT+CNMI=0,0,0,0,0\r","OK", 300);
+	sendwait(mdm, "AT+CNMI=0,0,0,0,0\r","OK", 500);
 	//show text mode sms parameters, required to know the length of received sms
 	res = sendwait(mdm,"AT+CSDH=1\r","OK",100);
 	//Delete all the  sms except unread sms
